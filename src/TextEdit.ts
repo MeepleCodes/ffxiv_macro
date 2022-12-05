@@ -1,8 +1,12 @@
 import { CanvasHTMLAttributes, DetailedHTMLProps, DOMAttributes } from 'react';
+
+import { CursorDirection, MoveDistance, TextModel } from './TextModel';
+
 import font12 from './res/axis-12-lobby.json';
 import font14 from './res/axis-14-lobby.json';
 import font18 from './res/axis-18-lobby.json';
-console.log("TextEdit setup ran");
+
+
 type TextEditorElement = Partial<TextEditor & DOMAttributes<TextEditor & { children: any }>>;
 
 declare global {
@@ -21,116 +25,23 @@ const fontMap = {
 export type FontSize = keyof typeof fontMap;
 export const FontSizes: [FontSize] = Object.keys(fontMap) as [FontSize];
 
-enum UndoType {
-    INSERT,
-    DELETE
-}
-interface UndoState {
-    text: string;
-    cursor: number;
-    type: UndoType | null;
-}
-/**
- * Stores undo history as a list of UndoState objects.
- *
- * The history array stores state in ascending age (most recent at 0) and the
- * index cursor points to the current state (that we cared to save).
- *
- * When we're just inserting entries index is 0 and the most recent state is
- * history[0], but as we perform undo operations index increases and points
- * further back in history. If index is > history.length there are no further
- * states we can revert to.
- *
- * Inserting new states when index is > 0 truncates the history array and
- * effectively starts a new timeline from there, so you can no longer use redo()
- * to return to the more recent states.
- *
- * Repeatedly performing actions of the same type (insert or delete) doesn't
- * create new history states; instead it overwrites the previous one. This means
- * when you undo it will undo a batch of single-character insert or deletes at
- * once, rather than doing each keypress individually. This is controlled by the
- * `type` field of an UndoState and the `overwrite` parameter in save() - if
- * overwrite is true *and* the type of the new state matches the most recent
- * undo state then it will overwrite instead of insert.
- * 
- * While this class doesn't make any restrictions about how that logic is applied,
- * the implementation currently behaves as such:
- * - Non-whitespace single-character inserts can overwrite each other
- * - Single-character delete or backspace can overwrite each other
- * - Typing a whitespace character will not overwrite; it starts a new state
- * - Pasting more than one character or deleting a selection starts a new state
- */
-class UndoBuffer<T extends {type: any}> {
-    /** History of undo states, from most recent to oldest */
-    private history: T[];
-    /** Position of the last saved state (if there is any). Normally 0,
-     * increases as we undo and decreases as we redo */
-    private index: number = 0;
-    constructor(initialState: T) {
-        this.history = [initialState];
-    }
-    public save(state: T, overwrite: boolean = false) {
-        let in_past = false;
-        // Discard any post-index history; we can't perform redo now we've written new state
-        if(this.index > 0) {
-            this.history = this.history.slice(this.index);
-            this.index = 0;
-            in_past = true;
-        }
-        if(!in_past && this.history.length > 0 && overwrite && state.type !== null && state.type === this.current?.type) {
-            this.history[0] = state;
-            console.log("Overwriting previous undo state with ", this.current);
-        } else {
-            this.history.unshift(state);
-            console.log("Inserting new undo state of ", this.current);
-        }
-    }
-    public get current(): T | undefined {
-        if(this.index < this.history.length) return this.history[this.index];
-        return undefined;
-    }
-    public undo(): T | undefined {
-        if(this.index < this.history.length - 1) {
-            this.index++;
-            console.log("Undoing to state", this.current," index is now", this.index);
-            return this.current;
-        }
-        return undefined;
-    }
-    public redo(): T | undefined {
-        if(this.index > 0 && this.index < this.history.length) {
-            this.index--;
-            console.log("Redoing to state", this.current," index is now", this.index);
-            return this.current;
-        }
-        return undefined;
-    }
-}
+
+
+
 export class TextEditor extends HTMLElement {
-    private _text: string = "";
-    private lineLengths: number[] = [];
-    // public src: string = "";
+    private text = new TextModel();
     public width: number = 400;
     public height: number = 400;
     // Map of font sizes to their json structures
     public size: FontSize = "12";
     private font: typeof font12 = font12;
-    private _start = 0;
-    public get start() {
-        return this._start;
-    }
-    public set start(value) {
-        this._start = value;
-    }
-    private end = 0;
-    private forward = true;
     private sprite = new Image();
     private blinkInterval = 500;
     private blink = false;
     private hasFocus = false;
     private intervalRef: ReturnType<typeof setInterval> | null = null;
     private canvas: HTMLCanvasElement;
-    private history = new UndoBuffer<UndoState>({text: this.text, cursor: this.cursor, type: null});
+    
     private eventMap = {
         "load": this.imageLoaded.bind(this),
         "keydown": this.keyDowned.bind(this),
@@ -223,13 +134,7 @@ export class TextEditor extends HTMLElement {
     private get showCursor(): boolean {
         return this.hasFocus && !this.blink;
     }
-    public get text(): string {
-        return this._text;
-    }
-    public set text(newValue: string) {
-        this._text = newValue;
-        this.lineLengths = newValue.split("\n").map(line => [...line].length);
-    }
+
     private redraw(): void {
         const context = this.canvas.getContext("2d");
         if(!context || !this.sprite.complete) return;
@@ -242,7 +147,7 @@ export class TextEditor extends HTMLElement {
         // Current character, determines when we paint a selection
         let c = 0;
         let y = margin.y;
-        for(const line of this.text.split("\n")) {
+        for(const line of this.text.text.split("\n")) {
           let x = margin.x;
           // When we want to do colour we'll need to mess around with https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Compositing
           for (const cpChar of line) {
@@ -253,13 +158,13 @@ export class TextEditor extends HTMLElement {
             var advance_width = glyph.w + glyph.right;
 
             // If we have an active selection, draw the box
-            if (c >= this.start && c < this.end) {
+            if (c >= this.text.selectionStart && c < this.text.selectionEnd) {
                 // Use glyph.w instead of advance width as we want to wrap the whole sprite
                 context.fillRect(x, y, glyph.w, this.font.line_height);
             }
             // If the cursor is not currently blinking and should be
             // at this position, draw it (to the left)      
-            if(this.showCursor && this.cursor == c) {
+            if(this.showCursor && this.text.cursor == c) {
                context.strokeRect(x, y, 0, this.font.line_height);
             }
             context.drawImage(this.sprite, glyph.x, glyph.y, glyph.w, glyph.h, x, y + glyph.top, glyph.w, glyph.h);
@@ -267,7 +172,7 @@ export class TextEditor extends HTMLElement {
             c++;
           }
           // If the cursor is at the end of the line, draw it after the last glyph
-          if(this.showCursor && this.cursor == c) {
+          if(this.showCursor && this.text.cursor == c) {
             context.strokeRect(x, y, 0, this.font.line_height);
           }
           y += this.font.line_height;
@@ -284,29 +189,39 @@ export class TextEditor extends HTMLElement {
         {key: "z", shift: true, action: this.redo}
     ];
     private clipboardCopy(ev_: Event) {
-        if(this.selection.length > 0) navigator.clipboard.writeText(this.selection);
+        if(this.text.selection.length > 0) {
+            navigator.clipboard.writeText(this.text.selection);
+            // Doesn't redraw as nothing's changed
+        }
     }
     private clipboardCut(ev_: Event) {
-        if(this.selection.length > 0) {
-            navigator.clipboard.writeText(this.selection);
-            this.delete(true);
+        if(this.text.selection.length > 0) {
+            navigator.clipboard.writeText(this.text.selection);
+            this.text.delete(CursorDirection.Forward);
+            this.postUpdate();
         }
     }
     private clipboardPaste(ev_: Event ) {
         navigator.clipboard.readText().then((text) => {
-            if(text.length > 0) this.insert(text, true);
+            if(text.length > 0) {
+                this.text.insert(text, true);
+                this.postUpdate();
+            }
         });
     }
     private selectAll(ev: Event) {
-        this.update(this.text, 0, -1, true);
+        this.text.selectAll();
         // Stop this propogating to do a select-all on the whole page
         ev.preventDefault();
+        this.postUpdate(false);
     }
     private undo(ev_: Event) {
-        this.restoreState(this.history.undo());
+        this.text.undo();
+        this.postUpdate();
     }
     private redo(ev_: Event) {
-        this.restoreState(this.history.redo());
+        this.text.redo();
+        this.postUpdate();
     }
     private keyDowned(ev: KeyboardEvent) {
         // Control bindings
@@ -326,114 +241,78 @@ export class TextEditor extends HTMLElement {
         if([...ev.key].length === 1) {
             // Skip command bindings (for now) and composition events
             if(ev.altKey || ev.ctrlKey || ev.metaKey || ev.isComposing) return;
-            this.insert(ev.key);
+            this.text.insert(ev.key);
+            this.postUpdate();
         } else {
             switch(ev.key) {
-            case "Backspace":
-                this.delete(false);
+            case "Enter":
+            case "Return":
+                this.text.insert("\n");
+                this.postUpdate();
                 break;
+            case "Backspace":
             case "Delete":
-                this.delete(true);
+                this.text.delete(ev.key === "Backspace" ? CursorDirection.Backward : CursorDirection.Forward);
+                this.postUpdate();
                 break;                
             case "Right":
             case "ArrowRight":
-                if(ev.shiftKey) this.extendX(true);  
-                else this.moveX(true);
-                break;
             case "Left":
             case "ArrowLeft":
-                if(ev.shiftKey) this.extendX(false);
-                else this.moveX(false);
+                const direction = ev.key === "Right" || ev.key === "ArrowRight" ? CursorDirection.Forward : CursorDirection.Backward;
+                this.text.moveCursor(direction, ev.ctrlKey ? MoveDistance.Word : MoveDistance.Character, ev.shiftKey);
+                this.postUpdate();
                 break;
+            case "Up":
+            case "Down":
+            case "ArrowUp":
+            case "ArrowDown": {
+                // TODO: Ctrl+Up/Down should be scroll instead of move
+                const direction = ev.key === "Up" || ev.key === "ArrowUp" ? CursorDirection.Backward : CursorDirection.Forward;
+                this.text.moveCursor(direction, MoveDistance.Line, ev.shiftKey);
+                this.postUpdate();
+                break;
+            }
+
             default:
                 // console.log("Unhandled key", ev.key);
             }
         }
     }
+    /**
+     * Called after each update to the text model.
+     * 
+     * Optioanlly restart the cursor blink (so the cursor is visible) and do a redraw
+     */
+    private postUpdate(reblink = true): void {
+        if(reblink) this.restartBlinking();
+        this.redraw();
+    }
     private imageLoaded(e: Event): void {
         console.log("Sprite image (re)loaded");
-        this.redraw()
+        this.redraw();
     }
     focusChanged(e: FocusEvent): void {
         if(e.type === "blur") this.hasFocus = false;
         else this.hasFocus = true;
     }
-    private get preSelection(): string {
-        return this.text.substring(0, this.start);
-    }
-    private get postSelection(): string {
-        return this.text.substring(this.end);
-    }
-    private get selection(): string {
-        return this.text.substring(this.start, this.end);
-    }
-    private get cursor(): number {
-        return this.forward ? this.end : this.start;
-    }
-    private restoreState(state: UndoState | undefined) {
-        if(state) this.update(state.text, state.cursor, state.cursor, true);
-    }
-    private update(text: string, start: number, end: number, forward: boolean) {
-        this.text = text;
-        // Negative start/end mean offsets from end, turn those into offsets from start
-        if(start < 0) start = this.text.length - start;
-        if(end < 0) end = this.text.length - end;
-        if(start > end) {
-            this.start = end;
-            this.end = start;
-        } else {
-            this.start = start;
-            this.end = end;
-        }
-        this.forward = forward;
-        this.restartBlinking();
-        this.redraw();
-    }
-    insert(text: string, batch = false) {
-        text = text.replace(/\r\n/g, "\n");
-        this.update(
-            this.preSelection + text + this.postSelection,
-            this.start + [...text].length,
-            this.start + [...text].length,
-            true            
-        );
-        this.history.save({text: this.text, cursor: this.cursor, type: UndoType.INSERT}, !batch && text.trim().length !== 0);
-    }
-    delete(forward: boolean) {
-        let canReplace = true;
-        if(this.end > this.start) {
-            this.update(this.preSelection + this.postSelection,
-                this.start,
-                this.start,
-                true
-                );
-            canReplace = false;
-        } else if(forward) {
-          this.update(this.preSelection + this.postSelection.substring(1), this.start, this.start, true);
-        } else {
-          let newC = Math.max(0, this.start - 1);
-          this.update(this.text.substring(0, newC) + this.postSelection, newC, newC, true);
-        }
-        this.history.save({text: this.text, cursor: this.cursor, type: UndoType.DELETE}, canReplace);
-    }
-    moveX(forward: boolean) {
-        let newC;
-        if(this.start != this.end) {
-            newC = forward ? this.end : this.start;
-            
-        } else {
-            newC = this.cursor + (forward ? 1 : -1);
-        }
-        this.update(this.text, newC, newC, true);
-    }
-    extendX(forward: boolean) {
-        const x = forward ? 1 : -1;
-        if(this.forward || this.start == this.end) {
-            this.update(this.text, this.start, this.end + x, this.start<=this.end + x);
-        } else {
-            this.update(this.text, this.start + x, this.end, this.start + x > this.end);
-        }
-    }    
+
     
+    // private update(text: string, start: number, end: number, forward: boolean) {
+    //     this.text = text;
+    //     // Negative start/end mean offsets from end, turn those into offsets from start
+    //     if(start < 0) start = this.text.length - start;
+    //     if(end < 0) end = this.text.length - end;
+    //     if(start > end) {
+    //         this.start = end;
+    //         this.end = start;
+    //     } else {
+    //         this.start = start;
+    //         this.end = end;
+    //     }
+    //     this.forward = forward;
+    // }
+    
+
 }
 customElements.define('text-editor', TextEditor);
