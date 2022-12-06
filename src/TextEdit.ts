@@ -1,4 +1,4 @@
-import { CanvasHTMLAttributes, DetailedHTMLProps, DOMAttributes } from 'react';
+import { MutableRefObject, DetailedHTMLProps, HTMLAttributes, DOMAttributes, RefAttributes } from 'react';
 
 import { CursorDirection, MoveDistance, TextModel } from './TextModel';
 
@@ -7,7 +7,8 @@ import font14 from './res/axis-14-lobby.json';
 import font18 from './res/axis-18-lobby.json';
 
 
-type TextEditorElement = Partial<TextEditor & DOMAttributes<TextEditor & { children: any }>>;
+// type TextEditorElement = Partial<TextEditor & DOMAttributes<TextEditor & { children: any }> & RefAttributes<MutableRefObject<TextEditor>>>;
+type TextEditorElement = DetailedHTMLProps<HTMLAttributes<TextEditor> & Partial<TextEditor>, TextEditor>;
 
 declare global {
   namespace JSX {
@@ -41,6 +42,12 @@ export class TextEditor extends HTMLElement {
     private hasFocus = false;
     private intervalRef: ReturnType<typeof setInterval> | null = null;
     private canvas: HTMLCanvasElement;
+    private selectBuffer: HTMLCanvasElement;
+    private textBuffer: HTMLCanvasElement;
+    private cursorBuffer: HTMLCanvasElement;
+    private get canvases() {
+        return [this.canvas, this.selectBuffer, this.textBuffer, this.cursorBuffer];
+    } 
     
     private eventMap = {
         "load": this.imageLoaded.bind(this),
@@ -66,6 +73,9 @@ export class TextEditor extends HTMLElement {
         
         this.attachShadow({mode: "open"});
         this.canvas = document.createElement("canvas");
+        this.selectBuffer = document.createElement("canvas");
+        this.textBuffer = document.createElement("canvas");
+        this.cursorBuffer = document.createElement("canvas");
     }
     public static get observedAttributes(): string[] {
         return ["size", "width", "height"];
@@ -75,7 +85,7 @@ export class TextEditor extends HTMLElement {
             case "height":
             case "width": {
                 this[name] = parseInt(newValue, 10);
-                this.canvas.setAttribute(name, newValue);
+                this.canvases.forEach(c => c.setAttribute(name, newValue));
                 break;
             }
             case "size": {
@@ -117,6 +127,9 @@ export class TextEditor extends HTMLElement {
             this.imageLoaded(e);
         }
     }
+    public insert(text: string) {
+        this.text.insert(text);
+    }
     private setFont(size: FontSize) {
         this.size = size;
         this.font = fontMap[this.size];
@@ -131,54 +144,80 @@ export class TextEditor extends HTMLElement {
             this.redraw();
         }, this.blinkInterval)        
     }
-    private get showCursor(): boolean {
+    private get cursorVisible(): boolean {
         return this.hasFocus && !this.blink;
     }
 
     private redraw(): void {
-        const context = this.canvas.getContext("2d");
-        if(!context || !this.sprite.complete) return;
+        const contexts = this.canvases.map(c => c.getContext("2d"));
+        const [context, selectContext, textContext, cursorContext] = contexts;
+        if(!context || !selectContext || !textContext || !cursorContext || !this.sprite.complete) return;
         const margin = {x: 1, y: 1};
-        context.clearRect(0, 0, this.width, this.height);
-        // console.log("Updating, text is", text, "selection is", selection, "blink is", cursorBlink);
+        contexts.forEach(c => c!.clearRect(0, 0, this.width, this.height));
+        
         // TODO: Customise these
-        context.fillStyle = "#a0a0ff";
-        context.strokeStyle = "#000000";
+        selectContext.fillStyle = "#a0a0ff";
+        cursorContext.strokeStyle = "#000000";
         // Current character, determines when we paint a selection
         let c = 0;
         let y = margin.y;
+        
         for(const line of this.text.text.split("\n")) {
           let x = margin.x;
+          // Reset previous glyph at the start of each line
+          let prev: number | undefined = undefined;  
           // When we want to do colour we'll need to mess around with https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Compositing
           for (const cpChar of line) {
             const codepoint = cpChar.codePointAt(0);
+            // Font structure is associative so uses codepoint as a string
             const key = `${codepoint}`;
             var glyph = this.font.glyphs[key as keyof typeof this.font.glyphs] || this.font.default_glyph;
-            // TODO: Kerning
-            var advance_width = glyph.w + glyph.right;
+            var advanceWidth = glyph.w + glyph.right; 
+            // Apply kerning if we have a previous glyph
+            if(prev) {
+                for(let kernRow of this.font.kerning) {
+                    if(kernRow.left === prev) {
+                        for(let pair of kernRow.kerning) {
+                            if(pair.right === glyph.kern) {
+                                x += pair.kern;
+                            }
+                            break;
+                        }
+                        break;
+                    }
+                }
+            }
+            prev = glyph.kern;
 
             // If we have an active selection, draw the box
             if (c >= this.text.selectionStart && c < this.text.selectionEnd) {
-                // Use glyph.w instead of advance width as we want to wrap the whole sprite
-                context.fillRect(x, y, glyph.w, this.font.line_height);
+                // For the last character in the selection, use glyph.w instead of advance_width
+                // so we don't cut it short for glyphs with negative right offset
+                const w = c === this.text.selectionEnd - 1 ? glyph.w : advanceWidth;
+                selectContext.fillRect(x, y, w, this.font.line_height);
             }
             // If the cursor is not currently blinking and should be
             // at this position, draw it (to the left)      
-            if(this.showCursor && this.text.cursor == c) {
-               context.strokeRect(x, y, 0, this.font.line_height);
+            if(this.cursorVisible && this.text.cursor == c) {
+               cursorContext.strokeRect(x, y, 0, this.font.line_height);
             }
-            context.drawImage(this.sprite, glyph.x, glyph.y, glyph.w, glyph.h, x, y + glyph.top, glyph.w, glyph.h);
-            x += advance_width;
+            textContext.drawImage(this.sprite, glyph.x, glyph.y, glyph.w, glyph.h, x, y + glyph.top, glyph.w, glyph.h);
+            x += advanceWidth;
             c++;
+            
           }
           // If the cursor is at the end of the line, draw it after the last glyph
-          if(this.showCursor && this.text.cursor == c) {
-            context.strokeRect(x, y, 0, this.font.line_height);
+          if(this.cursorVisible && this.text.cursor == c) {
+            cursorContext.strokeRect(x, y, 0, this.font.line_height);
           }
           y += this.font.line_height;
           // the linebreak is also a character for cursor purposes
           c++;
-        }        
+        }      
+        // layer all the buffers together
+        context.drawImage(this.selectBuffer, 0, 0);
+        context.drawImage(this.textBuffer, 0, 0);
+        context.drawImage(this.cursorBuffer, 0, 0);  
     }
     private keyBindings: {key: string, shift?: boolean, test?: (ev: KeyboardEvent) => boolean, action: (ev: KeyboardEvent) => void}[] = [
         {key: "c", action: this.clipboardCopy},
@@ -232,7 +271,7 @@ export class TextEditor extends HTMLElement {
             const key = ev.key.toLowerCase();
             for(let b of this.keyBindings) {
                 if(b.key === key && (b.shift === undefined || b.shift == ev.shiftKey) && (b.test === undefined || b.test(ev))) {
-                    b.action(ev);
+                    b.action.call(this, ev);
                     break;
                 }
             }
@@ -256,23 +295,41 @@ export class TextEditor extends HTMLElement {
                 this.postUpdate();
                 break;                
             case "Right":
-            case "ArrowRight":
-            case "Left":
-            case "ArrowLeft":
-                const direction = ev.key === "Right" || ev.key === "ArrowRight" ? CursorDirection.Forward : CursorDirection.Backward;
-                this.text.moveCursor(direction, ev.ctrlKey ? MoveDistance.Word : MoveDistance.Character, ev.shiftKey);
-                this.postUpdate();
-                break;
-            case "Up":
-            case "Down":
-            case "ArrowUp":
-            case "ArrowDown": {
-                // TODO: Ctrl+Up/Down should be scroll instead of move
-                const direction = ev.key === "Up" || ev.key === "ArrowUp" ? CursorDirection.Backward : CursorDirection.Forward;
-                this.text.moveCursor(direction, MoveDistance.Line, ev.shiftKey);
+            case "ArrowRight": {
+                this.text.moveCursor(CursorDirection.Forward, ev.ctrlKey ? MoveDistance.Word : MoveDistance.Character, ev.shiftKey);
                 this.postUpdate();
                 break;
             }
+            case "Left":
+            case "ArrowLeft": {
+                this.text.moveCursor(CursorDirection.Backward, ev.ctrlKey ? MoveDistance.Word : MoveDistance.Character, ev.shiftKey);
+                this.postUpdate();
+                break;
+            }
+            // TODO: Ctrl+Up/Down could be scroll instead of move
+            case "Up":
+            case "ArrowUp": {
+                this.text.moveCursor(CursorDirection.Backward, MoveDistance.Line, ev.shiftKey);
+                this.postUpdate();
+                break;
+            }
+            case "Down":
+            case "ArrowDown": {
+                this.text.moveCursor(CursorDirection.Forward, MoveDistance.Line, ev.shiftKey);
+                this.postUpdate();
+                break;
+            }
+            case "Home": {
+                this.text.moveCursor(CursorDirection.Backward, ev.ctrlKey ? MoveDistance.Document : MoveDistance.LineEnd, ev.shiftKey);
+                this.postUpdate();
+                break;
+            }
+            case "End": {
+                this.text.moveCursor(CursorDirection.Forward, ev.ctrlKey ? MoveDistance.Document : MoveDistance.LineEnd, ev.shiftKey);
+                this.postUpdate();
+                break;
+            }
+
 
             default:
                 // console.log("Unhandled key", ev.key);
@@ -296,23 +353,6 @@ export class TextEditor extends HTMLElement {
         if(e.type === "blur") this.hasFocus = false;
         else this.hasFocus = true;
     }
-
-    
-    // private update(text: string, start: number, end: number, forward: boolean) {
-    //     this.text = text;
-    //     // Negative start/end mean offsets from end, turn those into offsets from start
-    //     if(start < 0) start = this.text.length - start;
-    //     if(end < 0) end = this.text.length - end;
-    //     if(start > end) {
-    //         this.start = end;
-    //         this.end = start;
-    //     } else {
-    //         this.start = start;
-    //         this.end = end;
-    //     }
-    //     this.forward = forward;
-    // }
-    
 
 }
 customElements.define('text-editor', TextEditor);

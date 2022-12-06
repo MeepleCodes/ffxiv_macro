@@ -28,7 +28,11 @@ export class TextModel {
     private _text: string = "";
     // The length of each line in _text, including trailing newlines
     private lineLengths: number[] = [0];
+    // How far along the line the cursor is, expressed as codepoints (not characters/code units)
+    // This can exceed the current line length, in which case the cursor will be drawn at the
+    // end of the line but if we navigate vertically it will remember its true position
     private cursorX = 0;
+    // Which line the cursor is on
     private cursorY = 0;
     private anchor: number | null = null;
     private history = new UndoBuffer<UndoState>({text: this.text, cursorX: this.cursorX, cursorY: this.cursorY, type: null});
@@ -51,6 +55,27 @@ export class TextModel {
 
     public set cursor(newValue: number) {
         [this.cursorX, this.cursorY] = this.cursorXYFromOffset(newValue);
+    }
+
+    /**
+     * Get the cursorX/Y pair for the end of the current document
+     */
+    public eofXY() {
+        const y = this.lineLengths.length - 1;
+        return [this.lineLengths[y], y];
+    }
+
+    /**
+     * Get the length of a given line, excluding trailing \n
+     * @param line The line to get the length of
+     * @returns 
+     */
+    public lineLength(line: number): number {
+        if(line == this.lineLengths.length - 1) {
+            return this.lineLengths[line];
+        } else {
+            return this.lineLengths[line] - 1;
+        }
     }
     /**
      * Get the start of the selection as an offset from the start of the text.
@@ -84,26 +109,25 @@ export class TextModel {
      * Get all text before the selection (or cursor, if there is no selection)
      */
     public get preSelection(): string {
-        return this.text.substring(0, this.selectionStart);
+        return [...this.text].slice(0, this.selectionStart).join("");
     }
     /**
      * Get all text after the selection (or cursor, if there is no selection)
      */
     public get postSelection(): string {
-        return this.text.substring(this.selectionEnd);
+        return [...this.text].slice(this.selectionEnd).join("")
     }
     /**
      * Get the currently selected text. If there is no selection, return an
      * empty string.
      */
     public get selection(): string {
-        return this.text.substring(this.selectionStart, this.selectionEnd);
+        return [...this.text].slice(this.selectionStart, this.selectionEnd).join("")
     }
 
     public selectAll() {
         this.anchor = 0;
-        this.cursorY = this.lineLengths.length - 1;
-        this.cursorX = this.lineLengths[this.cursorY];
+        [this.cursorX, this.cursorY] = this.eofXY();
     }
     /**
      * Insert a character or block of text
@@ -122,6 +146,7 @@ export class TextModel {
         const newCursor = this.selectionStart + [...text].length;
         this.text = this.preSelection + text + this.postSelection;
         this.cursor = newCursor;
+        this.anchor = null;
         this.history.save({text: this.text, cursorX: this.cursorX, cursorY: this.cursorY, type: UndoType.INSERT}, !batch && text.trim().length !== 0); 
     }
 
@@ -150,6 +175,8 @@ export class TextModel {
             this.text = this._text.substring(0, newCursor) + this.postSelection;
             this.cursor = newCursor;
         }
+        // Clear the selection
+        this.anchor = null;
         this.history.save({text: this.text, cursorX: this.cursorX, cursorY: this.cursorY, type: UndoType.DELETE}, canReplace);
     }
 
@@ -194,10 +221,7 @@ export class TextModel {
 
     private cursorOffsetFromXY(x: number, y: number): number {
         const toLineStart = this.lineLengths.slice(0, y).reduce((prev, cur) => prev + cur, 0);
-        let lineLen = this.lineLengths[y];
-        // If this isn't the last line, then the character length of this line is one less (to account for \n)
-        if(y < this.lineLengths.length - 1) lineLen--;
-        return toLineStart + Math.min(lineLen, x);
+        return toLineStart + Math.min(this.lineLength(y), x);
     }
     /**
      */
@@ -240,11 +264,46 @@ export class TextModel {
                 toY += mod;
                 break;
             }
-            // TODO: Word, LineEnd
+            case MoveDistance.LineEnd: {
+                if(direction == CursorDirection.Forward) {
+                    toX = this.lineLength(toY);
+                } else {
+                    toX = 0;
+                }
+                break;
+            }
+            case MoveDistance.Word: {
+                // Move in the direction of travel until we have passed
+                // at least one non-whitespace, then stop at the next
+                // whitespace
+                const from = this.cursorOffsetFromXY(fromX, fromY);
+                // Cursor is expressed as codepoints, *not* characters, so do this
+                const scanCPs = direction === CursorDirection.Forward ? 
+                    [...this._text].slice(from).join("") :
+                    [...this._text].slice(0, from).reverse().join("");
+                
+                const offset = scanCPs.search(/(?<=\S)\s/);
+                if(direction === CursorDirection.Forward) {
+                    if(offset === -1) [toX, toY] = this.eofXY();
+                    else [toX, toY] = this.cursorXYFromOffset(from + offset);
+                } else {
+                    if(offset === -1) [toX, toY] = [0, 0];
+                    else [toX, toY] = this.cursorXYFromOffset(from - offset);
+                }
+                break;
+            }
+            case MoveDistance.Document: {
+                if(direction === CursorDirection.Forward) {
+                    [toX, toY] = this.eofXY()
+                } else {
+                    [toX, toY] = [0, 0];
+                }
+            }
+            
         }
-        
+        // cursorX can exceed current line length, but cursorY can't go out of bounds
         this.cursorX = toX;
-        this.cursorY = toY;
+        this.cursorY = Math.min(this.lineLengths.length - 1, Math.max(0, toY));
     }
 
     public undo() {
@@ -276,5 +335,7 @@ export enum MoveDistance {
     // To the start or end of the current line
     LineEnd,
     // Up or down one line
-    Line
+    Line,
+    // To the start or end of the text
+    Document
 }

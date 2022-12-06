@@ -8,14 +8,29 @@ import {FontSizes, TextEditor} from './TextEdit';
 
 function App() {
   let [size, setSize] = useState<TextEditor["size"]>("18");
+  const ref = useRef<TextEditor>(null);
   return (
     <div className="outer">
-      <text-editor size={size} width={400} height={400} tabIndex={1} contentEditable="true"/>
+      <text-editor size={size} ref={ref} width={400} height={400} tabIndex={1} contentEditable="true"/>
       {
       FontSizes.map(s => 
         <button key={s} onClick={e => setSize(s)}>{s}</button>
       )}
-      blah
+      <div className="glyphs">
+        {Object.entries(font.glyphs).map(([cp, glyph]) => 
+          <p 
+            className="g" 
+            key={cp}
+            title={`${String.fromCodePoint(parseInt(cp))} (U+${parseInt(cp).toString(16)})`}
+            style={{backgroundImage: `url(${spritesheet})`, width: glyph.w, height: glyph.h, backgroundPosition: `-${glyph.x}px -${glyph.y}px`}}
+            onClick={e => {
+                ref.current?.insert(String.fromCodePoint(parseInt(cp)));
+                // setText(textRef.current?.value!);
+              }
+            }
+          />)
+        }
+      </div>
     </div>
   );
 }

@@ -47,10 +47,10 @@
         }
         if(!in_past && this.history.length > 0 && overwrite && state.type !== null && state.type === this.current?.type) {
             this.history[0] = state;
-            console.log("Overwriting previous undo state with ", this.current);
+            // console.log("Overwriting previous undo state with ", this.current);
         } else {
             this.history.unshift(state);
-            console.log("Inserting new undo state of ", this.current);
+            // console.log("Inserting new undo state of ", this.current);
         }
     }
     public get current(): T | undefined {
@@ -60,7 +60,7 @@
     public undo(): T | undefined {
         if(this.index < this.history.length - 1) {
             this.index++;
-            console.log("Undoing to state", this.current," index is now", this.index);
+            // console.log("Undoing to state", this.current," index is now", this.index);
             return this.current;
         }
         return undefined;
@@ -68,7 +68,7 @@
     public redo(): T | undefined {
         if(this.index > 0 && this.index < this.history.length) {
             this.index--;
-            console.log("Redoing to state", this.current," index is now", this.index);
+            // console.log("Redoing to state", this.current," index is now", this.index);
             return this.current;
         }
         return undefined;
