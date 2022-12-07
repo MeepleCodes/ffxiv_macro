@@ -20,20 +20,24 @@ interface UndoState {
  * anchor then the selection is a 'backwards' one and selection changes will
  * operate differently.
  * 
- * Events
- * ===
- * This 'update' event will be emitted whenever the 
+ * All cursor offsets are expressed in *codepoints* not characters, which means
+ * you can't use most Javascript string functions - doing so will operate badly
+ * around codepoints which encode to more than one UTF-16 code value.
  */
 export class TextModel {
     private _text: string = "";
     // The length of each line in _text, including trailing newlines
-    private lineLengths: number[] = [0];
+    private _lineLengths: number[] = [0];
+    public get lineLengths() {
+        // Return a copy just to avoid mutation
+        return this._lineLengths.slice();
+    }
     // How far along the line the cursor is, expressed as codepoints (not characters/code units)
     // This can exceed the current line length, in which case the cursor will be drawn at the
     // end of the line but if we navigate vertically it will remember its true position
-    private cursorX = 0;
+    public cursorX = 0;
     // Which line the cursor is on
-    private cursorY = 0;
+    public cursorY = 0;
     private anchor: number | null = null;
     private history = new UndoBuffer<UndoState>({text: this.text, cursorX: this.cursorX, cursorY: this.cursorY, type: null});
 
@@ -44,7 +48,7 @@ export class TextModel {
         this._text = newValue;
         // Add one to the length of every line except the last to account for
         // the newline we removed by using split()
-        this.lineLengths = newValue.split("\n").map((line, index, array) => [...line].length + (index == array.length-1 ? 0 : 1));
+        this._lineLengths = newValue.split("\n").map((line, index, array) => [...line].length + (index == array.length-1 ? 0 : 1));
     }
     /**
      * Get the cursor position as an offset from the start of the text
@@ -60,7 +64,7 @@ export class TextModel {
     /**
      * Get the cursorX/Y pair for the end of the current document
      */
-    public eofXY() {
+    public eofXY(): [number, number] {
         const y = this.lineLengths.length - 1;
         return [this.lineLengths[y], y];
     }
@@ -179,20 +183,6 @@ export class TextModel {
         this.anchor = null;
         this.history.save({text: this.text, cursorX: this.cursorX, cursorY: this.cursorY, type: UndoType.DELETE}, canReplace);
     }
-
-    /*
-    Cursor behaviour:
-    Movement with no extend:
-    - If selection, use side of selection in the direction of travel
-    - Otherwise use cursor position
-    - Find actual cursor position, clamping to line end
-    - Add/subtract
-    
-    Movement with extend:
-    - Always use cursor position
-
-    */
-
     /**
      * Turn a cursor value as an offset into X/Y cursor position
      *
@@ -224,9 +214,19 @@ export class TextModel {
         return toLineStart + Math.min(this.lineLength(y), x);
     }
     /**
+     * 
+     * Cursor behaviour:
+     *  Movement with no extend:
+     *  - If selection, use side of selection in the direction of travel
+     *  - Otherwise use cursor position
+     *  - Find actual cursor position, clamping to line end
+     *  - Add/subtract
+     *
+     * Movement with extend:
+     *  - Always use cursor position
      */
     public moveCursor(direction: CursorDirection, distance: MoveDistance, extend = false) {
-        // The x/y cursor location we're going to be moving from For simple
+        // The x/y cursor location we're going to be moving from. For simple
         // moves this is the current cursor, but if we have an existing
         // selection it will be the side of the selection in the direction of
         // travel If we're creating/extending a selection it will always be the
@@ -277,7 +277,10 @@ export class TextModel {
                 // at least one non-whitespace, then stop at the next
                 // whitespace
                 const from = this.cursorOffsetFromXY(fromX, fromY);
-                // Cursor is expressed as codepoints, *not* characters, so do this
+                // Cursor is expressed as codepoints, *not* characters, so do
+                // this The reversing is still not *perfect* (it might fuck up
+                // combined characters for accents etc) but for what we need it
+                // should be ok
                 const scanCPs = direction === CursorDirection.Forward ? 
                     [...this._text].slice(from).join("") :
                     [...this._text].slice(0, from).reverse().join("");

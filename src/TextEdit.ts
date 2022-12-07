@@ -1,6 +1,7 @@
 import { MutableRefObject, DetailedHTMLProps, HTMLAttributes, DOMAttributes, RefAttributes } from 'react';
 
 import { CursorDirection, MoveDistance, TextModel } from './TextModel';
+import { Glyph } from './Font';
 
 import font12 from './res/axis-12-lobby.json';
 import font14 from './res/axis-14-lobby.json';
@@ -52,6 +53,7 @@ export class TextEditor extends HTMLElement {
     private eventMap = {
         "load": this.imageLoaded.bind(this),
         "keydown": this.keyDowned.bind(this),
+        "click": this.clicked.bind(this),
         "focus": this.focusChanged.bind(this),
         "blur": this.focusChanged.bind(this),
         "copy": console.log,
@@ -147,12 +149,78 @@ export class TextEditor extends HTMLElement {
     private get cursorVisible(): boolean {
         return this.hasFocus && !this.blink;
     }
+    /**
+     * Get the font glyph for a given codepoint, or the default.
+     */
+    private getGlyph(cpChar: string): Glyph {
+        const codepoint = cpChar.codePointAt(0);
+        // Font structure is associative so uses codepoint as a string
+        const key = `${codepoint}`;
+        return this.font.glyphs[key as keyof typeof this.font.glyphs] || this.font.default_glyph;
+    }
+    private  margin = {x: 1, y: 1};
+    private cursorXYFromPoint(x: number, y: number): [number, number] {
+        // assume a 1:1 canvas pixel to HTML document ratio
+        // Not sure if this is actually true or how to correct if it isn't
+        const cY = Math.floor(Math.max(0, y - this.margin.y) / this.font.line_height);
 
+        if(cY >= this.text.lineLengths.length) {
+            return this.text.eofXY();
+        }
+        const line = this.text.text.split("\n")[cY];
+        console.log("Closest line is", cY, line, "trying to find an X in it");
+        const lineLength = [...line].length;
+        let pixelX = this.margin.x;
+        let cX = 0;
+        this.forEachGlyph(line, (glyph: Glyph, advanceWidth: number) => {
+            if(x <= pixelX + (advanceWidth / 2)) {
+                console.log("Clicked in left half of glyph", cY);
+                return false;
+            } else if(x <= pixelX + advanceWidth) {
+                console.log("Clicked in right half of glyph", cY);
+                cX++;
+                return false;
+            }
+            cX++;
+            pixelX += advanceWidth;
+            return true;
+        });
+        console.log("I think we clicked at", cX, cY);
+        return [cX, cY];
+    }
+    private getKerning(leftClass: number, rightClass: number): number | null {
+        for(let kernRow of this.font.kerning) {
+            if(kernRow.left === leftClass) {
+                for(let pair of kernRow.kerning) {
+                    if(pair.right === rightClass) {
+                        return pair.kern;
+                    }
+                }
+                // If we found the leftClass but no matching rightClass then
+                // stop looking (we won't find any more)
+                break;
+            }
+        }
+        return null;
+    }
+    private forEachGlyph(line: string, callback: (glyph: Glyph, advanceWidth: number) => boolean) {
+        const glyphs = [...line].map(c => this.getGlyph(c));
+        for(const [i, glyph] of glyphs.entries()) {
+            let advanceWidth = glyph.w + glyph.right;
+            // Look ahead by one to see if we need to apply kerning
+            if(i < glyphs.length - 1) {
+                const nextGlyph = glyphs[i + 1];
+                const kerning = this.getKerning(glyph.kern, nextGlyph.kern);
+                if(kerning !== null) advanceWidth += kerning;
+            }
+            if(callback(glyph, advanceWidth) === false) break;
+        }        
+    }
     private redraw(): void {
         const contexts = this.canvases.map(c => c.getContext("2d"));
         const [context, selectContext, textContext, cursorContext] = contexts;
         if(!context || !selectContext || !textContext || !cursorContext || !this.sprite.complete) return;
-        const margin = {x: 1, y: 1};
+        
         contexts.forEach(c => c!.clearRect(0, 0, this.width, this.height));
         
         // TODO: Customise these
@@ -160,35 +228,11 @@ export class TextEditor extends HTMLElement {
         cursorContext.strokeStyle = "#000000";
         // Current character, determines when we paint a selection
         let c = 0;
-        let y = margin.y;
+        let y = this.margin.y;
         
         for(const line of this.text.text.split("\n")) {
-          let x = margin.x;
-          // Reset previous glyph at the start of each line
-          let prev: number | undefined = undefined;  
-          // When we want to do colour we'll need to mess around with https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Compositing
-          for (const cpChar of line) {
-            const codepoint = cpChar.codePointAt(0);
-            // Font structure is associative so uses codepoint as a string
-            const key = `${codepoint}`;
-            var glyph = this.font.glyphs[key as keyof typeof this.font.glyphs] || this.font.default_glyph;
-            var advanceWidth = glyph.w + glyph.right; 
-            // Apply kerning if we have a previous glyph
-            if(prev) {
-                for(let kernRow of this.font.kerning) {
-                    if(kernRow.left === prev) {
-                        for(let pair of kernRow.kerning) {
-                            if(pair.right === glyph.kern) {
-                                x += pair.kern;
-                            }
-                            break;
-                        }
-                        break;
-                    }
-                }
-            }
-            prev = glyph.kern;
-
+          let x = this.margin.x;
+          this.forEachGlyph(line, (glyph: Glyph, advanceWidth: number) => {
             // If we have an active selection, draw the box
             if (c >= this.text.selectionStart && c < this.text.selectionEnd) {
                 // For the last character in the selection, use glyph.w instead of advance_width
@@ -199,13 +243,13 @@ export class TextEditor extends HTMLElement {
             // If the cursor is not currently blinking and should be
             // at this position, draw it (to the left)      
             if(this.cursorVisible && this.text.cursor == c) {
-               cursorContext.strokeRect(x, y, 0, this.font.line_height);
+                cursorContext.strokeRect(x, y, 0, this.font.line_height);
             }
             textContext.drawImage(this.sprite, glyph.x, glyph.y, glyph.w, glyph.h, x, y + glyph.top, glyph.w, glyph.h);
             x += advanceWidth;
             c++;
-            
-          }
+            return true;
+          });
           // If the cursor is at the end of the line, draw it after the last glyph
           if(this.cursorVisible && this.text.cursor == c) {
             cursorContext.strokeRect(x, y, 0, this.font.line_height);
@@ -261,6 +305,9 @@ export class TextEditor extends HTMLElement {
     private redo(ev_: Event) {
         this.text.redo();
         this.postUpdate();
+    }
+    private clicked(ev: MouseEvent) {
+        [this.text.cursorX, this.text.cursorY] = this.cursorXYFromPoint(ev.offsetX, ev.offsetY);
     }
     private keyDowned(ev: KeyboardEvent) {
         // Control bindings
