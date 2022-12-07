@@ -2,6 +2,7 @@
   "name": "ffxiv_macro",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://meeplecodes.github.io/ffxiv_macro",
   "dependencies": {
     "@react-hook/resize-observer": "^1.2.6",
     "@testing-library/jest-dom": "^5.16.5",
