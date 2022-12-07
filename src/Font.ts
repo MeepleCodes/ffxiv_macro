@@ -21,3 +21,9 @@ export interface Kerning {
     left: number;
     kerning: {right: number, kern: number}[];
 }
+export interface GlyphPage {
+    name: string;
+    start: number;
+    end: number;
+    glyphs: Glyph[];
+}

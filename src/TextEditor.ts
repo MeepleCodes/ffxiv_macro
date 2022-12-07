@@ -1,5 +1,3 @@
-import { MutableRefObject, DetailedHTMLProps, HTMLAttributes, DOMAttributes, RefAttributes } from 'react';
-
 import { CursorDirection, MoveDistance, TextModel } from './TextModel';
 import { Glyph } from './Font';
 
@@ -8,17 +6,6 @@ import font14 from './res/axis-14-lobby.json';
 import font18 from './res/axis-18-lobby.json';
 
 
-// type TextEditorElement = Partial<TextEditor & DOMAttributes<TextEditor & { children: any }> & RefAttributes<MutableRefObject<TextEditor>>>;
-type TextEditorElement = DetailedHTMLProps<HTMLAttributes<TextEditor> & Partial<TextEditor>, TextEditor>;
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-        //DetailedHTMLProps<CanvasHTMLAttributes<HTMLCanvasElement>, HTMLCanvasElement> 
-      ['text-editor']: TextEditorElement
-    }
-  }
-}
 const fontMap = {
     "12": font12,
     "14": font14,
@@ -27,13 +14,30 @@ const fontMap = {
 export type FontSize = keyof typeof fontMap;
 export const FontSizes: [FontSize] = Object.keys(fontMap) as [FontSize];
 
+const STYLESHEET = `
+    :host {
+        border: 1px solid black;
+        cursor: text;
+        overflow: auto;
+        width: 200px;
+        height: 100px;
+    }
+`;
 
-
+enum ScrollBehaviour {
+    NONE,
+    WITH_MARGIN,
+    NO_MARGIN
+};
 
 export class TextEditor extends HTMLElement {
     private text = new TextModel();
-    public width: number = 400;
-    public height: number = 400;
+    private margin = {x: 1, y: 1};
+    private scrollMargin = {left: this.margin.x, right: this.margin.x, top: this.margin.y, bottom: this.margin.y};
+    private renderWidth: number = this.margin.x * 2;
+    private renderHeight: number = this.margin.y * 2;
+    private cursorX = this.margin.x;
+    private cursorY = this.margin.y;
     // Map of font sizes to their json structures
     public size: FontSize = "12";
     private font: typeof font12 = font12;
@@ -42,32 +46,25 @@ export class TextEditor extends HTMLElement {
     private blink = false;
     private hasFocus = false;
     private intervalRef: ReturnType<typeof setInterval> | null = null;
+    private stylesheet: HTMLStyleElement;
     private canvas: HTMLCanvasElement;
     private selectBuffer: HTMLCanvasElement;
     private textBuffer: HTMLCanvasElement;
     private cursorBuffer: HTMLCanvasElement;
     private get canvases() {
         return [this.canvas, this.selectBuffer, this.textBuffer, this.cursorBuffer];
-    } 
+    }
+    private get buffers() {
+        return [this.selectBuffer, this.textBuffer, this.cursorBuffer];
+    }
     
     private eventMap = {
         "load": this.imageLoaded.bind(this),
         "keydown": this.keyDowned.bind(this),
-        "click": this.clicked.bind(this),
+        "mousedown": this.mouseDowned.bind(this),
+        "mousemove": this.mouseMoved.bind(this),
         "focus": this.focusChanged.bind(this),
         "blur": this.focusChanged.bind(this),
-        "copy": console.log,
-        "paste": console.log,
-        "select": console.log,
-        "compositionend": console.log,
-        "selectstart": (e: Event) => {
-            console.log("Selection started", e);
-            console.log("Current selection is", getSelection());
-            e.stopPropagation();
-            e.preventDefault();
-            e.cancelBubble = true;
-        },
-        "selectionchange": console.log,
     }
     constructor() {
         super();
@@ -78,6 +75,8 @@ export class TextEditor extends HTMLElement {
         this.selectBuffer = document.createElement("canvas");
         this.textBuffer = document.createElement("canvas");
         this.cursorBuffer = document.createElement("canvas");
+        this.stylesheet = document.createElement("style");
+        this.stylesheet.innerHTML = STYLESHEET;
     }
     public static get observedAttributes(): string[] {
         return ["size", "width", "height"];
@@ -86,8 +85,8 @@ export class TextEditor extends HTMLElement {
         switch(name) {
             case "height":
             case "width": {
-                this[name] = parseInt(newValue, 10);
-                this.canvases.forEach(c => c.setAttribute(name, newValue));
+                // this[name] = parseInt(newValue, 10);
+                // this.canvases.forEach(c => c.setAttribute(name, newValue));
                 break;
             }
             case "size": {
@@ -102,24 +101,31 @@ export class TextEditor extends HTMLElement {
             
         }
       }
-    public disconnectedCallback() {
-        if(this.intervalRef) clearInterval(this.intervalRef);
-        this.sprite.removeEventListener("load", this);
-            for(const [event, _] of Object.entries(this.eventMap)) {
-                this.removeEventListener(event, this);
-            }
-    }
     public connectedCallback() {
         if(this.isConnected) {
             this.setAttribute("contenteditable", "");
+            this.setAttribute("tab-index", "0");
             this.setAttribute("aria-role", "textarea");
             this.setAttribute("aria-multiline", "true");
-            this.shadowRoot?.appendChild(this.canvas);
+            const container = document.createElement("div");
+            container.className = "container";
+            // Could go back to attaching directly to the shadow root
+            container.appendChild(this.stylesheet);
+            container.appendChild(this.canvas);
+
+            this.shadowRoot?.appendChild(container);
             this.restartBlinking();
             this.sprite.addEventListener("load", this);
             for(const [event, _] of Object.entries(this.eventMap)) {
                 this.addEventListener(event, this);
             }
+        }
+    }
+    public disconnectedCallback() {
+        if(this.intervalRef) clearInterval(this.intervalRef);
+        this.sprite.removeEventListener("load", this);
+        for(const [event, _] of Object.entries(this.eventMap)) {
+            this.removeEventListener(event, this);
         }
     }
     public handleEvent(e: Event) : void {
@@ -136,7 +142,12 @@ export class TextEditor extends HTMLElement {
         this.size = size;
         this.font = fontMap[this.size];
         this.sprite.src = this.font.src;
-        console.log("Font size set to ", size);
+        this.scrollMargin = {
+            left: this.margin.x + this.font.line_height * 2,
+            right: this.margin.x + this.font.line_height,
+            top: this.margin.y,
+            bottom: this.margin.y + this.font.line_height * 2
+        };
     }
     private restartBlinking() {
         this.blink = false;
@@ -158,8 +169,11 @@ export class TextEditor extends HTMLElement {
         const key = `${codepoint}`;
         return this.font.glyphs[key as keyof typeof this.font.glyphs] || this.font.default_glyph;
     }
-    private  margin = {x: 1, y: 1};
+    
     private cursorXYFromPoint(x: number, y: number): [number, number] {
+        // Correct for scrolling of the container
+        x += this.scrollLeft;
+        y += this.scrollTop;
         // assume a 1:1 canvas pixel to HTML document ratio
         // Not sure if this is actually true or how to correct if it isn't
         const cY = Math.floor(Math.max(0, y - this.margin.y) / this.font.line_height);
@@ -168,16 +182,13 @@ export class TextEditor extends HTMLElement {
             return this.text.eofXY();
         }
         const line = this.text.text.split("\n")[cY];
-        console.log("Closest line is", cY, line, "trying to find an X in it");
         const lineLength = [...line].length;
         let pixelX = this.margin.x;
         let cX = 0;
         this.forEachGlyph(line, (glyph: Glyph, advanceWidth: number) => {
             if(x <= pixelX + (advanceWidth / 2)) {
-                console.log("Clicked in left half of glyph", cY);
                 return false;
             } else if(x <= pixelX + advanceWidth) {
-                console.log("Clicked in right half of glyph", cY);
                 cX++;
                 return false;
             }
@@ -185,7 +196,6 @@ export class TextEditor extends HTMLElement {
             pixelX += advanceWidth;
             return true;
         });
-        console.log("I think we clicked at", cX, cY);
         return [cX, cY];
     }
     private getKerning(leftClass: number, rightClass: number): number | null {
@@ -216,12 +226,21 @@ export class TextEditor extends HTMLElement {
             if(callback(glyph, advanceWidth) === false) break;
         }        
     }
+    /**
+     * Calculate a safe size for a canvas to draw the current text content on
+     * 
+     * Will be a gross over-estimate but avoids clipping
+     */
+    private safeSize(): [number, number] {
+        return [Math.max(...this.text.lineLengths) * this.font.line_height * 2 + this.margin.x * 2, this.margin.y * 2 + this.text.lineLengths.length * this.font.line_height];
+    }
     private redraw(): void {
         const contexts = this.canvases.map(c => c.getContext("2d"));
         const [context, selectContext, textContext, cursorContext] = contexts;
         if(!context || !selectContext || !textContext || !cursorContext || !this.sprite.complete) return;
+        const drawSize = this.safeSize();
+        this.buffers.forEach(b => [b.width, b.height] = drawSize);
         
-        contexts.forEach(c => c!.clearRect(0, 0, this.width, this.height));
         
         // TODO: Customise these
         selectContext.fillStyle = "#a0a0ff";
@@ -229,9 +248,13 @@ export class TextEditor extends HTMLElement {
         // Current character, determines when we paint a selection
         let c = 0;
         let y = this.margin.y;
-        
+        // Height is fixed
+        let height = this.margin.y * 2 + this.text.lineLengths.length * this.font.line_height;
+        // Width is the longest line we've drawn
+        let width = this.margin.x * 2;
         for(const line of this.text.text.split("\n")) {
           let x = this.margin.x;
+          let rowWidth = 0;
           this.forEachGlyph(line, (glyph: Glyph, advanceWidth: number) => {
             // If we have an active selection, draw the box
             if (c >= this.text.selectionStart && c < this.text.selectionEnd) {
@@ -242,26 +265,70 @@ export class TextEditor extends HTMLElement {
             }
             // If the cursor is not currently blinking and should be
             // at this position, draw it (to the left)      
-            if(this.cursorVisible && this.text.cursor == c) {
-                cursorContext.strokeRect(x, y, 0, this.font.line_height);
+            if(this.text.cursor == c) {
+                this.cursorX = x;
+                this.cursorY = y;
             }
             textContext.drawImage(this.sprite, glyph.x, glyph.y, glyph.w, glyph.h, x, y + glyph.top, glyph.w, glyph.h);
+            // Take the wider of advanceWidth or glyph width when measuring the row
+            rowWidth = Math.max(x + advanceWidth, x + glyph.w);
             x += advanceWidth;
             c++;
             return true;
           });
           // If the cursor is at the end of the line, draw it after the last glyph
-          if(this.cursorVisible && this.text.cursor == c) {
-            cursorContext.strokeRect(x, y, 0, this.font.line_height);
+          if(this.text.cursor == c) {
+            this.cursorX = x;
+            this.cursorY = y;
           }
+          // Increment y coordinate
           y += this.font.line_height;
-          // the linebreak is also a character for cursor purposes
+          // the linebreak is also a character for cursor purposes so increment c
           c++;
-        }      
+          if(rowWidth + this.margin.x * 2 > width) {
+            width = this.margin.x * 2 + rowWidth;
+          }
+        }
+        if(this.cursorVisible) {
+            cursorContext.beginPath();
+            cursorContext.moveTo(this.cursorX+1, this.cursorY);
+            cursorContext.lineTo(this.cursorX+1, this.cursorY + this.font.line_height);
+            cursorContext.stroke();
+        }
+        // Resize the visible buffer (which will also clear it, even if the numbers don't change)
+        this.canvas.width = width;
+        this.canvas.height = height;
         // layer all the buffers together
         context.drawImage(this.selectBuffer, 0, 0);
         context.drawImage(this.textBuffer, 0, 0);
-        context.drawImage(this.cursorBuffer, 0, 0);  
+        context.drawImage(this.cursorBuffer, 0, 0);
+    }
+
+    public scrollToCursor() {
+        // When scrolling, remove the margin again so we actually
+        // scroll to 0,0
+        let targetX = this.scrollLeft;
+        let targetY = this.scrollTop;
+        for(const x of [this.cursorX - this.scrollMargin.left, this.cursorX + this.scrollMargin.right]) {
+            for(const y of [this.cursorY - this.scrollMargin.top, this.cursorY + this.scrollMargin.bottom]) {
+                // Check if this would be visible based on our *current* scroll
+                // target, so we don't bother re-doing a scroll if we'd already
+                // see what we want
+                if(x < targetX) {
+                    targetX = x;
+                } else if(x >= targetX + this.clientWidth) {
+                    targetX = x - this.clientWidth;
+                }
+                if(y < targetY) {
+                    targetY = y;
+                } else if(y >= targetY + this.clientHeight) {
+                    targetY = y - this.clientHeight;
+                }
+            }
+        }
+        if(targetX !== this.scrollLeft || targetY !== this.scrollTop) {
+            this.scrollTo(targetX, targetY);
+        }
     }
     private keyBindings: {key: string, shift?: boolean, test?: (ev: KeyboardEvent) => boolean, action: (ev: KeyboardEvent) => void}[] = [
         {key: "c", action: this.clipboardCopy},
@@ -294,9 +361,7 @@ export class TextEditor extends HTMLElement {
     }
     private selectAll(ev: Event) {
         this.text.selectAll();
-        // Stop this propogating to do a select-all on the whole page
-        ev.preventDefault();
-        this.postUpdate(false);
+        this.postUpdate(false, false);
     }
     private undo(ev_: Event) {
         this.text.undo();
@@ -306,10 +371,21 @@ export class TextEditor extends HTMLElement {
         this.text.redo();
         this.postUpdate();
     }
-    private clicked(ev: MouseEvent) {
-        [this.text.cursorX, this.text.cursorY] = this.cursorXYFromPoint(ev.offsetX, ev.offsetY);
+    private mouseDowned(ev: MouseEvent) {
+        if(ev.button === 0) {
+            this.text.setCursor(...this.cursorXYFromPoint(ev.offsetX, ev.offsetY), ev.shiftKey);
+            this.postUpdate(false);
+        }
+    }
+    private mouseMoved(ev: MouseEvent) {
+        if(ev.buttons & 1) {
+            this.text.setCursor(...this.cursorXYFromPoint(ev.offsetX, ev.offsetY), true);
+            this.postUpdate(false);
+        }
     }
     private keyDowned(ev: KeyboardEvent) {
+        let preventDefault = true;
+        let wasControl = false;
         // Control bindings
         if(ev.ctrlKey) {
             // Handle the problem that key can be upper- or lower-case
@@ -319,17 +395,18 @@ export class TextEditor extends HTMLElement {
             for(let b of this.keyBindings) {
                 if(b.key === key && (b.shift === undefined || b.shift == ev.shiftKey) && (b.test === undefined || b.test(ev))) {
                     b.action.call(this, ev);
+                    wasControl = true;
                     break;
                 }
             }
         }
         // If it's a typeable character then it will have a single codepoint
-        if([...ev.key].length === 1) {
-            // Skip command bindings (for now) and composition events
-            if(ev.altKey || ev.ctrlKey || ev.metaKey || ev.isComposing) return;
+        // But not it any control keys are held down
+        if([...ev.key].length === 1 && !(ev.altKey || ev.ctrlKey || ev.metaKey || ev.isComposing)) {
             this.text.insert(ev.key);
             this.postUpdate();
-        } else {
+        } else if(!wasControl) {
+            
             switch(ev.key) {
             case "Enter":
             case "Return":
@@ -376,21 +453,26 @@ export class TextEditor extends HTMLElement {
                 this.postUpdate();
                 break;
             }
-
-
-            default:
+            default: {
                 // console.log("Unhandled key", ev.key);
+                preventDefault = false;
+            }
             }
         }
+        if(preventDefault) ev.preventDefault();
     }
     /**
-     * Called after each update to the text model.
+     * Call after any changes to the text model to force UI refresh.
      * 
-     * Optioanlly restart the cursor blink (so the cursor is visible) and do a redraw
+     * Optionally restart the cursor blink timer (ensuring the cursor starts
+     * visible) and scroll to bring the cursor into view.
      */
-    private postUpdate(reblink = true): void {
+    private postUpdate(scroll = true, reblink = true): void {
         if(reblink) this.restartBlinking();
         this.redraw();
+        if(scroll) {
+            this.scrollToCursor();
+        }
     }
     private imageLoaded(e: Event): void {
         console.log("Sprite image (re)loaded");
@@ -398,7 +480,10 @@ export class TextEditor extends HTMLElement {
     }
     focusChanged(e: FocusEvent): void {
         if(e.type === "blur") this.hasFocus = false;
-        else this.hasFocus = true;
+        else {
+            this.hasFocus = true;
+            this.postUpdate();
+        }
     }
 
 }

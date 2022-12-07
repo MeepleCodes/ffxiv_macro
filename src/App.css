@@ -1,38 +1,33 @@
-div.outer {
+.outer {
+  margin: 8px;
+}
+div.row {
   display: flex;
   flex-direction: row;
 }
-  div.outer div {
-    width: 400px;
-    height: 400px;
-  }
+div.col {
+  display: flex;
+  flex-direction: column;
+}
 div.glyphs {
   overflow: auto;
-}
-div.textboxwrap {
-  position: relative;
-  flex-shrink: 0;
-}
-textarea {
-  background: #a0ffff;
-  width: 400px;
+  flex-grow: 0;
   height: 400px;
-}
-canvas {
+  width: 400px;
   border: 1px solid black;
-  width: 400px;
-  height: 400px;
-  top: 0;
-  left: 0;
+}
+button.tab {
+  padding: 8px;
+  border-radius: 4px 4px 0 0;
+  border: 2px outset grey;
+  border-bottom: 1px solid black;
+  margin: 0 4px -1px 4px;
+  z-index: 1;
+}
+button.tab.selected {
+  border-style: solid;
   background: white;
-  box-sizing: border-box;
-}
-canvas:focus {
-  border-width: 2px;
-  background: pink;
-}
-img {
-  display: none;
+  border-bottom: 1px hidden black;
 }
 p.g {
   display: inline-block;
@@ -40,4 +35,7 @@ p.g {
 }
 p.g:hover {
   outline: 1px solid red;
+}
+text-editor {
+  height: 200px;
 }

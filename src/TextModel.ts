@@ -35,9 +35,9 @@ export class TextModel {
     // How far along the line the cursor is, expressed as codepoints (not characters/code units)
     // This can exceed the current line length, in which case the cursor will be drawn at the
     // end of the line but if we navigate vertically it will remember its true position
-    public cursorX = 0;
+    private cursorX = 0;
     // Which line the cursor is on
-    public cursorY = 0;
+    private cursorY = 0;
     private anchor: number | null = null;
     private history = new UndoBuffer<UndoState>({text: this.text, cursorX: this.cursorX, cursorY: this.cursorY, type: null});
 
@@ -214,6 +214,17 @@ export class TextModel {
         return toLineStart + Math.min(this.lineLength(y), x);
     }
     /**
+     * Set the cursor to new X/Y coordinates, optionally extending or creating a selection
+     */
+    public setCursor(cursorX: number, cursorY: number, extend = false) {
+        if(extend && this.anchor === null) this.anchor = this.cursor;
+        if(!extend) this.anchor = null;
+
+        // cursorX can exceed current line length, but cursorY can't go out of bounds
+        this.cursorX = Math.max(0, cursorX);
+        this.cursorY = Math.min(this.lineLengths.length - 1, Math.max(0, cursorY));
+    }
+    /**
      * 
      * Cursor behaviour:
      *  Movement with no extend:
@@ -243,11 +254,6 @@ export class TextModel {
         } else {
             [fromX, fromY] = this.cursorXYFromOffset(this.selectionStart);
         }
-
-        // If we're starting a new selection, save the anchor
-        if(extend && this.anchor === null) this.anchor = this.cursor;
-        // If we're not selecting, drop any existing selection
-        if(!extend) this.anchor = null;
 
         // Where the cursor will end up
         let [toX, toY] = [fromX, fromY];
@@ -304,9 +310,7 @@ export class TextModel {
             }
             
         }
-        // cursorX can exceed current line length, but cursorY can't go out of bounds
-        this.cursorX = toX;
-        this.cursorY = Math.min(this.lineLengths.length - 1, Math.max(0, toY));
+        this.setCursor(toX, toY, extend);
     }
 
     public undo() {
