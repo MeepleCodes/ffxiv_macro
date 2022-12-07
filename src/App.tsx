@@ -1,14 +1,12 @@
-import React, { KeyboardEvent, RefObject, SyntheticEvent, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import logo from './logo.svg';
+import { useRef, useState } from 'react';
 import './App.css';
-import useResizeObserver from '@react-hook/resize-observer'
 import font from './res/axis-12-lobby.json';
 import spritesheet from './res/axis-12-lobby.png'
-import { Glyph, GlyphPage } from './Font';
+import { GlyphPage } from './Font';
 import './TextEditorReact';
 import {FontSizes, TextEditor} from './TextEditor';
 const glyphPages: GlyphPage[] = [{name: 'Latin etc', start: 0, end: 0x2FFF, glyphs: []}, {name: "CJK", start: 0x3000, end: 0xDFFF, glyphs: []}, {name: "Private", start: 0xE000, end: 0xFFFF, glyphs: []}]
-for(let [cp, glyph] of Object.entries(font.glyphs)) {
+for(let [, glyph] of Object.entries(font.glyphs)) {
   for(let page of glyphPages) {
     if(glyph.codepoint >= page.start && glyph.codepoint <= page.end) {
       page.glyphs.push(glyph);

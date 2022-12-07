@@ -1,4 +1,4 @@
-import { MutableRefObject, DetailedHTMLProps, HTMLAttributes, DOMAttributes, RefAttributes } from 'react';
+import { DetailedHTMLProps, HTMLAttributes } from 'react';
 import { TextEditor } from './TextEditor';
 // type TextEditorElement = Partial<TextEditor & DOMAttributes<TextEditor & { children: any }> & RefAttributes<MutableRefObject<TextEditor>>>;
 type TextEditorElement = DetailedHTMLProps<HTMLAttributes<TextEditor> & Partial<TextEditor>, TextEditor>;

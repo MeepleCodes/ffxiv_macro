@@ -9,6 +9,22 @@ interface UndoState {
     cursorY: number;
     type: UndoType | null;
 }
+export enum CursorDirection {
+    Forward,
+    Backward
+}
+export enum MoveDistance {
+    // One character left or right
+    Character,
+    // One word left or right
+    Word,
+    // To the start or end of the current line
+    LineEnd,
+    // Up or down one line
+    Line,
+    // To the start or end of the text
+    Document
+}
 /**
  * A abstract model for the text and cursor/selection in a text editor.
  *
@@ -48,7 +64,7 @@ export class TextModel {
         this._text = newValue;
         // Add one to the length of every line except the last to account for
         // the newline we removed by using split()
-        this._lineLengths = newValue.split("\n").map((line, index, array) => [...line].length + (index == array.length-1 ? 0 : 1));
+        this._lineLengths = newValue.split("\n").map((line, index, array) => [...line].length + (index === array.length-1 ? 0 : 1));
     }
     /**
      * Get the cursor position as an offset from the start of the text
@@ -75,7 +91,7 @@ export class TextModel {
      * @returns 
      */
     public lineLength(line: number): number {
-        if(line == this.lineLengths.length - 1) {
+        if(line === this.lineLengths.length - 1) {
             return this.lineLengths[line];
         } else {
             return this.lineLengths[line] - 1;
@@ -168,7 +184,7 @@ export class TextModel {
             this.text = this.preSelection + this.postSelection;
             this.cursor = newCursor;
             canReplace = false;
-        } else if(direction == CursorDirection.Forward) {
+        } else if(direction === CursorDirection.Forward) {
             const newCursor = this.cursor;
             this.text = this.preSelection + this.postSelection.substring(1);
             // Force a new cursor value even though it's not changed as this will
@@ -271,7 +287,7 @@ export class TextModel {
                 break;
             }
             case MoveDistance.LineEnd: {
-                if(direction == CursorDirection.Forward) {
+                if(direction === CursorDirection.Forward) {
                     toX = this.lineLength(toY);
                 } else {
                     toX = 0;
@@ -330,19 +346,3 @@ export class TextModel {
     }    
 }
 
-export enum CursorDirection {
-    Forward,
-    Backward
-}
-export enum MoveDistance {
-    // One character left or right
-    Character,
-    // One word left or right
-    Word,
-    // To the start or end of the current line
-    LineEnd,
-    // Up or down one line
-    Line,
-    // To the start or end of the text
-    Document
-}

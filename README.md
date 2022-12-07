@@ -9,7 +9,8 @@ Vague list of features still to implement
 [x] Kerning
 [x] Character picker (slightly better one, but performance suffers)
 [x] Line wrapping and/or scrolling
-- Refactor control key bindings in TextEditor
+[~] Refactor control key bindings in TextEditor
+- Column-mode selection
 - Switch to dynamically loading fonts and spritesheet (rather than the huge bundles we're currently making)
 [x] Anything involving the mouse
 - Dropping text (easy)

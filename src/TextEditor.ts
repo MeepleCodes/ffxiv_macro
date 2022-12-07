@@ -24,11 +24,27 @@ const STYLESHEET = `
     }
 `;
 
-enum ScrollBehaviour {
-    NONE,
-    WITH_MARGIN,
-    NO_MARGIN
-};
+/*
+    private keyBindings: {key: string, shift?: boolean, test?: (ev: KeyboardEvent) => boolean, action: (ev: KeyboardEvent) => void}[] = [
+        {key: "c", action: this.clipboardCopy},
+        {key: "x", action: this.clipboardCut},
+        {key: "v", action: this.clipboardPaste},
+        {key: "a", action: this.selectAll},
+        {key: "z", shift: false, action: this.undo},
+        {key: "z", shift: true, action: this.redo}
+    ];
+
+    */
+// class KeyBinding {
+//     constructor(
+//         public key: string,
+//         public action: (ev: KeyboardEvent) => void,
+//         public shift?: boolean
+//     ){}
+//     public matches(ev: KeyboardEvent) {
+//         return ev.key.toLowerCase() === this.key && (this.shift === undefined || ev.shiftKey === this.shift);
+//     }
+// }
 
 export class TextEditor extends HTMLElement {
     private text = new TextModel();
@@ -116,7 +132,7 @@ export class TextEditor extends HTMLElement {
             this.shadowRoot?.appendChild(container);
             this.restartBlinking();
             this.sprite.addEventListener("load", this);
-            for(const [event, _] of Object.entries(this.eventMap)) {
+            for(const [event,] of Object.entries(this.eventMap)) {
                 this.addEventListener(event, this);
             }
         }
@@ -124,14 +140,14 @@ export class TextEditor extends HTMLElement {
     public disconnectedCallback() {
         if(this.intervalRef) clearInterval(this.intervalRef);
         this.sprite.removeEventListener("load", this);
-        for(const [event, _] of Object.entries(this.eventMap)) {
+        for(const [event, ] of Object.entries(this.eventMap)) {
             this.removeEventListener(event, this);
         }
     }
     public handleEvent(e: Event) : void {
         if(e.target === this && e.type in this.eventMap) {
             this.eventMap[e.type as keyof typeof this.eventMap](e as any);
-        } else if(e.target === this.sprite && e.type == "load") {
+        } else if(e.target === this.sprite && e.type === "load") {
             this.imageLoaded(e);
         }
     }
@@ -182,7 +198,6 @@ export class TextEditor extends HTMLElement {
             return this.text.eofXY();
         }
         const line = this.text.text.split("\n")[cY];
-        const lineLength = [...line].length;
         let pixelX = this.margin.x;
         let cX = 0;
         this.forEachGlyph(line, (glyph: Glyph, advanceWidth: number) => {
@@ -252,10 +267,9 @@ export class TextEditor extends HTMLElement {
         let height = this.margin.y * 2 + this.text.lineLengths.length * this.font.line_height;
         // Width is the longest line we've drawn
         let width = this.margin.x * 2;
-        for(const line of this.text.text.split("\n")) {
-          let x = this.margin.x;
-          let rowWidth = 0;
-          this.forEachGlyph(line, (glyph: Glyph, advanceWidth: number) => {
+        let x = this.margin.x;
+        let rowWidth = 0;
+        const drawGlyph = (glyph: Glyph, advanceWidth: number) => {
             // If we have an active selection, draw the box
             if (c >= this.text.selectionStart && c < this.text.selectionEnd) {
                 // For the last character in the selection, use glyph.w instead of advance_width
@@ -265,7 +279,7 @@ export class TextEditor extends HTMLElement {
             }
             // If the cursor is not currently blinking and should be
             // at this position, draw it (to the left)      
-            if(this.text.cursor == c) {
+            if(this.text.cursor === c) {
                 this.cursorX = x;
                 this.cursorY = y;
             }
@@ -275,9 +289,13 @@ export class TextEditor extends HTMLElement {
             x += advanceWidth;
             c++;
             return true;
-          });
+        };
+        for(const line of this.text.text.split("\n")) {
+          x = this.margin.x;
+          rowWidth = 0;
+          this.forEachGlyph(line, drawGlyph);
           // If the cursor is at the end of the line, draw it after the last glyph
-          if(this.text.cursor == c) {
+          if(this.text.cursor === c) {
             this.cursorX = x;
             this.cursorY = y;
           }
@@ -393,7 +411,7 @@ export class TextEditor extends HTMLElement {
             // binding 
             const key = ev.key.toLowerCase();
             for(let b of this.keyBindings) {
-                if(b.key === key && (b.shift === undefined || b.shift == ev.shiftKey) && (b.test === undefined || b.test(ev))) {
+                if(b.key === key && (b.shift === undefined || b.shift === ev.shiftKey) && (b.test === undefined || b.test(ev))) {
                     b.action.call(this, ev);
                     wasControl = true;
                     break;
