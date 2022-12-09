@@ -1,8 +1,11 @@
-import { DetailedHTMLProps, HTMLAttributes } from 'react';
+import React from 'react';
 import { TextEditor } from './TextEditor';
-// type TextEditorElement = Partial<TextEditor & DOMAttributes<TextEditor & { children: any }> & RefAttributes<MutableRefObject<TextEditor>>>;
-type TextEditorElement = DetailedHTMLProps<HTMLAttributes<TextEditor> & Partial<TextEditor>, TextEditor>;
-
+interface TextEditorHTMLAttributes<T> extends React.HTMLAttributes<T> {
+  size: string;
+}
+// type TextEditorAttributes<T> = React.HTMLAttributes<T> & Omit<TextEditor, keyof HTMLCustomElement>;
+type TextEditorElement = React.DetailedHTMLProps<TextEditorHTMLAttributes<TextEditor>, TextEditor>;
+// React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>;
 declare global {
   namespace JSX {
     interface IntrinsicElements {

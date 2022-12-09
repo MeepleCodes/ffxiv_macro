@@ -19,8 +19,11 @@ function App() {
   const ref = useRef<TextEditor>(null);
   return (
     <div className="row outer">
+      <textarea style={{width: 400, height: 400, flexShrink: 0}}>Test</textarea>
       <div className="col">
-        <text-editor size={size} ref={ref}/>
+        <text-editor size={size} ref={ref}>
+          This is some text!
+        </text-editor>
         <div className="row">
           Font size:
         {

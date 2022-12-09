@@ -41,9 +41,9 @@ export enum MoveDistance {
  * around codepoints which encode to more than one UTF-16 code value.
  */
 export class TextModel {
-    private _text: string = "";
+    private _text!: string;
     // The length of each line in _text, including trailing newlines
-    private _lineLengths: number[] = [0];
+    private _lineLengths!: number[];
     public get lineLengths() {
         // Return a copy just to avoid mutation
         return this._lineLengths.slice();
@@ -51,16 +51,33 @@ export class TextModel {
     // How far along the line the cursor is, expressed as codepoints (not characters/code units)
     // This can exceed the current line length, in which case the cursor will be drawn at the
     // end of the line but if we navigate vertically it will remember its true position
-    private cursorX = 0;
+    private cursorX!: number;
     // Which line the cursor is on
-    private cursorY = 0;
-    private anchor: number | null = null;
-    private history = new UndoBuffer<UndoState>({text: this.text, cursorX: this.cursorX, cursorY: this.cursorY, type: null});
+    private cursorY!: number;
+    private anchor!: number | null;
+    private history!: UndoBuffer<UndoState>;
 
+    public constructor(initialText: string = "") {
+        this.reset(initialText);
+    }
+
+    /**
+     * Reset the model, optionally with an initial text string.
+     * 
+     * Clears the cursor and selection and resets the undo buffer.
+     * 
+     * @param initialText Optional text to initialise the model with
+     */
+     public reset(initialText: string = "") {
+        this.text = initialText;
+        this.cursorX = this.cursorY = 0;
+        this.anchor = null;
+        this.history = new UndoBuffer<UndoState>({text: this.text, cursorX: this.cursorX, cursorY: this.cursorY, type: null})
+    }
     public get text(): string {
         return this._text;
     }
-    public set text(newValue: string) {
+    private set text(newValue: string) {
         this._text = newValue;
         // Add one to the length of every line except the last to account for
         // the newline we removed by using split()
@@ -149,6 +166,7 @@ export class TextModel {
         this.anchor = 0;
         [this.cursorX, this.cursorY] = this.eofXY();
     }
+
     /**
      * Insert a character or block of text
      * 
@@ -177,7 +195,7 @@ export class TextModel {
      * either before or after the cursor.
      * @param direction Which character to delete if there's no selected text
      */
-    public delete(direction: CursorDirection) {
+    public delete(direction: CursorDirection, bypassUndo = false) {
         let canReplace = true;
         if(this.anchor !== null) {
             const newCursor = this.selectionStart;
@@ -197,7 +215,7 @@ export class TextModel {
         }
         // Clear the selection
         this.anchor = null;
-        this.history.save({text: this.text, cursorX: this.cursorX, cursorY: this.cursorY, type: UndoType.DELETE}, canReplace);
+        if(!bypassUndo) this.history.save({text: this.text, cursorX: this.cursorX, cursorY: this.cursorY, type: UndoType.DELETE}, canReplace);
     }
     /**
      * Turn a cursor value as an offset into X/Y cursor position
