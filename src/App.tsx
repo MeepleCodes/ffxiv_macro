@@ -1,12 +1,38 @@
 import { useRef, useState } from 'react';
 import './App.css';
-import font from './res/axis-12-lobby.json';
+import font from './axis-12-lobby.json';
 import spritesheet from './res/axis-12-lobby.png'
 import { GlyphPage } from './Font';
+import { TextEditor } from './TextEditor';
 import './TextEditorReact';
-import {FontSizes, TextEditor} from './TextEditor';
+type FontSource = {
+  name: string;
+  src: string;
+  request: string;
+}
+const fontSources: FontSource[] = [];
+
+function importRes(requireContext: __WebpackModuleApi.RequireContext, cache = false) {
+  requireContext.keys().forEach((request) => {
+    const res = requireContext(request);
+    if(cache) {
+        const parts = (request.startsWith("./") ? request.substring(2) : request).split(/[-.]/).slice(0,2);
+        const name = parts[0].charAt(0).toUpperCase() + parts[0].substring(1) + " " + parts[1];
+        fontSources.push({
+          name: name,
+          src: res,
+          request: request
+        });
+    }
+    
+  });
+}
+
+importRes(require.context('./res/', true, /\.png$/), false);
+importRes(require.context('./res/', true, /-combined\.json$/), true);
+
 const glyphPages: GlyphPage[] = [{name: 'Latin etc', start: 0, end: 0x2FFF, glyphs: []}, {name: "CJK", start: 0x3000, end: 0xDFFF, glyphs: []}, {name: "Private", start: 0xE000, end: 0xFFFF, glyphs: []}]
-for(let [, glyph] of Object.entries(font.glyphs)) {
+for(let glyph of font.glyphs.slice(1)) {
   for(let page of glyphPages) {
     if(glyph.codepoint >= page.start && glyph.codepoint <= page.end) {
       page.glyphs.push(glyph);
@@ -14,22 +40,20 @@ for(let [, glyph] of Object.entries(font.glyphs)) {
   }
 }
 function App() {
-  let [size, setSize] = useState<TextEditor["size"]>("12");
+  // let [size, setSize] = useState<TextEditor["size"]>("12");
+  let [font, setFont] = useState<FontSource>(fontSources[0]);
   let [tab, setTab] = useState<number>(0);
   const ref = useRef<TextEditor>(null);
+  console.log("App function ran");
   return (
     <div className="row outer">
-      <textarea style={{width: 400, height: 400, flexShrink: 0}}>Test</textarea>
       <div className="col">
-        <text-editor size={size} ref={ref}>
+        <text-editor fontsrc={font.src} ref={ref}>
           This is some text!
         </text-editor>
         <div className="row">
-          Font size:
-        {
-        FontSizes.map(s => 
-          <button key={s} onClick={e => setSize(s)}>{s}</button>
-        )}
+          Font:
+        {fontSources.map((fontSource: FontSource) => <button title={fontSource.request} key={fontSource.request} onClick={e => setFont(fontSource)}>{fontSource.name}</button>)}
         </div>
       </div>
       <div className="col">

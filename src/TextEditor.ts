@@ -1,19 +1,6 @@
 import { CursorDirection, MoveDistance, TextModel } from './TextModel';
-import { Glyph } from './Font';
-
-import font12 from './res/axis-12-lobby.json';
-import font14 from './res/axis-14-lobby.json';
-import font18 from './res/axis-18-lobby.json';
-
-
-const fontMap = {
-    "12": font12,
-    "14": font14,
-    "18": font18
-}
-export type FontSize = keyof typeof fontMap;
-export const FontSizes: [FontSize] = Object.keys(fontMap) as [FontSize];
-
+import { Font, Glyph, isRawFont, mapRawFont } from './Font';
+console.log("TextEditor imported");
 const STYLESHEET = `
     :host {
         border: 1px solid black;
@@ -21,16 +8,58 @@ const STYLESHEET = `
         overflow: auto;
         width: 200px;
         height: 100px;
-        padding: 20px;
+        padding: 2px;
         position: relative;
     }
     slot {
         display: none;
     }
+    #container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+    slot[name="spinner"], #error {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, .5);
+        position: absolute;
+        top: 0; bottom: 0; right: 0; left: 0;
+    }
+    #error {
+        flex-direction: column;
+    }
+    [hidden] { display: none !important; }
+    .lds-dual-ring {
+        display: inline-block;
+        width: 80px;
+        height: 80px;
+      }
+      .lds-dual-ring:after {
+        content: " ";
+        display: block;
+        width: 64px;
+        height: 64px;
+        margin: 8px;
+        border-radius: 50%;
+        border: 6px solid #fff;
+        border-color: #fff transparent #fff transparent;
+        animation: lds-dual-ring 1.2s linear infinite;
+      }
+      @keyframes lds-dual-ring {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      
 `;
 
 /*
-    private keyBindings: {key: string, shift?: boolean, test?: (ev: KeyboardEvent) => boolean, action: (ev: KeyboardEvent) => void}[] = [
+    protected keyBindings: {key: string, shift?: boolean, test?: (ev: KeyboardEvent) => boolean, action: (ev: KeyboardEvent) => void}[] = [
         {key: "c", action: this.clipboardCopy},
         {key: "x", action: this.clipboardCut},
         {key: "v", action: this.clipboardPaste},
@@ -55,102 +84,136 @@ interface Coordinate {
     x: number;
     y: number;
 }
-
 export class TextEditor extends HTMLElement implements EventListenerObject {
-    private text = new TextModel();
+    protected text = new TextModel();
+    protected _fontSrc: string = "";
+    public get fontSrc() {
+        return this._fontSrc;
+    }
+    public set fontSrc(newValue: string) {
+        console.log("setting fontSrc to", newValue);
+        if(this._fontSrc !== newValue) {
+            this._fontSrc = newValue;
+            this.loadFont(newValue);
+        }
+    }
+    // Optional fields that aren't optional once we're ready to render
+    protected font?: Font;
+    protected fontTexture?: ImageBitmap;
     // The margin around the cursor to try and keep visible when scrolling
-    private scrollMargin = {left: 1, right: 1, top: 1, bottom: 1};
+    protected scrollMargin = {left: 1, right: 1, top: 1, bottom: 1};
     // Pixel coordinates of the caret/typing cursor, relative to the canvas element
-    private caret: Coordinate = {x: 0, y: 0};
+    protected caret: Coordinate = {x: 0, y: 0};
     // Pixel coordinates of the drag/drop insertion cursor, or null if we're not
     // currently dropping anything
-    private insertion: Coordinate | null = null;
-    //Current font size
-    public size: FontSize = "12";
-    // Actual font structure
-    private font: typeof font12 = font12;
+    protected insertion: Coordinate | null = null;
     // The image holding the current font's glyph map
-    private sprite = new Image();
+    protected sprite = new Image();
     // Interval between caret on/off, in ms
-    private blinkInterval = 500;
+    protected blinkInterval = 500;
     // Whether the caret is currently blinking (meaning invisible)
-    private blink = false;
+    protected blink = false;
     // Whether the editor has focus; the caret isn't shown if not
-    private hasFocus = false;
+    protected hasFocus = false;
     // Reference for the setInterval return used to control the caret blink
-    private intervalRef: ReturnType<typeof setInterval> | null = null;
+    protected intervalRef: ReturnType<typeof setInterval> | null = null;
 
     // A select operation is currently in progress (between mousedown and mouseup)
-    private selecting = false;
+    protected selecting = false;
     // A drag operation (with us as the source) is in progress (between dragstart and dragend)
-    private dragging = false;
+    protected dragging = false;
 
     // HTMLElements used to build the shadow DOM
-    private stylesheet: HTMLStyleElement;
-    private canvas: HTMLCanvasElement;
-    private slotElement: HTMLSlotElement;
+    protected stylesheet: HTMLStyleElement;
+    protected canvas: HTMLCanvasElement;
+    protected slotElement: HTMLSlotElement;
+    protected spinner: HTMLSlotElement;
+    protected errorElement: HTMLDivElement;
+    protected errorMessage: HTMLParagraphElement;
+    protected container: HTMLDivElement;
 
     // Elements not in the DOM that are used for buffers
-    private selectBuffer: HTMLCanvasElement;
-    private textBuffer: HTMLCanvasElement;
-    private cursorBuffer: HTMLCanvasElement;
-    private dragImage: HTMLImageElement = new Image();
+    protected selectBuffer: HTMLCanvasElement;
+    protected textBuffer: HTMLCanvasElement;
+    protected cursorBuffer: HTMLCanvasElement;
+    protected dragImage: HTMLImageElement = new Image();
 
     // Helpful getters for sets of canvas elements
-    private get canvases() {
+    protected get canvases() {
         return [this.canvas, this.selectBuffer, this.textBuffer, this.cursorBuffer];
     }
-    private get buffers() {
+    protected get buffers() {
         return [this.selectBuffer, this.textBuffer, this.cursorBuffer];
     }
     
     /** Top-level events and their handlers */
-    private eventMap = {
-        "load": this.imageLoaded.bind(this),
-        "keydown": this.keyDowned.bind(this),
-        "mouseup": this.mouseUpped.bind(this),
-        "mousedown": this.mouseDowned.bind(this),
-        "mousemove": this.mouseMoved.bind(this),
-        "focus": this.focusChanged.bind(this),
-        "blur": this.focusChanged.bind(this),
-        "dragstart": this.dragStarted.bind(this),
-        "dragend": this.dragEnded.bind(this),
-        "dragenter": this.dragEntered.bind(this),
-        "dragover": this.draggedOver.bind(this),
-        "dragleave": this.dragLeft.bind(this),
-        "drop": this.dropped.bind(this)
+    protected eventMap = {
+        // Super hacky but we promise not to call the event handlers
+        // without checking isReady() first
+        // Might be a better way to do this...
+        "keydown": this.keyDowned.bind(this as any as Ready),
+        "mouseup": this.mouseUpped.bind(this as any as Ready),
+        "mousedown": this.mouseDowned.bind(this as any as Ready),
+        "mousemove": this.mouseMoved.bind(this as any as Ready),
+        "focus": this.focusChanged.bind(this as any as Ready),
+        "blur": this.focusChanged.bind(this as any as Ready),
+        "dragstart": this.dragStarted.bind(this as any as Ready),
+        "dragend": this.dragEnded.bind(this as any as Ready),
+        "dragenter": this.dragEntered.bind(this as any as Ready),
+        "dragover": this.draggedOver.bind(this as any as Ready),
+        "dragleave": this.dragLeft.bind(this as any as Ready),
+        "drop": this.dropped.bind(this as any as Ready)
     }
     constructor() {
         super();
-        
+        console.log("Constructed");
         this.attachShadow({mode: "open"});
         // Maybe this should be done with an innerHTML'd template
         // and clone, then pick the nodes out with querySelector()
         this.canvas = document.createElement("canvas");
+        
+        this.stylesheet = document.createElement("style");
+        this.stylesheet.innerHTML = STYLESHEET;
+        this.container = document.createElement("div");
+        this.container.id = "container";
+
+        this.slotElement = document.createElement("slot");
+        
+        this.spinner = document.createElement("slot");
+        this.spinner.name = "spinner";
+        this.spinner.hidden = true;
+        const defaultSpinner = document.createElement("div");
+        defaultSpinner.className = "lds-dual-ring";
+        this.spinner.appendChild(defaultSpinner);
+        
+        this.errorElement = document.createElement("div");
+        this.errorElement.id="error";
+        this.errorElement.hidden = true;
+        const errorTitle = document.createElement("h1");
+        errorTitle.innerText = "Error";
+        this.errorElement.appendChild(errorTitle);
+
+        this.errorMessage = document.createElement("p");
+        this.errorElement.appendChild(this.errorMessage);
+
+        // The buffer canvases for rendering the layers separately
+        // These could probably be OffscreenCanvas objects
         this.selectBuffer = document.createElement("canvas");
         // Mark the select buffer's context for frequent reads
         this.selectBuffer.getContext("2d", {willReadFrequently: true});
         this.textBuffer = document.createElement("canvas");
         this.cursorBuffer = document.createElement("canvas");
-        this.stylesheet = document.createElement("style");
-        this.slotElement = document.createElement("slot");
-        this.stylesheet.innerHTML = STYLESHEET;
+        
     }
+
     public static get observedAttributes(): string[] {
-        return ["size", "width", "height"];
+        return ["fontsrc"];
     }
     public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
         switch(name) {
-            case "height":
-            case "width": {
-                // this[name] = parseInt(newValue, 10);
-                // this.canvases.forEach(c => c.setAttribute(name, newValue));
-                break;
-            }
-            case "size": {
-                if (["12", "14", "18"].includes(newValue)) {
-                    this.setFont(newValue as FontSize);
-                }
+            case "fontsrc": {
+                console.log()
+                this.fontSrc = newValue;
                 break;
             }
             default:
@@ -160,58 +223,112 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
       }
     public connectedCallback() {
         if(this.isConnected) {
+            
             this.setAttribute("contenteditable", "");
             this.setAttribute("tab-index", "0");
             this.setAttribute("draggable", "true");
             this.setAttribute("aria-role", "textarea");
             this.setAttribute("aria-multiline", "true");
-            
-            this.shadowRoot?.appendChild(this.stylesheet);
-            this.shadowRoot?.appendChild(this.canvas);
-            
-            
-            this.shadowRoot?.appendChild(this.slotElement);
 
-            this.restartBlinking();
-            this.sprite.addEventListener("load", this);
+            const container = this.container;
+
+            container.appendChild(this.stylesheet);
+            container.appendChild(this.canvas);
+            
+            container.appendChild(this.slotElement);
+
+            container.appendChild(this.spinner);
+            container.appendChild(this.errorElement);
+
+            this.shadowRoot?.appendChild(container);
+
             this.slotElement.addEventListener("slotchange", this);
             for(const [event,] of Object.entries(this.eventMap)) {
                 this.addEventListener(event, this);
+            }
+            if(!this.fontSrc || this.fontSrc === "") {
+                this.showError("Need a fontSrc");
             }
         }
     }
     public disconnectedCallback() {
         if(this.intervalRef) clearInterval(this.intervalRef);
         this.sprite.removeEventListener("load", this);
+        this.slotElement.removeEventListener("slotchange", this);
         for(const [event, ] of Object.entries(this.eventMap)) {
             this.removeEventListener(event, this);
         }
     }
     public handleEvent(e: Event) : void {
-        
         if(e.target === this && e.type in this.eventMap) {
-            this.eventMap[e.type as keyof typeof this.eventMap](e as any);
-        } else if(e.target === this.sprite && e.type === "load") {
-            this.imageLoaded(e);
+            if(this.isReady()) this.eventMap[e.type as keyof typeof this.eventMap](e as any);
         } else if(e.type === "slotchange") {
             this.slotChanged(e);
         }
     }
+
+    public ready(): this is typeof this & {font: Font} {
+        return this.font !== null;
+    }
+
     public insert(text: string) {
         this.text.insert(text);
     }
-    private setFont(size: FontSize) {
-        this.size = size;
-        this.font = fontMap[this.size];
-        this.sprite.src = this.font.src;
+    protected setSpinner(hidden = true) {
+        this.spinner.hidden = hidden;
+    }
+    protected hideError() {
+        this.errorElement.hidden = true;
+    }
+    protected showError(message: string) {
+        this.errorMessage.innerText = message;
+        this.errorElement.hidden = false;
+        this.spinner.hidden = true;
+    }
+    protected async loadFont(src: string) {
+        this.spinner.hidden = false;
+        this.errorElement.hidden = true;
+        try {
+            const fontResp = await fetch(src);
+            if(!fontResp.ok) throw new Error(`Couldn't fetch font JSON data: ${fontResp.status} ${fontResp.statusText}`);
+            const json = await fontResp.json();
+            if(!isRawFont(json)) {
+                console.error("Font JSON wasn't RawFont", json);
+                throw new Error("Got invalid font JSON data");
+            }
+            const font: Font = mapRawFont(json);
+            // Try and make a URL from the src property of the font JSON, but if it's a relative path this will fail
+            const texURL = new URL(font.src, new URL(fontResp.url));
+            console.log("Fetching font texture from", texURL);
+            const texResp = await(fetch(texURL));
+
+            if(!texResp.ok) throw new Error(`Couldn't fetch font texture data: ${texResp.status} ${texResp.statusText}`);
+            const blob = await texResp.blob();
+            this.fontTexture = await createImageBitmap(blob);
+            this.font = font;
+            this.spinner.hidden = true;
+            if(!this.isReady()) {
+                console.error("Loaded font and texture but still not ready");
+            } else {
+                this.redraw();
+            }
+        } catch(e) {
+            console.error(e);
+            this.showError("Error loading");
+        }
+       
+        
+    }
+    protected setFont(font: Font) {
+        this.font = font;
         this.scrollMargin = {
-            left: this.font.line_height * 2,
-            right: this.font.line_height,
+            left: this.font.maxWidth * 2,
+            right: this.font.maxWidth,
             top: 0,
-            bottom: this.font.line_height * 2
+            bottom: this.font.lineHeight * 2
         };
     }
-    private restartBlinking() {
+    protected restartBlinking(this: Ready) {
         this.blink = false;
         if(this.intervalRef) clearInterval(this.intervalRef);
         this.intervalRef = setInterval(() => {
@@ -219,29 +336,28 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
             this.redraw();
         }, this.blinkInterval)        
     }
-    private get cursorVisible(): boolean {
+    protected get cursorVisible(): boolean {
         return this.hasFocus && !this.blink;
     }
     /**
      * Get the font glyph for a given codepoint, or the default.
      */
-    private getGlyph(cpChar: string): Glyph {
+    protected getGlyph(this: Ready, cpChar: string): Glyph {
         const codepoint = cpChar.codePointAt(0);
-        // Font structure is associative so uses codepoint as a string
-        const key = `${codepoint}`;
-        return this.font.glyphs[key as keyof typeof this.font.glyphs] || this.font.default_glyph;
+        if(codepoint === undefined || !this.font.glyphMap[codepoint] === undefined) return this.font.defaultGlyph;
+        return this.font.glyphMap[codepoint];
     }
     
-    private coordinateFromEvent(ev: MouseEvent, snap = false): Coordinate {
+    protected coordinateFromEvent(this: Ready, ev: MouseEvent, snap = false): Coordinate {
         // Correct for scrolling, but not padding (as the offsetX/Y already does
         // that for us)
-        let offsetLeft = this.canvas.offsetLeft;
-        let offsetTop = this.canvas.offsetTop;
-        // Normally both canvas and text-editor elements have an offsetParent
-        // somewhfere further up the DOM tree, but if someone sets our position
-        // to relative then we'll end up being the offsetParent of the canvas
-        // and this goes wrong
-        if(this.canvas.offsetParent !== this) {
+        let offsetLeft = this.container.offsetLeft;
+        let offsetTop = this.container.offsetTop;
+        // If the text-editor element has a position of 'relative' then it will
+        // be the offsetParent of the container, otherwise both will have a common
+        // offsetParent further up the DOM tree (oddly I don't think you can
+        // prevent this even though it sort of breaches the shadow DOM).
+        if(this.container.offsetParent !== this) {
             offsetLeft -= this.offsetLeft;
             offsetTop -= this.offsetTop;
         }
@@ -253,7 +369,7 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
             
             // assume a 1:1 canvas pixel to HTML document ratio
             // Not sure if this is actually true or how to correct if it isn't
-            let cY = Math.max(0, Math.floor(y / this.font.line_height))
+            let cY = Math.max(0, Math.floor(y / this.font.lineHeight))
     
             // If you're just below the last line, pretend you're in the
             // last line. Otherwise, jump to the very last character
@@ -276,13 +392,13 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
                 return true;
             });
             x = pixelX;
-            y = cY * this.font.line_height;
+            y = cY * this.font.lineHeight;
         }
 
         return {x, y};
     }
 
-    private eventWithinSelection(ev: MouseEvent): boolean {
+    protected eventWithinSelection(this: Ready, ev: MouseEvent): boolean {
         // Shortcut: can't be within a selection that doesn't exist
         if(this.text.selection.length === 0) return false;
         let {x, y} = this.coordinateFromEvent(ev);
@@ -293,11 +409,11 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
         return data !== undefined && data[3] > 0;
     }
 
-    private cursorXYFromEvent(ev: MouseEvent): [number, number] {
+    protected cursorXYFromEvent(this: Ready, ev: MouseEvent): [number, number] {
         let {x, y} = this.coordinateFromEvent(ev);
         // assume a 1:1 canvas pixel to HTML document ratio
         // Not sure if this is actually true or how to correct if it isn't
-        let cY = Math.max(0, Math.floor(y / this.font.line_height))
+        let cY = Math.max(0, Math.floor(y / this.font.lineHeight))
 
         // If you click just below the last line, pretend you clicked in the
         // last line. Otherwise, jump to the very last character
@@ -322,30 +438,18 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
         });
         return [cX, cY];
     }
-    private getKerning(leftClass: number, rightClass: number): number | null {
-        for(let kernRow of this.font.kerning) {
-            if(kernRow.left === leftClass) {
-                for(let pair of kernRow.kerning) {
-                    if(pair.right === rightClass) {
-                        return pair.kern;
-                    }
-                }
-                // If we found the leftClass but no matching rightClass then
-                // stop looking (we won't find any more)
-                break;
-            }
-        }
-        return null;
+    protected getKerning(this: Ready, leftClass: number, rightClass: number): number {
+        return this.font.kerningMap[leftClass]?.[rightClass] || 0;
     }
-    private forEachGlyph(line: string, callback: (glyph: Glyph, advanceWidth: number) => boolean) {
+    protected forEachGlyph(this: Ready, line: string, callback: (glyph: Glyph, advanceWidth: number) => boolean) {
         const glyphs = [...line].map(c => this.getGlyph(c));
         for(const [i, glyph] of glyphs.entries()) {
             let advanceWidth = glyph.w + glyph.right;
             // Look ahead by one to see if we need to apply kerning
             if(i < glyphs.length - 1) {
                 const nextGlyph = glyphs[i + 1];
-                const kerning = this.getKerning(glyph.kern, nextGlyph.kern);
-                if(kerning !== null) advanceWidth += kerning;
+                const kerning = this.getKerning(glyph.kerningClass, nextGlyph.kerningClass);
+                advanceWidth += kerning;
             }
             if(callback(glyph, advanceWidth) === false) break;
         }        
@@ -355,11 +459,11 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
      * 
      * Will be a gross over-estimate but avoids clipping
      */
-    private safeSize(): [number, number] {
-        return [(Math.max(...this.text.lineLengths) + 1) * this.font.line_height + 10, (this.text.lineLengths.length + 1) * this.font.line_height + 10];
+    protected safeSize(this: Ready): [number, number] {
+        return [(Math.max(...this.text.lineLengths) + 1) * this.font.lineHeight * 2 + 10, (this.text.lineLengths.length + 1) * this.font.lineHeight + 10];
     }
     
-    private redraw(): void {
+    protected redraw(this: Ready): void {
         const contexts = this.canvases.map(c => c.getContext("2d"));
         const [context, selectContext, textContext, cursorContext] = contexts;
         if(!context || !selectContext || !textContext || !cursorContext || !this.sprite.complete) return;
@@ -375,7 +479,7 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
         let c = 0;
         let y = 0;
         // Height is fixed
-        let height = this.text.lineLengths.length * this.font.line_height;
+        let height = this.text.lineLengths.length * this.font.lineHeight;
         // Width is the longest line we've drawn
         let width = 0;
         let x = 0;
@@ -386,14 +490,14 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
                 // For the last character in the selection, use glyph.w instead of advance_width
                 // so we don't cut it short for glyphs with negative right offset
                 const w = c === this.text.selectionEnd - 1 ? glyph.w : advanceWidth;
-                selectContext.fillRect(x, y, w, this.font.line_height);
+                selectContext.fillRect(x, y, w, this.font.lineHeight);
             }
             // If the cursor is not currently blinking and should be
             // at this position, draw it (to the left)      
             if(this.text.cursor === c) {
                 this.caret = {x, y};
             }
-            textContext.drawImage(this.sprite, glyph.x, glyph.y, glyph.w, glyph.h, x, y + glyph.top, glyph.w, glyph.h);
+            textContext.drawImage(this.fontTexture, glyph.x, glyph.y, glyph.w, glyph.h, x, y + glyph.top, glyph.w, glyph.h);
             // Take the wider of advanceWidth or glyph width when measuring the row
             rowWidth = Math.max(x + advanceWidth, x + glyph.w);
             x += advanceWidth;
@@ -409,7 +513,7 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
             this.caret = {x, y};
           }
           // Increment y coordinate
-          y += this.font.line_height;
+          y += this.font.lineHeight;
           // the linebreak is also a character for cursor purposes so increment c
           c++;
           if(rowWidth > width) {
@@ -420,14 +524,14 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
             cursorContext.setLineDash([]);
             cursorContext.beginPath();
             cursorContext.moveTo(this.caret.x + 1, this.caret.y);
-            cursorContext.lineTo(this.caret.x+1, this.caret.y + this.font.line_height);
+            cursorContext.lineTo(this.caret.x+1, this.caret.y + this.font.lineHeight);
             cursorContext.stroke();
         }
         if(this.insertion !== null) {
             cursorContext.setLineDash([2]);
             cursorContext.beginPath();
             cursorContext.moveTo(this.insertion.x + 1, this.insertion.y);
-            cursorContext.lineTo(this.insertion.x + 1, this.insertion.y + this.font.line_height);
+            cursorContext.lineTo(this.insertion.x + 1, this.insertion.y + this.font.lineHeight);
             cursorContext.stroke();
         }
         // Resize the visible buffer (which will also clear it, even if the numbers don't change)
@@ -440,7 +544,7 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
         context.drawImage(this.cursorBuffer, 0, 0);
     }
 
-    public scrollToCursor() {
+    public scrollToCursor(this: Ready) {
         // Turn the caret coordinates (which are relative to the canvas)
         // into coordinates relative to the container
         const relX = this.caret.x + this.canvas.offsetLeft;
@@ -468,7 +572,7 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
             this.scrollTo(targetX, targetY);
         }
     }
-    private keyBindings: {key: string, shift?: boolean, test?: (ev: KeyboardEvent) => boolean, action: (ev: KeyboardEvent) => void}[] = [
+    protected keyBindings: {key: string, shift?: boolean, test?: (ev: KeyboardEvent) => boolean, action: (ev: KeyboardEvent) => void}[] = [
         {key: "c", action: this.clipboardCopy},
         {key: "x", action: this.clipboardCut},
         {key: "v", action: this.clipboardPaste},
@@ -476,20 +580,20 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
         {key: "z", shift: false, action: this.undo},
         {key: "z", shift: true, action: this.redo}
     ];
-    private clipboardCopy(ev_: Event) {
+    protected clipboardCopy(this: Ready, ev_: Event) {
         if(this.text.selection.length > 0) {
             navigator.clipboard.writeText(this.text.selection);
             // Doesn't redraw as nothing's changed
         }
     }
-    private clipboardCut(ev_: Event) {
+    protected clipboardCut(this: Ready, ev_: Event) {
         if(this.text.selection.length > 0) {
             navigator.clipboard.writeText(this.text.selection);
             this.text.delete(CursorDirection.Forward);
             this.postUpdate();
         }
     }
-    private clipboardPaste(ev_: Event ) {
+    protected clipboardPaste(this: Ready, ev_: Event ) {
         navigator.clipboard.readText().then((text) => {
             if(text.length > 0) {
                 this.text.insert(text, true);
@@ -497,15 +601,15 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
             }
         });
     }
-    private selectAll(ev: Event) {
+    protected selectAll(this: Ready, ev: Event) {
         this.text.selectAll();
         this.postUpdate(false, false);
     }
-    private undo(ev_: Event) {
+    protected undo(this: Ready, ev_: Event) {
         this.text.undo();
         this.postUpdate();
     }
-    private redo(ev_: Event) {
+    protected redo(this: Ready, ev_: Event) {
         this.text.redo();
         this.postUpdate();
     }
@@ -551,22 +655,22 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
 
     - Create the drag image by slicing out of the canvas around the selection
     */
-    private mouseDowned(ev: MouseEvent) {
+    protected mouseDowned(this: Ready, ev: MouseEvent) {
         if(ev.button === 0 && !this.eventWithinSelection(ev)) {
             this.text.setCursor(...this.cursorXYFromEvent(ev), ev.shiftKey);
             this.postUpdate(false);
             this.selecting = true;
         }
     }
-    private mouseUpped(ev: MouseEvent) {
-if(ev.button === 0 && !this.dragging) {
+    protected mouseUpped(this: Ready, ev: MouseEvent) {
+        if(ev.button === 0 && !this.dragging) {
             this.text.setCursor(...this.cursorXYFromEvent(ev), ev.shiftKey || this.selecting);
             this.selecting = false;
             this.postUpdate(false);
         }
     }
 
-    private mouseMoved(ev: MouseEvent) {
+    protected mouseMoved(this: Ready, ev: MouseEvent) {
         if(!(ev.buttons & 1)) {
             this.dragging = false;
             this.selecting = false;
@@ -576,7 +680,7 @@ if(ev.button === 0 && !this.dragging) {
         }
     }
 
-    private dragStarted(ev: DragEvent) {
+    protected dragStarted(this: Ready, ev: DragEvent) {
         if(this.text.selection.length > 0 && !this.selecting) {
             const dt = ev.dataTransfer;
             if(dt) {
@@ -595,21 +699,21 @@ if(ev.button === 0 && !this.dragging) {
         
     }
     
-    private dragEnded(ev: DragEvent) {
+    protected dragEnded(this: Ready, ev: DragEvent) {
         if(ev.dataTransfer?.dropEffect === "move" && this.text.selection.length > 0) {
             this.text.delete(CursorDirection.Forward);
         }
         this.dragging = false;
     }
 
-    private dragEntered(ev: DragEvent) {
+    protected dragEntered(this: Ready, ev: DragEvent) {
         if(ev.dataTransfer?.types.includes("text/plain")) {
             ev.preventDefault();        
         } else {
             console.log("Rejecting drag-over event, can't handle a data transfer with types", ev.dataTransfer?.types);
         }
     }
-    private draggedOver(ev: DragEvent) {
+    protected draggedOver(this: Ready, ev: DragEvent) {
         // If we're also dragging then assume we are currently both drag and
         // dragover targets (there's no precise way to ensure this but it seems
         // safe). In which case, only show an insertion cursor if the mouse
@@ -624,7 +728,7 @@ if(ev.button === 0 && !this.dragging) {
         this.postUpdate(false);
         ev.preventDefault();
     }
-    private dropped(ev: DragEvent) {
+    protected dropped(this: Ready, ev: DragEvent) {
         // If we dropped on ourself without leaving our own selection,
         // abort to avoid moving
         if(this.dragging && this.eventWithinSelection(ev)) {
@@ -643,7 +747,7 @@ if(ev.button === 0 && !this.dragging) {
             this.postUpdate(false);
         }
     }
-    private dragLeft(ev: DragEvent) {
+    protected dragLeft(this: Ready, ev: DragEvent) {
         // If the drag-over ended with a drop, insertion will have already been
         // nulled so skip the redraw
         if(this.insertion !== null) {
@@ -651,12 +755,14 @@ if(ev.button === 0 && !this.dragging) {
             this.postUpdate(false);
         }
     }
-    private slotChanged(ev: Event) {
+    protected slotChanged(ev: Event) {
         const text = this.slotElement.assignedNodes({flatten: true}).map((node: Node) => node.textContent).join("");
         this.text.reset(text);
-        this.postUpdate();
+        if(this.isReady()) {
+            this.postUpdate();
+        }
     }
-    private keyDowned(ev: KeyboardEvent) {
+    protected keyDowned(this: Ready, ev: KeyboardEvent) {
         let preventDefault = true;
         let wasControl = false;
         // Control bindings
@@ -740,23 +846,27 @@ if(ev.button === 0 && !this.dragging) {
      * Optionally restart the cursor blink timer (ensuring the cursor starts
      * visible) and scroll to bring the cursor into view.
      */
-    private postUpdate(scroll = true, reblink = true): void {
+    protected postUpdate(this: Ready, scroll = true, reblink = true): void {
         if(reblink) this.restartBlinking();
         this.redraw();
         if(scroll) {
             this.scrollToCursor();
         }
     }
-    private imageLoaded(e: Event): void {
-        this.redraw();
-    }
-    focusChanged(e: FocusEvent): void {
+    focusChanged(this: Ready, e: FocusEvent): void {
         if(e.type === "blur") this.hasFocus = false;
         else {
             this.hasFocus = true;
             this.postUpdate();
         }
     }
-
+    isReady(): this is Ready {
+        return this.font !== undefined && this.fontTexture !== undefined;
+    }
+}
+abstract class Ready extends TextEditor {
+    protected abstract font: Font;
+    protected abstract fontTexture: ImageBitmap;
 }
 customElements.define('text-editor', TextEditor);
+console.log("Defined text editor element");

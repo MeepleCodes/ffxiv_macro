@@ -1,8 +1,9 @@
 import React from 'react';
 import { TextEditor } from './TextEditor';
 interface TextEditorHTMLAttributes<T> extends React.HTMLAttributes<T> {
-  size: string;
+  fontsrc: string | object;
 }
+console.log("TextEditorReact imported");
 // type TextEditorAttributes<T> = React.HTMLAttributes<T> & Omit<TextEditor, keyof HTMLCustomElement>;
 type TextEditorElement = React.DetailedHTMLProps<TextEditorHTMLAttributes<TextEditor>, TextEditor>;
 // React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>;
