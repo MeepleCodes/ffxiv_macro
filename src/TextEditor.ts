@@ -84,7 +84,27 @@ interface Coordinate {
     x: number;
     y: number;
 }
+type EventMap = {
+    [type in keyof HTMLElementEventMap]?: {
+        handler: (this: Ready, evt: HTMLElementEventMap[type]) => void,
+        // handler: any,
+        source: (that: TextEditor) => DocumentAndElementEventHandlers,
+        requiresReady: boolean
+    }
+}
+const EVENT_MAP: EventMap = {};
+
+function Event(type: keyof HTMLElementEventMap, eventSource: (that: TextEditor) => DocumentAndElementEventHandlers = (that: TextEditor) => that, requiresReady = true) {
+    return function (target: TextEditor, propertyKey: any, descriptor: PropertyDescriptor) {
+        EVENT_MAP[type] = {
+            handler: target[propertyKey as keyof TextEditor] as any,
+            source: eventSource,
+            requiresReady
+        };
+    }
+}
 export class TextEditor extends HTMLElement implements EventListenerObject {
+    
     protected text = new TextModel();
     protected _fontSrc: string = "";
     public get fontSrc() {
@@ -144,25 +164,21 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
     protected get buffers() {
         return [this.selectBuffer, this.textBuffer, this.cursorBuffer];
     }
-    
-    /** Top-level events and their handlers */
-    protected eventMap = {
-        // Super hacky but we promise not to call the event handlers
-        // without checking isReady() first
-        // Might be a better way to do this...
-        "keydown": this.keyDowned.bind(this as any as Ready),
-        "mouseup": this.mouseUpped.bind(this as any as Ready),
-        "mousedown": this.mouseDowned.bind(this as any as Ready),
-        "mousemove": this.mouseMoved.bind(this as any as Ready),
-        "focus": this.focusChanged.bind(this as any as Ready),
-        "blur": this.focusChanged.bind(this as any as Ready),
-        "dragstart": this.dragStarted.bind(this as any as Ready),
-        "dragend": this.dragEnded.bind(this as any as Ready),
-        "dragenter": this.dragEntered.bind(this as any as Ready),
-        "dragover": this.draggedOver.bind(this as any as Ready),
-        "dragleave": this.dragLeft.bind(this as any as Ready),
-        "drop": this.dropped.bind(this as any as Ready)
-    }
+    // protected static EVENT_MAP: EventMap = {
+    //     "keydown": TextEditor.prototype.keyDowned,
+    //     "mouseup": TextEditor.prototype.mouseUpped,
+    //     "mousedown": TextEditor.prototype.mouseDowned,
+    //     "mousemove": TextEditor.prototype.mouseMoved,
+    //     "focus": TextEditor.prototype.focusChanged,
+    //     "blur": TextEditor.prototype.focusChanged,
+    //     "dragstart": TextEditor.prototype.dragStarted,
+    //     "dragend": TextEditor.prototype.dragEnded,
+    //     "dragenter": TextEditor.prototype.dragEntered,
+    //     "dragover": TextEditor.prototype.draggedOver,
+    //     "dragleave": TextEditor.prototype.dragLeft,
+    //     "drop": TextEditor.prototype.dropped,  
+    //     "slotchange": TextEditor.prototype.slotChanged, 
+    // }
     constructor() {
         super();
         this.attachShadow({mode: "open"});
@@ -240,8 +256,9 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
             this.shadowRoot?.appendChild(container);
 
             this.slotElement.addEventListener("slotchange", this);
-            for(const [event,] of Object.entries(this.eventMap)) {
-                this.addEventListener(event, this);
+
+            for(const [event, eventMap] of Object.entries(EVENT_MAP)) {
+                eventMap.source(this).addEventListener(event, this);
             }
             if(!this.fontSrc || this.fontSrc === "") {
                 this.showError("Need a fontSrc");
@@ -250,17 +267,15 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
     }
     public disconnectedCallback() {
         if(this.intervalRef) clearInterval(this.intervalRef);
-        this.sprite.removeEventListener("load", this);
-        this.slotElement.removeEventListener("slotchange", this);
-        for(const [event, ] of Object.entries(this.eventMap)) {
-            this.removeEventListener(event, this);
+        for(const [event, eventMap] of Object.entries(EVENT_MAP)) {
+            eventMap.source(this).removeEventListener(event, this);
         }
+
     }
     public handleEvent(e: Event) : void {
-        if(e.target === this && e.type in this.eventMap) {
-            if(this.isReady()) this.eventMap[e.type as keyof typeof this.eventMap](e as any);
-        } else if(e.type === "slotchange") {
-            this.slotChanged(e);
+        const map = EVENT_MAP[e.type as keyof EventMap];
+        if(map !== undefined && (this.isReady() || !map.requiresReady)) {
+            (map.handler as any).call(this, e as any as keyof HTMLElementEventMap);
         }
     }
 
@@ -651,6 +666,7 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
 
     - Create the drag image by slicing out of the canvas around the selection
     */
+    @Event("mousedown")
     protected mouseDowned(this: Ready, ev: MouseEvent) {
         if(ev.button === 0 && !this.eventWithinSelection(ev)) {
             this.text.setCursor(...this.cursorXYFromEvent(ev), ev.shiftKey);
@@ -658,6 +674,7 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
             this.selecting = true;
         }
     }
+    @Event("mouseup")
     protected mouseUpped(this: Ready, ev: MouseEvent) {
         if(ev.button === 0 && !this.dragging) {
             this.text.setCursor(...this.cursorXYFromEvent(ev), ev.shiftKey || this.selecting);
@@ -665,7 +682,7 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
             this.postUpdate(false);
         }
     }
-
+    @Event("mousemove")
     protected mouseMoved(this: Ready, ev: MouseEvent) {
         if(!(ev.buttons & 1)) {
             this.dragging = false;
@@ -675,7 +692,7 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
             this.postUpdate(false);
         }
     }
-
+    @Event("dragstart")
     protected dragStarted(this: Ready, ev: DragEvent) {
         if(this.text.selection.length > 0 && !this.selecting) {
             const dt = ev.dataTransfer;
@@ -694,7 +711,7 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
         }
         
     }
-    
+    @Event("dragend")
     protected dragEnded(this: Ready, ev: DragEvent) {
         if(ev.dataTransfer?.dropEffect === "move" && this.text.selection.length > 0) {
             this.text.delete(CursorDirection.Forward);
@@ -702,6 +719,7 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
         this.dragging = false;
     }
 
+    @Event("dragenter")
     protected dragEntered(this: Ready, ev: DragEvent) {
         if(ev.dataTransfer?.types.includes("text/plain")) {
             ev.preventDefault();        
@@ -709,6 +727,7 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
             console.log("Rejecting drag-over event, can't handle a data transfer with types", ev.dataTransfer?.types);
         }
     }
+    @Event("dragover")
     protected draggedOver(this: Ready, ev: DragEvent) {
         // If we're also dragging then assume we are currently both drag and
         // dragover targets (there's no precise way to ensure this but it seems
@@ -724,6 +743,7 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
         this.postUpdate(false);
         ev.preventDefault();
     }
+    @Event("drop")
     protected dropped(this: Ready, ev: DragEvent) {
         // If we dropped on ourself without leaving our own selection,
         // abort to avoid moving
@@ -743,6 +763,7 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
             this.postUpdate(false);
         }
     }
+    @Event("dragleave")
     protected dragLeft(this: Ready, ev: DragEvent) {
         // If the drag-over ended with a drop, insertion will have already been
         // nulled so skip the redraw
@@ -751,6 +772,7 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
             this.postUpdate(false);
         }
     }
+    @Event("slotchange", (that: TextEditor) => that.slotElement, false)
     protected slotChanged(ev: Event) {
         const text = this.slotElement.assignedNodes({flatten: true}).map((node: Node) => node.textContent).join("");
         this.text.reset(text);
@@ -758,6 +780,7 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
             this.postUpdate();
         }
     }
+    @Event("keydown")
     protected keyDowned(this: Ready, ev: KeyboardEvent) {
         let preventDefault = true;
         let wasControl = false;
@@ -849,6 +872,8 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
             this.scrollToCursor();
         }
     }
+    @Event("focus")
+    @Event("blur")
     focusChanged(this: Ready, e: FocusEvent): void {
         if(e.type === "blur") this.hasFocus = false;
         else {
