@@ -1,6 +1,6 @@
 import { CursorDirection, MoveDistance, TextModel } from './TextModel';
 import { Font, Glyph, isRawFont, mapRawFont } from './Font';
-console.log("TextEditor imported");
+
 const STYLESHEET = `
     :host {
         border: 1px solid black;
@@ -91,7 +91,6 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
         return this._fontSrc;
     }
     public set fontSrc(newValue: string) {
-        console.log("setting fontSrc to", newValue);
         if(this._fontSrc !== newValue) {
             this._fontSrc = newValue;
             this.loadFont(newValue);
@@ -166,7 +165,6 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
     }
     constructor() {
         super();
-        console.log("Constructed");
         this.attachShadow({mode: "open"});
         // Maybe this should be done with an innerHTML'd template
         // and clone, then pick the nodes out with querySelector()
@@ -212,7 +210,6 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
     public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
         switch(name) {
             case "fontsrc": {
-                console.log()
                 this.fontSrc = newValue;
                 break;
             }
@@ -299,7 +296,6 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
             const font: Font = mapRawFont(json);
             // Try and make a URL from the src property of the font JSON, but if it's a relative path this will fail
             const texURL = new URL(font.src, new URL(fontResp.url));
-            console.log("Fetching font texture from", texURL);
             const texResp = await(fetch(texURL));
 
             if(!texResp.ok) throw new Error(`Couldn't fetch font texture data: ${texResp.status} ${texResp.statusText}`);
@@ -869,4 +865,3 @@ abstract class Ready extends TextEditor {
     protected abstract fontTexture: ImageBitmap;
 }
 customElements.define('text-editor', TextEditor);
-console.log("Defined text editor element");
