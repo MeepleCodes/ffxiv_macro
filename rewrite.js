@@ -77,6 +77,9 @@ const rewrittenConfigFactory = function(webpackEnv) {
 // Patch the configFactory in our target script
 script.__set__("configFactory", rewrittenConfigFactory);
 // If config has already been stored at the top level, patch that too
-if(script.__get__("config")) {
+try {
+    script.__get__("config");
     script.__set__("config", rewrittenConfigFactory(script.__get__("config").mode));
+} catch(e) {
+    // Doesn't have a config, so do nothing
 }

@@ -5,6 +5,10 @@ import spritesheet from './res/axis-12-lobby.png'
 import { GlyphPage } from './Font';
 import { TextEditor } from './TextEditor';
 import './TextEditorReact';
+
+// Force an import of this otherwise webpack doesn't think it's referenced
+require("./TextEditor");
+
 type FontSource = {
   name: string;
   src: string;
