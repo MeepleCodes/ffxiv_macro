@@ -54,7 +54,18 @@ export class TextModel {
     private cursorX!: number;
     // Which line the cursor is on
     private cursorY!: number;
+    public get cursorRow() {
+        return this.cursorY;
+    }
+    public get cursorCol() {
+        return this.cursorX;
+    }
     private anchor!: number | null;
+    public get selectionAnchor(): {row: number, col: number} | null {
+        if(this.anchor === null) return null;
+        const [col, row] = this.cursorXYFromOffset(this.anchor);
+        return {row, col};
+    }
     private history!: UndoBuffer<UndoState>;
 
     public constructor(initialText: string = "") {

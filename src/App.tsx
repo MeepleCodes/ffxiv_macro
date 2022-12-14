@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './App.css';
 import font from './axis-12-lobby.json';
 import spritesheet from './res/axis-12-lobby.png'
@@ -43,18 +43,52 @@ for(let glyph of font.glyphs.slice(1)) {
     }
   }
 }
+type TEInfo = {
+  cursorX: number,
+  cursorY: number,
+  cursorRow: number,
+  cursorCol: number,
+  selectionLength: number,
+  selectionPixels: number | null
+};
 function App() {
   // let [size, setSize] = useState<TextEditor["size"]>("12");
   let [font, setFont] = useState<FontSource>(fontSources[0]);
+  let [cur, setCur] = useState<TEInfo | undefined>();
   let [tab, setTab] = useState<number>(0);
   const ref = useRef<TextEditor>(null);
-  console.log("App function ran");
+  useEffect(() => {
+    ref.current?.addEventListener("update", (e: Event) => {
+      if(ref.current !== null) {
+        setCur({
+          cursorX: ref.current.cursorX,
+          cursorY: ref.current.cursorY,
+          cursorRow: ref.current.cursorRow,
+          cursorCol: ref.current.cursorCol,
+          selectionLength: ref.current.selectionLength,
+          selectionPixels: ref.current.selectionPixels
+        });
+      }
+    })
+  }, [ref]);
+  let selectionText = "";
+  if(cur && cur.selectionLength > 0) {
+    if(cur.selectionPixels !== null) {
+      selectionText = `(${cur.selectionLength} selected, ${cur.selectionPixels}px)`;
+    } else {
+      selectionText = `(${cur.selectionLength} selected)`;
+    }
+    
+  } 
   return (
     <div className="row outer">
       <div className="col">
         <text-editor fontsrc={font.src} ref={ref}>
           This is some text!
         </text-editor>
+        {cur && <div className="status row">
+          Ln {cur.cursorRow}, Col {cur.cursorCol} [{cur.cursorX}, {cur.cursorY}] {selectionText}
+        </div>}
         <div className="row">
           Font:
         {fontSources.map((fontSource: FontSource) => <button title={fontSource.request} key={fontSource.request} onClick={e => setFont(fontSource)}>{fontSource.name}</button>)}
@@ -74,10 +108,11 @@ function App() {
             <p 
               className="g" 
               key={glyph.codepoint}
-              title={`${String.fromCodePoint(glyph.codepoint)} (U+${glyph.codepoint.toString(16).toUpperCase().padStart(4, '0')})`}
+              title={`${String.fromCodePoint(glyph.codepoint)} (U+${glyph.codepoint.toString(16).toUpperCase().padStart(4, '0')}) ${glyph.w + glyph.right}x${glyph.h}px`}
               style={{backgroundImage: `url(${spritesheet})`, width: glyph.w, height: glyph.h, backgroundPosition: `-${glyph.x}px -${glyph.y}px`}}
               onClick={e => {
                   ref.current?.insert(String.fromCodePoint(glyph.codepoint));
+                  ref.current?.focus();
                 }
               }
             />)
