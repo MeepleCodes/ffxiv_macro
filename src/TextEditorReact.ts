@@ -2,6 +2,7 @@ import React from 'react';
 import { TextEditor } from './TextEditor';
 interface TextEditorHTMLAttributes<T> extends React.HTMLAttributes<T> {
   fontsrc: string | object;
+  value?: string;
 }
 console.log("TextEditorReact imported");
 // type TextEditorAttributes<T> = React.HTMLAttributes<T> & Omit<TextEditor, keyof HTMLCustomElement>;

@@ -1,6 +1,16 @@
 import { CursorDirection, MoveDistance, TextModel } from './TextModel';
 import { Font, Glyph, isRawFont, mapRawFont } from './Font';
+import log from 'loglevel';
+const logger = log.getLogger("TextEditor");
+const logRender = log.getLogger("TextEditor.render");
+logRender.setLevel(log.levels.INFO);
+log.setLevel(log.levels.INFO, true);
 
+// Fixed width of fake selection to show when a selection spans lines
+const SELECTED_NEWLINE_WIDTH = 3;
+// Additional rendering space needed at the end of a line of text
+// Must be at least 2 (1px wide cursor 1px past the end of the line)
+const LINE_WIDTH_MARGIN = Math.max(2, SELECTED_NEWLINE_WIDTH);
 const STYLESHEET = `
     :host {
         border: 1px solid black;
@@ -57,28 +67,6 @@ const STYLESHEET = `
       }
       
 `;
-
-/*
-    protected keyBindings: {key: string, shift?: boolean, test?: (ev: KeyboardEvent) => boolean, action: (ev: KeyboardEvent) => void}[] = [
-        {key: "c", action: this.clipboardCopy},
-        {key: "x", action: this.clipboardCut},
-        {key: "v", action: this.clipboardPaste},
-        {key: "a", action: this.selectAll},
-        {key: "z", shift: false, action: this.undo},
-        {key: "z", shift: true, action: this.redo}
-    ];
-
-    */
-// class KeyBinding {
-//     constructor(
-//         public key: string,
-//         public action: (ev: KeyboardEvent) => void,
-//         public shift?: boolean
-//     ){}
-//     public matches(ev: KeyboardEvent) {
-//         return ev.key.toLowerCase() === this.key && (this.shift === undefined || ev.shiftKey === this.shift);
-//     }
-// }
 
 interface Coordinate {
     x: number;
@@ -191,21 +179,7 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
     protected get buffers() {
         return [this.selectBuffer, this.textBuffer, this.cursorBuffer];
     }
-    // protected static EVENT_MAP: EventMap = {
-    //     "keydown": TextEditor.prototype.keyDowned,
-    //     "mouseup": TextEditor.prototype.mouseUpped,
-    //     "mousedown": TextEditor.prototype.mouseDowned,
-    //     "mousemove": TextEditor.prototype.mouseMoved,
-    //     "focus": TextEditor.prototype.focusChanged,
-    //     "blur": TextEditor.prototype.focusChanged,
-    //     "dragstart": TextEditor.prototype.dragStarted,
-    //     "dragend": TextEditor.prototype.dragEnded,
-    //     "dragenter": TextEditor.prototype.dragEntered,
-    //     "dragover": TextEditor.prototype.draggedOver,
-    //     "dragleave": TextEditor.prototype.dragLeft,
-    //     "drop": TextEditor.prototype.dropped,  
-    //     "slotchange": TextEditor.prototype.slotChanged, 
-    // }
+
     constructor() {
         super();
         this.attachShadow({mode: "open"});
@@ -248,12 +222,16 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
     }
 
     public static get observedAttributes(): string[] {
-        return ["fontsrc"];
+        return ["fontsrc", "value"];
     }
     public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
         switch(name) {
             case "fontsrc": {
                 this.fontSrc = newValue;
+                break;
+            }
+            case "value": {
+                this.text.reset(newValue);
                 break;
             }
             default:
@@ -418,18 +396,25 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
                 x = Infinity;
             }
             const line = this.text.text.split("\n")[cY];
-            let pixelX = 0;
-            this.forGlyphInLine(line, (glyph: Glyph, advanceWidth: number) => {
+            let lastX = 0;
+            // console.log("Finding snap X for", x);
+            this.forGlyphInLine(line, (glyph, pixelX, advanceWidth, col) => {
+                
                 if(x <= pixelX + (advanceWidth / 2)) {
+                    lastX = pixelX;
+                    // console.log("Snapping to left of col", col, "at", lastX);
                     return false;
                 } else if(x <= pixelX + advanceWidth) {
-                    pixelX += advanceWidth;
+                    lastX = pixelX + advanceWidth;
+                    // console.log("Snapping to right of col", col, "at", lastX);
                     return false;
+                } else {
+                    // Always update in case we fall off the end of the line
+                    lastX = pixelX;
+                    return true;
                 }
-                pixelX += advanceWidth;
-                return true;
             });
-            x = pixelX;
+            x = lastX;
             y = cY * this.font.lineHeight;
         }
 
@@ -447,6 +432,7 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
         return data !== undefined && data[3] > 0;
     }
 
+    // FIXME: Merge with coordinateFromEvent
     protected cursorXYFromEvent(this: Ready, ev: MouseEvent): [number, number] {
         let {x, y} = this.coordinateFromEvent(ev);
         // assume a 1:1 canvas pixel to HTML document ratio
@@ -463,7 +449,7 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
         const line = this.text.text.split("\n")[cY];
         let pixelX = 0;
         let cX = 0;
-        this.forGlyphInLine(line, (glyph: Glyph, advanceWidth: number) => {
+        this.forGlyphInLine(line, (glyph, x_, advanceWidth, col) => {
             if(x <= pixelX + (advanceWidth / 2)) {
                 return false;
             } else if(x <= pixelX + advanceWidth) {
@@ -477,6 +463,7 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
         return [cX, cY];
     }
     // TODO: Pull {row, col} into a Cursor type, put it in TextModel
+    // FIXME: Don't calcualte this on the fly, save it after each update like we do with caret
     protected coordinateFromCursor(this: Ready, {row: searchRow, col: searchCol}: {row: number, col: number}): Coordinate {
         let result: Coordinate = {x: 0, y: 0};
         this.forGlyphInText((glyph, x, y, advanceWidth, row, col, c) => {
@@ -498,26 +485,26 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
     protected getKerning(this: Ready, leftClass: number, rightClass: number): number {
         return this.font.kerningMap[leftClass]?.[rightClass] || 0;
     }
-    protected forGlyphInText(this: Ready, eachGlyph: (glyph: Glyph, x: number, y: number, advanceWidth: number, row: number, col: number, c: number) => boolean, lineEnd?: (x: number, y: number, row: number, col: number, c: number) => boolean) {
-        let y = 0, lineStartC = 0, lineC = 0, lineWidth = 0, row = 0;
+    protected forGlyphInText(this: Ready, eachGlyph: (glyph: Glyph, x: number, y: number, advanceWidth: number, row: number, col: number, character: number) => boolean, lineEnd?: (x: number, y: number, row: number, col: number, character: number) => boolean) {
+        let y = 0, character  = 0, lineWidth = 0, row = 0;
         // Stop TS narrowing from boolean to true because we know function side effects can un-narrow it again
         let keepProcessing: boolean = true as boolean;
         const perGlyph = (glyph: Glyph, x: number, advanceWidth: number, col: number) => {
-            lineC = col;
             lineWidth = Math.max(x + advanceWidth, x + glyph.w);
-            keepProcessing = eachGlyph(glyph, x, y, advanceWidth, row, col, col + lineStartC);
+            keepProcessing = eachGlyph(glyph, x, y, advanceWidth, row, col, character);
+            character++;
             return keepProcessing;
         };
         for(const line of this.text.text.split("\n")) {
-            lineC = 0;
+            logger.debug("Line starting from", character);
             lineWidth = 0;
             this.forGlyphInLine(line, perGlyph);
             if(keepProcessing === false) break;
-            // Count the newline at the end of the line
-            lineC++;
+            if(lineEnd !== undefined && lineEnd(lineWidth, y, row, [...line].length, character) === false) break;
+            // Increment character again to account for the newline
+            character++;
             row++;
-            if(lineEnd !== undefined && lineEnd(lineWidth, y, row, lineC, lineC + lineStartC) === false) break;
-            lineStartC = lineC;
+            logger.debug("Next line will start at", character);
             y += this.font.lineHeight;
         }
     }
@@ -564,6 +551,7 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
         // Width is the longest line we've drawn
         let width = 0;
         this.forGlyphInText((glyph, x, y, advanceWidth, row, col, c) => {
+            logRender.debug("Drawing", String.fromCodePoint(glyph.codepoint),"at", c);
             // If we have an active selection, draw the box
             if (c >= this.text.selectionStart && c < this.text.selectionEnd) {
                 // For the last character in the selection, use glyph.w instead of advance_width
@@ -579,7 +567,14 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
             textContext.drawImage(this.fontTexture, glyph.x, glyph.y, glyph.w, glyph.h, x, y + glyph.top, glyph.w, glyph.h);
             return true;
         }, (x, y, row, col, c) => {
+            logRender.debug("Line ended at character", c);
             if(x > width) width = x;
+            // If we have an active selection, draw the box
+            if (c >= this.text.selectionStart && c < this.text.selectionEnd) {
+                // For the last character in the selection, use glyph.w instead of advance_width
+                // so we don't cut it short for glyphs with negative right offset
+                selectContext.fillRect(x, y, SELECTED_NEWLINE_WIDTH, this.font.lineHeight);
+            }
             if(this.text.cursor === c) {
                 this.caret = {x, y};
             }
@@ -601,8 +596,7 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
             cursorContext.stroke();
         }
         // Resize the visible buffer (which will also clear it, even if the numbers don't change)
-        // Add 2 to allow a trailing cursor (which is 1px past the end of the row and 1px wide)
-        this.canvas.width = width + 2; 
+        this.canvas.width = width + LINE_WIDTH_MARGIN;
         this.canvas.height = height;
         // layer all the buffers together
         context.drawImage(this.selectBuffer, 0, 0);

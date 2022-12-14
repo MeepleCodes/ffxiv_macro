@@ -83,9 +83,7 @@ function App() {
   return (
     <div className="row outer">
       <div className="col">
-        <text-editor fontsrc={font.src} ref={ref}>
-          This is some text!
-        </text-editor>
+        <text-editor fontsrc={font.src} ref={ref} value={"line\n\nline"}/>
         {cur && <div className="status row">
           Ln {cur.cursorRow}, Col {cur.cursorCol} [{cur.cursorX}, {cur.cursorY}] {selectionText}
         </div>}

@@ -9,6 +9,10 @@ interface UndoState {
     cursorY: number;
     type: UndoType | null;
 }
+export type Cursor = {
+    row: number;
+    col: number;
+}
 export enum CursorDirection {
     Forward,
     Backward

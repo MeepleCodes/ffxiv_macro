@@ -21,7 +21,7 @@ Vague list of features still to implement
 - Form association (https://html.spec.whatwg.org/multipage/custom-elements.html#concept-custom-element-definition-form-associated)
 [x] Refactor to make all functions that use TextEditor.font etc take a custom this: type declaration
   [ Messy but worked ]
-- Status bar with current cursor and pixel position
+[x] Status bar with current cursor and pixel position
 - Command to attempt to increase or decrease the length of a selection by replacing spaces/wide spaces
 - Replace character picker with a canvas-based solution?
 - Tooltips on character picker to show glyph dimensions
