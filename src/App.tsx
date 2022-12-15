@@ -165,7 +165,7 @@ function App() {
 							<img 
 								className="g" 
 								key={glyph.codepoint}
-								title={`${String.fromCodePoint(glyph.codepoint)} (U+${glyph.codepoint.toString(16).toUpperCase().padStart(4, '0')}) ${glyph.w + glyph.right}x${glyph.h}px`}
+								alt={`${String.fromCodePoint(glyph.codepoint)} (U+${glyph.codepoint.toString(16).toUpperCase().padStart(4, '0')}) ${glyph.w + glyph.right}x${glyph.h}px`}
 								src={spritesheet}
 								style={{objectPosition: `-${glyph.x}px -${glyph.y}px`, width: glyph.w, height: glyph.h}}
 								onClick={e => {
@@ -181,7 +181,7 @@ function App() {
                     <button onClick={refreshFiles}>Refresh</button>
                     <ul>
                         {fileList.map((macro) => (
-                            <li key={macro.id} title={macro.id} onClick={() =>load(macro.id)}>{macro.name} <img src={`data:image/png;base64,${macro.thumbnail.toBase64()}`}/></li>
+                            <li key={macro.id} title={macro.id} onClick={() =>load(macro.id)}>{macro.name} <img alt="" src={`data:image/png;base64,${macro.thumbnail.toBase64()}`}/></li>
                         ))}
                     </ul>
                 </div>
