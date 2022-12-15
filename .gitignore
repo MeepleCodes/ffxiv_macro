@@ -23,3 +23,4 @@ yarn-error.log*
 .mailmap
 // Copy of create-react-app's webpack config pulled out for reference when writing rewrite.js
 example-webpack.config.js
+.env

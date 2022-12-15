@@ -24,5 +24,11 @@ Vague list of features still to implement
 [x] Status bar with current cursor and pixel position
 - Command to attempt to increase or decrease the length of a selection by replacing spaces/wide spaces
 - Replace character picker with a canvas-based solution?
-- Tooltips on character picker to show glyph dimensions
+[x] Tooltips on character picker to show glyph dimensions
+- Split App.tsx up into components
+  - Make a proper React component wrapper around text-editor
+    - onChange event from text-editor to make that work better
+  - Would making the statusbar a memo()d component improve performance?
+- Start using MUI
 - Saving and loading macros with firebase storeage or similar
+  - Loading/browsing could eventually use something like https://github.com/bvaughn/react-window for lazy loading

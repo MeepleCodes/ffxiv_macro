@@ -139,6 +139,12 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
         }
         return null;
     }
+    public getText() {
+        return this.text.text;
+    }
+    public async getThumbnail() {
+        return new Promise<Blob>((resolve, reject) => this.canvas.toBlob((blob) => blob !== null ? resolve(blob) : reject));
+    }
     // Pixel coordinates of the drag/drop insertion cursor, or null if we're not
     // currently dropping anything
     protected insertion: Coordinate | null = null;
