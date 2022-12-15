@@ -1,6 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { Bytes, collection, doc, DocumentData, DocumentReference, DocumentSnapshot, FirestoreDataConverter, getDoc, getDocs, getFirestore, query, QueryDocumentSnapshot, setDoc, SnapshotOptions, WithFieldValue } from "firebase/firestore";
-import { isUndefined } from "util";
+import { Bytes, collection, doc, DocumentData, DocumentReference, FirestoreDataConverter, getDoc, getDocs, getFirestore, query, QueryDocumentSnapshot, setDoc, SnapshotOptions, WithFieldValue } from "firebase/firestore";
 
 // Far from perfect but at least we're not committing the keys to github
 // (they're still accessible from the packed javascript)
@@ -47,23 +46,18 @@ const MacroConverter: FirestoreDataConverter<MacroDoc>  = {
     },
 }
 
-const justID = {
-    fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): string {
-        return snapshot.data().id;
-    }
-}
 export const Store = {
     docRef(id: string): DocumentReference<MacroDoc> {
         return doc(macros, id).withConverter(MacroConverter);
     },
     async load(id: string): Promise<MacroDoc|null> {
-        return await getDoc(this.docRef(id)).then((snap) => {
+        return getDoc(this.docRef(id)).then((snap) => {
             if(!snap.exists()) return null;
             else return snap.data();
         });
     },
     async loadAll(): Promise<MacroDoc[]> {
-        return await getDocs(query(macros).withConverter(MacroConverter)).then((snapshot) => {
+        return getDocs(query(macros).withConverter(MacroConverter)).then((snapshot) => {
             return snapshot.docs.filter(snap => snap.exists()).map(snap=>snap.data());
         });
     },
