@@ -103,11 +103,12 @@ function App() {
         </div>
         <div className="glyphs">
           {glyphPages[tab].glyphs.map(glyph => 
-            <p 
+            <img 
               className="g" 
               key={glyph.codepoint}
               title={`${String.fromCodePoint(glyph.codepoint)} (U+${glyph.codepoint.toString(16).toUpperCase().padStart(4, '0')}) ${glyph.w + glyph.right}x${glyph.h}px`}
-              style={{backgroundImage: `url(${spritesheet})`, width: glyph.w, height: glyph.h, backgroundPosition: `-${glyph.x}px -${glyph.y}px`}}
+              src={spritesheet}
+              style={{objectPosition: `-${glyph.x}px -${glyph.y}px`, width: glyph.w, height: glyph.h}}
               onClick={e => {
                   ref.current?.insert(String.fromCodePoint(glyph.codepoint));
                   ref.current?.focus();

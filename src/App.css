@@ -29,11 +29,11 @@ button.tab.selected {
   background: white;
   border-bottom: 1px hidden black;
 }
-p.g {
-  display: inline-block;
+.g {
+  object-fit: none;
   margin: 0;
 }
-p.g:hover {
+.g:hover {
   outline: 1px solid red;
 }
 text-editor {
