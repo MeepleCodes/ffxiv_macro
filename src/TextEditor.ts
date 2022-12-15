@@ -238,6 +238,7 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
             }
             case "value": {
                 this.text.reset(newValue);
+                if(this.isReady()) this.postUpdate();
                 break;
             }
             default:
@@ -872,7 +873,7 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
             if(ev.key === " " && ev.shiftKey && this.font.glyphMap[0x3000]) {
                 this.text.insert(String.fromCodePoint(0x3000));
             } else {
-            this.text.insert(ev.key);
+                this.text.insert(ev.key);
             }
             this.postUpdate();
         } else if(!wasControl) {
