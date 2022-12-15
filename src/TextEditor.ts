@@ -835,6 +835,19 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
             this.postUpdate();
         }
     }
+
+    /**
+     * Keydown event handler
+     * 
+     * Delegates a lot of work out to the functions defined in keyBindings,
+     * which is where we define any ctrl+<key> bindings and the like.
+     * 
+     * It also handles 'special' keys like the arrows, space, enter, delete.
+     * 
+     * Those could probably be pushed into the keyBindings object to make
+     * this function shorter
+     * @param ev Keyboard event
+     */
     @Handler("keydown")
     protected keyDowned(this: Ready, ev: KeyboardEvent) {
         let preventDefault = true;
@@ -856,10 +869,13 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
         // If it's a typeable character then it will have a single codepoint
         // But not it any control keys are held down
         if([...ev.key].length === 1 && !(ev.altKey || ev.ctrlKey || ev.metaKey || ev.isComposing)) {
+            if(ev.key === " " && ev.shiftKey && this.font.glyphMap[0x3000]) {
+                this.text.insert(String.fromCodePoint(0x3000));
+            } else {
             this.text.insert(ev.key);
+            }
             this.postUpdate();
         } else if(!wasControl) {
-            
             switch(ev.key) {
             case "Enter":
             case "Return":
