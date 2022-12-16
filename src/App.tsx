@@ -37,7 +37,8 @@ function importRes(requireContext: __WebpackModuleApi.RequireContext, cache = fa
 importRes(require.context('./res/', true, /\.png$/), false);
 importRes(require.context('./res/', true, /-combined\.json$/), true);
 
-const glyphPages: GlyphPage[] = [{name: 'Latin etc', start: 0, end: 0x2FFF, glyphs: []}, {name: "CJK", start: 0x3000, end: 0xDFFF, glyphs: []}, {name: "Private", start: 0xE000, end: 0xFFFF, glyphs: []}]
+let glyphPages: GlyphPage[] = [{name: 'Latin etc', start: 0, end: 0x2FFF, glyphs: []}, {name: "CJK", start: 0x3000, end: 0xDFFF, glyphs: []}, {name: "Private", start: 0xE000, end: 0xFFFF, glyphs: []}]
+// let glyphPages: GlyphPage[] = font.blocks.map(b => ({...b, glyphs: []}));
 for(let glyph of font.glyphs.slice(1)) {
 	for(let page of glyphPages) {
 		if(glyph.codepoint >= page.start && glyph.codepoint <= page.end) {
@@ -45,6 +46,7 @@ for(let glyph of font.glyphs.slice(1)) {
 		}
 	}
 }
+glyphPages = glyphPages.filter(g => g.glyphs.length > 0);
 type TEInfo = {
 	cursorX: number,
 	cursorY: number,
@@ -162,18 +164,21 @@ function App() {
 					</div>
 					<div className="glyphs">
 						{glyphPages[tab].glyphs.map(glyph => 
-							<img 
+							<p 
 								className="g" 
 								key={glyph.codepoint}
-								alt={`${String.fromCodePoint(glyph.codepoint)} (U+${glyph.codepoint.toString(16).toUpperCase().padStart(4, '0')}) ${glyph.w + glyph.right}x${glyph.h}px`}
-								src={spritesheet}
-								style={{objectPosition: `-${glyph.x}px -${glyph.y}px`, width: glyph.w, height: glyph.h}}
+                                draggable="true"
+								title={`${String.fromCodePoint(glyph.codepoint)} (U+${glyph.codepoint.toString(16).toUpperCase().padStart(4, '0')}) ${glyph.w + glyph.right}x${glyph.h}px`}
+								// src={spritesheet}
+							//	style={{objectPosition: `-${glyph.x}px -${glyph.y}px`, width: glyph.w, height: glyph.h}}
+                                style={{backgroundImage: `url(${spritesheet})`, width: glyph.w, height: glyph.h, backgroundPosition: `-${glyph.x}px -${glyph.y}px`}}
 								onClick={e => {
 										ref.current?.insert(String.fromCodePoint(glyph.codepoint));
 										ref.current?.focus();
 									}
 								}
-							/>)
+                                onDragStart={e => e.dataTransfer.setData("text/plain", String.fromCodePoint(glyph.codepoint))}
+							>{String.fromCodePoint(glyph.codepoint)}</p>)
 						}
 					</div>
 				</div>
