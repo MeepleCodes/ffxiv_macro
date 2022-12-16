@@ -6,6 +6,7 @@ extracted from FFXIV (which it uses instead of vector/TTF-based fonts).
 
 ## Bugs
 - Drop insertion point drawn in the wrong place at the end of a line
+- Cursor not restored correctly when undo/redoing
 
 ## TODOs
 Vague list of features still to implement
@@ -13,6 +14,9 @@ Vague list of features still to implement
 [x] Character picker (slightly better one, but performance suffers)
 [x] Line wrapping and/or scrolling
 [~] Refactor control key bindings in TextEditor
+- Last character in selection should select max of g.w/g.advanceWidth (vertical line's have a huge +ve right margin)
+- Insert by drag/drop or glyph picker should be its own Undo state
+- Show-whitespace mode
 - Always show cursor (maybe don't blink if not focused?)
 [x] Styling via CSS (including ::selection)
 [x] Drag and drop from glyph picker into editor window

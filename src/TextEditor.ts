@@ -910,11 +910,26 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
                 this.text.insert("\n");
                 this.postUpdate();
                 break;
-            case "Backspace":
+            // Ctrl+delete/backspace are sometimes "delete entire word"
             case "Delete":
-                this.text.delete(ev.key === "Backspace" ? CursorDirection.Backward : CursorDirection.Forward);
+                if(ev.shiftKey) {
+                    this.clipboardCut(ev);
+                } else {
+                    this.text.delete(CursorDirection.Forward);
+                    this.postUpdate();
+                }
+                break;
+            case "Backspace":
+                this.text.delete(CursorDirection.Backward);
                 this.postUpdate();
-                break;                
+                break;
+            case "Insert":
+                if(ev.shiftKey) {
+                    this.clipboardPaste(ev);
+                } else if(ev.ctrlKey) {
+                    this.clipboardCopy(ev);
+                }
+                break;
             case "Right":
             case "ArrowRight": {
                 this.text.moveCursor(CursorDirection.Forward, ev.ctrlKey ? MoveDistance.Word : MoveDistance.Character, ev.shiftKey);
