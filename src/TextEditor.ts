@@ -20,6 +20,11 @@ const STYLESHEET = `
         height: 100px;
         padding: 2px;
         position: relative;
+        color: black;
+    }
+    :host::selection {
+        background-color: #b0b8e0;
+        color: black;
     }
     slot {
         display: none;
@@ -93,7 +98,6 @@ function Handler(type: keyof HTMLElementEventMap, eventSource: (that: TextEditor
 }
 
 export class TextEditor extends HTMLElement implements EventListenerObject {
-    
     protected text = new TextModel();
     protected _fontSrc: string = "";
     public get fontSrc() {
@@ -106,8 +110,11 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
         }
     }
     // Optional fields that aren't optional once we're ready to render
+    // These are non-optional in the Ready type
     protected font?: Font;
     protected fontTexture?: ImageBitmap;
+    protected textStyle?: CSSStyleDeclaration;
+    protected selectStyle?: CSSStyleDeclaration;
     // The margin around the cursor to try and keep visible when scrolling
     protected scrollMargin = {left: 1, right: 1, top: 1, bottom: 1};
     // Pixel coordinates of the caret/typing cursor, relative to the canvas element
@@ -165,7 +172,8 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
 
     // HTMLElements used to build the shadow DOM
     protected stylesheet: HTMLStyleElement;
-    protected canvas: HTMLCanvasElement;
+    protected canvas: HTMLCanvasElement = document.createElement("canvas");
+    protected context = this.canvas.getContext("2d") as CanvasRenderingContext2D;
     protected slotElement: HTMLSlotElement;
     protected spinner: HTMLSlotElement;
     protected errorElement: HTMLDivElement;
@@ -173,25 +181,24 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
     protected container: HTMLDivElement;
 
     // Elements not in the DOM that are used for buffers
-    protected selectBuffer: HTMLCanvasElement;
-    protected textBuffer: HTMLCanvasElement;
-    protected cursorBuffer: HTMLCanvasElement;
+    // The select buffer is a normal canvas because we need to inspect it to see
+    // if a coordinate is within the selection; the rest are offscreen
+    protected selectBuffer = document.createElement("canvas");
+    protected selectContext = this.selectBuffer.getContext("2d", {willReadFrequently: true}) as CanvasRenderingContext2D;
+    protected textBuffer = new OffscreenCanvas(0, 0);
+    protected textContext = this.textBuffer.getContext("2d") as OffscreenCanvasRenderingContext2D;
+    protected cursorBuffer = new OffscreenCanvas(0, 0);
+    protected cursorContext = this.cursorBuffer.getContext("2d") as OffscreenCanvasRenderingContext2D;
+    protected textColourBuffer = new OffscreenCanvas(0, 0)
+    protected textColourContext = this.textColourBuffer.getContext("2d") as OffscreenCanvasRenderingContext2D;
     protected dragImage: HTMLImageElement = new Image();
 
-    // Helpful getters for sets of canvas elements
-    protected get canvases() {
-        return [this.canvas, this.selectBuffer, this.textBuffer, this.cursorBuffer];
-    }
-    protected get buffers() {
-        return [this.selectBuffer, this.textBuffer, this.cursorBuffer];
-    }
 
     constructor() {
         super();
         this.attachShadow({mode: "open"});
         // Maybe this should be done with an innerHTML'd template
         // and clone, then pick the nodes out with querySelector()
-        this.canvas = document.createElement("canvas");
         
         this.stylesheet = document.createElement("style");
         this.stylesheet.innerHTML = STYLESHEET;
@@ -217,14 +224,6 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
         this.errorMessage = document.createElement("p");
         this.errorElement.appendChild(this.errorMessage);
 
-        // The buffer canvases for rendering the layers separately
-        // These could probably be OffscreenCanvas objects
-        this.selectBuffer = document.createElement("canvas");
-        // Mark the select buffer's context for frequent reads
-        this.selectBuffer.getContext("2d", {willReadFrequently: true});
-        this.textBuffer = document.createElement("canvas");
-        this.cursorBuffer = document.createElement("canvas");
-        
     }
 
     public static get observedAttributes(): string[] {
@@ -254,6 +253,8 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
             this.setAttribute("draggable", "true");
             this.setAttribute("aria-role", "textarea");
             this.setAttribute("aria-multiline", "true");
+            this.textStyle = getComputedStyle(this);
+            this.selectStyle = getComputedStyle(this, "::selection");
 
             const container = this.container;
 
@@ -292,7 +293,7 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
     }
 
     public ready(): this is typeof this & {font: Font} {
-        return this.font !== null;
+        return this.font !== null && this.isConnected;
     }
 
     public insert(text: string) {
@@ -541,17 +542,21 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
     }
     
     protected redraw(this: Ready): void {
-        const contexts = this.canvases.map(c => c.getContext("2d"));
-        const [context, selectContext, textContext, cursorContext] = contexts;
-        if(!context || !selectContext || !textContext || !cursorContext) return;
         const drawSize = this.safeSize();
-        this.buffers.forEach(b => [b.width, b.height] = drawSize);
+        [this.textBuffer, this.selectBuffer, this.textColourBuffer, this.cursorBuffer].forEach(
+            (b) => [b.width, b.height] = drawSize
+        );
+      
         
+        // Draw glyphs normally, at the end we'll use source-in to change their colour
+        this.textContext.globalCompositeOperation="source-over";
         
-        // TODO: Customise these
-        selectContext.fillStyle = "#a0a0ff";
-        cursorContext.strokeStyle = "#000000";
-        cursorContext.lineWidth = 1;
+        // Cursor is drawn in text colour
+        this.cursorContext.strokeStyle = this.textStyle.color;
+        this.cursorContext.lineWidth = 1;
+        // Selection background colour and reset composition
+        this.selectContext.fillStyle = this.selectStyle.backgroundColor;
+        this.selectContext.globalCompositeOperation="source-over";
 
         // Height is fixed
         let height = this.text.lineLengths.length * this.font.lineHeight;
@@ -564,14 +569,14 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
                 // For the last character in the selection, use glyph.w instead of advance_width
                 // so we don't cut it short for glyphs with negative right offset
                 const w = c === this.text.selectionEnd - 1 ? glyph.w : advanceWidth;
-                selectContext.fillRect(x, y, w, this.font.lineHeight);
+                this.selectContext.fillRect(x, y, w, this.font.lineHeight);
             }
             // If the cursor is not currently blinking and should be
             // at this position, draw it (to the left)      
             if(this.text.cursor === c) {
                 this.caret = {x, y};
             }
-            textContext.drawImage(this.fontTexture, glyph.x, glyph.y, glyph.w, glyph.h, x, y + glyph.top, glyph.w, glyph.h);
+            this.textContext.drawImage(this.fontTexture, glyph.x, glyph.y, glyph.w, glyph.h, x, y + glyph.top, glyph.w, glyph.h);
             return true;
         }, (x, y, row, col, c) => {
             logRender.debug("Line ended at character", c);
@@ -580,7 +585,7 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
             if (c >= this.text.selectionStart && c < this.text.selectionEnd) {
                 // For the last character in the selection, use glyph.w instead of advance_width
                 // so we don't cut it short for glyphs with negative right offset
-                selectContext.fillRect(x, y, SELECTED_NEWLINE_WIDTH, this.font.lineHeight);
+                this.selectContext.fillRect(x, y, SELECTED_NEWLINE_WIDTH, this.font.lineHeight);
             }
             if(this.text.cursor === c) {
                 this.caret = {x, y};
@@ -589,26 +594,48 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
         })
 
         if(this.cursorVisible) {
-            cursorContext.setLineDash([]);
-            cursorContext.beginPath();
-            cursorContext.moveTo(this.caret.x + 1, this.caret.y);
-            cursorContext.lineTo(this.caret.x+1, this.caret.y + this.font.lineHeight);
-            cursorContext.stroke();
+            this.cursorContext.setLineDash([]);
+            this.cursorContext.beginPath();
+            this.cursorContext.moveTo(this.caret.x + 1, this.caret.y);
+            this.cursorContext.lineTo(this.caret.x+1, this.caret.y + this.font.lineHeight);
+            this.cursorContext.stroke();
         }
         if(this.insertion !== null) {
-            cursorContext.setLineDash([2]);
-            cursorContext.beginPath();
-            cursorContext.moveTo(this.insertion.x + 1, this.insertion.y);
-            cursorContext.lineTo(this.insertion.x + 1, this.insertion.y + this.font.lineHeight);
-            cursorContext.stroke();
+            this.cursorContext.setLineDash([2]);
+            this.cursorContext.beginPath();
+            this.cursorContext.moveTo(this.insertion.x + 1, this.insertion.y);
+            this.cursorContext.lineTo(this.insertion.x + 1, this.insertion.y + this.font.lineHeight);
+            this.cursorContext.stroke();
         }
         // Resize the visible buffer (which will also clear it, even if the numbers don't change)
         this.canvas.width = width + LINE_WIDTH_MARGIN;
         this.canvas.height = height;
-        // layer all the buffers together
-        context.drawImage(this.selectBuffer, 0, 0);
-        context.drawImage(this.textBuffer, 0, 0);
-        context.drawImage(this.cursorBuffer, 0, 0);
+
+        
+        // Use the selection buffer to mask out colours onto the text colour buffer
+
+        // Unselected text first
+        this.textColourContext.globalCompositeOperation = "source-over";
+        this.textColourContext.fillStyle = this.textStyle.color;
+        this.textColourContext.fillRect(0, 0, ...drawSize);
+        this.textColourContext.globalCompositeOperation = "destination-out";
+        this.textColourContext.drawImage(this.selectBuffer, 0, 0);
+        // textColour will now be unselected text colour everywhere except the
+        // selection, which will be transparent
+
+        // Now fill that transparent bit with the ::selection foreground colour
+        this.textColourContext.globalCompositeOperation = "destination-over";
+        this.textColourContext.fillStyle = this.selectStyle.color;
+        this.textColourContext.fillRect(0, 0, ...drawSize);
+
+        // Apply it to the text buffer with source-in to recolour the black + white text
+        this.textContext.globalCompositeOperation="source-in";
+        this.textContext.drawImage(this.textColourBuffer, 0, 0);
+
+        // Layer the buffers onto the output canvas
+        this.context.drawImage(this.selectBuffer, 0, 0);
+        this.context.drawImage(this.textBuffer, 0, 0);
+        this.context.drawImage(this.cursorBuffer, 0, 0);
     }
 
     public scrollToCursor(this: Ready) {
@@ -780,7 +807,7 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
         if(ev.dataTransfer?.types.includes("text/plain")) {
             ev.preventDefault();        
         } else {
-            console.log("Rejecting drag-over event, can't handle a data transfer with types", ev.dataTransfer?.types);
+            console.log("Rejecting drag-over event, can't handle a data transfer with types", ev.dataTransfer?.types, ev.dataTransfer?.items);
         }
     }
     @Handler("dragover")
@@ -962,5 +989,8 @@ export class TextEditor extends HTMLElement implements EventListenerObject {
 abstract class Ready extends TextEditor {
     protected abstract font: Font;
     protected abstract fontTexture: ImageBitmap;
+    protected abstract textStyle: CSSStyleDeclaration;
+    protected abstract selectStyle: CSSStyleDeclaration;    
 }
 customElements.define('text-editor', TextEditor);
+console.log("Custom element definition applied");
