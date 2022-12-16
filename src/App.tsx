@@ -178,7 +178,7 @@ function App() {
 									}
 								}
                                 onDragStart={e => e.dataTransfer.setData("text/plain", String.fromCodePoint(glyph.codepoint))}
-							>{String.fromCodePoint(glyph.codepoint)}</p>)
+							></p>)
 						}
 					</div>
 				</div>

@@ -32,7 +32,6 @@ button.tab.selected {
 .g {
   object-fit: none;
   margin: 0;
-  font-size: 0;
   display: inline-block;
 }
 .g:hover {
