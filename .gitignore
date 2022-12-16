@@ -24,3 +24,4 @@ yarn-error.log*
 // Copy of create-react-app's webpack config pulled out for reference when writing rewrite.js
 example-webpack.config.js
 .env
+.firebase/
