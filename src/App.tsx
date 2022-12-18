@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import './App.css';
 import font from './axis-12-lobby.json';
 import spritesheet from './res/axis-12-lobby.png'
-import { GlyphPage } from './Font';
-import { TextEditor } from './TextEditor';
+import { GlyphPage } from './texteditor/Font';
+import { TextEditor } from './texteditor/TextEditor';
 import './TextEditorReact';
 import { MacroDoc, Store } from './Firebase';
 import { Bytes } from 'firebase/firestore';
