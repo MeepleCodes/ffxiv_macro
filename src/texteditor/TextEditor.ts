@@ -92,7 +92,7 @@ function Handler(type: keyof HTMLElementEventMap, eventSource: (that: TextEditor
     }
 }
 
-export class TextEditor extends HTMLElement implements EventListenerObject {
+export default class TextEditor extends HTMLElement implements EventListenerObject {
     
     protected text = new TextModel();
     protected _fontSrc: string = "";
