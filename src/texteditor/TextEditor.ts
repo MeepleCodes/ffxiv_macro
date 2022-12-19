@@ -1007,5 +1007,7 @@ abstract class Ready extends TextEditor {
     protected abstract textStyle: CSSStyleDeclaration;
     protected abstract selectStyle: CSSStyleDeclaration;    
 }
-customElements.define('text-editor', TextEditor);
-console.log("Custom element definition applied");
+export function installWebComponent() {
+    customElements.define('text-editor', TextEditor);
+}
+installWebComponent();
