@@ -3,13 +3,12 @@ import './App.css';
 import font from './axis-12-lobby.json';
 import spritesheet from './res/axis-12-lobby.png'
 import { GlyphPage } from './texteditor/Font';
-import { TextEditor } from './texteditor/TextEditor';
-import './TextEditorReact';
+import TextEditor, {HTMLTextEditorElement} from './texteditor/TextEditorReact';
 import { MacroDoc, Store } from './Firebase';
 import { Bytes } from 'firebase/firestore';
 
-// Force an import of this otherwise webpack doesn't think it's referenced
-require("./TextEditor");
+// // Force an import of this otherwise webpack doesn't think it's referenced
+// require("./TextEditor");
 
 type FontSource = {
 	name: string;
@@ -62,7 +61,7 @@ function App() {
     let [fileList, setFileList] = useState<MacroDoc[]>([]);
     let [loading, setLoading] = useState<boolean>(false);
 
-	const ref = useRef<TextEditor>(null);
+	const ref = useRef<HTMLTextEditorElement>(null);
 	useEffect(() => {
 		ref.current?.addEventListener("update", (e: Event) => {
 			if(ref.current !== null) {
@@ -142,7 +141,7 @@ function App() {
 			</div>
 			<div className="row">
 				<div className="col">
-					<text-editor fontsrc={font.src} ref={ref} value={"line\n\nline"}/>
+					<TextEditor fontsrc={font.src} ref={ref} value={"line\n\nline"}/>
 					{cur && <div className="status row">
 						Ln {cur.cursorRow}, Col {cur.cursorCol} [{cur.cursorX}, {cur.cursorY}] {selectionText}
 					</div>}

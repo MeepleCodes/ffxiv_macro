@@ -963,4 +963,7 @@ abstract class Ready extends TextEditor {
     protected abstract font: Font;
     protected abstract fontTexture: ImageBitmap;
 }
-customElements.define('text-editor', TextEditor);
+export function installWebComponent() {
+    customElements.define('text-editor', TextEditor);
+}
+installWebComponent();
