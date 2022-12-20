@@ -4,7 +4,7 @@ import font from './axis-12-lobby.json';
 import spritesheet from './res/axis-12-lobby.png'
 import { GlyphPage } from './texteditor/Font';
 import TextEditor, {HTMLTextEditorElement} from './texteditor/TextEditorReact';
-import { MacroDoc, Store } from './Firebase';
+import { MacroDoc, Store } from './store/Firebase';
 import { Bytes } from 'firebase/firestore';
 
 // // Force an import of this otherwise webpack doesn't think it's referenced
@@ -56,26 +56,21 @@ function App() {
 	let [font, setFont] = useState<FontSource>(fontSources[0]);
 	let [cur, setCur] = useState<TEInfo | undefined>();
 	let [tab, setTab] = useState<number>(0);
-	let [filename, setFilename] = useState<string>("");
-    let [fileid, setFileid] = useState<string|undefined>();
     let [fileList, setFileList] = useState<MacroDoc[]>([]);
     let [loading, setLoading] = useState<boolean>(false);
+    let ref = useRef<HTMLTextEditorElement>(null);
 
-	const ref = useRef<HTMLTextEditorElement>(null);
-	useEffect(() => {
-		ref.current?.addEventListener("update", (e: Event) => {
-			if(ref.current !== null) {
-				setCur({
-					cursorX: ref.current.cursorX,
-					cursorY: ref.current.cursorY,
-					cursorRow: ref.current.cursorRow,
-					cursorCol: ref.current.cursorCol,
-					selectionLength: ref.current.selectionLength,
-					selectionPixels: ref.current.selectionPixels
-				});
-			}
-		})
-	}, [ref]);
+    const updateCursor = (ev: Event) => {
+        const t = ev.target as HTMLTextEditorElement;
+        setCur({
+            cursorX: t.cursorX,
+            cursorY: t.cursorY,
+            cursorRow: t.cursorRow,
+            cursorCol: t.cursorCol,
+            selectionLength: t.selectionLength,
+            selectionPixels: t.selectionPixels,
+        });
+    };
 	let selectionText = "";
 	if(cur && cur.selectionLength > 0) {
 		if(cur.selectionPixels !== null) {
@@ -85,52 +80,7 @@ function App() {
 		}
 		
 	}
-    const getMacro = async function(): Promise<MacroDoc | null> {
-        if(!ref.current) return null;
-        const name = filename;
-        const text = ref.current.getText()|| "";
-        return await ref.current.getThumbnail().then(blob => blob.arrayBuffer()).then(arraybuffer => {
-                return {
-                    id: undefined,
-                    draft: false,
-                    name,
-                    text,
-                    thumbnail: Bytes.fromUint8Array(new Uint8Array(arraybuffer))
-                };
-            });
-    }
-	const save = async function(id?: string) {
-        console.log("Saving started, getting thumbnail");
-        setLoading(true);
-        const macro = await getMacro();
-        
-        if(macro !== null) {
-            console.log("Ready to save");
-		    const id = await Store.save(fileid, macro);
-            console.log("Save complete, file ID is", id);
-            setFileid(id);
-        } else {
-            console.error("Unable to generate thumbnail for saving");
-        }
-        setLoading(false);
-	}
-    const load = async function(id?: string) {
-        if(id === undefined) return;
-        console.log("Loading started");
-        setLoading(true);
-        const doc = await Store.load(id);
-        if(doc === null) {
-            console.error("Failed to load macro ID", id);
-        } else {
-            setFileid(doc.id);
-            setFilename(doc.name);
-            ref.current?.setAttribute("value", doc.text);
-        }
-        setLoading(false);
-    }
-    const refreshFiles = async function() {
-        setFileList(await Store.loadAll());
-    }
+ 
 	return (
 		<div className="col outer">
 			<div className="row">
@@ -141,7 +91,7 @@ function App() {
 			</div>
 			<div className="row">
 				<div className="col">
-					<TextEditor fontsrc={font.src} ref={ref} value={"line\n\nline"}/>
+					<TextEditor fontsrc={font.src} ref={ref} onUpdate={updateCursor} value={"line\n\nline"}/>
 					{cur && <div className="status row">
 						Ln {cur.cursorRow}, Col {cur.cursorCol} [{cur.cursorX}, {cur.cursorY}] {selectionText}
 					</div>}

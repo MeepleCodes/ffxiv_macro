@@ -142,7 +142,7 @@ export default class TextEditor extends HTMLElement implements EventListenerObje
     public getText() {
         return this.text.text;
     }
-    public async getThumbnail() {
+    public async getThumbnail(): Promise<Blob> {
         return new Promise<Blob>((resolve, reject) => this.canvas.toBlob((blob) => blob !== null ? resolve(blob) : reject));
     }
     // Pixel coordinates of the drag/drop insertion cursor, or null if we're not
@@ -964,6 +964,8 @@ abstract class Ready extends TextEditor {
     protected abstract fontTexture: ImageBitmap;
 }
 export function installWebComponent() {
-    customElements.define('text-editor', TextEditor);
+    if(!customElements.get("text-editor")) {
+        customElements.define('text-editor', TextEditor);
+    }
 }
 installWebComponent();

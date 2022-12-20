@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import TextEditor, { installWebComponent } from './TextEditor';
 export type HTMLTextEditorElement = TextEditor;
 
@@ -31,10 +31,15 @@ export default React.forwardRef<HTMLTextEditorElement, TextEditorProps>((props: 
     const ref = (fwdRef!== null && typeof(fwdRef) !== "function") ? fwdRef : myRef;
     if(typeof(fwdRef) === "function") fwdRef(ref.current);
     React.useEffect(() => {
-        if(onUpdate) ref.current?.addEventListener("update", onUpdate);
-        return () => {
-            if(onUpdate) ref.current?.removeEventListener("update", onUpdate);
+        const tgt = ref.current;
+        if(onUpdate) {
+            tgt?.addEventListener("update", onUpdate);
         }
-    })
+        return () => {
+            if(onUpdate) {
+                tgt?.removeEventListener("update", onUpdate);
+            }
+        }
+    }, [ref, fwdRef, onUpdate]);
     return <text-editor ref={ref} {...rest}/>
 });
