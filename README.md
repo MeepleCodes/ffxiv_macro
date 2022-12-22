@@ -3,6 +3,8 @@ Completely over-the-top solution to offline editing of FFXIV macros in the authe
 
 A from-scratch text editor implemented in HTML Canvas so we can use the sprite-based fonts
 extracted from FFXIV (which it uses instead of vector/TTF-based fonts).
+## Bugs
+- There's *some* order of delete/insert (maybe clipboard) that doesn't create two undo states, just one
 
 ## TODOs
 Vague list of features still to implement
@@ -30,5 +32,6 @@ Vague list of features still to implement
     - onChange event from text-editor to make that work better
   - Would making the statusbar a memo()d component improve performance?
 - Start using MUI
-- Saving and loading macros with firebase storeage or similar
+  - Keep is a good template to take inspiration from
+[~] Saving and loading macros with firebase storeage or similar
   - Loading/browsing could eventually use something like https://github.com/bvaughn/react-window for lazy loading
