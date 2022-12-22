@@ -1,7 +1,6 @@
 import React from 'react';
-import TextEditor, { installWebComponent } from './TextEditor';
-export type HTMLTextEditorElement = TextEditor;
-
+import HTMLTextEditorElement, { installWebComponent } from './TextEditor';
+export { default as HTMLTextEditorElement } from './TextEditor';
 interface TextEditorHTMLAttributes<T> extends React.HTMLAttributes<T> {
     fontsrc: string | object;
     value?: string;

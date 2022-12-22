@@ -1,28 +1,38 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, RefObject, useContext, useRef, useState } from "react";
 import { MacroDoc, Store } from './Firebase';
 import { HTMLTextEditorElement } from './../texteditor/TextEditorReact'
 import { Bytes } from "firebase/firestore";
+import { emitWarning } from "process";
 
-const StoreContext = createContext<Ctx>({loading: false, setLoading: (newValue) => {}});
+const dontUseDefault = (nv: any) => {throw new Error("Don't use the default context");};
+
+const StoreContext = createContext<Ctx>({editor: useRef(null), loading: false, setLoading: dontUseDefault, filename: "", fileid: undefined, setFilename: dontUseDefault, setFileid: dontUseDefault});
 
 type Ctx = {
-    loading: boolean,
+    editor: RefObject<HTMLTextEditorElement>;
+    loading: boolean;
+    filename: string;
+    fileid?: string;
     setLoading: (newValue: boolean) => void;
+    setFilename: (newValue: string) => void;
+    setFileid: (newValue?: string) => void;
 }
 
-export function StoreContextProvider() {
+export function StoreContextProvider({editor}: {editor: RefObject<HTMLTextEditorElement>}) {
     const [loading, setLoading] = useState<boolean>(false);
-    return <StoreContext.Provider value={{loading, setLoading}}/>
+    const [filename, setFilename] = useState<string>("");
+    const [fileid, setFileid] = useState<string|undefined>();
+    return <StoreContext.Provider value={{editor, loading, setLoading, filename, setFilename, fileid, setFileid}}/>
 }
 
-export function SaveControls({editor}: {editor: HTMLTextEditorElement}) {
-	let [filename, setFilename] = useState<string>("");
-    let [fileid, setFileid] = useState<string|undefined>();    
-    let {loading, setLoading} = useContext(StoreContext);
+export function SaveControls() {
+	 
+    let {editor, loading, setLoading, filename, setFilename, fileid, setFileid} = useContext(StoreContext);
     const getMacro = async function(): Promise<MacroDoc | null> {
+        if(editor.current === null) return null;
         const name = filename;
-        const text = editor.getText()|| "";
-        return await editor.getThumbnail().then(blob => blob.arrayBuffer()).then(arraybuffer => {
+        const text = editor.current.getText()|| "";
+        return await editor.current.getThumbnail().then(blob => blob.arrayBuffer()).then(arraybuffer => {
                 return {
                     id: undefined,
                     draft: false,
@@ -47,6 +57,17 @@ export function SaveControls({editor}: {editor: HTMLTextEditorElement}) {
         }
         setLoading(false);
 	}
+    return <>
+			Filename <input type="text" value={filename} onChange={e => setFilename(e.target.value)}/>
+				<button onClick={e => save(fileid)} disabled={filename === "" || loading}>Save</button>
+				<button onClick={e => save(undefined)} disabled={filename === "" || loading}>Save copy</button>
+    </>
+}
+
+export function FileList() {
+    let [fileList, setFileList] = useState<MacroDoc[]>([]);
+    let {editor, loading, setLoading, setFilename, setFileid} = useContext(StoreContext);
+
     const load = async function(id?: string) {
         if(id === undefined) return;
         console.log("Loading started");
@@ -57,11 +78,20 @@ export function SaveControls({editor}: {editor: HTMLTextEditorElement}) {
         } else {
             setFileid(doc.id);
             setFilename(doc.name);
-            editor.setAttribute("value", doc.text);
+            editor.current?.setAttribute("value", doc.text);
         }
         setLoading(false);
     }
     const refreshFiles = async function() {
         setFileList(await Store.loadAll());
-    }
+    }    
+    return <>
+        <button onClick={refreshFiles}>Refresh</button>
+        <ul>
+            {fileList.map((macro) => (
+                // Swap for buttons, disabled={loading || refreshing}
+                <li key={macro.id} title={macro.id} onClick={() =>load(macro.id)}>{macro.name} <img alt="" src={`data:image/png;base64,${macro.thumbnail.toBase64()}`}/></li>
+            ))}
+        </ul>
+    </>
 }
