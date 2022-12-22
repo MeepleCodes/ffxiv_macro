@@ -37,7 +37,8 @@ Vague list of features still to implement
 - Double-click to selet a word, triple-click to select line, quad for whole document
 [x] Dropping text (easy)
 [x] Dragging text (why not! Seems easy enough) [you fool. You utter rube.]
-- Input mode for entering arbitary unicode?
+- Input mode for entering unicode
+- More shortcuts for commonly used glyphs (vertical/horizontal lines, letters/numbers in boxes)
 - Form association (https://html.spec.whatwg.org/multipage/custom-elements.html#concept-custom-element-definition-form-associated)
 [x] Refactor to make all functions that use TextEditor.font etc take a custom this: type declaration
   [ Messy but worked ]
