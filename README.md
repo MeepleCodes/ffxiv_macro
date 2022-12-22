@@ -24,6 +24,10 @@ Vague list of features still to implement
 [x] Refactor to make all functions that use TextEditor.font etc take a custom this: type declaration
   [ Messy but worked ]
 [x] Status bar with current cursor and pixel position
+  - No. of lines selected
+- View whitespace (U+00B7 for short space, something for long space)
+- Kerning class, link to unicode definition/names for glyph picker tooltip
+- Glyph browser page?
 - Command to attempt to increase or decrease the length of a selection by replacing spaces/wide spaces
 - Replace character picker with a canvas-based solution?
 [x] Tooltips on character picker to show glyph dimensions
