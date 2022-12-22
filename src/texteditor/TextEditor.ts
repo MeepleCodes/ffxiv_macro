@@ -76,23 +76,23 @@ type EventMap = {
     [type in keyof HTMLElementEventMap]?: {
         handler: (this: Ready, evt: HTMLElementEventMap[type]) => void,
         // handler: any,
-        source: (that: TextEditor) => DocumentAndElementEventHandlers,
+        source: (that: HTMLTextEditorElement) => DocumentAndElementEventHandlers,
         requiresReady: boolean
     }
 }
 const EVENT_MAP: EventMap = {};
 
-function Handler(type: keyof HTMLElementEventMap, eventSource: (that: TextEditor) => DocumentAndElementEventHandlers = (that: TextEditor) => that, requiresReady = true) {
-    return function (target: TextEditor, propertyKey: any, descriptor: PropertyDescriptor) {
+function Handler(type: keyof HTMLElementEventMap, eventSource: (that: HTMLTextEditorElement) => DocumentAndElementEventHandlers = (that: HTMLTextEditorElement) => that, requiresReady = true) {
+    return function (target: HTMLTextEditorElement, propertyKey: any, descriptor: PropertyDescriptor) {
         EVENT_MAP[type] = {
-            handler: target[propertyKey as keyof TextEditor] as any,
+            handler: target[propertyKey as keyof HTMLTextEditorElement] as any,
             source: eventSource,
             requiresReady
         };
     }
 }
 
-export default class TextEditor extends HTMLElement implements EventListenerObject {
+export default class HTMLTextEditorElement extends HTMLElement implements EventListenerObject {
     
     protected text = new TextModel();
     protected _fontSrc: string = "";
@@ -828,7 +828,7 @@ export default class TextEditor extends HTMLElement implements EventListenerObje
             this.postUpdate(false);
         }
     }
-    @Handler("slotchange", (that: TextEditor) => that.slotElement, false)
+    @Handler("slotchange", (that: HTMLTextEditorElement) => that.slotElement, false)
     protected slotChanged(ev: Event) {
         const text = this.slotElement.assignedNodes({flatten: true}).map((node: Node) => node.textContent).join("");
         this.text.reset(text);
@@ -959,13 +959,13 @@ export default class TextEditor extends HTMLElement implements EventListenerObje
         return this.font !== undefined && this.fontTexture !== undefined;
     }
 }
-abstract class Ready extends TextEditor {
+abstract class Ready extends HTMLTextEditorElement {
     protected abstract font: Font;
     protected abstract fontTexture: ImageBitmap;
 }
 export function installWebComponent() {
     if(!customElements.get("text-editor")) {
-        customElements.define('text-editor', TextEditor);
+        customElements.define('text-editor', HTMLTextEditorElement);
     }
 }
 installWebComponent();
