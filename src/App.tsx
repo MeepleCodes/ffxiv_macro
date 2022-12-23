@@ -6,6 +6,12 @@ import { Bytes } from 'firebase/firestore';
 import { SaveControls, FileList, StoreContextProvider } from './store/StoreControls';
 import GlyphPicker from './GlyphPicker';
 
+
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+
 // // Force an import of this otherwise webpack doesn't think it's referenced
 // require("./TextEditor");
 
@@ -73,10 +79,8 @@ function App() {
  
 	return (
 		<StoreContextProvider editor={ref}>
-		<div className="col outer">
-			<div className="row">
-				<SaveControls/>
-			</div>
+			<Card>
+				
 			<div className="row">
 				<div className="col">
 					<TextEditor fontsrc={font.src} ref={ref} onUpdate={updateCursor} value={"line\n\nline"}/>
@@ -92,8 +96,11 @@ function App() {
                 <div className="col"><FileList/>
                 </div>
 			</div>
-			</div>
-			</StoreContextProvider>
+			<CardActions>
+				<SaveControls/>
+			</CardActions>
+			</Card>
+		</StoreContextProvider>
 		
 	);
 }
