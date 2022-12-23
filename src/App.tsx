@@ -6,6 +6,7 @@ import { GlyphPage } from './texteditor/Font';
 import TextEditor, {HTMLTextEditorElement} from './texteditor/TextEditorReact';
 import { MacroDoc, Store } from './store/Firebase';
 import { Bytes } from 'firebase/firestore';
+import { SaveControls, FileList, StoreContextProvider } from './store/StoreControls';
 
 // // Force an import of this otherwise webpack doesn't think it's referenced
 // require("./TextEditor");
@@ -82,12 +83,10 @@ function App() {
 	}
  
 	return (
+		<StoreContextProvider editor={ref}>
 		<div className="col outer">
 			<div className="row">
-			Filename <input type="text" value={filename} onChange={e => setFilename(e.target.value)}/>
-				<button onClick={e => save(fileid)} disabled={filename === ""}>Save</button>
-				<button onClick={e => save(undefined)} disabled={filename === ""}>Save copy</button>
-                {loading ? "Loading" : "Not loading"}
+				<SaveControls/>
 			</div>
 			<div className="row">
 				<div className="col">
@@ -126,16 +125,12 @@ function App() {
 						}
 					</div>
 				</div>
-                <div className="col">
-                    <button onClick={refreshFiles}>Refresh</button>
-                    <ul>
-                        {fileList.map((macro) => (
-                            <li key={macro.id} title={macro.id} onClick={() =>load(macro.id)}>{macro.name} <img alt="" src={`data:image/png;base64,${macro.thumbnail.toBase64()}`}/></li>
-                        ))}
-                    </ul>
+                <div className="col"><FileList/>
                 </div>
 			</div>
-		</div>
+			</div>
+			</StoreContextProvider>
+		
 	);
 }
 
