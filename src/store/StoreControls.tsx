@@ -1,4 +1,4 @@
-import { createContext, RefObject, useContext, useRef, useState } from "react";
+import React, { createContext, createRef, RefObject, useContext, useRef, useState } from "react";
 import { MacroDoc, Store } from './Firebase';
 import { HTMLTextEditorElement } from './../texteditor/TextEditorReact'
 import { Bytes } from "firebase/firestore";
@@ -6,7 +6,7 @@ import { emitWarning } from "process";
 
 const dontUseDefault = (nv: any) => {throw new Error("Don't use the default context");};
 
-const StoreContext = createContext<Ctx>({editor: useRef(null), loading: false, setLoading: dontUseDefault, filename: "", fileid: undefined, setFilename: dontUseDefault, setFileid: dontUseDefault});
+const StoreContext = createContext<Ctx>({editor: createRef(), loading: false, setLoading: dontUseDefault, filename: "", fileid: undefined, setFilename: dontUseDefault, setFileid: dontUseDefault});
 
 type Ctx = {
     editor: RefObject<HTMLTextEditorElement>;
@@ -18,11 +18,13 @@ type Ctx = {
     setFileid: (newValue?: string) => void;
 }
 
-export function StoreContextProvider({editor}: {editor: RefObject<HTMLTextEditorElement>}) {
+export function StoreContextProvider({editor, children}: {editor: RefObject<HTMLTextEditorElement>, children: React.ReactNode}) {
     const [loading, setLoading] = useState<boolean>(false);
     const [filename, setFilename] = useState<string>("");
     const [fileid, setFileid] = useState<string|undefined>();
-    return <StoreContext.Provider value={{editor, loading, setLoading, filename, setFilename, fileid, setFileid}}/>
+    return <StoreContext.Provider value={{editor, loading, setLoading, filename, setFilename, fileid, setFileid}}>
+        {children}
+    </StoreContext.Provider>
 }
 
 export function SaveControls() {
