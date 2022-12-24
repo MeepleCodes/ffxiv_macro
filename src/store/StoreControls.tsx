@@ -27,8 +27,7 @@ export function StoreContextProvider({editor, children}: {editor: RefObject<HTML
     </StoreContext.Provider>
 }
 
-export function SaveControls() {
-	 
+export function useSave() {
     let {editor, loading, setLoading, filename, setFilename, fileid, setFileid} = useContext(StoreContext);
     const getMacro = async function(): Promise<MacroDoc | null> {
         if(editor.current === null) return null;
@@ -59,6 +58,12 @@ export function SaveControls() {
         }
         setLoading(false);
 	}
+    return save;
+}
+
+export function SaveControls() {
+    let {loading, filename, setFilename, fileid} = useContext(StoreContext);
+    const save = useSave();
     return <>
 			Filename <input type="text" value={filename} onChange={e => setFilename(e.target.value)}/>
 				<button onClick={e => save(fileid)} disabled={filename === "" || loading}>Save</button>
