@@ -2,7 +2,10 @@ import React, { createContext, createRef, RefObject, useContext, useRef, useStat
 import { MacroDoc, Store } from './Firebase';
 import { HTMLTextEditorElement } from './../texteditor/TextEditorReact'
 import { Bytes } from "firebase/firestore";
-import { emitWarning } from "process";
+
+import Button from '@mui/material/Button';
+import InputBase from '@mui/material/InputBase';
+
 
 const dontUseDefault = (nv: any) => {throw new Error("Don't use the default context");};
 
@@ -27,7 +30,7 @@ export function StoreContextProvider({editor, children}: {editor: RefObject<HTML
     </StoreContext.Provider>
 }
 
-export function useSave() {
+function useSave() {
     let {editor, loading, setLoading, filename, setFilename, fileid, setFileid} = useContext(StoreContext);
     const getMacro = async function(): Promise<MacroDoc | null> {
         if(editor.current === null) return null;
@@ -60,7 +63,36 @@ export function useSave() {
 	}
     return save;
 }
-
+export function SaveButton() {
+    let { fileid } = useContext(StoreContext);
+    const save = useSave();
+    return <Button onClick={e => save(fileid)}>Save</Button>
+}
+export function FileName({editable = false}) {
+    let { filename, setFilename } = useContext(StoreContext);
+    const [state, setState] = useState<{editing: boolean, currentName: string}>({editing: false, currentName: filename});
+    const save = () => {
+        setFilename(state.currentName);
+        setState({...state, editing: false});
+    }
+    return <><InputBase
+        sx={{ ml: 1, flex: 1 }}
+        placeholder={editable ? "Filename" : ""}
+        value={state.currentName}
+        readOnly={!state.editing}
+        onChange={e => setState({editing: true, currentName: e.target.value})}
+        inputProps={{ 'aria-label': 'filename' }}
+      />
+      {editable ? (state.editing ?
+        <>
+        <Button onClick={e => setState({editing: false, currentName: filename})}>Cancel</Button>
+        <Button onClick={save}>Save</Button>
+        </>
+      : 
+        <Button onClick={e => setState({...state, editing: true})}>Edit</Button>
+      ): <></>}
+      </>
+}
 export function SaveControls() {
     let {loading, filename, setFilename, fileid} = useContext(StoreContext);
     const save = useSave();

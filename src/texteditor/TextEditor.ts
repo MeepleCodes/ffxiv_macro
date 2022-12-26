@@ -20,6 +20,7 @@ const STYLESHEET = `
         height: 100px;
         padding: 2px;
         position: relative;
+        display: block;
     }
     slot {
         display: none;
