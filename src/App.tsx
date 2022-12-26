@@ -3,7 +3,7 @@ import './App.css';
 import TextEditor, {HTMLTextEditorElement} from './texteditor/TextEditorReact';
 import { MacroDoc, Store } from './store/Firebase';
 import { Bytes } from 'firebase/firestore';
-import { SaveControls, FileList, StoreContextProvider, FileName, SaveButton } from './store/StoreControls';
+import { SaveControls, FileList, StoreContextProvider, FileName, SaveButton, SimpleFileName } from './store/StoreControls';
 import GlyphPicker from './GlyphPicker';
 
 
@@ -13,7 +13,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import CardActions from '@mui/material/CardActions';
 import CardHeader from '@mui/material/CardContent';
 import CardContent from '@mui/material/CardContent';
-import { Stack } from '@mui/material';
+import { Stack, TextField } from '@mui/material';
 
 // // Force an import of this otherwise webpack doesn't think it's referenced
 // require("./TextEditor");
@@ -82,8 +82,9 @@ function App() {
 		<StoreContextProvider editor={ref}>
 			<Card>
 				<CardHeader>
-					<FileName editable={true}/>
+					<Stack direction="row">					<SimpleFileName/>
 					<SaveButton/>
+					</Stack>
 				</CardHeader>
 				<CardContent>
 						<TextEditor fontsrc={font.src} ref={ref} onUpdate={updateCursor} value={"line\n\nline"}/>

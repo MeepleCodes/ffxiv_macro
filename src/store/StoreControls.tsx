@@ -5,6 +5,7 @@ import { Bytes } from "firebase/firestore";
 
 import Button from '@mui/material/Button';
 import InputBase from '@mui/material/InputBase';
+import TextField from "@mui/material/TextField";
 
 
 const dontUseDefault = (nv: any) => {throw new Error("Don't use the default context");};
@@ -67,6 +68,10 @@ export function SaveButton() {
     let { fileid } = useContext(StoreContext);
     const save = useSave();
     return <Button onClick={e => save(fileid)}>Save</Button>
+}
+export function SimpleFileName() {
+    let { filename, setFilename } = useContext(StoreContext);
+    return <TextField value={filename} placeholder="Filename" size="small" fullWidth onChange={e => setFilename(e.target.value)}/>
 }
 export function FileName({editable = false}) {
     let { filename, setFilename } = useContext(StoreContext);
