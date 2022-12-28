@@ -1,22 +1,33 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './App.css';
 import TextEditor, {HTMLTextEditorElement} from './texteditor/TextEditorReact';
-import { MacroDoc, Store } from './store/Firebase';
-import { Bytes } from 'firebase/firestore';
-import { SaveControls, FileList, StoreContextProvider, FileName, SaveButton, SimpleFileName } from './store/StoreControls';
+import { FileList, StoreContextProvider, SaveIconButton, SimpleFileName } from './store/StoreControls';
 import GlyphPicker from './GlyphPicker';
 
-
+import {  useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import EditIcon from '@mui/icons-material/Edit';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import Toolbar from '@mui/material/Toolbar';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import Typography from '@mui/material/Typography';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select  from '@mui/material/Select';
 import CardActions from '@mui/material/CardActions';
+import CardMedia from '@mui/material/CardMedia';
 import CardHeader from '@mui/material/CardContent';
-import CardContent from '@mui/material/CardContent';
-import { Stack, TextField } from '@mui/material';
+import Stack from '@mui/material/Stack';
+import { ThemeProvider } from '@mui/material/styles';
+import { NavAppBar, NavDrawer, NavHeader, NavMain } from './Nav';
+import { appTheme } from './Theme';
 
 // // Force an import of this otherwise webpack doesn't think it's referenced
 // require("./TextEditor");
+
 
 type FontSource = {
 	name: string;
@@ -51,13 +62,13 @@ type TEInfo = {
 	selectionPixels: number | null
 };
 function App() {
-	let [font, setFont] = useState<FontSource>(fontSources[0]);
+	let [font, setFont] = useState<number>(0);
 	let [cur, setCur] = useState<TEInfo | undefined>();
-    let [fileList, setFileList] = useState<MacroDoc[]>([]);
-    let [loading, setLoading] = useState<boolean>(false);
+	let [open, setOpen] = useState<boolean>(true);
     let ref = useRef<HTMLTextEditorElement>(null);
+	const theme = useTheme();
 
-    const updateCursor = (ev: Event) => {
+    const updateCursor = (ev: {target: any}) => {
         const t = ev.target as HTMLTextEditorElement;
         setCur({
             cursorX: t.cursorX,
@@ -77,37 +88,79 @@ function App() {
 		}
 		
 	}
- 
+	useEffect(() => {
+		if(ref.current !== null) updateCursor({target: ref.current});
+	})
+
 	return (
 		<StoreContextProvider editor={ref}>
-			<Card>
-				<CardHeader>
-					<Stack direction="row">					<SimpleFileName/>
-					<SaveButton/>
-					</Stack>
-				</CardHeader>
-				<CardContent>
-						<TextEditor fontsrc={font.src} ref={ref} onUpdate={updateCursor} value={"line\n\nline"}/>
-				</CardContent>
-			<CardActions>
-				Font:
-					{fontSources.map((fontSource: FontSource) => <button title={fontSource.request} key={fontSource.request} onClick={e => setFont(fontSource)}>{fontSource.name}</button>)}
-					{cur && <div className="status row">
-						Ln {cur.cursorRow}, Col {cur.cursorCol} [{cur.cursorX}, {cur.cursorY}] {selectionText}
-					</div>}
-				
-			</CardActions>
-			</Card>
-			<Card>
-				<CardContent>
+			<ThemeProvider theme={appTheme}>
+			<NavAppBar position="fixed" open={open}>
+				<Toolbar>
+					<IconButton
+						color="inherit"
+						aria-label="open drawer"
+						onClick={e => setOpen(true)}
+						edge="start"
+						sx={{ mr: 2, ...(open && { display: 'none' }) }}
+					>
+						<MenuIcon />
+					</IconButton>
+					<Typography variant="h6" noWrap component="div">
+						THRM
+					</Typography>
+
+					<Box sx={{flexGrow: 1}}/>		
+					<FormControl size="small" color="inverted">
+						{/* <InputLabel sx={{color:"inherit", borderColor: "currentcolor"}} id="font-size">Font size</InputLabel> */}
+						<InputLabel id="font-size">Font size</InputLabel>
+						<Select
+							labelId="font-size"
+							id="font-size"
+							value={font.toString()}
+							label="Font size"
+							onChange={e => setFont(parseInt(e.target.value))}
+						>
+							{fontSources.map((fontSource: FontSource, i: number) => <MenuItem key={fontSource.request} value={i}>{fontSource.name}</MenuItem>)}
+						</Select>
+					</FormControl>
+
+				</Toolbar>
+			</NavAppBar>
+			<NavDrawer variant="persistent" anchor="left" open={open}>
+				<NavHeader>
+				<IconButton onClick={e => setOpen(false)}>
+					{theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+				</IconButton>					
+				</NavHeader>
+				<FileList/>
+			</NavDrawer>
+			<NavMain open={open}>
+				<NavHeader/>
+				<Stack direction="row" spacing={3} justifyContent="center">
+					<Card>
+						<CardHeader sx={{boxShadow: 1}}>
+						<Stack direction="row">
+							<SimpleFileName/>
+							<SaveIconButton/>
+							<SaveIconButton asCopy={true}/>
+						</Stack>
+						</CardHeader>
+						<CardMedia>
+							<TextEditor fontsrc={fontSources[font].src} ref={ref} onUpdate={updateCursor} value={"line\n\nline"}/>
+						</CardMedia>
+					<CardActions sx={{boxShadow: 1}}>
+							{cur && <div className="status row">
+								Ln {cur.cursorRow}, Col {cur.cursorCol} [{cur.cursorX}, {cur.cursorY}] {selectionText}
+							</div>}
+						
+						
+					</CardActions>
+					</Card>
 					<GlyphPicker editorRef={ref} />
-				</CardContent>
-			</Card>
-			<Card>
-				<CardContent>
-					<FileList/>
-				</CardContent>
-			</Card>
+				</Stack>
+			</NavMain>
+			</ThemeProvider>
 		</StoreContextProvider>
 		
 	);

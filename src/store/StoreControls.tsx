@@ -1,8 +1,12 @@
-import React, { createContext, createRef, RefObject, useContext, useRef, useState } from "react";
+import React, { createContext, createRef, RefObject, useContext, useState } from "react";
 import { MacroDoc, Store } from './Firebase';
 import { HTMLTextEditorElement } from './../texteditor/TextEditorReact'
 import { Bytes } from "firebase/firestore";
 
+import SaveIcon from '@mui/icons-material/Save';
+import SaveAsIcon from '@mui/icons-material/SaveAs';
+
+import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import InputBase from '@mui/material/InputBase';
 import TextField from "@mui/material/TextField";
@@ -32,7 +36,7 @@ export function StoreContextProvider({editor, children}: {editor: RefObject<HTML
 }
 
 function useSave() {
-    let {editor, loading, setLoading, filename, setFilename, fileid, setFileid} = useContext(StoreContext);
+    let {editor,  setLoading, filename,  setFileid} = useContext(StoreContext);
     const getMacro = async function(): Promise<MacroDoc | null> {
         if(editor.current === null) return null;
         const name = filename;
@@ -47,14 +51,14 @@ function useSave() {
                 };
             });
     }
-	const save = async function(id?: string) {
+	const save = async function(saveId?: string) {
         console.log("Saving started, getting thumbnail");
         setLoading(true);
         const macro = await getMacro();
         
         if(macro !== null) {
             console.log("Ready to save");
-		    const id = await Store.save(fileid, macro);
+		    const id = await Store.save(saveId, macro);
             console.log("Save complete, file ID is", id);
             setFileid(id);
         } else {
@@ -64,10 +68,15 @@ function useSave() {
 	}
     return save;
 }
-export function SaveButton() {
+export function SaveButton({asCopy = false}) {
     let { fileid } = useContext(StoreContext);
     const save = useSave();
-    return <Button onClick={e => save(fileid)}>Save</Button>
+    return <Button onClick={e => save(asCopy ? undefined : fileid)}>{asCopy ? 'Save Copy' : 'Save'}</Button>
+}
+export function SaveIconButton({asCopy = false}) {
+    let { fileid } = useContext(StoreContext);
+    const save = useSave();
+    return <IconButton color="primary" onClick={e => save(asCopy ? undefined : fileid)}>{asCopy ? <SaveAsIcon/> : <SaveIcon/>}</IconButton>
 }
 export function SimpleFileName() {
     let { filename, setFilename } = useContext(StoreContext);
@@ -110,7 +119,7 @@ export function SaveControls() {
 
 export function FileList() {
     let [fileList, setFileList] = useState<MacroDoc[]>([]);
-    let {editor, loading, setLoading, setFilename, setFileid} = useContext(StoreContext);
+    let {editor, setLoading, setFilename, setFileid} = useContext(StoreContext);
 
     const load = async function(id?: string) {
         if(id === undefined) return;
