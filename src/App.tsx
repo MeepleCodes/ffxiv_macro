@@ -53,6 +53,7 @@ function importRes(requireContext: __WebpackModuleApi.RequireContext, cache = fa
 importRes(require.context('./res/', true, /\.png$/), false);
 importRes(require.context('./res/', true, /-combined\.json$/), true);
 
+
 type TEInfo = {
 	cursorX: number,
 	cursorY: number,
