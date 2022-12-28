@@ -29,9 +29,14 @@ button.tab.selected {
   background: white;
   border-bottom: 1px hidden black;
 }
-.g {
+img.g {
   object-fit: none;
   margin: 0;
+}
+p.g {
+  font-size: 0;
+  margin: 0;
+  display: inline-block;
 }
 .g:hover {
   outline: 1px solid red;
@@ -39,4 +44,9 @@ button.tab.selected {
 text-editor {
   height: 400px;
   width: 400px;
+  border: 0;
+  padding: 4px 8px;
+}
+text-editor:focus {
+  outline: 0;
 }

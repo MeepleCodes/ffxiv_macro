@@ -63,7 +63,7 @@ export const Store = {
     },
     async save(id: string|undefined, macro: MacroDoc): Promise<string> {
         const ref = (id === undefined ? doc(macros) : doc(macros, id)).withConverter(MacroConverter);
-        console.log("Saving", macro, "to", ref.path);
+        console.log(id === undefined ? "Saving copy of " : "Saving", macro, "to", ref.path);
         return setDoc(ref, macro).then(() => ref.id);
     },
     async saveNew(macro: MacroDoc): Promise<string> {

@@ -1,8 +1,13 @@
 import { RefObject, useState } from "react";
+
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Card, {CardProps} from '@mui/material/Card';
+import CardHeader from '@mui/material/CardContent';
+import CardContent from '@mui/material/CardContent';
+
 import HTMLTextEditorElement from "./texteditor/TextEditor";
-
-
-import { GlyphPage } from './texteditor/Font';
+import { Glyph, GlyphPage } from './texteditor/Font';
 import font from './axis-12-lobby.json';
 import spritesheet from './res/axis-12-lobby.png'
 
@@ -14,36 +19,59 @@ for(let glyph of font.glyphs.slice(1)) {
 		}
 	}
 }
+type GlyphPickerProps = CardProps & {
+    editorRef: RefObject<HTMLTextEditorElement>;
+};
 
-
-export default function GlyphPicker({editorRef}: {editorRef: RefObject<HTMLTextEditorElement>}) {
-    
-	let [tab, setTab] = useState<number>(0);
-    return <div className="col">
-                        
-        <div className="row">
-            {glyphPages.map((p, i) => 
-            <button 
-                className={tab === i ? "tab selected" : "tab"}
-                key={i}
-                onClick={e => setTab(i)}>{p.name}</button>
-            )}
-        </div>
-        <div className="glyphs">
-            {glyphPages[tab].glyphs.map(glyph => 
-                <img 
-                    className="g" 
-                    key={glyph.codepoint}
-                    alt={`${String.fromCodePoint(glyph.codepoint)} (U+${glyph.codepoint.toString(16).toUpperCase().padStart(4, '0')}) ${glyph.w + glyph.right}x${glyph.h}px`}
-                    src={spritesheet}
-                    style={{objectPosition: `-${glyph.x}px -${glyph.y}px`, width: glyph.w, height: glyph.h}}
-                    onClick={e => {
-                            editorRef.current?.insert(String.fromCodePoint(glyph.codepoint));
-                            editorRef.current?.focus();
-                        }
-                    }
-                />)
+const glyphP = (editorRef: RefObject<HTMLTextEditorElement>, glyph: Glyph) => {
+    return <p 
+            className="g"
+            draggable
+            key={glyph.codepoint}
+            title={`${String.fromCodePoint(glyph.codepoint)} (U+${glyph.codepoint.toString(16).toUpperCase().padStart(4, '0')}) ${glyph.w + glyph.right}x${glyph.h}px`}
+            style={{backgroundImage: `url(${spritesheet})`, width: glyph.w, height: glyph.h, backgroundPosition: `-${glyph.x}px -${glyph.y}px`}}
+            onDragStart={e => e.dataTransfer.setData("text/plain", String.fromCodePoint(glyph.codepoint))}
+            onClick={e => {
+                editorRef.current?.insert(String.fromCodePoint(glyph.codepoint));
+                editorRef.current?.focus();
+            }}
+            />//            >{String.fromCodePoint(glyph.codepoint)}</p>
+}
+const glyphImg = (editorRef: RefObject<HTMLTextEditorElement>, glyph: Glyph) => {
+    return <img
+        className="g" 
+        key={glyph.codepoint}
+        alt={`${String.fromCodePoint(glyph.codepoint)} (U+${glyph.codepoint.toString(16).toUpperCase().padStart(4, '0')}) ${glyph.w + glyph.right}x${glyph.h}px`}
+        src={spritesheet}
+        style={{objectPosition: `-${glyph.x}px -${glyph.y}px`, width: glyph.w, height: glyph.h}}
+        onDragStart={e => e.dataTransfer.setData("text/plain", String.fromCodePoint(glyph.codepoint))}
+        onClick={e => {
+                editorRef.current?.insert(String.fromCodePoint(glyph.codepoint));
+                editorRef.current?.focus();
             }
-        </div>
-    </div>
+        }
+    />
+}
+
+export default function GlyphPicker(props: GlyphPickerProps) {
+    const {editorRef, ...rest} = props;
+	let [tab, setTab] = useState<number>(0);
+    return <Card {...rest}>
+        <CardHeader>
+            <Tabs value={tab} onChange={(e, v) => setTab(v)}>
+            {glyphPages.map((p, i) => (
+            <Tab 
+                id={`glyph-tab-${i}`}
+                aria-controls={`glyph-tabpanel-${i}`}
+                key={i}
+                value={i}
+                label={p.name}
+                />
+            ))}
+            </Tabs>
+        </CardHeader>
+        <CardContent sx={{maxWidth: 400, maxHeight: 400, overflow: "auto"}}>
+        {glyphPages[tab].glyphs.map(g => glyphP(editorRef, g))}
+        </CardContent>
+    </Card>
 }
