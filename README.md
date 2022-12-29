@@ -60,3 +60,8 @@ Vague list of features still to implement
 [~] Saving and loading macros with firebase storeage or similar
   - Authentication and user management
   - Loading/browsing could eventually use something like https://github.com/bvaughn/react-window for lazy loading
+- Icons from https://xivapi.com/MacroIcon
+- Tags for macros. Use XIVAPI for lists of applicable tags?
+  - Class/job: https://xivapi.com/ClassJob?pretty=1
+  - Trials and Raids: https://xivapi.com/search?filters=ContentFinderCondition.ContentType.ID%3E=4,ContentFinderCondition.ContentType.ID%3C=5&pretty=1
+   (note this only has the latest Unreal on the list so that's a bit of a pain)
