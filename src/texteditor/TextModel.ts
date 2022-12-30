@@ -194,7 +194,7 @@ export class TextModel {
      * @param batch If this is a batch operation (eg paste, mouse drop)
      */
     public insert(text: string, batch = false) {
-        text = text.replace(/\r\n/g, "\n");
+        text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
         // The new cursor position will always be after the inserted text
         const newCursor = this.selectionStart + [...text].length;
         this.text = this.preSelection + text + this.postSelection;
