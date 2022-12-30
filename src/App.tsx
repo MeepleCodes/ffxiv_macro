@@ -137,8 +137,9 @@ function App() {
 			<NavDrawer variant="persistent" anchor="left" open={open}>
 
 				<Toolbar/>
-			
-				<FileList/>
+				<Box sx={{overflow: "auto"}} >
+					<FileList/>
+				</Box>
 			</NavDrawer>
 			<NavMain open={open}>
 				<NavHeader/>
