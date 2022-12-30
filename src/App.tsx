@@ -4,14 +4,11 @@ import TextEditor, {HTMLTextEditorElement} from './texteditor/TextEditorReact';
 import { FileList, StoreContextProvider, SaveIconButton, SimpleFileName } from './store/StoreControls';
 import GlyphPicker from './GlyphPicker';
 
-import {  useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Typography from '@mui/material/Typography';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -76,7 +73,6 @@ function App() {
 	let [cur, setCur] = useState<TEInfo | undefined>();
 	let [open, setOpen] = useState<boolean>(true);
     let ref = useRef<HTMLTextEditorElement>(null);
-	const theme = useTheme();
 
     const updateCursor = (ev: {target: any}) => {
         const t = ev.target as HTMLTextEditorElement;
@@ -105,20 +101,20 @@ function App() {
 	return (
 		<StoreContextProvider editor={ref}>
 			<ThemeProvider theme={appTheme}>
-			<NavAppBar position="fixed" open={open}>
+			<NavAppBar position="fixed">
 				<Toolbar>
 					<IconButton
 						color="inherit"
 						aria-label="open drawer"
-						onClick={e => setOpen(true)}
+						onClick={e => setOpen(!open)}
 						edge="start"
-						sx={{ mr: 2, ...(open && { display: 'none' }) }}
+						// sx={{ ...(open && { display: 'none' }) }}
 					>
 						<MenuIcon />
 					</IconButton>
-					<THRMIcon/>
+					<THRMIcon sx={{m: 2, mr: 1}}/>
 					<Typography variant="h6" noWrap component="div">
-						THRM
+						XIV Macro Maker
 					</Typography>
 
 					<Box sx={{flexGrow: 1}}/>		
@@ -139,11 +135,9 @@ function App() {
 				</Toolbar>
 			</NavAppBar>
 			<NavDrawer variant="persistent" anchor="left" open={open}>
-				<NavHeader>
-				<IconButton onClick={e => setOpen(false)}>
-					{theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-				</IconButton>					
-				</NavHeader>
+
+				<Toolbar/>
+			
 				<FileList/>
 			</NavDrawer>
 			<NavMain open={open}>
