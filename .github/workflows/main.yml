@@ -25,7 +25,7 @@ jobs:
   deploy:
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url }} 
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -40,7 +40,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Build
-        run: npm run build        
+        run: npm run build
+        env:
+          REACT_APP_FIREBASE_API_KEY: ${{  secrets.REACT_APP_FIREBASE_API_KEY }}
+          REACT_APP_FIREBASE_AUTH_DOMAIN: ${{  secrets.REACT_APP_FIREBASE_AUTH_DOMAIN }}
+          REACT_APP_FIREBASE_PROJECT_ID: ${{  secrets.REACT_APP_FIREBASE_PROJECT_ID }}
+          REACT_APP_FIREBASE_STORAGE_BUCKET: ${{  secrets.REACT_APP_FIREBASE_STORAGE_BUCKET }}
+          REACT_APP_FIREBASE_MESSAGE_SENDER_ID: ${{  secrets.REACT_APP_FIREBASE_MESSAGE_SENDER_ID }}
+          REACT_APP_FIREBASE_APP_ID: ${{  secrets.REACT_APP_FIREBASE_APP_ID }}    
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
