@@ -19,19 +19,18 @@ Vague list of features still to implement
 [~] Refactor control key bindings in TextEditor
 - Last character in selection should select max of g.w/g.advanceWidth (vertical line's have a huge +ve right margin)
 - Insert by drag/drop or glyph picker should be its own Undo state
-- Show-whitespace mode
 - Always show cursor (maybe don't blink if not focused?)
 [x] Styling via CSS (including ::selection)
 [x] Drag and drop from glyph picker into editor window
-- Refactor the cursor/coordinate/x/y complexity into something cleaner
-- Use visual position rather than column during vertical cursor movement (?)
 - Add the Lodestone's icon font to the page so we can render it in title fields, input boxes etc
   (not usable for everything because it's *only* the private codepage and they don't put out the rest of Axis, so all other charcaters are wrong)
 [x] Text colour
 - Optimise rendering
   - Only render what's changed
   - Do a full redraw on requestAnimationFrame but only redraw if needed (would get around not being able to spot CSS changes)
-- Column-mode selection
+- Column-mode selection, multiple selections
+- Refactor the cursor/coordinate/x/y complexity into something cleaner
+- Use visual position rather than column during vertical cursor movement (?)
 [x] Switch to dynamically loading fonts and spritesheet (rather than the huge bundles we're currently making)
   [That was far more complicated than it had any right to be]
 [x] Anything involving the mouse
@@ -45,18 +44,20 @@ Vague list of features still to implement
   [ Messy but worked ]
 [x] Status bar with current cursor and pixel position
   - No. of lines selected
-- View whitespace (U+00B7 for short space, something for long space)
+[x] View whitespace (U+00B7 for short space, something for long space)
 - Kerning class, link to unicode definition/names for glyph picker tooltip
+- Common glyphs as well as full browser (types of space, the lines, ???)
+- Ctrl-B to cycle between thin and thick lines within selection
 - Glyph browser page?
 - Command to attempt to increase or decrease the length of a selection by replacing spaces/wide spaces
-- Replace character picker with a canvas-based solution?
+- Replace character picker with a canvas-based solution
 [x] Tooltips on character picker to show glyph dimensions
-- Split App.tsx up into components
-  - Make a proper React component wrapper around text-editor
+[x] Split App.tsx up into components
+  [x] Make a proper React component wrapper around text-editor
     - onChange event from text-editor to make that work better
   - Would making the statusbar a memo()d component improve performance?
-- Start using MUI
-  - Keep is a good template to take inspiration from
+[x] Start using MUI
+  [x] Keep is a good template to take inspiration from
 [~] Saving and loading macros with firebase storeage or similar
   - Authentication and user management
   - Loading/browsing could eventually use something like https://github.com/bvaughn/react-window for lazy loading
@@ -65,3 +66,4 @@ Vague list of features still to implement
   - Class/job: https://xivapi.com/ClassJob?pretty=1
   - Trials and Raids: https://xivapi.com/search?filters=ContentFinderCondition.ContentType.ID%3E=4,ContentFinderCondition.ContentType.ID%3C=5&pretty=1
    (note this only has the latest Unreal on the list so that's a bit of a pain)
+- Icon browser for /micon selection (XIVAPI again)
