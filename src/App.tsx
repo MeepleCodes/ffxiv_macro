@@ -24,8 +24,8 @@ import Stack from '@mui/material/Stack';
 import { ThemeProvider } from '@mui/material/styles';
 import { NavAppBar, NavDrawer, NavHeader, NavMain } from './Nav';
 import { appTheme } from './Theme';
-// import { ReactComponent as Icon } from './icon.svg';
-// import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
+import { ReactComponent as Icon } from './icon.svg';
+import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 
 
 // // Force an import of this otherwise webpack doesn't think it's referenced
@@ -65,11 +65,11 @@ type TEInfo = {
 	selectionPixels: number | null
 };
 
-// function THRMIcon(props: SvgIconProps) {
-// 	return (
-// 		<SvgIcon component={Icon} {...props} inheritViewBox />
-// 	);
-// }
+function THRMIcon(props: SvgIconProps) {
+	return (
+		<SvgIcon component={Icon} {...props} inheritViewBox />
+	);
+}
 
 function App() {
 	let [font, setFont] = useState<number>(0);
@@ -116,7 +116,7 @@ function App() {
 					>
 						<MenuIcon />
 					</IconButton>
-					{/* <THRMIcon/> */}
+					<THRMIcon/>
 					<Typography variant="h6" noWrap component="div">
 						THRM
 					</Typography>
