@@ -22,8 +22,8 @@ for(let glyph of font.glyphs.slice(1)) {
 type GlyphPickerProps = CardProps & {
     editorRef: RefObject<HTMLTextEditorElement>;
 };
-
-const glyphP = (editorRef: RefObject<HTMLTextEditorElement>, glyph: Glyph) => {
+export type GlyphProps = {editorRef: RefObject<HTMLTextEditorElement>, glyph: Glyph};
+export function GlyphP({editorRef, glyph}: GlyphProps) {
     return <p 
             className="g"
             draggable
@@ -37,7 +37,7 @@ const glyphP = (editorRef: RefObject<HTMLTextEditorElement>, glyph: Glyph) => {
             }}
             />//            >{String.fromCodePoint(glyph.codepoint)}</p>
 }
-const glyphImg = (editorRef: RefObject<HTMLTextEditorElement>, glyph: Glyph) => {
+export function GlyphImg({editorRef, glyph}: GlyphProps) {
     return <img
         className="g" 
         key={glyph.codepoint}
@@ -71,7 +71,7 @@ export default function GlyphPicker(props: GlyphPickerProps) {
             </Tabs>
         </CardHeader>
         <CardContent sx={{maxWidth: 400, maxHeight: 400, overflow: "auto"}}>
-        {glyphPages[tab].glyphs.map(g => glyphP(editorRef, g))}
+        {glyphPages[tab].glyphs.map(g => <GlyphP editorRef={editorRef} glyph={g}/>)}
         </CardContent>
     </Card>
 }
