@@ -5,9 +5,11 @@ import { FileList, StoreContextProvider, SaveIconButton, SimpleFileName } from '
 import GlyphPicker from './GlyphPicker';
 
 import Box from '@mui/material/Box';
+import ToggleButton from '@mui/material/ToggleButton';
 import Card from '@mui/material/Card';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import SpaceBarIcon from '@mui/icons-material/SpaceBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import InputLabel from '@mui/material/InputLabel';
@@ -72,6 +74,7 @@ function App() {
 	let [font, setFont] = useState<number>(0);
 	let [cur, setCur] = useState<TEInfo | undefined>();
 	let [open, setOpen] = useState<boolean>(true);
+	let [showWhitespace, setShowWhitespace] = useState<boolean>(true);
     let ref = useRef<HTMLTextEditorElement>(null);
 
     const updateCursor = (ev: {target: any}) => {
@@ -117,7 +120,17 @@ function App() {
 						XIV Macro Maker
 					</Typography>
 
-					<Box sx={{flexGrow: 1}}/>		
+					<Box sx={{flexGrow: 1}}/>
+					<ToggleButton
+						value="show whitespace"
+						size="small"
+						selected={showWhitespace}
+						onChange={() => {
+							setShowWhitespace(!showWhitespace);
+						}}
+						>
+						<SpaceBarIcon /> Show whitespace
+					</ToggleButton>
 					<FormControl size="small" color="inverted">
 						{/* <InputLabel sx={{color:"inherit", borderColor: "currentcolor"}} id="font-size">Font size</InputLabel> */}
 						<InputLabel id="font-size">Font size</InputLabel>
@@ -153,7 +166,7 @@ function App() {
 						</Stack>
 						</CardHeader>
 						<CardMedia>
-							<TextEditor fontsrc={fontSources[font].src} ref={ref} onUpdate={updateCursor} value={"line\n\nline"}/>
+							<TextEditor fontsrc={fontSources[font].src} ref={ref} onUpdate={updateCursor} showWhitespace={showWhitespace} value={"line\n\nline"}/>
 						</CardMedia>
 					<CardActions sx={{boxShadow: 1}}>
 							{cur && <div className="status row">

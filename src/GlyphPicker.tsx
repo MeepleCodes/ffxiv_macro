@@ -27,7 +27,6 @@ export function GlyphP({editorRef, glyph}: GlyphProps) {
     return <p 
             className="g"
             draggable
-            key={glyph.codepoint}
             title={`${String.fromCodePoint(glyph.codepoint)} (U+${glyph.codepoint.toString(16).toUpperCase().padStart(4, '0')}) ${glyph.w + glyph.right}x${glyph.h}px`}
             style={{backgroundImage: `url(${spritesheet})`, width: glyph.w, height: glyph.h, backgroundPosition: `-${glyph.x}px -${glyph.y}px`}}
             onDragStart={e => e.dataTransfer.setData("text/plain", String.fromCodePoint(glyph.codepoint))}
@@ -40,7 +39,6 @@ export function GlyphP({editorRef, glyph}: GlyphProps) {
 export function GlyphImg({editorRef, glyph}: GlyphProps) {
     return <img
         className="g" 
-        key={glyph.codepoint}
         alt={`${String.fromCodePoint(glyph.codepoint)} (U+${glyph.codepoint.toString(16).toUpperCase().padStart(4, '0')}) ${glyph.w + glyph.right}x${glyph.h}px`}
         src={spritesheet}
         style={{objectPosition: `-${glyph.x}px -${glyph.y}px`, width: glyph.w, height: glyph.h}}
@@ -71,7 +69,7 @@ export default function GlyphPicker(props: GlyphPickerProps) {
             </Tabs>
         </CardHeader>
         <CardContent sx={{maxWidth: 400, maxHeight: 400, overflow: "auto"}}>
-        {glyphPages[tab].glyphs.map(g => <GlyphP editorRef={editorRef} glyph={g}/>)}
+        {glyphPages[tab].glyphs.map(g => <GlyphP editorRef={editorRef} glyph={g} key={g.codepoint}/>)}
         </CardContent>
     </Card>
 }

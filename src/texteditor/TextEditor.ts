@@ -97,6 +97,16 @@ function Handler(type: keyof HTMLElementEventMap, eventSource: (that: HTMLTextEd
         };
     }
 }
+const NEWLINE = 0x0A;
+const WhitespaceMap = {
+    0x20: 0xB7,
+    0xAD: 0x2013,
+    0x0A: 0xB6,
+    0x3000: 0x301C,
+}
+function hasWhitespace(codepoint: number): codepoint is keyof typeof WhitespaceMap {
+    return codepoint in WhitespaceMap;
+}
 
 export default class HTMLTextEditorElement extends HTMLElement implements EventListenerObject {
     
@@ -117,6 +127,7 @@ export default class HTMLTextEditorElement extends HTMLElement implements EventL
     protected fontTexture?: ImageBitmap;
     protected textStyle?: CSSStyleDeclaration;
     protected selectStyle?: CSSStyleDeclaration;
+    protected whitespaceStyle?: CSSStyleDeclaration;
     // The margin around the cursor to try and keep visible when scrolling
     protected scrollMargin = {left: 1, right: 1, top: 1, bottom: 1};
     // Pixel coordinates of the caret/typing cursor, relative to the canvas element
@@ -171,6 +182,8 @@ export default class HTMLTextEditorElement extends HTMLElement implements EventL
     protected selecting = false;
     // A drag operation (with us as the source) is in progress (between dragstart and dragend)
     protected dragging = false;
+    // Whether we draw helpers for whitespace characters
+    protected showWhitespace = false;
 
     // HTMLElements used to build the shadow DOM
     protected stylesheet: HTMLStyleElement;
@@ -189,6 +202,8 @@ export default class HTMLTextEditorElement extends HTMLElement implements EventL
     protected selectContext = this.selectBuffer.getContext("2d", {willReadFrequently: true}) as CanvasRenderingContext2D;
     protected textBuffer = new OffscreenCanvas(0, 0);
     protected textContext = this.textBuffer.getContext("2d") as OffscreenCanvasRenderingContext2D;
+    protected whitespaceBuffer = new OffscreenCanvas(0, 0);
+    protected whitespaceContext = this.whitespaceBuffer.getContext("2d") as OffscreenCanvasRenderingContext2D;
     protected cursorBuffer = new OffscreenCanvas(0, 0);
     protected cursorContext = this.cursorBuffer.getContext("2d") as OffscreenCanvasRenderingContext2D;
     protected textColourBuffer = new OffscreenCanvas(0, 0)
@@ -229,19 +244,23 @@ export default class HTMLTextEditorElement extends HTMLElement implements EventL
     }
 
     public static get observedAttributes(): string[] {
-        return ["fontsrc", "value"];
+        return ["fontsrc", "value", "show-whitespace"];
     }
-    public attributeChangedCallback(name: string, oldValue: string, newValue: string): void {
+    public attributeChangedCallback(name: string, oldValue: string|null, newValue: string|null): void {
         switch(name) {
             case "fontsrc": {
-                this.fontSrc = newValue;
+                this.fontSrc = newValue || "";
                 break;
             }
             case "value": {
-                this.text.reset(newValue);
+                this.text.reset(newValue || "");
                 if(this.isReady()) this.postUpdate();
                 break;
             }
+            case "show-whitespace":
+                this.showWhitespace = newValue !== null;
+                if(this.isReady()) this.postUpdate();
+                break;
             default:
                 console.log(name, "set to", newValue, typeof(newValue));
             
@@ -255,8 +274,10 @@ export default class HTMLTextEditorElement extends HTMLElement implements EventL
             this.setAttribute("draggable", "true");
             this.setAttribute("aria-role", "textarea");
             this.setAttribute("aria-multiline", "true");
+            // Extract some (dynamically updated) calculated style references
             this.textStyle = getComputedStyle(this);
             this.selectStyle = getComputedStyle(this, "::selection");
+            this.whitespaceStyle = getComputedStyle(this, "::cue");
 
             const container = this.container;
 
@@ -267,6 +288,10 @@ export default class HTMLTextEditorElement extends HTMLElement implements EventL
 
             container.appendChild(this.spinner);
             container.appendChild(this.errorElement);
+            const whitespacePart = document.createElement("div");
+            whitespacePart.setAttribute("part", "whitespace");
+            whitespacePart.style.display = "none";
+            container.appendChild(whitespacePart);
 
             this.shadowRoot?.appendChild(container);
 
@@ -545,14 +570,17 @@ export default class HTMLTextEditorElement extends HTMLElement implements EventL
     
     protected redraw(this: Ready): void {
         const drawSize = this.safeSize();
-        [this.textBuffer, this.selectBuffer, this.textColourBuffer, this.cursorBuffer].forEach(
+        [this.textBuffer, this.selectBuffer, this.textColourBuffer, this.cursorBuffer, this.whitespaceBuffer].forEach(
             (b) => [b.width, b.height] = drawSize
         );
       
         
         // Draw glyphs normally, at the end we'll use source-in to change their colour
         this.textContext.globalCompositeOperation="source-over";
-        
+        // Whitespace drawn normally, we'll use source-in later to recolour
+        this.whitespaceContext.globalCompositeOperation="source-over";
+        // It would be nice to use a custom pseudo-element to style this, but they don't exist yet
+        this.whitespaceContext.fillStyle = "rgba(0,0,0,0.25)";
         // Cursor is drawn in text colour
         this.cursorContext.strokeStyle = this.textStyle.color;
         this.cursorContext.lineWidth = 1;
@@ -579,10 +607,18 @@ export default class HTMLTextEditorElement extends HTMLElement implements EventL
                 this.caret = {x, y};
             }
             this.textContext.drawImage(this.fontTexture, glyph.x, glyph.y, glyph.w, glyph.h, x, y + glyph.top, glyph.w, glyph.h);
+            if(hasWhitespace(glyph.codepoint)) {
+                const wsGlyph = this.font.glyphMap[WhitespaceMap[glyph.codepoint]];
+                this.whitespaceContext.drawImage(this.fontTexture, wsGlyph.x, wsGlyph.y, wsGlyph.w, wsGlyph.h, x, y + wsGlyph.top, wsGlyph.w, wsGlyph.h);
+            }
             return true;
         }, (x, y, row, col, c) => {
             logRender.debug("Line ended at character", c);
             if(x > width) width = x;
+            if(hasWhitespace(NEWLINE)) {
+                const wsGlyph = this.font.glyphMap[WhitespaceMap[NEWLINE]];
+                this.whitespaceContext.drawImage(this.fontTexture, wsGlyph.x, wsGlyph.y, wsGlyph.w, wsGlyph.h, x, y + wsGlyph.top, wsGlyph.w, wsGlyph.h);
+            }
             // If we have an active selection, draw the box
             if (c >= this.text.selectionStart && c < this.text.selectionEnd) {
                 // For the last character in the selection, use glyph.w instead of advance_width
@@ -613,8 +649,7 @@ export default class HTMLTextEditorElement extends HTMLElement implements EventL
         this.canvas.width = width + LINE_WIDTH_MARGIN;
         this.canvas.height = height;
 
-        
-        // Use the selection buffer to mask out colours onto the text colour buffer
+        // Recolour the text from pure alpha to the CSS colour/selection colour
 
         // Unselected text first
         this.textColourContext.globalCompositeOperation = "source-over";
@@ -630,13 +665,24 @@ export default class HTMLTextEditorElement extends HTMLElement implements EventL
         this.textColourContext.fillStyle = this.selectStyle.color;
         this.textColourContext.fillRect(0, 0, ...drawSize);
 
-        // Apply it to the text buffer with source-in to recolour the black + white text
+        // We now have a canvas that's filled with the text colour, except for
+        // the selection which is filled with the selected text colour. Apply it
+        // to the text buffer with source-in to recolour the black + white text.
         this.textContext.globalCompositeOperation="source-in";
         this.textContext.drawImage(this.textColourBuffer, 0, 0);
 
         // Layer the buffers onto the output canvas
         this.context.drawImage(this.selectBuffer, 0, 0);
         this.context.drawImage(this.textBuffer, 0, 0);
+        
+        
+        if(this.showWhitespace) {
+            // Recolour the black/alpha whitespace
+            this.whitespaceContext.globalCompositeOperation = "source-in";
+            this.whitespaceContext.fillRect(0, 0, this.whitespaceBuffer.width, this.whitespaceBuffer.height);
+            this.context.drawImage(this.whitespaceBuffer, 0, 0);
+        }
+
         this.context.drawImage(this.cursorBuffer, 0, 0);
     }
 
@@ -1007,7 +1053,8 @@ abstract class Ready extends HTMLTextEditorElement {
     protected abstract font: Font;
     protected abstract fontTexture: ImageBitmap;
     protected abstract textStyle: CSSStyleDeclaration;
-    protected abstract selectStyle: CSSStyleDeclaration;    
+    protected abstract selectStyle: CSSStyleDeclaration;
+    protected abstract whitespaceStyle: CSSStyleDeclaration;
 }
 export function installWebComponent() {
     if(!customElements.get("text-editor")) {

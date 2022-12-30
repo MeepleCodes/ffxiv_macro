@@ -51,3 +51,6 @@ text-editor {
 text-editor:focus {
   outline: 0;
 }
+text-editor::part(whitespace) {
+  color: red;
+}

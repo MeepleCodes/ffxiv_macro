@@ -4,6 +4,7 @@ export { default as HTMLTextEditorElement } from './TextEditor';
 interface TextEditorHTMLAttributes<T> extends React.HTMLAttributes<T> {
     fontsrc: string | object;
     value?: string;
+    showWhitespace?: boolean;
 }
 // React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>;
 // type TextEditorAttributes<T> = React.HTMLAttributes<T> & Omit<TextEditor, keyof HTMLCustomElement>;
@@ -25,7 +26,7 @@ type TextEditorProps = TextEditorElementProps & {
 }
 
 export default React.forwardRef<HTMLTextEditorElement, TextEditorProps>((props: TextEditorProps, fwdRef: React.ForwardedRef<HTMLTextEditorElement>) => {
-    const {onUpdate, ...rest} = props;
+    const {onUpdate, showWhitespace, ...rest} = props;
     const myRef = React.useRef<HTMLTextEditorElement>(null);
     const ref = (fwdRef!== null && typeof(fwdRef) !== "function") ? fwdRef : myRef;
     if(typeof(fwdRef) === "function") fwdRef(ref.current);
@@ -40,5 +41,5 @@ export default React.forwardRef<HTMLTextEditorElement, TextEditorProps>((props: 
             }
         }
     }, [ref, fwdRef, onUpdate]);
-    return <text-editor ref={ref} {...rest}/>
+    return <text-editor ref={ref} show-whitespace={showWhitespace ? "" : null} {...rest}/>
 });
