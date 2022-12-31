@@ -23,8 +23,7 @@ import Stack from '@mui/material/Stack';
 import { ThemeProvider } from '@mui/material/styles';
 import { NavAppBar, NavDrawer, NavHeader, NavMain } from './Nav';
 import { appTheme } from './Theme';
-import { ReactComponent as Icon } from './icon.svg';
-import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
+
 
 
 // // Force an import of this otherwise webpack doesn't think it's referenced
@@ -64,11 +63,7 @@ type TEInfo = {
 	selectionPixels: number | null
 };
 
-function THRMIcon(props: SvgIconProps) {
-	return (
-		<SvgIcon component={Icon} {...props} inheritViewBox />
-	);
-}
+
 
 function App() {
 	let [font, setFont] = useState<number>(0);
@@ -111,14 +106,19 @@ function App() {
 						aria-label="open drawer"
 						onClick={e => setOpen(!open)}
 						edge="start"
+						sx={{mr: 2}}
 						// sx={{ ...(open && { display: 'none' }) }}
 					>
 						<MenuIcon />
 					</IconButton>
-					<THRMIcon sx={{m: 2, mr: 1}}/>
-					<Typography variant="h6" noWrap component="div">
-						XIV Macro Maker
-					</Typography>
+					<Stack>
+					<Typography variant="h6" noWrap>
+							DON'T STAND IN BAD
+						</Typography>
+						<Typography variant="subtitle2" noWrap>
+							A raid macro editor for Final Fantasy XIV
+						</Typography>
+					</Stack>
 
 					<Box sx={{flexGrow: 1}}/>
 					<ToggleButton

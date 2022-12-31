@@ -29,6 +29,10 @@ Vague list of features still to implement
   - Only render what's changed
   - Do a full redraw on requestAnimationFrame but only redraw if needed (would get around not being able to spot CSS changes)
 - Column-mode selection, multiple selections
+- Refactor TextEditor/TextModel more thoroughly into MVC split
+  - Model knows about glyphs and pixels
+  - View is just the canvas/render stuff
+  - Control is the event handlers
 - Refactor the cursor/coordinate/x/y complexity into something cleaner
 - Use visual position rather than column during vertical cursor movement (?)
 [x] Switch to dynamically loading fonts and spritesheet (rather than the huge bundles we're currently making)
@@ -58,7 +62,15 @@ Vague list of features still to implement
   - Would making the statusbar a memo()d component improve performance?
 [x] Start using MUI
   [x] Keep is a good template to take inspiration from
+- Overlays for common chat window sizes
+- Dark theme
 [~] Saving and loading macros with firebase storeage or similar
+  - 'New' button
+  - Delete button
+  - More fields on documents:
+    - Created/last modified
+    - Owner
+    - Tags
   - Authentication and user management
   - Loading/browsing could eventually use something like https://github.com/bvaughn/react-window for lazy loading
 - Icons from https://xivapi.com/MacroIcon
