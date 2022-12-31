@@ -324,7 +324,7 @@ export default class HTMLTextEditorElement extends HTMLElement implements EventL
     }
 
     public insert(text: string) {
-        this.text.insert(text);
+        this.text.insert(text, true);
     }
     protected setSpinner(hidden = true) {
         this.spinner.hidden = hidden;
@@ -596,9 +596,10 @@ export default class HTMLTextEditorElement extends HTMLElement implements EventL
             logRender.debug("Drawing", String.fromCodePoint(glyph.codepoint),"at", c);
             // If we have an active selection, draw the box
             if (c >= this.text.selectionStart && c < this.text.selectionEnd) {
-                // For the last character in the selection, use glyph.w instead of advance_width
-                // so we don't cut it short for glyphs with negative right offset
-                const w = c === this.text.selectionEnd - 1 ? glyph.w : advanceWidth;
+                // For the last character in the selection, use larger of
+                // glyph.w and advance_width so we don't cut it short for glyphs
+                // with negative right offset
+                const w = c === this.text.selectionEnd - 1 ? Math.max(glyph.w, advanceWidth) : advanceWidth;
                 this.selectContext.fillRect(x, y, w, this.font.lineHeight);
             }
             // If the cursor is not currently blinking and should be

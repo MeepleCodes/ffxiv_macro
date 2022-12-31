@@ -17,8 +17,8 @@ Vague list of features still to implement
 [x] Character picker (slightly better one, but performance suffers)
 [x] Line wrapping and/or scrolling
 [~] Refactor control key bindings in TextEditor
-- Last character in selection should select max of g.w/g.advanceWidth (vertical line's have a huge +ve right margin)
-- Insert by drag/drop or glyph picker should be its own Undo state
+[x] Last character in selection should select max of g.w/g.advanceWidth (vertical line have a huge +ve right margin)
+[x] Insert by drag/drop or glyph picker should be its own Undo state
 - Always show cursor (maybe don't blink if not focused?)
 [x] Styling via CSS (including ::selection)
 [x] Drag and drop from glyph picker into editor window
