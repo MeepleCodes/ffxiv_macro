@@ -1,5 +1,5 @@
 import { CursorDirection, MoveDistance, TextModel } from './TextModel';
-import { Font, Glyph, isRawFont, mapRawFont } from './Font';
+import { Font, Glyph, isRawFont } from './Font';
 import log from 'loglevel';
 const logger = log.getLogger("TextEditor");
 const logRender = log.getLogger("TextEditor.render");
@@ -348,7 +348,7 @@ export default class HTMLTextEditorElement extends HTMLElement implements EventL
                 console.error("Font JSON wasn't RawFont", json);
                 throw new Error("Got invalid font JSON data");
             }
-            const font: Font = mapRawFont(json);
+            const font: Font = new Font(json);
             // Try and make a URL from the src property of the font JSON, but if it's a relative path this will fail
             const texURL = new URL(font.src, new URL(fontResp.url));
             const texResp = await(fetch(texURL));

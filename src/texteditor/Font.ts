@@ -22,35 +22,40 @@ export type KerningMap = {
         [rightClass:number]: number
     }
 }
-export interface Font extends RawFont {
+export class Font {
     glyphMap: GlyphMap;
     kerningMap: KerningMap;
+    lineHeight: number;
+    maxWidth: number;
+    defaultGlyph: Glyph;
+    glyphs: Glyph[];
+    kerning: Kerning[];
+    src: string;    
+    constructor(raw: RawFont) {
+        this.lineHeight = raw.lineHeight;
+        this.maxWidth = raw.maxWidth;
+        this.defaultGlyph = raw.defaultGlyph;
+        this.glyphs = raw.glyphs;
+        this.kerning = raw.kerning;
+        this.src = raw.src;
+        this.glyphMap = Object.fromEntries(raw.glyphs.map(glyph => [glyph.codepoint, glyph]));
+        this.kerningMap = Object.fromEntries(
+            raw.kerning.map(group => [group.left, Object.fromEntries(
+                group.kerning.map(row => [row.right, row.kern])
+            )])
+        );        
+    }
+
+    public glyph(codepoint?: number) {
+        if(codepoint === undefined || !(codepoint in this.glyphMap)) return this.defaultGlyph;
+        else return this.glyphMap[codepoint];
+    }
+
+    public getKerning(left: Glyph, right: Glyph) {
+        return this.kerningMap[left.kerningClass]?.[right.kerningClass] || 0;
+    }
 }
-/**
- * Turn a RawFont object into a Font object by creating the map properties.
- *
- * JSON doesn't allow numerical indexes for objects so we need to generate these
- * after the fact (it's also more space-efficient).
- *
- * The RawFont object is modified in-place (with Object.assign()) to avoid
- * needless copying
- *
- * @param raw The raw font
- * @returns The same object with the glyphMap and kerningMap properties added
- */
-export function mapRawFont(raw: RawFont): Font {
-    const glyphMap: GlyphMap = Object.fromEntries(raw.glyphs.map(glyph => [glyph.codepoint, glyph]));
-    const kerningMap: KerningMap = Object.fromEntries(
-        raw.kerning.map(group => [group.left, Object.fromEntries(
-            group.kerning.map(row => [row.right, row.kern])
-        )])
-    );
-    let asFont: Font = Object.assign(raw, {
-        glyphMap,
-        kerningMap
-    });
-    return asFont;
-}
+
 export interface Glyph {
     codepoint: number;
     x: number;
