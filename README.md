@@ -22,6 +22,7 @@ Vague list of features still to implement
 - Always show cursor (maybe don't blink if not focused?)
 [x] Styling via CSS (including ::selection)
 [x] Drag and drop from glyph picker into editor window
+- Zoom button as well as font size
 - Add the Lodestone's icon font to the page so we can render it in title fields, input boxes etc
   (not usable for everything because it's *only* the private codepage and they don't put out the rest of Axis, so all other charcaters are wrong)
 [x] Text colour
