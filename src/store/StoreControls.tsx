@@ -40,7 +40,7 @@ function useSave() {
     const getMacro = async function(): Promise<MacroDoc | null> {
         if(editor.current === null) return null;
         const name = filename;
-        const text = editor.current.getText()|| "";
+        const text = editor.current.value;
         return await editor.current.getThumbnail().then(blob => blob.arrayBuffer()).then(arraybuffer => {
                 return {
                     id: undefined,

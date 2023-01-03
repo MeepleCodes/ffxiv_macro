@@ -60,7 +60,7 @@
     public undo(): T | undefined {
         if(this.index < this.history.length - 1) {
             this.index++;
-            // console.log("Undoing to state", this.current," index is now", this.index);
+            console.log("Undoing to state", this.current," index is now", this.index);
             return this.current;
         }
         return undefined;
@@ -72,5 +72,9 @@
             return this.current;
         }
         return undefined;
+    }
+    public reset(state: T) {
+        this.index = 0;
+        this.history = [state];
     }
 }

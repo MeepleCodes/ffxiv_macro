@@ -6,7 +6,7 @@ import Card, {CardProps} from '@mui/material/Card';
 import CardHeader from '@mui/material/CardContent';
 import CardContent from '@mui/material/CardContent';
 
-import HTMLTextEditorElement from "./texteditor/TextEditor";
+import HTMLTextEditorElementOld from "./texteditor/TextEditor";
 import { Glyph, GlyphPage } from './texteditor/Font';
 import font from './axis-12-lobby.json';
 import spritesheet from './res/axis-12-lobby.png'
@@ -20,9 +20,9 @@ for(let glyph of font.glyphs.slice(1)) {
 	}
 }
 type GlyphPickerProps = CardProps & {
-    editorRef: RefObject<HTMLTextEditorElement>;
+    editorRef: RefObject<HTMLTextEditorElementOld>;
 };
-export type GlyphProps = {editorRef: RefObject<HTMLTextEditorElement>, glyph: Glyph};
+export type GlyphProps = {editorRef: RefObject<HTMLTextEditorElementOld>, glyph: Glyph};
 export function GlyphP({editorRef, glyph}: GlyphProps) {
     return <p 
             className="g"

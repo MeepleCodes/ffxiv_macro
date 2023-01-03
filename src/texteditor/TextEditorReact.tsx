@@ -1,7 +1,7 @@
 import React from 'react';
 import HTMLTextEditorElement, { installWebComponent } from './TextEditor';
 export { default as HTMLTextEditorElement } from './TextEditor';
-interface TextEditorHTMLAttributes<T> extends React.HTMLAttributes<T> {
+interface TextEditorHTMLAttributes<T> extends Omit<React.HTMLAttributes<T>, "children"> {
     fontsrc: string | object;
     value?: string;
     showWhitespace?: boolean;

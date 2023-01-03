@@ -5,9 +5,11 @@ A from-scratch text editor implemented in HTML Canvas so we can use the sprite-b
 extracted from FFXIV (which it uses instead of vector/TTF-based fonts).
 ## Bugs
 - There's *some* order of delete/insert (maybe clipboard) that doesn't create two undo states, just one
+- Moving the cursor doesn't finalise the previous undo state so insert > move > insert is a single state
 - Scrolling from keyboard navigation isn't quite working (down arrow, at least)
 
 ## Bugs
+- CPU usage wtf
 - Drop insertion point drawn in the wrong place at the end of a line
 - Cursor not restored correctly when undo/redoing
 
