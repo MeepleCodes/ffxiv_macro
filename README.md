@@ -9,7 +9,7 @@ extracted from FFXIV (which it uses instead of vector/TTF-based fonts).
 - Scrolling from keyboard navigation isn't quite working (down arrow, at least)
 
 ## Bugs
-- CPU usage wtf
+[x] CPU usage wtf
 - Drop insertion point drawn in the wrong place at the end of a line
 - Cursor not restored correctly when undo/redoing
 

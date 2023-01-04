@@ -99,7 +99,7 @@ function App() {
 		
 	}
 	useEffect(() => {
-		if(ref.current !== null) updateCursor({target: ref.current});
+		if(ref.current !== null && cur === undefined) updateCursor({target: ref.current});
 	})
 
 	return (
