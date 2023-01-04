@@ -1,18 +1,31 @@
-import { UndoBuffer } from "./UndoBuffer";
-enum UndoType {
-    INSERT,
-    DELETE
+import { Font, Glyph } from './Font';
+import { UndoBuffer } from './UndoBuffer';
+import log from 'loglevel';
+const logger = log.getLogger("TextModel");
+
+
+export const EOL_SELECTION_MARGIN = 3;
+export type Coord = {
+    readonly y: number,
+    readonly x: number
 }
-interface UndoState {
-    text: string;
-    cursorX: number;
-    cursorY: number;
-    type: UndoType | null;
+export type Cursor = Coord & {
+    readonly virtualX?: number;
+    readonly row: number;
+    readonly col: number;
+    readonly c: number;
 }
-export type Cursor = {
-    row: number;
-    col: number;
+const DEFAULT_CURSOR: Cursor = {x: 0, y: 0, row: 0, col: 0, c: 0};
+export type GlyphPosition = Cursor & {
+    glyph?: Glyph;
 }
+export interface Selection {
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+}
+
 export enum CursorDirection {
     Forward,
     Backward
@@ -29,301 +42,115 @@ export enum MoveDistance {
     // To the start or end of the text
     Document
 }
-/**
- * A abstract model for the text and cursor/selection in a text editor.
- *
- * The text content is accessible via the .text property.
- *
- * The selection and cursor are stored internally as an X (position along line)
- * and y (line number) for the cursor, and an optional anchor point for the
- * character after the start of the selection. If the cursor is before the
- * anchor then the selection is a 'backwards' one and selection changes will
- * operate differently.
- * 
- * All cursor offsets are expressed in *codepoints* not characters, which means
- * you can't use most Javascript string functions - doing so will operate badly
- * around codepoints which encode to more than one UTF-16 code value.
- */
-export class TextModel {
-    private _text!: string;
-    // The length of each line in _text, including trailing newlines
-    private _lineLengths!: number[];
-    public get lineLengths() {
-        // Return a copy just to avoid mutation
-        return this._lineLengths.slice();
-    }
-    // How far along the line the cursor is, expressed as codepoints (not characters/code units)
-    // This can exceed the current line length, in which case the cursor will be drawn at the
-    // end of the line but if we navigate vertically it will remember its true position
-    private cursorX!: number;
-    // Which line the cursor is on
-    private cursorY!: number;
-    public get cursorRow() {
-        return this.cursorY;
-    }
-    public get cursorCol() {
-        return this.cursorX;
-    }
-    private anchor!: number | null;
-    public get selectionAnchor(): {row: number, col: number} | null {
-        if(this.anchor === null) return null;
-        const [col, row] = this.cursorXYFromOffset(this.anchor);
-        return {row, col};
-    }
-    private history!: UndoBuffer<UndoState>;
+enum UndoType {
+    INSERT,
+    DELETE
+}
+type TextState = {
+    text: string;
+    caret: Cursor;
+    type: UndoType | null;
+}
+export class TextModel extends EventTarget {
+    private lines = [""];
+    private _text = "";
+    /** Glyphs and cursors for every line plus an extra 'glyph' position at the end of each line with a null glyph and the location where the line ends */
+    private glyphs: GlyphPosition[][] = [[DEFAULT_CURSOR]];
+    private _caret = DEFAULT_CURSOR;
+    private anchor: Cursor|null = null;
+    private _selections: Selection[] = [];
+    private history: UndoBuffer<TextState> = new UndoBuffer<TextState>(this.getState());
 
-    public constructor(initialText: string = "") {
-        this.reset(initialText);
+    constructor(private font: Font, initialValue: string = "") {
+        super();
+        this.reset(initialValue);
     }
 
-    /**
-     * Reset the model, optionally with an initial text string.
-     * 
-     * Clears the cursor and selection and resets the undo buffer.
-     * 
-     * @param initialText Optional text to initialise the model with
-     */
-     public reset(initialText: string = "") {
-        this.text = initialText;
-        this.cursorX = this.cursorY = 0;
-        this.anchor = null;
-        this.history = new UndoBuffer<UndoState>({text: this.text, cursorX: this.cursorX, cursorY: this.cursorY, type: null})
+    public setFont(newValue: Font) {
+        this.font = newValue;
+        this.layoutGlyphs();
     }
-    public get text(): string {
+    public reset(text: string) {
+        this.setText(text);
+        this.history.reset(this.getState());
+    }
+    private setText(newValue: string) {
+        // Fix up any newline mess
+        this._text = newValue.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+        this.lines = this._text.split("\n");
+        this.layoutGlyphs();
+    }
+    public get text() {
         return this._text;
     }
-    private set text(newValue: string) {
-        this._text = newValue;
-        // Add one to the length of every line except the last to account for
-        // the newline we removed by using split()
-        this._lineLengths = newValue.split("\n").map((line, index, array) => [...line].length + (index === array.length-1 ? 0 : 1));
+    
+    public get caret() {
+        return this._caret;
+    }
+    public get selections() {
+        return [...this._selections];
+    }
+    public getSelectionLength(): number {
+        return this.selectionEnd.c - this.selectionStart.c;
+    }
+    public getSelectionWidth(): number {
+        return this.selections.reduce((total, selection) => total + selection.w, 0);
+    }
+    public getSelectedText(): string|null {
+        if(this.anchor === null) return null;
+        return this._text.slice(this.selectionStart.c, this.selectionEnd.c);
+    }
+    public isInSelection(coord: Coord) {
+        return this.selections.some(s => s.x <= coord.x && s.x + s.w >= coord.x && s.y <= coord.y && s.y + s.h >= coord.y);
+    }
+    [Symbol.iterator]() {
+        return this.glyphs.flat(1)[Symbol.iterator]();
     }
     /**
-     * Get the cursor position as an offset from the start of the text
+     * Calculate a bounding box for the current text.
+     *
+     * The width will be the greater of advance width or glyph width on the
+     * widest line, but won't make any allowance for a cursor or whitespace
+     * visualisation at the end of the line.
+     *
+     * @returns The bounding box as an object with width and height properties
      */
-    public get cursor(): number {
-        return this.cursorOffsetFromXY(this.cursorX, this.cursorY);
-    }
-
-    public set cursor(newValue: number) {
-        [this.cursorX, this.cursorY] = this.cursorXYFromOffset(newValue);
-    }
-
-    /**
-     * Get the cursorX/Y pair for the end of the current document
-     */
-    public eofXY(): [number, number] {
-        const y = this.lineLengths.length - 1;
-        return [this.lineLengths[y], y];
-    }
-
-    /**
-     * Get the length of a given line, excluding trailing \n
-     * @param line The line to get the length of
-     * @returns 
-     */
-    public lineLength(line: number): number {
-        if(line === this.lineLengths.length - 1) {
-            return this.lineLengths[line];
-        } else {
-            return this.lineLengths[line] - 1;
+    public getBoundingBox(): {width: number, height: number} {
+        return {
+            width: Math.max(...this.glyphs.map(line => line.at(-1)!.x)),
+            height: this.glyphs.length * this.font.lineHeight
         }
     }
-    /**
-     * Get the start of the selection as an offset from the start of the text.
-     *
-     * This will always be less than or equal to selectionEnd, even if the
-     * selection is backwards (ie the cursor is at the start of the selection).
-     *
-     * If there is no selection, this will be equal to selectionEnd and the
-     * cursor position.
-     */
-     public get selectionStart(): number {
-        if(this.anchor !== null) return Math.min(this.cursor, this.anchor);
-        else return this.cursor;
-    }
-
-    /**
-     * Get the end of the selection as an offset from the start of the text.
-     *
-     * This will always be greater than or equal to selectionStart, even if the
-     * selection is backwards (ie the cursor is at the start of the selection).
-     *
-     * If there is no selection, this will be equal to selectionStart and the
-     * cursor position.
-     */
-    public get selectionEnd(): number {
-        if(this.anchor !== null) return Math.max(this.cursor, this.anchor);
-        else return this.cursor;
-    }
-
-    /**
-     * Get all text before the selection (or cursor, if there is no selection)
-     */
-    public get preSelection(): string {
-        return [...this.text].slice(0, this.selectionStart).join("");
-    }
-    /**
-     * Get all text after the selection (or cursor, if there is no selection)
-     */
-    public get postSelection(): string {
-        return [...this.text].slice(this.selectionEnd).join("")
-    }
-    /**
-     * Get the currently selected text. If there is no selection, return an
-     * empty string.
-     */
-    public get selection(): string {
-        return [...this.text].slice(this.selectionStart, this.selectionEnd).join("")
-    }
-
     public selectAll() {
-        this.anchor = 0;
-        [this.cursorX, this.cursorY] = this.eofXY();
+        this.anchor = DEFAULT_CURSOR;
+        this.setCaret(this.cursorAtEOF(), true);
     }
-
-    /**
-     * Insert a character or block of text
-     * 
-     * Batch insert operations always create their own undo state. Non-batch
-     * inserts when the inserted text isn't whitespace will merge with previous
-     * inserts in the undo buffer, so a single undo operation will undo all
-     * such inserts in one go.
-     * 
-     * @param text Text to insert
-     * @param batch If this is a batch operation (eg paste, mouse drop)
-     */
-    public insert(text: string, batch = false) {
-        text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
-        // The new cursor position will always be after the inserted text
-        const newCursor = this.selectionStart + [...text].length;
-        this.text = this.preSelection + text + this.postSelection;
-        this.cursor = newCursor;
-        this.anchor = null;
-        this.history.save({text: this.text, cursorX: this.cursorX, cursorY: this.cursorY, type: UndoType.INSERT}, !batch && text.trim().length !== 0); 
+    public setCaretToCoord(coord: Coord, extendSelection = false) {
+        const cursor = this.cursorFromCoord(coord);
+        logger.debug("Setting caret to", cursor, "from", coord);
+        this.setCaret(cursor, extendSelection);
     }
-
-    /**
-     * Perform a deletion operation.
-     * 
-     * If there is selected text, remove it. Otherwise, remove one character
-     * either before or after the cursor.
-     * @param direction Which character to delete if there's no selected text
-     */
-    public delete(direction: CursorDirection, bypassUndo = false) {
-        let canReplace = true;
-        if(this.anchor !== null) {
-            const newCursor = this.selectionStart;
-            this.text = this.preSelection + this.postSelection;
-            this.cursor = newCursor;
-            canReplace = false;
-        } else if(direction === CursorDirection.Forward) {
-            const newCursor = this.cursor;
-            this.text = this.preSelection + this.postSelection.substring(1);
-            // Force a new cursor value even though it's not changed as this will
-            // reset cursorX to the actual position
-            this.cursor = newCursor;
-        } else {
-            const newCursor = Math.max(0, this.cursor - 1);
-            this.text = this._text.substring(0, newCursor) + this.postSelection;
-            this.cursor = newCursor;
-        }
-        // Clear the selection
-        this.anchor = null;
-        if(!bypassUndo) this.history.save({text: this.text, cursorX: this.cursorX, cursorY: this.cursorY, type: UndoType.DELETE}, canReplace);
-    }
-    /**
-     * Turn a cursor value as an offset into X/Y cursor position
-     *
-     * X will always be within line Y rather than a virtual value off the end of
-     * the line
-     *
-     * @param offset Offset in codepoints from start of the text
-     * @returns [x, y] cursor values 
-     */
-    private cursorXYFromOffset(offset: number): [number, number] {
-        // Clamp negative offsets
-        offset = Math.max(0, offset);
-        // Offset of the start of the current line
-        let lineStart = 0;
-        // Iterate through all lines until we find one that contains offset
-        for(let [line, lineLength] of this.lineLengths.entries()) {
-            if(offset >= lineStart && offset < lineStart + lineLength) {
-                return [offset - lineStart, line];
-            }
-            // Start of the next line, including the newline
-            lineStart += lineLength;
-        }
-        let y = this.lineLengths.length - 1;
-        return [this.lineLengths[y], y];
-    }
-
-    private cursorOffsetFromXY(x: number, y: number): number {
-        const toLineStart = this.lineLengths.slice(0, y).reduce((prev, cur) => prev + cur, 0);
-        return toLineStart + Math.min(this.lineLength(y), x);
-    }
-    /**
-     * Set the cursor to new X/Y coordinates, optionally extending or creating a selection
-     */
-    public setCursor(cursorX: number, cursorY: number, extend = false) {
-        if(extend && this.anchor === null) this.anchor = this.cursor;
-        if(!extend) this.anchor = null;
-
-        // cursorX can exceed current line length, but cursorY can't go out of bounds
-        this.cursorX = Math.max(0, cursorX);
-        this.cursorY = Math.min(this.lineLengths.length - 1, Math.max(0, cursorY));
-    }
-    /**
-     * 
-     * Cursor behaviour:
-     *  Movement with no extend:
-     *  - If selection, use side of selection in the direction of travel
-     *  - Otherwise use cursor position
-     *  - Find actual cursor position, clamping to line end
-     *  - Add/subtract
-     *
-     * Movement with extend:
-     *  - Always use cursor position
-     */
-    public moveCursor(direction: CursorDirection, distance: MoveDistance, extend = false) {
-        // The x/y cursor location we're going to be moving from. For simple
-        // moves this is the current cursor, but if we have an existing
-        // selection it will be the side of the selection in the direction of
-        // travel If we're creating/extending a selection it will always be the
-        // cursor as moving against the direction of the selection means
-        // reducing the size of the selection
-        let fromX, fromY: number;
-
-        // If we're creating a selection, we always move relative to the actual cursor
-        // Likewise if we have no active selection there's no decision to make
-        if(extend || this.anchor == null) {
-            [fromX, fromY] = [this.cursorX, this.cursorY];
-        } else if(direction === CursorDirection.Forward) {
-            [fromX, fromY] = this.cursorXYFromOffset(this.selectionEnd);
-        } else {
-            [fromX, fromY] = this.cursorXYFromOffset(this.selectionStart);
-        }
-
-        // Where the cursor will end up
-        let [toX, toY] = [fromX, fromY];
-
+    public moveCaret(direction: CursorDirection, distance: MoveDistance, extendSelection = false) {
+        const moveFrom: Cursor = (!extendSelection && this.anchor !== null) ? (
+            direction === CursorDirection.Backward ? this.selectionStart : this.selectionEnd
+        ) : this._caret;
+        let newCursor: Cursor|null = null;
         switch(distance) {
             case MoveDistance.Character: {
                 const mod = direction === CursorDirection.Forward ? +1 : -1;
-                
-                [toX, toY] = this.cursorXYFromOffset(this.cursorOffsetFromXY(toX, toY) + mod);
+                newCursor = this.cursorFromC(moveFrom.c + mod);
                 break;
             }
             case MoveDistance.Line: {
-                const mod = direction === CursorDirection.Forward ? +1 : -1;
-                toY += mod;
+                const mod = (direction === CursorDirection.Forward ? +1 : -1) * this.font.lineHeight;
+                newCursor = this.cursorFromCoord({x: moveFrom.x, y: moveFrom.y + mod}, true);
                 break;
             }
             case MoveDistance.LineEnd: {
                 if(direction === CursorDirection.Forward) {
-                    toX = this.lineLength(toY);
+                    newCursor = this.cursorFromRowCol(moveFrom.row, this.glyphs[moveFrom.row].length)
                 } else {
-                    toX = 0;
+                    newCursor = this.cursorFromRowCol(moveFrom.row, 0);
                 }
                 break;
             }
@@ -331,7 +158,7 @@ export class TextModel {
                 // Move in the direction of travel until we have passed
                 // at least one non-whitespace, then stop at the next
                 // whitespace
-                const from = this.cursorOffsetFromXY(fromX, fromY);
+                const from = moveFrom.c;
                 // Cursor is expressed as codepoints, *not* characters, so do
                 // this The reversing is still not *perfect* (it might fuck up
                 // combined characters for accents etc) but for what we need it
@@ -342,24 +169,68 @@ export class TextModel {
                 
                 const offset = scanCPs.search(/(?<=\S)\s/);
                 if(direction === CursorDirection.Forward) {
-                    if(offset === -1) [toX, toY] = this.eofXY();
-                    else [toX, toY] = this.cursorXYFromOffset(from + offset);
+                    if(offset === -1) newCursor = this.cursorAtEOF();
+                    else newCursor = this.cursorFromC(from + offset);
                 } else {
-                    if(offset === -1) [toX, toY] = [0, 0];
-                    else [toX, toY] = this.cursorXYFromOffset(from - offset);
+                    if(offset === -1) newCursor = {...DEFAULT_CURSOR};
+                    else newCursor = this.cursorFromC(from - offset);
                 }
                 break;
             }
             case MoveDistance.Document: {
                 if(direction === CursorDirection.Forward) {
-                    [toX, toY] = this.eofXY()
+                    newCursor = this.cursorAtEOF();
                 } else {
-                    [toX, toY] = [0, 0];
+                    newCursor = {...DEFAULT_CURSOR};
                 }
             }
             
         }
-        this.setCursor(toX, toY, extend);
+        this.setCaret(newCursor, extendSelection);
+    }
+    public insert(text: string, batch = false) {
+        text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+        // The new cursor position will always be after the inserted text
+        const newC = this.selectionStart.c + [...text].length;
+        this.setText(this.getPreSelection()
+             + text
+             + this.getPostSelection());
+        this._caret = this.cursorFromC(newC);
+        this.anchor = null;
+        this.history.save(this.getState(UndoType.INSERT), !batch && text.trim().length !== 0); 
+    }
+    /**
+     * Delete the active selection if there is one, otherwise a single character.
+     * 
+     * bypassUndo is only used by the drag/drop operation when we drop text onto ourselves,
+     * where we don't want to have an intermediate undo state between deleting the text in
+     * its old location and placing it in the new.
+     * 
+     * @param direction Which direction to delete if there is no active selection
+     * @param bypassUndo If true, do not create an undo state
+     */
+    public delete(direction: CursorDirection = CursorDirection.Forward, bypassUndo = false) {
+        let canReplace = true;
+        if(this.anchor !== null) {
+            const newCursor = this.selectionStart;
+            this.setText(this.getPreSelection() + this.getPostSelection());
+            this.setCaret(newCursor);
+            canReplace = false;
+        } else if(direction === CursorDirection.Forward) {
+            const newCursor = this.caret;
+            this.setText(this.getPreSelection() + this.getPostSelection().substring(1));
+            // Force a new cursor value even though it's not changed as this will
+            // reset cursorX to the actual position
+            this.setCaret(newCursor);
+        } else {
+            
+            const newCursor = this.cursorFromC(Math.max(0, this.caret.c - 1));
+            this.setText(this.getPreSelection().substring(0, newCursor.c) + this.getPostSelection());
+            this.setCaret(newCursor);
+        }
+        // Clear the selection
+        this.anchor = null;
+        if(!bypassUndo) this.history.save(this.getState(UndoType.DELETE), canReplace);
     }
 
     public undo() {
@@ -368,14 +239,176 @@ export class TextModel {
     public redo() {
         this.restoreState(this.history.redo());
     }
+    private getPreSelection() {
+        return [...this.text].slice(0, this.selectionStart.c).join("");
+    }
 
-    private restoreState(state: UndoState | undefined) {
-        if(state) {
-            this.text = state.text;
-            this.cursorY = state.cursorX;
-            this.cursorY = state.cursorY;
+    private getPostSelection() {
+        return [...this.text].slice(this.selectionEnd.c).join("");
+    }
+
+    /**
+     * 
+     */
+    private layoutGlyphs() {
+        let x = 0, y = 0, c = 0;
+        this.glyphs = this.lines.map((line, row) => {
+            x = 0;
+            const lineGlyphs = [...line].map(cp => this.font.glyph(cp.codePointAt(0)));
+            const lineGlyphPositions: GlyphPosition[] = lineGlyphs.map((glyph, col) => {
+                const glyphPosition: GlyphPosition = {
+                    glyph,
+                    x,
+                    y,
+                    row,
+                    col,
+                    c
+                };
+                let advanceWidth = glyph.w + glyph.right;
+                // Look ahead by one to see if we need to apply kerning
+                if(col < lineGlyphs.length - 1) {
+                    const nextGlyph = lineGlyphs[col + 1];
+                    const kerning = this.font.getKerning(glyph, nextGlyph);
+                    advanceWidth += kerning;
+                }
+                x += advanceWidth;                
+                c++;
+                return glyphPosition;
+            });
+            // The trailing 'glyph' position represents the newline
+            lineGlyphPositions.push({x, y, row, col: lineGlyphs.length, c});
+            c++;
+            y += this.font.lineHeight;
+            return lineGlyphPositions;
+        });
+
+        this.dispatchEvent(new Event("change"));
+        this.setCaret(DEFAULT_CURSOR);
+    }
+    private getLineWidth(line: number): number {
+        return this.glyphs[line].at(-1)!.x;
+    }
+    private get selectionStart(): Cursor {
+        return this.anchor === null ? this._caret : (
+            this.anchor.c > this._caret.c ? this._caret : this.anchor
+        );
+    }
+    private get selectionEnd(): Cursor {
+        return this.anchor === null ? this._caret : (
+            this.anchor.c > this._caret.c ? this.anchor : this._caret
+        );
+    }
+    private updateSelections() {
+        this._selections = [];
+        if(this.anchor !== null) {
+            const [start, end] = [this.selectionStart, this.selectionEnd];
+            for(let row = start.row; row<=end.row; row++) {
+                const x = row === start.row ? start.x : 0;
+                this._selections.push({
+                    x,
+                    y: this.font.lineHeight * row,
+                    w: (row === end.row ? end.x : this.getLineWidth(row) + EOL_SELECTION_MARGIN) - x,
+                    h: this.font.lineHeight
+                });
+            }
+        }
+        this.dispatchEvent(new Event("selectionchange"));
+    }
+    private cFromRowCol(row: number, col: number): number {
+        return this.glyphs.slice(0, row).reduce((total, line) => total + line.length, col);
+    }
+    /**
+     * Get the Cursor value closest to the supplied top/left coordinate
+     * @param coord X/Y coordinate
+     * @param extendX Whether to save an X value that exceeds line width in virtualX
+     * @returns 
+     */
+    public cursorFromCoord(coord: Coord, extendX = false): Cursor {
+        let row = Math.floor(coord.y / this.font.lineHeight);
+        let col = 0;
+        // If you click below everything, snap to the end of the last line
+        if(row < 0) {
+            row = 0;
+            col = 0;
+        } else if(row > this.glyphs.length) {
+            row = this.glyphs.length -1;
+            col = this.glyphs.at(-1)!.length - 1;
+        } else {
+            // If you click just below the last line, treat it as if
+            // it was in the last line (don't jump right to the end)
+            if(row === this.glyphs.length && this.glyphs.length > 0) {
+                row = this.glyphs.length - 1;
+            }
+            // If this line is empty or left is negative, col is 0
+            if(this.glyphs[row].length === 1 || coord.x < 0) {
+                col = 0;
+            } else {
+                
+                // Set a default of "far end of line" in case we reach the end
+                // of the loop without finding a match
+                col = this.glyphs[row].length - 1;
+                // TODO: This could be a binary chop for efficiency but it probably
+                // doesn't matter enough
+                for(let i=1; i<this.glyphs[row].length; i++) {
+                    const [prev, next] = this.glyphs[row].slice(i-1, i+1);
+                    if(prev.x <= coord.x && next.x > coord.x) {
+                        if(Math.abs(prev.x - coord.x) < Math.abs(next.x - coord.x)) col = i-1;
+                        else col = i;
+                        break;
+                    }
+                }
+            }
+        }
+        const g = this.glyphs[row][col];
+        return {
+            row,
+            col,
+            x: g.x,
+            y: g.y,
+            c: this.cFromRowCol(row, col),
+            virtualX: extendX ? coord.x : g.x
+        };
+    }
+    private cursorAtEOF(): Cursor {
+        return this.glyphs.at(-1)!.at(-1)!;
+    }
+    private cursorFromRowCol(row: number, col: number): Cursor {
+        if(row < 0) return this.glyphs[0][0];
+        else if(row >= this.glyphs.length) return this.cursorAtEOF();
+        else if(col < 0) return this.glyphs[row][0];
+        else if(col >= this.glyphs[row].length) return this.glyphs[row].at(-1)!;
+        else return this.glyphs[row][col];
+    }
+    private cursorFromC(c: number): Cursor {
+        if(c <= 0) return this.glyphs[0][0];
+        for(const g of this) {
+            if(g.c === c) return g;
+        }
+        return this.glyphs.at(-1)!.at(-1)!;
+    }
+    
+    private setCaret(newValue: Cursor, extendSelection = false) {
+        logger.debug("Setting caret to", newValue,extendSelection ? "with" : "without", "extending selection");
+        if(extendSelection && this.anchor === null && newValue.c !== this._caret.c) {
+            this.anchor = {...this._caret};
+        } else if(!extendSelection || newValue.c === this.anchor?.c) {
             this.anchor = null;
+        }
+        this._caret = newValue;
+        this.updateSelections();
+    }
+    private getState(type: UndoType | null = null): TextState {
+        return {
+            text: this.text,
+            caret: {...this.caret},
+            type
+        }
+    }
+    private restoreState(state: TextState | undefined) {
+        if(state) {
+            this.setText(state.text);
+            this.anchor = null;
+            this.setCaret(state.caret);
         }
     }    
 }
-

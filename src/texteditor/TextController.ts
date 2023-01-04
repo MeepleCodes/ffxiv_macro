@@ -1,7 +1,9 @@
-import { Font, isRawFont } from "./Font";
 import HTMLTextEditorElement from "./TextEditor";
-import { Coord, CursorDirection, MoveDistance, TextModel } from "./TextModel2";
+import { Coord, CursorDirection, MoveDistance, TextModel } from "./TextModel";
 import { TextViewer } from "./TextViewer";
+import log from 'loglevel';
+const logger = log.getLogger("TextController");
+
 type EventMap = {
     [type in keyof HTMLElementEventMap]?: {
         handler: (evt: HTMLElementEventMap[type]) => void,
@@ -165,6 +167,7 @@ export class TextController implements EventListenerObject {
         if(ev.button === 0){
             const coord = this.coordFromMouseEvent(ev);
             if(!this.model.isInSelection(coord)) {
+                logger.debug("Mousedown, moving caret", ev.shiftKey);
                 this.model.setCaretToCoord(coord, ev.shiftKey);
                 this.selecting = true;
             }
@@ -173,6 +176,7 @@ export class TextController implements EventListenerObject {
     @Handler("mouseup")
     protected mouseUpped(ev: MouseEvent) {
         if(ev.button === 0 && !this.dragging) {
+            logger.debug("Mouseup, ending selecting", ev.shiftKey);
             this.model.setCaretToCoord(this.coordFromMouseEvent(ev), ev.shiftKey || this.selecting);
             this.selecting = false;
         }
@@ -183,7 +187,9 @@ export class TextController implements EventListenerObject {
             this.dragging = false;
             this.selecting = false;
         } else if(this.selecting) {
-            this.model.setCaretToCoord(this.coordFromMouseEvent(ev), true);
+            const coord = this.coordFromMouseEvent(ev);
+            log.debug("Mouse moving selection to", coord, "from", ev.offsetX, ev.offsetY);
+            this.model.setCaretToCoord(coord, true);
         }
     }
     @Handler("dragstart")

@@ -24,6 +24,12 @@ import { ThemeProvider } from '@mui/material/styles';
 import { NavAppBar, NavDrawer, NavHeader, NavMain } from './Nav';
 import { appTheme } from './Theme';
 
+import log, {RootLogger} from 'loglevel';
+declare global {
+	interface Window { log: RootLogger }
+}
+window.log = log;
+log.setLevel(log.levels.DEBUG);
 
 
 // // Force an import of this otherwise webpack doesn't think it's referenced
@@ -74,14 +80,14 @@ function App() {
 
     const updateCursor = (ev: {target: any}) => {
         const t = ev.target as HTMLTextEditorElement;
-        // setCur({
-        //     cursorX: t.cursorX,
-        //     cursorY: t.cursorY,
-        //     cursorRow: t.cursorRow,
-        //     cursorCol: t.cursorCol,
-        //     selectionLength: t.selectionLength,
-        //     selectionPixels: t.selectionPixels,
-        // });
+        setCur({
+            cursorX: t.cursorX,
+            cursorY: t.cursorY,
+            cursorRow: t.cursorRow,
+            cursorCol: t.cursorCol,
+            selectionLength: t.selectionLength,
+            selectionPixels: t.selectionPixels,
+        });
     };
 	let selectionText = "";
 	if(cur && cur.selectionLength > 0) {
@@ -97,7 +103,7 @@ function App() {
 	})
 
 	return (
-		// <StoreContextProvider editor={ref}>
+		<StoreContextProvider editor={ref}>
 			<ThemeProvider theme={appTheme}>
 			<NavAppBar position="fixed">
 				<Toolbar>
@@ -132,7 +138,7 @@ function App() {
 						<SpaceBarIcon /> Show whitespace
 					</ToggleButton>
 					<FormControl size="small" color="inverted">
-						{/* <InputLabel sx={{color:"inherit", borderColor: "currentcolor"}} id="font-size">Font size</InputLabel> */}
+						<InputLabel sx={{color:"inherit", borderColor: "currentcolor"}} id="font-size">Font size</InputLabel>
 						<InputLabel id="font-size">Font size</InputLabel>
 						<Select
 							labelId="font-size"
@@ -151,7 +157,7 @@ function App() {
 
 				<Toolbar/>
 				<Box sx={{overflow: "auto"}} >
-					{/* <FileList/> */}
+					<FileList/>
 				</Box>
 			</NavDrawer>
 			<NavMain open={open}>
@@ -160,9 +166,9 @@ function App() {
 					<Card>
 						<CardHeader sx={{boxShadow: 1}}>
 						<Stack direction="row">
-							{/* <SimpleFileName/>
+							<SimpleFileName/>
 							<SaveIconButton/>
-							<SaveIconButton asCopy={true}/> */}
+							<SaveIconButton asCopy={true}/>
 						</Stack>
 						</CardHeader>
 						<CardMedia>
@@ -176,11 +182,11 @@ function App() {
 						
 					</CardActions>
 					</Card>
-					{/* <GlyphPicker editorRef={ref} /> */}
+					<GlyphPicker editorRef={ref} />
 				</Stack>
 			</NavMain>
 			</ThemeProvider>
-		// </StoreContextProvider>
+		 </StoreContextProvider>
 		
 	);
 }

@@ -1,6 +1,6 @@
 import { Font, isRawFont } from "./Font";
 import { TextController } from "./TextController";
-import { TextModel } from "./TextModel2";
+import { Cursor, TextModel } from "./TextModel";
 import { TextViewer } from "./TextViewer";
 const STYLESHEET = `
     :host {
@@ -98,14 +98,14 @@ export default class HTMLTextEditorElement extends HTMLElement {
     private showWhitespace = false;
     
     // HTMLElements used to build the shadow DOM
-    protected stylesheet: HTMLStyleElement;
-    protected canvas: HTMLCanvasElement = document.createElement("canvas");
-    protected context = this.canvas.getContext("bitmaprenderer") as ImageBitmapRenderingContext;
-    protected slotElement: HTMLSlotElement;
-    protected spinner: HTMLSlotElement;
-    protected errorElement: HTMLDivElement;
-    protected errorMessage: HTMLParagraphElement;
-    protected container: HTMLDivElement;
+    private stylesheet: HTMLStyleElement;
+    private canvas: HTMLCanvasElement = document.createElement("canvas");
+    private context = this.canvas.getContext("bitmaprenderer") as ImageBitmapRenderingContext;
+    private slotElement: HTMLSlotElement;
+    private spinner: HTMLSlotElement;
+    private errorElement: HTMLDivElement;
+    private errorMessage: HTMLParagraphElement;
+    private container: HTMLDivElement;
     constructor() {
         super();
         this.attachShadow({mode: "open"});
@@ -206,6 +206,27 @@ export default class HTMLTextEditorElement extends HTMLElement {
     public get value(): string {
         return this._value;
     }
+    public get cursor(): Cursor | undefined {
+        return this.model?.caret;
+    }
+    public get cursorX(): number {
+        return this.model?.caret.x || 0;
+    }
+    public get cursorY(): number {
+        return this.model?.caret.y || 0;
+    }
+    public get cursorRow(): number {
+        return this.model?.caret.row || 0;
+    }
+    public get cursorCol(): number {
+        return this.model?.caret.col || 0;
+    }
+    public get selectionLength(): number {
+        return this.model?.getSelectionLength() || 0;
+    }
+    public get selectionPixels(): number {
+        return this.model?.getSelectionWidth() || 0;
+    }
     public insert(text: string) {
         if(this.model) this.model.insert(text, true);
     }
@@ -236,18 +257,12 @@ export default class HTMLTextEditorElement extends HTMLElement {
             this.scrollTop - offsetTop
         ];
     }
-    protected setSpinner(hidden = true) {
-        this.spinner.hidden = hidden;
-    }
-    protected hideError() {
-        this.errorElement.hidden = true;
-    }
-    protected showError(message: string) {
+    private showError(message: string) {
         this.errorMessage.innerText = message;
         this.errorElement.hidden = false;
         this.spinner.hidden = true;
     }
-    protected async loadFont(src: string) {
+    private async loadFont(src: string) {
         this.spinner.hidden = false;
         this.errorElement.hidden = true;
         try {
@@ -277,7 +292,10 @@ export default class HTMLTextEditorElement extends HTMLElement {
             if(this.model) this.model.setFont(this.font);
             else this.model = new TextModel(this.font, this._value);
             if(this.viewer) this.viewer.setFont(this.font, this.fontTexture);
-            else this.viewer = new TextViewer(this.model, this.font, this.fontTexture, this.context, this.textStyle!, this.selectStyle!);
+            else {
+                this.viewer = new TextViewer(this.model, this.font, this.fontTexture, this.context, this.textStyle!, this.selectStyle!);
+                this.viewer.showWhitespace = this.showWhitespace;
+            }
             if(!this.controller) {
                 this.controller = new TextController(this, this.model, this.viewer);
                 this.controller.listen();

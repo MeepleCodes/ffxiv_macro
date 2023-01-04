@@ -1,5 +1,5 @@
 import { Font, Glyph } from "./Font";
-import { Cursor, GlyphPosition, TextModel, EOL_SELECTION_MARGIN } from "./TextModel2";
+import { Cursor, TextModel, EOL_SELECTION_MARGIN } from "./TextModel";
 
 const EOL_MARGIN = EOL_SELECTION_MARGIN;
 const NEWLINE = 0x0A;
@@ -51,8 +51,11 @@ export class TextViewer {
         this.redraw();
     }
     public set showWhitespace(newValue: boolean) {
-        this.showWhitespace = newValue;
+        this._showWhitespace = newValue;
         this.redraw();
+    }
+    public get showWhitespace() {
+        return this._showWhitespace;
     }
     public setFont(font: Font, fontTexture: ImageBitmap) {
         this.font = font;
