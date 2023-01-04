@@ -2,6 +2,7 @@ import { Font, isRawFont } from "./Font";
 import { TextController } from "./TextController";
 import { Cursor, TextModel } from "./TextModel";
 import { TextViewer } from "./TextViewer";
+
 const STYLESHEET = `
     :host {
         border: 1px solid black;
