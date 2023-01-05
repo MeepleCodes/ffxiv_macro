@@ -28,14 +28,15 @@ export class TextViewer {
     private textColourContext = this.textColourBuffer.getContext("2d") as OffscreenCanvasRenderingContext2D;
     private _insertionCursor: Cursor | null = null;
     private _caretVisible = false;
-    private _showWhitespace = false;
+
     constructor(
         private model: TextModel,
         private font: Font,
         private fontTexture: ImageBitmap,
         private dest: ImageBitmapRenderingContext,
         private textStyle: CSSStyleDeclaration,
-        private selectionStyle: CSSStyleDeclaration) {
+        private selectionStyle: CSSStyleDeclaration,
+        private _showWhitespace = false) {
         // TODO: These *could* redraw subsets
         model.addEventListener("change", e => this.redraw());
         model.addEventListener("selectionchange", e => this.redraw());

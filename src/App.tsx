@@ -172,7 +172,7 @@ function App() {
 						</Stack>
 						</CardHeader>
 						<CardMedia>
-							<TextEditor fontsrc={fontSources[font].src} ref={ref} onUpdate={updateCursor} showWhitespace={showWhitespace} value={"line\n\nline"}/>
+							<TextEditor fontsrc={fontSources[font].src} ref={ref} onSelectionChange={updateCursor}  showWhitespace={showWhitespace} value={"line\n\nline"}/>
 						</CardMedia>
 					<CardActions sx={{boxShadow: 1}}>
 							{cur && <div className="status row">

@@ -67,18 +67,11 @@ const STYLESHEET = `
 `;
 
 
-export default class HTMLTextEditorElement extends HTMLElement {
+export default class HTMLTextEditorElement extends HTMLElement implements EventListenerObject {
     private _fontSrc: string = "";
-    public get fontSrc() {
-        return this._fontSrc;
-    }
-    public set fontSrc(newValue: string) {
-        if(this._fontSrc !== newValue) {
-            this._fontSrc = newValue;
-            this.loadFont(newValue);
-        }
-    }
-    private _value: string = "";
+
+    /** Starting text value, saved until the first time a font is loaded and we can instantiate a Model */
+    private initialValue: string = "";
     private font?: Font;
     private fontTexture?: ImageBitmap;
     private model?: TextModel;
@@ -87,14 +80,11 @@ export default class HTMLTextEditorElement extends HTMLElement {
 
     private textStyle?: CSSStyleDeclaration;
     private selectStyle?: CSSStyleDeclaration;
-    private whitespaceStyle?: CSSStyleDeclaration;
+
     // The margin around the cursor to try and keep visible when scrolling
     private scrollMargin = {left: 1, right: 1, top: 1, bottom: 1};
     
-    // A select operation is currently in progress (between mousedown and mouseup)
-    private selecting = false;
-    // A drag operation (with us as the source) is in progress (between dragstart and dragend)
-    private dragging = false;
+
     // Whether we draw helpers for whitespace characters
     private showWhitespace = false;
     
@@ -102,7 +92,6 @@ export default class HTMLTextEditorElement extends HTMLElement {
     private stylesheet: HTMLStyleElement;
     private canvas: HTMLCanvasElement = document.createElement("canvas");
     private context = this.canvas.getContext("bitmaprenderer") as ImageBitmapRenderingContext;
-    private slotElement: HTMLSlotElement;
     private spinner: HTMLSlotElement;
     private errorElement: HTMLDivElement;
     private errorMessage: HTMLParagraphElement;
@@ -117,8 +106,6 @@ export default class HTMLTextEditorElement extends HTMLElement {
         this.stylesheet.innerHTML = STYLESHEET;
         this.container = document.createElement("div");
         this.container.id = "container";
-
-        this.slotElement = document.createElement("slot");
         
         this.spinner = document.createElement("slot");
         this.spinner.name = "spinner";
@@ -141,19 +128,28 @@ export default class HTMLTextEditorElement extends HTMLElement {
         this.selectStyle = getComputedStyle(this, "::selection");        
 
     }
+    handleEvent(ev: Event): void {
+        console.log("Handling event", ev);
+        if(ev.type === "selectionchange") this.updateScroll();
+        // Every event we see will be ones we listened to from the model, so
+        // re-dispatch them from ourselves. We will need to extend this as and
+        // when we end up with synthetic events more complex than Event()
+        this.dispatchEvent(new Event(ev.type));
+    }
 
     public static get observedAttributes(): string[] {
         return ["fontsrc", "value", "show-whitespace"];
     }
     public attributeChangedCallback(name: string, oldValue: string|null, newValue: string|null): void {
+        // TODO: Move value and show-whitespace to setters like fontSrc
         switch(name) {
             case "fontsrc": {
                 this.fontSrc = newValue || "";
                 break;
             }
             case "value": {
-                this._value = newValue || "";
-                if(this.model) this.model.reset(this._value);
+                this.initialValue = newValue || "";
+                if(this.model) this.model.reset(this.initialValue);
                 break;
             }
             case "show-whitespace":
@@ -166,6 +162,7 @@ export default class HTMLTextEditorElement extends HTMLElement {
             
         }
     }
+
     public connectedCallback() {
         if(this.isConnected) {
             
@@ -174,23 +171,14 @@ export default class HTMLTextEditorElement extends HTMLElement {
             this.setAttribute("draggable", "true");
             this.setAttribute("aria-role", "textarea");
             this.setAttribute("aria-multiline", "true");
-            // Extract some (dynamically updated) calculated style references
-
-            this.whitespaceStyle = getComputedStyle(this, "::cue");
 
             const container = this.container;
 
             container.appendChild(this.stylesheet);
             container.appendChild(this.canvas);
             
-            container.appendChild(this.slotElement);
-
             container.appendChild(this.spinner);
             container.appendChild(this.errorElement);
-            const whitespacePart = document.createElement("div");
-            whitespacePart.setAttribute("part", "whitespace");
-            whitespacePart.style.display = "none";
-            container.appendChild(whitespacePart);
 
             this.shadowRoot?.appendChild(container);
 
@@ -200,12 +188,29 @@ export default class HTMLTextEditorElement extends HTMLElement {
         }
     }
     public disconnectedCallback() {
-        if(this.controller) this.controller.unlisten();
+        if(this.controller) {
+            this.controller.unlisten();
+            this.model?.removeEventListener("selectionchange", this);
+            this.model?.removeEventListener("change", this);
+            this.model = undefined;
+            this.viewer = undefined;
+            this.controller = undefined;
+        }
 
+    }
+    public get fontSrc() {
+        return this._fontSrc;
+    }
+    public set fontSrc(newValue: string) {
+        if(this._fontSrc !== newValue) {
+            this._fontSrc = newValue;
+            this.loadFont(newValue);
+        }
     }
 
     public get value(): string {
-        return this._value;
+        if(this.model) return this.model.text;
+        else return this.initialValue;
     }
     public get cursor(): Cursor | undefined {
         return this.model?.caret;
@@ -263,6 +268,35 @@ export default class HTMLTextEditorElement extends HTMLElement {
         this.errorElement.hidden = false;
         this.spinner.hidden = true;
     }
+    private updateScroll() {
+        if(!this.model) return;
+        // Turn the caret coordinates (which are relative to the canvas)
+        // into coordinates relative to the container
+        const relX = this.model.caret.x + this.canvas.offsetLeft;
+        const relY = this.model.caret.y + this.canvas.offsetTop;
+        let targetX = this.scrollLeft;
+        let targetY = this.scrollTop;
+        for(const x of [relX - this.scrollMargin.left, relX + this.scrollMargin.right]) {
+            for(const y of [relY - this.scrollMargin.top, relY + this.scrollMargin.bottom]) {
+                // Check if this would be visible based on our *current* scroll
+                // target, so we don't bother re-doing a scroll if we'd already
+                // see what we want
+                if(x < targetX) {
+                    targetX = x;
+                } else if(x >= targetX + this.clientWidth) {
+                    targetX = x - this.clientWidth;
+                }
+                if(y < targetY) {
+                    targetY = y;
+                } else if(y >= targetY + this.clientHeight) {
+                    targetY = y - this.clientHeight;
+                }
+            }
+        }
+        if(targetX !== this.scrollLeft || targetY !== this.scrollTop) {
+            this.scrollTo(targetX, targetY);
+        }
+    }
     private async loadFont(src: string) {
         this.spinner.hidden = false;
         this.errorElement.hidden = true;
@@ -281,30 +315,35 @@ export default class HTMLTextEditorElement extends HTMLElement {
 
             if(!texResp.ok) throw new Error(`Couldn't fetch font texture data: ${texResp.status} ${texResp.statusText}`);
             const blob = await texResp.blob();
-            this.fontTexture = await createImageBitmap(blob);
-            this.font = font;
-            this.scrollMargin = {
-                left: this.font.maxWidth * 2,
-                right: this.font.maxWidth,
-                top: 0,
-                bottom: this.font.lineHeight * 2
-            };            
+            const fontTexture = await createImageBitmap(blob);
+            this.setFont(font, fontTexture);
             this.spinner.hidden = true;
-            if(this.model) this.model.setFont(this.font);
-            else this.model = new TextModel(this.font, this._value);
-            if(this.viewer) this.viewer.setFont(this.font, this.fontTexture);
-            else {
-                this.viewer = new TextViewer(this.model, this.font, this.fontTexture, this.context, this.textStyle!, this.selectStyle!);
-                this.viewer.showWhitespace = this.showWhitespace;
-            }
-            if(!this.controller) {
-                this.controller = new TextController(this, this.model, this.viewer);
-                this.controller.listen();
-            }
         } catch(e) {
             console.error(e);
             this.showError("Error loading");
         }
+    }
+    protected setFont(font: Font, fontTexture: ImageBitmap) {
+        this.font = font;
+        this.fontTexture = fontTexture;
+        this.scrollMargin = {
+            left: this.font.maxWidth * 2,
+            right: this.font.maxWidth,
+            top: 0,
+            bottom: this.font.lineHeight * 2
+        };            
+        if(this.model && this.viewer) {
+            this.model.setFont(this.font);
+            this.viewer.setFont(this.font, this.fontTexture);
+        } else {
+            this.model = new TextModel(this.font, this.initialValue);
+            this.viewer = new TextViewer(this.model, this.font, this.fontTexture, this.context, this.textStyle!, this.selectStyle!, this.showWhitespace);
+            this.controller = new TextController(this, this.model, this.viewer);
+            this.controller.listen();
+            this.model.addEventListener("selectionchange", this);
+            this.model.addEventListener("change", this);
+        }
+
     }
 }
 export function installWebComponent() {

@@ -22,24 +22,24 @@ installWebComponent();
 type TextEditorProps = TextEditorElementProps & {
     fontsrc: string | object;
     value?: string;
-    onUpdate?: (ev: Event) => any;
+    onSelectionChange?: (ev: Event) => any;
 }
 
 export default React.forwardRef<HTMLTextEditorElement, TextEditorProps>((props: TextEditorProps, fwdRef: React.ForwardedRef<HTMLTextEditorElement>) => {
-    const {onUpdate, showWhitespace, ...rest} = props;
+    const {onSelectionChange, showWhitespace, ...rest} = props;
     const myRef = React.useRef<HTMLTextEditorElement>(null);
     const ref = (fwdRef!== null && typeof(fwdRef) !== "function") ? fwdRef : myRef;
     if(typeof(fwdRef) === "function") fwdRef(ref.current);
     React.useEffect(() => {
         const tgt = ref.current;
-        if(onUpdate) {
-            tgt?.addEventListener("update", onUpdate);
+        if(onSelectionChange) {
+            tgt?.addEventListener("selectionchange", onSelectionChange);
         }
         return () => {
-            if(onUpdate) {
-                tgt?.removeEventListener("update", onUpdate);
+            if(onSelectionChange) {
+                tgt?.removeEventListener("selectionchange", onSelectionChange);
             }
         }
-    }, [ref, fwdRef, onUpdate]);
+    }, [ref, fwdRef, onSelectionChange]);
     return <text-editor ref={ref} show-whitespace={showWhitespace ? "" : null} {...rest}/>
 });

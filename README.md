@@ -10,8 +10,10 @@ extracted from FFXIV (which it uses instead of vector/TTF-based fonts).
 
 ## Bugs
 [x] CPU usage wtf
-- Drop insertion point drawn in the wrong place at the end of a line
+[x] Drop insertion point drawn in the wrong place at the end of a line
 - Cursor not restored correctly when undo/redoing
+- Insert/move cursor/insert is merging undo states; should be separate
+[x] Re-implement autoscroll in refactored editor
 
 ## TODOs
 Vague list of features still to implement
@@ -68,7 +70,7 @@ Vague list of features still to implement
 - Overlays for common chat window sizes
 - Dark theme
 - Line count in status bar (and warn if >15)
-- Move web component to asset-loaded CSSn
+- Move web component to asset-loaded CSS
 [~] Saving and loading macros with firebase storeage or similar
   - 'New' button
   - Delete button
