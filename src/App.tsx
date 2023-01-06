@@ -25,6 +25,7 @@ import { NavAppBar, NavDrawer, NavHeader, NavMain } from './Nav';
 import { appTheme } from './Theme';
 
 import log, {RootLogger} from 'loglevel';
+import GlyphViewerReact from './glyphviewer/GlyphViewerReact';
 declare global {
 	interface Window { log: RootLogger }
 }
@@ -162,7 +163,7 @@ function App() {
 			</NavDrawer>
 			<NavMain open={open}>
 				<NavHeader/>
-				<Stack direction="row" spacing={3} justifyContent="center">
+				<Stack direction="row" spacing={3} justifyContent="center" sx={{flexWrap: 'wrap'}}>
 					<Card>
 						<CardHeader sx={{boxShadow: 1}}>
 						<Stack direction="row">
@@ -183,6 +184,9 @@ function App() {
 					</CardActions>
 					</Card>
 					<GlyphPicker editorRef={ref} />
+					<Card>
+						<GlyphViewerReact fontsrc={fontSources[font].src} value="1234"/>
+					</Card>
 				</Stack>
 			</NavMain>
 			</ThemeProvider>

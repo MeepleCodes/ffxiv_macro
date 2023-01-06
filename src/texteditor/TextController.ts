@@ -1,6 +1,6 @@
 import HTMLTextEditorElement from "./TextEditor";
 import { Coord, CursorDirection, MoveDistance, TextModel } from "./TextModel";
-import { TextViewer } from "./TextViewer";
+import TextViewer from "./TextViewer";
 import log from 'loglevel';
 const logger = log.getLogger("TextController");
 
@@ -23,8 +23,11 @@ function Handler(type: keyof HTMLElementEventMap, eventSource: (that: HTMLTextEd
         };
     }
 }
-
-export class TextController implements EventListenerObject {
+export interface Controller {
+    attach(): void;
+    detach(): void;
+}
+export default class TextController implements EventListenerObject, Controller {
     // A select operation is currently in progress (between mousedown and mouseup)
     private selecting = false;
     // A drag operation (with us as the source) is in progress (between dragstart and dragend)
@@ -40,12 +43,12 @@ export class TextController implements EventListenerObject {
     private dragImage = new Image();
 
     constructor(private element: HTMLTextEditorElement, private model: TextModel, private viewer: TextViewer) {}
-    public listen() {
+    public attach() {
         for(const [event, eventMap] of Object.entries(EVENT_MAP)) {
             eventMap.source(this.element).addEventListener(event, this);
         }
     }
-    public unlisten() {
+    public detach() {
         for(const [event, eventMap] of Object.entries(EVENT_MAP)) {
             eventMap.source(this.element).removeEventListener(event, this);
         }        

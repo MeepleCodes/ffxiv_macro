@@ -52,16 +52,16 @@ type TextState = {
     type: UndoType | null;
 }
 export class TextModel extends EventTarget {
-    private lines = [""];
-    private _text = "";
+    protected lines = [""];
+    protected _text = "";
     /** Glyphs and cursors for every line plus an extra 'glyph' position at the end of each line with a null glyph and the location where the line ends */
-    private glyphs: GlyphPosition[][] = [[DEFAULT_CURSOR]];
+    protected glyphs: GlyphPosition[][] = [[DEFAULT_CURSOR]];
     private _caret = DEFAULT_CURSOR;
     private anchor: Cursor|null = null;
     private _selections: Selection[] = [];
     private history: UndoBuffer<TextState> = new UndoBuffer<TextState>(this.getState());
 
-    constructor(private font: Font, initialValue: string = "") {
+    constructor(protected font: Font, initialValue: string = "") {
         super();
         this.reset(initialValue);
     }
@@ -74,11 +74,12 @@ export class TextModel extends EventTarget {
         this.setText(text);
         this.history.reset(this.getState());
     }
-    private setText(newValue: string) {
+    protected setText(newValue: string) {
         // Fix up any newline mess
         this._text = newValue.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
         this.lines = this._text.split("\n");
         this.layoutGlyphs();
+        this.setCaret(DEFAULT_CURSOR);
     }
     public get text() {
         return this._text;
@@ -250,7 +251,7 @@ export class TextModel extends EventTarget {
     /**
      * 
      */
-    private layoutGlyphs() {
+    protected layoutGlyphs() {
         let x = 0, y = 0, c = 0;
         this.glyphs = this.lines.map((line, row) => {
             x = 0;
@@ -283,7 +284,6 @@ export class TextModel extends EventTarget {
         });
 
         this.dispatchEvent(new Event("change"));
-        this.setCaret(DEFAULT_CURSOR);
     }
     private getLineWidth(line: number): number {
         return this.glyphs[line].at(-1)!.x;
