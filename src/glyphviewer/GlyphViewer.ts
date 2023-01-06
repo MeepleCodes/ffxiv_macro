@@ -73,7 +73,8 @@ class GlyphController implements Controller, EventListenerObject {
     }
 
     private mouseMoved(ev: MouseEvent) {
-
+        const g = this.model.glyphUnderCoord(this.element.getCanvasOffset);
+        
     }
 
 }
@@ -132,7 +133,28 @@ class GlyphModel extends TextModel {
         }
     }
     public glyphUnderCoord(coord: Coord): GlyphPosition | null {
-
+        let row = Math.floor(coord.y / this.font.lineHeight);
+        let col: number|null = null;
+        // If you click below everything, snap to the end of the last line
+        if(row < 0 || row >= this.glyphs.length) {
+            return null
+        } else {
+            // If this line is empty or left is negative, col is 0
+            if(this.glyphs[row].length === 1 || coord.x < 0) {
+                return null;
+            } else {
+                // TODO: This could be a binary chop for efficiency but it probably
+                // doesn't matter enough
+                for(let i=1; i<this.glyphs[row].length; i++) {
+                    const [prev, next] = this.glyphs[row].slice(i-1, i+1);
+                    if(prev.x <= coord.x && next.x > coord.x) {
+                        if(Math.abs(prev.x - coord.x) < Math.abs(next.x - coord.x)) return prev;
+                        else return next;
+                    }
+                }
+            }
+        }
+        return null;
     }
 }
 
