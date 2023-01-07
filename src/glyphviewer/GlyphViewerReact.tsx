@@ -20,23 +20,24 @@ installWebComponent();
 type GlyphViewerProps = GlyphViewerElementProps & {
     fontsrc: string | object;
     value?: string;
+    onSelectionChange?: (ev: Event) => any;
 }
 
 export default React.forwardRef<HTMLGlyphViewerElement, GlyphViewerProps>((props: GlyphViewerProps, fwdRef: React.ForwardedRef<HTMLGlyphViewerElement>) => {
-    const {...rest} = props;
+    const {onSelectionChange, ...rest} = props;
     const myRef = React.useRef<HTMLGlyphViewerElement>(null);
     const ref = (fwdRef!== null && typeof(fwdRef) !== "function") ? fwdRef : myRef;
     if(typeof(fwdRef) === "function") fwdRef(ref.current);
     React.useEffect(() => {
         const tgt = ref.current;
-        // if(onSelectionChange) {
-        //     tgt?.addEventListener("selectionchange", onSelectionChange);
-        // }
-        // return () => {
-        //     if(onSelectionChange) {
-        //         tgt?.removeEventListener("selectionchange", onSelectionChange);
-        //     }
-        // }
-    }, [ref, fwdRef, /*onSelectionChange*/]);
+        if(onSelectionChange) {
+            tgt?.addEventListener("selectionchange", onSelectionChange);
+        }
+        return () => {
+            if(onSelectionChange) {
+                tgt?.removeEventListener("selectionchange", onSelectionChange);
+            }
+        }
+    }, [ref, fwdRef, onSelectionChange]);
     return <glyph-viewer ref={ref} {...rest}/>
 });

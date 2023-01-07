@@ -1,4 +1,4 @@
-import { Font } from "../texteditor/Font";
+import { Font, Glyph } from "../texteditor/Font";
 import { Controller } from "../texteditor/TextController";
 import { BaseTextElement } from "../texteditor/TextEditor";
 import { Coord, Cursor, GlyphPosition, TextModel } from "../texteditor/TextModel";
@@ -9,6 +9,10 @@ const STYLESHEET = `
         position: relative;
         display: block;
         color: black;
+        --glyph-background: rgba(0,0,0,0.1);
+    }
+    :host:focus {
+        outline: none;
     }
     :host::selection {
         background-color: #b0b8e0;
@@ -64,14 +68,19 @@ class GlyphController implements Controller, EventListenerObject {
     constructor(private element: HTMLGlyphViewerElement, private model: GlyphModel, private viewer: TextViewer) {}
     handleEvent(ev: Event): void {
         if(ev.type === "mousemove") this.mouseMoved(ev as MouseEvent);
+        if(ev.type === "mouseout") this.mousedOut(ev as MouseEvent);
     }
     attach(): void {
         this.element.addEventListener("mousemove", this);
+        this.element.addEventListener("mouseout", this);
     }
     detach(): void {
         this.element.removeEventListener("mousemove", this);
+        this.element.removeEventListener("mouseout", this);
     }
-
+    private mousedOut(ev: MouseEvent) {
+        this.model.selectNone();
+    }
     private mouseMoved(ev: MouseEvent) {
         const g = this.model.glyphUnderCoord(this.element.coordFromMouseEvent(ev));
         if(g) {
@@ -80,7 +89,6 @@ class GlyphController implements Controller, EventListenerObject {
             this.model.selectNone();
         }
     }
-
 }
 class GlyphModel extends TextModel {
     private cols = 16;
@@ -108,10 +116,9 @@ class GlyphModel extends TextModel {
             x = 0;
             const lineGlyphs = [...line].map(cp => this.font.glyph(cp.codePointAt(0)));
             const lineGlyphPositions: GlyphPosition[] = lineGlyphs.map((glyph, col) => {
-                const paddingLeft = Math.floor((this.font.maxWidth - (glyph.w + glyph.right))/2);
                 const glyphPosition: GlyphPosition = {
                     glyph,
-                    x: x + paddingLeft,
+                    x: x,
                     y,
                     row,
                     col,
@@ -144,12 +151,10 @@ class GlyphModel extends TextModel {
     }
     public glyphUnderCoord(coord: Coord): GlyphPosition | null {
         let row = Math.floor(coord.y / this.font.lineHeight);
-        let col: number|null = null;
-        // If you click below everything, snap to the end of the last line
         if(row < 0 || row >= this.glyphs.length) {
             return null
         } else {
-            // If this line is empty or left is negative, col is 0
+            // If row is empty, nothing under the cursor
             if(this.glyphs[row].length === 1 || coord.x < 0) {
                 return null;
             } else {
@@ -158,14 +163,55 @@ class GlyphModel extends TextModel {
                 for(let i=1; i<this.glyphs[row].length; i++) {
                     const [prev, next] = this.glyphs[row].slice(i-1, i+1);
                     if(prev.x <= coord.x && next.x > coord.x) {
-                        if(Math.abs(prev.x - coord.x) < Math.abs(next.x - coord.x)) return prev;
-                        else return next;
+                        return prev;
                     }
                 }
             }
         }
         return null;
     }
+}
+
+class GlyphView extends TextViewer {
+    protected drawGlyph(context: OffscreenCanvasRenderingContext2D, glyph: Glyph, position: Cursor): void {
+        const paddingLeft = Math.floor((this.font.maxWidth - (glyph.w + glyph.right))/2);
+        context.drawImage(this.fontTexture,
+            glyph.x, glyph.y, glyph.w, glyph.h,
+            position.x + paddingLeft, position.y + glyph.top, glyph.w, glyph.h);
+    }
+    renderGlyphBackgrounds() {
+        // Use the whitespace buffer, we don't otherwise need it
+        // TODO: Could refactor that out and push some of this into a common root
+        this.whitespaceContext.fillStyle = this.textStyle.getPropertyValue("--glyph-background");
+        for(const gp of this.model) {
+            if(!gp.glyph) continue;
+            const paddingLeft = Math.floor((this.font.maxWidth - (gp.glyph.w + gp.glyph.right))/2);
+            this.whitespaceContext.fillRect(gp.x + paddingLeft, gp.y + gp.glyph.top, gp.glyph.w + gp.glyph.right, gp.glyph.h);
+        }
+    }
+    protected redraw() {
+        this.resize();
+        this.renderText();
+        this.renderSelectionAndTextColour();
+        this.renderGlyphBackgrounds();
+
+        // Use the text buffer to mask the text colour buffer. If we do it this
+        // way around we can keep textBuffer as a black + white (or black +
+        // transparent) version which is then available for thumbnails etc.
+        this.textColourContext.globalCompositeOperation="destination-in";
+        this.textColourContext.drawImage(this.textBuffer, 0, 0);
+
+        // Layer the buffers onto the output canvas
+        this.outputContext.drawImage(this.selectBuffer, 0, 0);
+        this.outputContext.drawImage(this.whitespaceBuffer, 0, 0);
+        this.outputContext.drawImage(this.textBuffer, 0, 0);
+
+
+        this.outputContext.drawImage(this.cursorBuffer, 0, 0);
+        this.dest.canvas.width = this.outputBuffer.width;
+        this.dest.canvas.height = this.outputBuffer.height;
+        this.dest.transferFromImageBitmap(this.outputBuffer.transferToImageBitmap());
+    }    
 }
 
 export default class HTMLGlyphViewerElement extends BaseTextElement {
@@ -178,7 +224,7 @@ export default class HTMLGlyphViewerElement extends BaseTextElement {
             this.viewer.setFont(this.font, this.fontTexture);
         } else {
             this.model = new GlyphModel(this.canvas, this.font, this._initialValue);
-            this.viewer = new TextViewer(this.model, this.font, this.fontTexture, this.context, this.textStyle!, this.selectStyle!, false);
+            this.viewer = new GlyphView(this.model, this.font, this.fontTexture, this.context, this.textStyle!, this.selectStyle!, false);
             this.controller = new GlyphController(this, this.model, this.viewer);
             this.controller.attach();
         }
@@ -186,6 +232,15 @@ export default class HTMLGlyphViewerElement extends BaseTextElement {
     protected getStyle() {
         return STYLESHEET;
     }    
+    public connectedCallback(): void {
+        super.connectedCallback();
+        if(this.isConnected) {
+            this.removeAttribute("contenteditable");
+            this.removeAttribute("tab-index",);
+            this.removeAttribute("aria-role");
+            this.removeAttribute("aria-multiline");
+        }
+    }
 }
 export function installWebComponent() {
     if(!customElements.get("glyph-viewer")) {

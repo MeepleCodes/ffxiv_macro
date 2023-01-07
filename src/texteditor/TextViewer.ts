@@ -14,29 +14,29 @@ function hasWhitespace(codepoint: number): codepoint is keyof typeof WhitespaceM
 }
 
 export default class TextViewer {
-    private outputBuffer = new OffscreenCanvas(0, 0);
-    private outputContext = this.outputBuffer.getContext("2d") as OffscreenCanvasRenderingContext2D;
-    private selectBuffer = new OffscreenCanvas(0, 0);
-    private selectContext = this.selectBuffer.getContext("2d") as OffscreenCanvasRenderingContext2D;
-    private textBuffer = new OffscreenCanvas(0, 0);
-    private textContext = this.textBuffer.getContext("2d") as OffscreenCanvasRenderingContext2D;
-    private whitespaceBuffer = new OffscreenCanvas(0, 0);
-    private whitespaceContext = this.whitespaceBuffer.getContext("2d") as OffscreenCanvasRenderingContext2D;
-    private cursorBuffer = new OffscreenCanvas(0, 0);
-    private cursorContext = this.cursorBuffer.getContext("2d") as OffscreenCanvasRenderingContext2D;
-    private textColourBuffer = new OffscreenCanvas(0, 0)
-    private textColourContext = this.textColourBuffer.getContext("2d") as OffscreenCanvasRenderingContext2D;
-    private _insertionCursor: Cursor | null = null;
-    private _caretVisible = false;
+    protected outputBuffer = new OffscreenCanvas(0, 0);
+    protected outputContext = this.outputBuffer.getContext("2d") as OffscreenCanvasRenderingContext2D;
+    protected selectBuffer = new OffscreenCanvas(0, 0);
+    protected selectContext = this.selectBuffer.getContext("2d") as OffscreenCanvasRenderingContext2D;
+    protected textBuffer = new OffscreenCanvas(0, 0);
+    protected textContext = this.textBuffer.getContext("2d") as OffscreenCanvasRenderingContext2D;
+    protected whitespaceBuffer = new OffscreenCanvas(0, 0);
+    protected whitespaceContext = this.whitespaceBuffer.getContext("2d") as OffscreenCanvasRenderingContext2D;
+    protected cursorBuffer = new OffscreenCanvas(0, 0);
+    protected cursorContext = this.cursorBuffer.getContext("2d") as OffscreenCanvasRenderingContext2D;
+    protected textColourBuffer = new OffscreenCanvas(0, 0)
+    protected textColourContext = this.textColourBuffer.getContext("2d") as OffscreenCanvasRenderingContext2D;
+    protected _insertionCursor: Cursor | null = null;
+    protected _caretVisible = false;
 
     constructor(
-        private model: TextModel,
-        private font: Font,
-        private fontTexture: ImageBitmap,
-        private dest: ImageBitmapRenderingContext,
-        private textStyle: CSSStyleDeclaration,
-        private selectionStyle: CSSStyleDeclaration,
-        private _showWhitespace = false) {
+        protected model: TextModel,
+        protected font: Font,
+        protected fontTexture: ImageBitmap,
+        protected dest: ImageBitmapRenderingContext,
+        protected textStyle: CSSStyleDeclaration,
+        protected selectionStyle: CSSStyleDeclaration,
+        protected _showWhitespace = false) {
         // TODO: These *could* redraw subsets
         model.addEventListener("change", e => this.redraw());
         model.addEventListener("selectionchange", e => this.redraw());
@@ -70,7 +70,7 @@ export default class TextViewer {
         return new Promise<Blob>((resolve, reject) => drawto.toBlob((blob) => blob !== null ? resolve(blob) : reject));
     }
     //#endregion
-    private drawGlyph(context: OffscreenCanvasRenderingContext2D, glyph: Glyph, position: Cursor) {
+    protected drawGlyph(context: OffscreenCanvasRenderingContext2D, glyph: Glyph, position: Cursor) {
         context.drawImage(this.fontTexture,
             glyph.x, glyph.y, glyph.w, glyph.h,
             position.x, position.y + glyph.top, glyph.w, glyph.h);
@@ -82,11 +82,12 @@ export default class TextViewer {
      * Both will be drawn to their buffers in monochrome black+alpha, to be
      * recoloured later.
      */
-    private renderText() {
+    protected renderText() {
         const EOL = this.font.glyphMap[WhitespaceMap[NEWLINE]];
         // Whitespace drawn normally, we'll use source-in later to recolour
         this.whitespaceContext.globalCompositeOperation="source-over";
         // It would be nice to use a custom pseudo-element to style this, but they don't exist yet
+        // TODO: Could use a CSC --custom-property instead?
         this.whitespaceContext.fillStyle = "rgba(0,0,0,0.25)";
         for(const gp of this.model) {
             if(gp.glyph) {
@@ -109,7 +110,7 @@ export default class TextViewer {
      * separate buffer - it will be textStyle.color everywhere except within the
      * selection where it will be selectionStyle.color.
      */
-    private renderSelectionAndTextColour() {
+    protected renderSelectionAndTextColour() {
         this.textColourContext.globalCompositeOperation="source-over";
         this.textColourContext.fillStyle = this.textStyle.color;
         this.textColourContext.fillRect(0, 0, this.textColourBuffer.width, this.textColourBuffer.height);
@@ -126,8 +127,9 @@ export default class TextViewer {
     /**
      * Render the caret and/or insertion cursors if they're current visible
      */
-    private renderCursors() {
+    protected renderCursors() {
         // Cursor is drawn in text colour
+        // TODO: Should use caret-color really
         this.cursorContext.strokeStyle = this.textStyle.color;
         this.cursorContext.lineWidth = 1;
         if(this._caretVisible) {
@@ -145,7 +147,7 @@ export default class TextViewer {
             this.cursorContext.stroke();
         }        
     }
-    private redraw() {
+    protected resize(): void {
         // Setup of contexts
         let {width, height} = this.model.getBoundingBox();
         const EOL = this.font.glyphMap[WhitespaceMap[NEWLINE]];
@@ -158,7 +160,9 @@ export default class TextViewer {
             buffer.width = width;
             buffer.height = height;
         });
-
+    }
+    protected redraw() {
+        this.resize();
         this.renderText();
         this.renderSelectionAndTextColour();
         this.renderCursors();
@@ -182,8 +186,8 @@ export default class TextViewer {
         }
 
         this.outputContext.drawImage(this.cursorBuffer, 0, 0);
-        this.dest.canvas.width = width;
-        this.dest.canvas.height = height;
+        this.dest.canvas.width = this.outputBuffer.width;
+        this.dest.canvas.height = this.outputBuffer.height;
         this.dest.transferFromImageBitmap(this.outputBuffer.transferToImageBitmap());
     }
 
