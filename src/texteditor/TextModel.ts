@@ -56,8 +56,8 @@ export class TextModel extends EventTarget {
     protected _text = "";
     /** Glyphs and cursors for every line plus an extra 'glyph' position at the end of each line with a null glyph and the location where the line ends */
     protected glyphs: GlyphPosition[][] = [[DEFAULT_CURSOR]];
-    private _caret = DEFAULT_CURSOR;
-    private anchor: Cursor|null = null;
+    protected _caret = DEFAULT_CURSOR;
+    protected anchor: Cursor|null = null;
     private _selections: Selection[] = [];
     private history: UndoBuffer<TextState> = new UndoBuffer<TextState>(this.getState());
 
@@ -79,7 +79,7 @@ export class TextModel extends EventTarget {
         this._text = newValue.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
         this.lines = this._text.split("\n");
         this.layoutGlyphs();
-        this.setCaret(DEFAULT_CURSOR);
+        this.selectNone();
     }
     public get text() {
         return this._text;
@@ -125,6 +125,10 @@ export class TextModel extends EventTarget {
     public selectAll() {
         this.anchor = DEFAULT_CURSOR;
         this.setCaret(this.cursorAtEOF(), true);
+    }
+    public selectNone() {
+        this.anchor = null;
+        this.setCaret(DEFAULT_CURSOR);
     }
     public setCaretToCoord(coord: Coord, extendSelection = false) {
         const cursor = this.cursorFromCoord(coord);
@@ -298,7 +302,7 @@ export class TextModel extends EventTarget {
             this.anchor.c > this._caret.c ? this.anchor : this._caret
         );
     }
-    private updateSelections() {
+    protected updateSelections() {
         this._selections = [];
         if(this.anchor !== null) {
             const [start, end] = [this.selectionStart, this.selectionEnd];
@@ -379,7 +383,7 @@ export class TextModel extends EventTarget {
         else if(col >= this.glyphs[row].length) return this.glyphs[row].at(-1)!;
         else return this.glyphs[row][col];
     }
-    private cursorFromC(c: number): Cursor {
+    protected cursorFromC(c: number): Cursor {
         if(c <= 0) return this.glyphs[0][0];
         for(const g of this) {
             if(g.c === c) return g;

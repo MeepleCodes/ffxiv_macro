@@ -73,8 +73,12 @@ class GlyphController implements Controller, EventListenerObject {
     }
 
     private mouseMoved(ev: MouseEvent) {
-        const g = this.model.glyphUnderCoord(this.element.getCanvasOffset);
-        
+        const g = this.model.glyphUnderCoord(this.element.coordFromMouseEvent(ev));
+        if(g) {
+            this.model.selectGlyph(g);
+        } else {
+            this.model.selectNone();
+        }
     }
 
 }
@@ -125,6 +129,12 @@ class GlyphModel extends TextModel {
         });
 
         this.dispatchEvent(new Event("change"));
+    }
+    public selectGlyph(gp: GlyphPosition) {
+        this.anchor = gp;
+        this._caret = this.cursorFromC(gp.c + 1);
+        this.updateSelections();
+
     }
     public getBoundingBox(): {width: number, height: number} {
         return {

@@ -151,24 +151,11 @@ export default class TextController implements EventListenerObject, Controller {
     - Create the drag image by slicing out of the canvas around the selection
     */
 
-    /**
-     * Apply scrolling and offsets to turn a mouse event (over the whole element) into
-     * coordinates relative to the top/left of the drawing canvas.
-     * 
-     * @param ev MouseEvent
-     */
-    private coordFromMouseEvent(ev: MouseEvent): Coord {
-        const [leftOffset, topOffset] = this.element.getCanvasOffset();
-        return {
-            x: ev.offsetX + leftOffset,
-            y: ev.offsetY + topOffset
-        }
-    }
 
     @Handler("mousedown")
     protected mouseDowned(ev: MouseEvent) {
         if(ev.button === 0){
-            const coord = this.coordFromMouseEvent(ev);
+            const coord = this.element.coordFromMouseEvent(ev);
             if(!this.model.isInSelection(coord)) {
                 logger.debug("Mousedown, moving caret", ev.shiftKey);
                 this.model.setCaretToCoord(coord, ev.shiftKey);
@@ -180,7 +167,7 @@ export default class TextController implements EventListenerObject, Controller {
     protected mouseUpped(ev: MouseEvent) {
         if(ev.button === 0 && !this.dragging) {
             logger.debug("Mouseup, ending selecting", ev.shiftKey);
-            this.model.setCaretToCoord(this.coordFromMouseEvent(ev), ev.shiftKey || this.selecting);
+            this.model.setCaretToCoord(this.element.coordFromMouseEvent(ev), ev.shiftKey || this.selecting);
             this.selecting = false;
         }
     }
@@ -190,7 +177,7 @@ export default class TextController implements EventListenerObject, Controller {
             this.dragging = false;
             this.selecting = false;
         } else if(this.selecting) {
-            const coord = this.coordFromMouseEvent(ev);
+            const coord = this.element.coordFromMouseEvent(ev);
             log.debug("Mouse moving selection to", coord, "from", ev.offsetX, ev.offsetY);
             this.model.setCaretToCoord(coord, true);
         }
@@ -237,7 +224,7 @@ export default class TextController implements EventListenerObject, Controller {
         // dragover targets (there's no precise way to ensure this but it seems
         // safe). In which case, only show an insertion cursor if the mouse
         // isn't over the selection (which we're trying to drag)
-        const coord = this.coordFromMouseEvent(ev);
+        const coord = this.element.coordFromMouseEvent(ev);
         if(!this.dragging || !this.model.isInSelection(coord)) {
             this.viewer.insertionCursor = this.model.cursorFromCoord(coord);
             if(ev.dataTransfer) ev.dataTransfer.dropEffect = ev.ctrlKey ? "copy" : "move";
@@ -251,7 +238,7 @@ export default class TextController implements EventListenerObject, Controller {
     protected dropped(ev: DragEvent) {
         // If we dropped on ourself without leaving our own selection,
         // abort to avoid moving
-        const coord = this.coordFromMouseEvent(ev);
+        const coord = this.element.coordFromMouseEvent(ev);
         if(this.dragging && this.model.isInSelection(coord)) {
             ev.preventDefault();
         } else {

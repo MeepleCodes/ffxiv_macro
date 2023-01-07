@@ -1,6 +1,6 @@
 import { Font, isRawFont } from "./Font";
 import TextController, { Controller } from "./TextController";
-import { Cursor, TextModel } from "./TextModel";
+import { Coord, Cursor, TextModel } from "./TextModel";
 import TextViewer from "./TextViewer";
 
 const STYLESHEET = `
@@ -212,6 +212,20 @@ export class BaseTextElement extends HTMLElement {
             this.scrollLeft - offsetLeft,
             this.scrollTop - offsetTop
         ];
+    }
+    
+    /**
+     * Apply scrolling and offsets to turn a mouse event (over the whole element) into
+     * coordinates relative to the top/left of the drawing canvas.
+     * 
+     * @param ev MouseEvent
+     */
+    public coordFromMouseEvent(ev: MouseEvent): Coord {
+        const [leftOffset, topOffset] = this.getCanvasOffset();
+        return {
+            x: ev.offsetX + leftOffset,
+            y: ev.offsetY + topOffset
+        }
     }
     protected getStyle() {
         return STYLESHEET;
