@@ -10,6 +10,7 @@ import HTMLTextEditorElement from "./texteditor/TextEditor";
 import { Glyph, GlyphPage } from './texteditor/Font';
 import font from './axis-12-lobby.json';
 import spritesheet from './res/axis-12-lobby.png'
+import GlyphViewerReact from "./glyphviewer/GlyphViewerReact";
 
 const glyphPages: GlyphPage[] = [{name: 'Latin etc', start: 0, end: 0x2FFF, glyphs: []}, {name: "CJK", start: 0x3000, end: 0xDFFF, glyphs: []}, {name: "Private", start: 0xE000, end: 0xFFFF, glyphs: []}]
 for(let glyph of font.glyphs.slice(1)) {
@@ -21,6 +22,7 @@ for(let glyph of font.glyphs.slice(1)) {
 }
 type GlyphPickerProps = CardProps & {
     editorRef: RefObject<HTMLTextEditorElement>;
+    fontsrc: string;
 };
 export type GlyphProps = {editorRef: RefObject<HTMLTextEditorElement>, glyph: Glyph};
 export function GlyphP({editorRef, glyph}: GlyphProps) {
@@ -52,7 +54,7 @@ export function GlyphImg({editorRef, glyph}: GlyphProps) {
 }
 
 export default function GlyphPicker(props: GlyphPickerProps) {
-    const {editorRef, ...rest} = props;
+    const {editorRef, fontsrc, ...rest} = props;
 	let [tab, setTab] = useState<number>(0);
     return <Card {...rest}>
         <CardHeader>
@@ -69,7 +71,8 @@ export default function GlyphPicker(props: GlyphPickerProps) {
             </Tabs>
         </CardHeader>
         <CardContent sx={{maxWidth: 400, maxHeight: 400, overflow: "auto"}}>
-        {glyphPages[tab].glyphs.map(g => <GlyphP editorRef={editorRef} glyph={g} key={g.codepoint}/>)}
+            <GlyphViewerReact value={glyphPages[tab].glyphs.join("")} fontsrc={fontsrc}/>
+        {/* {glyphPages[tab].glyphs.map(g => <GlyphP editorRef={editorRef} glyph={g} key={g.codepoint}/>)} */}
         </CardContent>
     </Card>
 }
