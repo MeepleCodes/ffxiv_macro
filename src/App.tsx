@@ -183,7 +183,7 @@ function App() {
 						
 					</CardActions>
 					</Card>
-					<GlyphPicker editorRef={ref} />
+					<GlyphPicker editorRef={ref} fontsrc=/>
 					<Card>
 						<GlyphViewerReact fontsrc={fontSources[font].src} value="1234"/>
 					</Card>
