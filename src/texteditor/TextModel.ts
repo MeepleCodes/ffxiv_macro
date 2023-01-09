@@ -24,6 +24,9 @@ export interface Selection {
     y: number;
     w: number;
     h: number;
+    c: number;
+    length: number;
+    text: string;
 }
 
 export enum CursorDirection {
@@ -56,7 +59,10 @@ export class TextModel extends EventTarget {
     protected _text = "";
     /** Glyphs and cursors for every line plus an extra 'glyph' position at the end of each line with a null glyph and the location where the line ends */
     protected glyphs: GlyphPosition[][] = [[DEFAULT_CURSOR]];
+    /** The 'main' (only in non-column mode) caret which defines one end of the selection box or strip */
     protected _caret = DEFAULT_CURSOR;
+    /** All carets we render and/or insert text at. Outside of column mode, this is just _caret above. */
+    protected _allCarets: Cursor[] = [DEFAULT_CURSOR];
     protected anchor: Cursor|null = null;
     private _selections: Selection[] = [];
     private history: UndoBuffer<TextState> = new UndoBuffer<TextState>(this.getState());
@@ -88,21 +94,30 @@ export class TextModel extends EventTarget {
     public get caret() {
         return this._caret;
     }
+    public get allCarets() {
+        return this._allCarets;
+    }
     public get selections() {
         return [...this._selections];
     }
     public getSelectionLength(): number {
-        return this.selectionEnd.c - this.selectionStart.c;
+        return this.selections.reduce((v, s) => v + s.length, 0);
     }
     public getSelectionWidth(): number {
         return this.selections.reduce((total, selection) => total + selection.w, 0);
     }
     public getSelectedText(): string|null {
         if(this.anchor === null) return null;
-        return this._text.slice(this.selectionStart.c, this.selectionEnd.c);
+        return this.selections.reduce<string|null>((v, s) => v === null ? s.text : `${v}\n${s.text}`, null);
     }
     public isInSelection(coord: Coord) {
         return this.selections.some(s => s.x <= coord.x && s.x + s.w >= coord.x && s.y <= coord.y && s.y + s.h >= coord.y);
+    }
+    public hasSelection() {
+        return this.getSelectionLength() > 0;
+    }
+    public columnSelection() {
+        return this.allCarets.length > 1;
     }
     [Symbol.iterator]() {
         return this.glyphs.flat(1)[Symbol.iterator]();
@@ -131,10 +146,10 @@ export class TextModel extends EventTarget {
         this.anchor = null;
         this.setCaret(DEFAULT_CURSOR);
     }
-    public setCaretToCoord(coord: Coord, extendSelection = false) {
+    public setCaretToCoord(coord: Coord, extendSelection = false, columnMode = false) {
         const cursor = this.cursorFromCoord(coord);
         logger.debug("Setting caret to", cursor, "from", coord);
-        this.setCaret(cursor, extendSelection);
+        this.setCaret(cursor, extendSelection, columnMode);
     }
     public moveCaret(direction: CursorDirection, distance: MoveDistance, extendSelection = false) {
         const moveFrom: Cursor = (!extendSelection && this.anchor !== null) ? (
@@ -194,15 +209,60 @@ export class TextModel extends EventTarget {
         }
         this.setCaret(newCursor, extendSelection);
     }
-    public insert(text: string, batch = false) {
+    /**
+     * Delete all selected text, calling setText() with what remains.
+     * 
+     * If there are multiple cursors (and therefor multiple discrete selections),
+     * they are assumed to be non-overlapping and in order.
+     */
+    private sliceSelection(text: string = "") {
         text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
-        // The new cursor position will always be after the inserted text
-        const newC = this.selectionStart.c + [...text].length;
-        this.setText(this.getPreSelection()
-             + text
-             + this.getPostSelection());
-        this._caret = this.cursorFromC(newC);
-        this.anchor = null;
+        let newAnchorC, replacement, newCaret;
+        const columnMode = this.columnSelection();
+        if(!columnMode) {
+            newAnchorC = null;
+            replacement = text;
+        } else {
+            const textLines = text.split("\n");
+            if(textLines.length === this.allCarets.length) {
+                replacement = (i:number) => textLines[i];
+            } else {
+                replacement = text;
+            }
+            newAnchorC = this.selectionStart.c + textLines[0].length;
+        }
+
+        if(!this.hasSelection() && replacement === "") {
+            // No selection, no replacement text - actually a no-op
+            newCaret = this._caret;
+        } else if(!this.columnSelection) {
+            // Either a selection, or some insertion text, but not column mode
+            // Use start/end of selection rather than the individual selection rectangles
+            const insert = replacement instanceof Function ? replacement(0) : replacement;
+            const newC = this._caret.c + replacement.length;
+            this.setText(this.text.substring(0, this._caret.c) + insert + this.text.substring(this._caret.c));
+            newCaret = this.cursorFromC(newC);
+        } else {
+            // Complex case: take chunks before and after each selection
+            let newText = "";
+            let lastEnd = 0;
+            for(const [i, s] of this.selections.entries()) {
+                const insert = replacement instanceof Function ? replacement(i) : replacement;
+                newText += this.text.substring(lastEnd, s.c) + insert;
+                lastEnd = s.c;
+            }
+            // The cursor will be at the end of the last splice location
+            const newC = newText.length;
+            newText += this.text.substring(lastEnd);
+            this.setText(newText);
+            newCaret = this.cursorFromC(newC);
+        }
+        this.anchor = newAnchorC !== null ? this.cursorFromC(newAnchorC) : null;
+        this.setCaret(newCaret, columnMode, columnMode);
+    }
+
+    public insert(text: string, batch = false) {
+        this.sliceSelection(text);
         this.history.save(this.getState(UndoType.INSERT), !batch && text.trim().length !== 0); 
     }
     /**
@@ -217,25 +277,59 @@ export class TextModel extends EventTarget {
      */
     public delete(direction: CursorDirection = CursorDirection.Forward, bypassUndo = false) {
         let canReplace = true;
-        if(this.anchor !== null) {
-            const newCursor = this.selectionStart;
-            this.setText(this.getPreSelection() + this.getPostSelection());
-            this.setCaret(newCursor);
+        if(this.hasSelection()) {
+            this.sliceSelection();
             canReplace = false;
-        } else if(direction === CursorDirection.Forward) {
-            const newCursor = this.caret;
-            this.setText(this.getPreSelection() + this.getPostSelection().substring(1));
-            // Force a new cursor value even though it's not changed as this will
-            // reset cursorX to the actual position
-            this.setCaret(newCursor);
+        } else if(!this.columnSelection) {
+            if(direction === CursorDirection.Forward) {
+                const newCursor = this.caret;
+                this.setText(this.getPreSelection() + this.getPostSelection().substring(1));
+                // Force a new cursor value even though it's not changed to recalculate selections
+                this.setCaret(this._caret);
+            } else {
+                const newC = Math.max(0, this.caret.c - 1);
+                this.setText(this.getPreSelection().substring(0, newC) + this.getPostSelection());
+                this.setCaret(this.cursorFromC(newC));
+
+            }
+            // Clear the selection
+            this.anchor = null;            
         } else {
-            
-            const newCursor = this.cursorFromC(Math.max(0, this.caret.c - 1));
-            this.setText(this.getPreSelection().substring(0, newCursor.c) + this.getPostSelection());
-            this.setCaret(newCursor);
+            // Complex case: take chunks before and after each selection
+            let newText = "";
+            let lastEnd = 0;
+            let newAnchor = null;
+            console.log("Performing complicated delete");
+            for(const c of this.allCarets) {
+                let sliceTo, sliceFrom;
+                console.log("Considering caret", c);
+                if(direction === CursorDirection.Forward) {
+                    sliceTo = c.c;
+                    
+                    // Can't delete forward past the end of the line, so no-op
+                    sliceFrom = c.col === this.glyphs[c.row].length-1 ? c.c : c.c + 1;
+                    console.log("Deleting forward, added text up to", sliceTo, "next section starts at ", sliceFrom);
+                } else {
+                    sliceFrom = c.c;
+                    // Likewise, can't backspace past the start of a line, so no-op
+                    sliceTo = c.col === 0 ? c.c : c.c - 1;
+                    console.log("Deleting backward, added text up to", sliceTo, "next section starts at ", sliceFrom);
+                }
+                if(newAnchor === null) {
+                    console.log("No anchor yet, will use", sliceTo);
+                    newAnchor = sliceTo;
+                }
+                newText += this.text.substring(lastEnd, sliceTo);
+                lastEnd = sliceFrom;
+            }
+            // The cursor will be at the end of the last splice location
+            const newC = newText.length;
+            newText += this.text.substring(lastEnd);
+            this.setText(newText);
+            this.anchor = this.cursorFromC(newAnchor || 0);
+            this.setCaret(this.cursorFromC(newC), true, true);
         }
-        // Clear the selection
-        this.anchor = null;
+
         if(!bypassUndo) this.history.save(this.getState(UndoType.DELETE), canReplace);
     }
 
@@ -252,6 +346,7 @@ export class TextModel extends EventTarget {
     private getPostSelection() {
         return [...this.text].slice(this.selectionEnd.c).join("");
     }
+
 
     /**
      * 
@@ -290,9 +385,6 @@ export class TextModel extends EventTarget {
 
         this.dispatchEvent(new Event("change"));
     }
-    private getLineWidth(line: number): number {
-        return this.glyphs[line].at(-1)!.x;
-    }
     private get selectionStart(): Cursor {
         return this.anchor === null ? this._caret : (
             this.anchor.c > this._caret.c ? this._caret : this.anchor
@@ -303,18 +395,34 @@ export class TextModel extends EventTarget {
             this.anchor.c > this._caret.c ? this.anchor : this._caret
         );
     }
-    protected updateSelections() {
+    protected updateSelections(columnMode = false) {
         this._selections = [];
+        this._allCarets = [];
+        if(!columnMode) this._allCarets = [this._caret];
         if(this.anchor !== null) {
             const [start, end] = [this.selectionStart, this.selectionEnd];
             for(let row = start.row; row<=end.row; row++) {
-                const x = row === start.row ? start.x : 0;
-                this._selections.push({
-                    x,
-                    y: this.font.lineHeight * row,
-                    w: (row === end.row ? end.x : this.getLineWidth(row) + EOL_SELECTION_MARGIN) - x,
-                    h: this.font.lineHeight
-                });
+                const y = this.font.lineHeight * row;
+                const h = this.font.lineHeight;
+                const rowStart = row === start.row ? 
+                    start :
+                    (columnMode ? 
+                        this.cursorFromCoord({x: start.x, y}) : 
+                        this.glyphs[row][0]
+                    );
+                const rowEnd = row === end.row ?
+                    end :
+                    (columnMode ? 
+                        this.cursorFromCoord({x: end.x, y}) :
+                        this.glyphs[row].at(-1)!
+                    );
+                const x = rowStart.x;
+                const w = rowEnd.col === this.glyphs[row].length - 1 ? rowEnd.x - x + EOL_SELECTION_MARGIN : rowEnd.x - x;
+                const length = rowEnd.c - rowStart.c;
+                const c = rowStart.c;
+                const text = this._text.slice(rowStart.c, rowEnd.c);
+                this._selections.push({x, y, w, h, c, length, text});
+                if(columnMode) this._allCarets.push(rowEnd);
             }
         }
         this.dispatchEvent(new Event("selectionchange"));
@@ -392,15 +500,14 @@ export class TextModel extends EventTarget {
         return this.glyphs.at(-1)!.at(-1)!;
     }
     
-    private setCaret(newValue: Cursor, extendSelection = false) {
-        logger.debug("Setting caret to", newValue,extendSelection ? "with" : "without", "extending selection");
+    private setCaret(newValue: Cursor, extendSelection = false, columnMode = false) {
         if(extendSelection && this.anchor === null && newValue.c !== this._caret.c) {
             this.anchor = {...this._caret};
         } else if(!extendSelection || newValue.c === this.anchor?.c) {
             this.anchor = null;
         }
         this._caret = newValue;
-        this.updateSelections();
+        this.updateSelections(columnMode);
     }
     private getState(type: UndoType | null = null): TextState {
         return {

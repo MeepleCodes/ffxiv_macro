@@ -158,7 +158,7 @@ export default class TextController implements EventListenerObject, Controller {
             const coord = this.element.coordFromMouseEvent(ev);
             if(!this.model.isInSelection(coord)) {
                 logger.debug("Mousedown, moving caret", ev.shiftKey);
-                this.model.setCaretToCoord(coord, ev.shiftKey);
+                this.model.setCaretToCoord(coord, ev.shiftKey, ev.altKey);
                 this.selecting = true;
             }
         }
@@ -167,7 +167,7 @@ export default class TextController implements EventListenerObject, Controller {
     protected mouseUpped(ev: MouseEvent) {
         if(ev.button === 0 && !this.dragging) {
             logger.debug("Mouseup, ending selecting", ev.shiftKey);
-            this.model.setCaretToCoord(this.element.coordFromMouseEvent(ev), ev.shiftKey || this.selecting);
+            this.model.setCaretToCoord(this.element.coordFromMouseEvent(ev), ev.shiftKey || this.selecting, ev.altKey);
             this.selecting = false;
         }
     }
@@ -179,7 +179,7 @@ export default class TextController implements EventListenerObject, Controller {
         } else if(this.selecting) {
             const coord = this.element.coordFromMouseEvent(ev);
             log.debug("Mouse moving selection to", coord, "from", ev.offsetX, ev.offsetY);
-            this.model.setCaretToCoord(coord, true);
+            this.model.setCaretToCoord(coord, true, ev.altKey);
         }
     }
     @Handler("dragstart")

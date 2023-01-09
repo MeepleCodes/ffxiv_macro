@@ -5,6 +5,7 @@ import { FileList, StoreContextProvider, SaveIconButton, SimpleFileName } from '
 import GlyphPicker from './GlyphPicker';
 
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import ToggleButton from '@mui/material/ToggleButton';
 import Card from '@mui/material/Card';
 import IconButton from '@mui/material/IconButton';
@@ -128,6 +129,14 @@ function App() {
 					</Stack>
 
 					<Box sx={{flexGrow: 1}}/>
+					<Button sx={{color: 'white'}} onClick={() => navigator.clipboard.read().then(items => {
+						console.log("Clipboard currently contains", items);
+						items.forEach(item => {
+							item.types.forEach(t => {
+								item.getType(t).then(b => b.text()).then(txt => console.log(t, ":", txt));
+							})
+						})
+					})}>Hello?!</Button>
 					<ToggleButton
 						value="show whitespace"
 						size="small"

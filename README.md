@@ -30,10 +30,13 @@ Vague list of features still to implement
 - Add the Lodestone's icon font to the page so we can render it in title fields, input boxes etc
   (not usable for everything because it's *only* the private codepage and they don't put out the rest of Axis, so all other charcaters are wrong)
 [x] Text colour
-- Optimise rendering
-  - Only render what's changed
+[x] Optimise rendering
+  [x] Only render what's changed
   - Do a full redraw on requestAnimationFrame but only redraw if needed (would get around not being able to spot CSS changes)
 - Column-mode selection, multiple selections
+  - Copy/paste gets interesting. Desired/imitated behaviour:
+    - Paste with no selection: insert first row of clipboard data at current caret, each subsequent row in the same column further down
+    - Paste with active selection: delete all active selections, then paste as if no selection above
 [x] Refactor TextEditor/TextModel more thoroughly into MVC split
   [x] Model knows about glyphs and pixels
   [x] View is just the canvas/render stuff
@@ -59,7 +62,8 @@ Vague list of features still to implement
 - Ctrl-B to cycle between thin and thick lines within selection
 - Glyph browser page?
 - Command to attempt to increase or decrease the length of a selection by replacing spaces/wide spaces
-- Replace character picker with a canvas-based solution
+[x] Replace character picker with a canvas-based solution
+  - Drag/drop still needed on new glyph picker
 [x] Tooltips on character picker to show glyph dimensions
 [x] Split App.tsx up into components
   [x] Make a proper React component wrapper around text-editor

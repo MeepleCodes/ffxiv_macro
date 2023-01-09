@@ -152,17 +152,21 @@ export default class TextView {
         this.cursorContext.strokeStyle = this.textStyle.color;
         this.cursorContext.lineWidth = 1;
         if(this._caretVisible) {
-            this.cursorContext.setLineDash([]);
-            this.cursorContext.beginPath();
-            this.cursorContext.moveTo(this.model.caret.x + 1, this.model.caret.y);
-            this.cursorContext.lineTo(this.model.caret.x + 1, this.model.caret.y + this.font.lineHeight);
-            this.cursorContext.stroke();            
+            
+            for(const c of this.model.allCarets) {
+                if(c === this.model.caret) this.cursorContext.setLineDash([]);
+                else this.cursorContext.setLineDash([1]);
+                this.cursorContext.beginPath();
+                this.cursorContext.moveTo(c.x + 0.5, c.y);
+                this.cursorContext.lineTo(c.x + 0.5, c.y + this.font.lineHeight);
+                this.cursorContext.stroke();            
+            }
         }
         if(this._insertionCursor !== null) {
             this.cursorContext.setLineDash([2]);
             this.cursorContext.beginPath();
-            this.cursorContext.moveTo(this._insertionCursor.x + 1, this._insertionCursor.y);
-            this.cursorContext.lineTo(this._insertionCursor.x + 1, this._insertionCursor.y + this.font.lineHeight);
+            this.cursorContext.moveTo(this._insertionCursor.x + 0.5, this._insertionCursor.y);
+            this.cursorContext.lineTo(this._insertionCursor.x + 0.5, this._insertionCursor.y + this.font.lineHeight);
             this.cursorContext.stroke();
         }        
     }
@@ -181,7 +185,6 @@ export default class TextView {
         });
     }
     protected redraw(text = true, selection = true, cursor = true) {
-        console.log("Redraw of", text, selection, cursor);
         // Redrawing the text will *always* redraw everything else because a)
         // the position of things might change and b) the canvas is getting
         // resized
