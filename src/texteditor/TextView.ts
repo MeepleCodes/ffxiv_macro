@@ -65,7 +65,7 @@ export default class TextView {
         this.redraw();
     }
     public getThumbnail(): Promise<Blob> {
-        const drawto = new HTMLCanvasElement();
+        const drawto = document.createElement("canvas");
         [drawto.width, drawto.height] = [this.textBuffer.width, this.textBuffer.height];
         drawto.getContext("2d")!.drawImage(this.textBuffer.transferToImageBitmap(), 0, 0);
         return new Promise<Blob>((resolve, reject) => drawto.toBlob((blob) => blob !== null ? resolve(blob) : reject));
@@ -170,13 +170,17 @@ export default class TextView {
         });
     }
     protected redraw(text = true, selection = true, cursor = true) {
+        // Redrawing the text will *always* redraw everything else because a)
+        // the position of things might change and b) the canvas is getting
+        // resized
+        // TODO: Make the booleans make more sense then
         if(text) {
             // Size only changes if the text does
             this.resize();
             this.renderText();
         }
-        if(selection) this.renderSelectionAndTextColour(text);
-        if(cursor) this.renderCursors(text);
+        if(selection || text) this.renderSelectionAndTextColour(text);
+        if(cursor || text) this.renderCursors(text);
         this.colourAndCompose();
     }
     protected colourAndCompose() {
