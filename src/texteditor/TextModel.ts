@@ -127,6 +127,7 @@ export class TextModel extends EventTarget {
         this.setCaret(this.cursorAtEOF(), true);
     }
     public selectNone() {
+        if(this.anchor === null && this.caret === DEFAULT_CURSOR) return;
         this.anchor = null;
         this.setCaret(DEFAULT_CURSOR);
     }

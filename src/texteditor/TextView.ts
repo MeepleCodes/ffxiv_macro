@@ -67,7 +67,10 @@ export default class TextView {
     public getThumbnail(): Promise<Blob> {
         const drawto = document.createElement("canvas");
         [drawto.width, drawto.height] = [this.textBuffer.width, this.textBuffer.height];
-        drawto.getContext("2d")!.drawImage(this.textBuffer.transferToImageBitmap(), 0, 0);
+        // Don't use transferTo/FromImageBitmap, even though it seems 'correct',
+        // as it wipes the source canvas and we'd have to redraw the text from
+        // scratch
+        drawto.getContext("2d")?.drawImage(this.textBuffer, 0, 0);
         return new Promise<Blob>((resolve, reject) => drawto.toBlob((blob) => blob !== null ? resolve(blob) : reject));
     }
     //#endregion
@@ -87,9 +90,6 @@ export default class TextView {
         const EOL = this.font.glyphMap[WhitespaceMap[NEWLINE]];
         // Whitespace drawn normally, we'll use source-in later to recolour
         this.whitespaceContext.globalCompositeOperation="source-over";
-        // It would be nice to use a custom pseudo-element to style this, but they don't exist yet
-        // TODO: Could use a CSC --custom-property instead?
-        this.whitespaceContext.fillStyle = "rgba(0,0,0,0.25)";
         for(const gp of this.model) {
             if(gp.glyph) {
                 this.drawGlyph(this.textContext, gp.glyph, gp);
@@ -100,6 +100,13 @@ export default class TextView {
             } else if(this.showWhitespace) {
                 this.drawGlyph(this.whitespaceContext, EOL, gp);
             }
+        }
+        if(this.showWhitespace) {
+            // Recolour the black/alpha whitespace buffer in place
+            // TODO: Use a CSS --custom-property for this style
+            this.whitespaceContext.fillStyle = "rgba(0,0,0,0.25)";            
+            this.whitespaceContext.globalCompositeOperation = "source-in";
+            this.whitespaceContext.fillRect(0, 0, this.whitespaceBuffer.width, this.whitespaceBuffer.height);        
         }
     }
 
@@ -126,7 +133,11 @@ export default class TextView {
             this.textColourContext.fillRect(sel.x, sel.y, sel.w, sel.h);
             this.selectContext.fillRect(sel.x, sel.y, sel.w, sel.h);
         }
-
+        // Use the text buffer to mask the text colour buffer. If we do it this
+        // way around we can keep textBuffer as a black + white (or black +
+        // transparent) version which is then available for thumbnails etc.
+        this.textColourContext.globalCompositeOperation="destination-in";
+        this.textColourContext.drawImage(this.textBuffer, 0, 0);
     }
 
     /**
@@ -170,6 +181,7 @@ export default class TextView {
         });
     }
     protected redraw(text = true, selection = true, cursor = true) {
+        console.log("Redraw of", text, selection, cursor);
         // Redrawing the text will *always* redraw everything else because a)
         // the position of things might change and b) the canvas is getting
         // resized
@@ -181,25 +193,13 @@ export default class TextView {
         }
         if(selection || text) this.renderSelectionAndTextColour(text);
         if(cursor || text) this.renderCursors(text);
-        this.colourAndCompose();
+        this.compose();
     }
-    protected colourAndCompose() {
-
-        // Use the text buffer to mask the text colour buffer. If we do it this
-        // way around we can keep textBuffer as a black + white (or black +
-        // transparent) version which is then available for thumbnails etc.
-        this.textColourContext.globalCompositeOperation="destination-in";
-        this.textColourContext.drawImage(this.textBuffer, 0, 0);
-
+    protected compose() {
         // Layer the buffers onto the output canvas
         this.outputContext.drawImage(this.selectBuffer, 0, 0);
         this.outputContext.drawImage(this.textBuffer, 0, 0);
-        
-        
         if(this.showWhitespace) {
-            // Recolour the black/alpha whitespace buffer in place
-            this.whitespaceContext.globalCompositeOperation = "source-in";
-            this.whitespaceContext.fillRect(0, 0, this.whitespaceBuffer.width, this.whitespaceBuffer.height);
             this.outputContext.drawImage(this.whitespaceBuffer, 0, 0);
         }
 

@@ -200,7 +200,7 @@ class GlyphView extends TextView {
      * Override the default composition as we've stolen the whitespace buffer
      * and repurposed it to render the background of each glyph.
      */
-    protected colourAndCompose() {
+    protected compose() {
 
         // Use the text buffer to mask the text colour buffer. If we do it this
         // way around we can keep textBuffer as a black + white (or black +
