@@ -39,20 +39,21 @@ export default class TextView {
         protected _showWhitespace = false) {
         // TODO: These *could* redraw subsets
         model.addEventListener("change", e => this.redraw());
-        model.addEventListener("selectionchange", e => this.redraw());
+        model.addEventListener("selectionchange", e => this.redraw(false, true, true));
         this.redraw();
     }
     //#region Public API
     public set caretVisible(newValue: boolean) {
         this._caretVisible = newValue;
-        this.redraw();
+        this.redraw(false, false, true);
     }
     public set insertionCursor(newValue: Cursor|null) {
         this._insertionCursor = newValue;
-        this.redraw();
+        this.redraw(false, false, true);
     }
     public set showWhitespace(newValue: boolean) {
         this._showWhitespace = newValue;
+        // TODO: We could pull this to its own redraw subset, if we really wanted
         this.redraw();
     }
     public get showWhitespace() {
@@ -110,7 +111,11 @@ export default class TextView {
      * separate buffer - it will be textStyle.color everywhere except within the
      * selection where it will be selectionStyle.color.
      */
-    protected renderSelectionAndTextColour() {
+    protected renderSelectionAndTextColour(alreadyCleared = false) {
+        if(!alreadyCleared) {
+            this.textColourContext.clearRect(0, 0, this.textColourBuffer.width, this.textColourBuffer.height);
+            this.selectContext.clearRect(0, 0, this.selectBuffer.width, this.selectBuffer.height);
+        }
         this.textColourContext.globalCompositeOperation="source-over";
         this.textColourContext.fillStyle = this.textStyle.color;
         this.textColourContext.fillRect(0, 0, this.textColourBuffer.width, this.textColourBuffer.height);
@@ -127,7 +132,10 @@ export default class TextView {
     /**
      * Render the caret and/or insertion cursors if they're current visible
      */
-    protected renderCursors() {
+    protected renderCursors(alreadyCleared = false) {
+        if(!alreadyCleared) {
+            this.cursorContext.clearRect(0, 0, this.cursorBuffer.width, this.cursorBuffer.height);
+        }
         // Cursor is drawn in text colour
         // TODO: Should use caret-color really
         this.cursorContext.strokeStyle = this.textStyle.color;
@@ -161,11 +169,17 @@ export default class TextView {
             buffer.height = height;
         });
     }
-    protected redraw() {
-        this.resize();
-        this.renderText();
-        this.renderSelectionAndTextColour();
-        this.renderCursors();
+    protected redraw(text = true, selection = true, cursor = true) {
+        if(text) {
+            // Size only changes if the text does
+            this.resize();
+            this.renderText();
+        }
+        if(selection) this.renderSelectionAndTextColour(text);
+        if(cursor) this.renderCursors(text);
+        this.colourAndCompose();
+    }
+    protected colourAndCompose() {
 
         // Use the text buffer to mask the text colour buffer. If we do it this
         // way around we can keep textBuffer as a black + white (or black +

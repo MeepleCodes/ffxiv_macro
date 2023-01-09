@@ -187,21 +187,20 @@ class GlyphView extends TextView {
             glyph.x, glyph.y, glyph.w, glyph.h,
             position.x + paddingLeft, position.y + glyph.top, glyph.w, glyph.h);
     }
-    renderGlyphBackgrounds() {
-        // Use the whitespace buffer, we don't otherwise need it
-        // TODO: Could refactor that out and push some of this into a common root
+    protected renderText() {
         this.whitespaceContext.fillStyle = this.textStyle.getPropertyValue("--glyph-background");
         for(const gp of this.model) {
             if(!gp.glyph) continue;
             const paddingLeft = Math.floor((this.font.maxWidth - (gp.glyph.w + gp.glyph.right))/2);
+            this.drawGlyph(this.textContext, gp.glyph, gp);
             this.whitespaceContext.fillRect(gp.x + paddingLeft, gp.y + gp.glyph.top, gp.glyph.w + gp.glyph.right, gp.glyph.h);
         }
     }
-    protected redraw() {
-        this.resize();
-        this.renderText();
-        this.renderSelectionAndTextColour();
-        this.renderGlyphBackgrounds();
+    /**
+     * Override the default composition as we've stolen the whitespace buffer
+     * and repurposed it to render the background of each glyph.
+     */
+    protected colourAndCompose() {
 
         // Use the text buffer to mask the text colour buffer. If we do it this
         // way around we can keep textBuffer as a black + white (or black +
