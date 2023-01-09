@@ -105,16 +105,12 @@ class GlyphModel extends TextModel {
         this.lines = [];
         // Respect supplied line breaks, but also hard wrap long lines
         for(let line of this._text.split("\n")) {
-            console.log("Considering", line, "length", line.length);
             while(line.length > this.cols) {
-                console.log("Wrapping long line into", line.substring(0, this.cols), line.substring(this.cols));
                 this.lines.push(line.substring(0, this.cols));
-                
                 line = line.substring(this.cols);
             }
             this.lines.push(line);
         }
-        console.log("Wrapping", newValue, " complete, laying out", this.lines);
         this.layoutGlyphs();
     }
     protected layoutGlyphs() {
@@ -150,6 +146,10 @@ class GlyphModel extends TextModel {
         this._caret = this.cursorFromC(gp.c + 1);
         this.updateSelections();
 
+    }
+    public getSelectedGlyph(): Glyph | undefined {
+        if(this.anchor && this.anchor.c + 1 === this._caret.c) return this.glyphs[this.anchor.row][this.anchor.col].glyph;
+        return undefined;
     }
     public getBoundingBox(): {width: number, height: number} {
         return {
@@ -247,6 +247,9 @@ export default class HTMLGlyphViewerElement extends BaseTextElement {
             this.removeAttribute("aria-role");
             this.removeAttribute("aria-multiline");
         }
+    }
+    public selectedGlyph(): Glyph | undefined {
+        return this.model?.getSelectedGlyph();
     }
 }
 export function installWebComponent() {

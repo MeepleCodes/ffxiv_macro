@@ -1,4 +1,4 @@
-import { RefObject, useState } from "react";
+import { MouseEvent, RefObject, useRef, useState } from "react";
 
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -10,7 +10,7 @@ import HTMLTextEditorElement from "./texteditor/TextEditor";
 import { Glyph, GlyphPage } from './texteditor/Font';
 import font from './axis-12-lobby.json';
 import spritesheet from './res/axis-12-lobby.png'
-import GlyphViewerReact from "./glyphviewer/GlyphViewerReact";
+import GlyphViewerReact, { HTMLGlyphViewerElement } from "./glyphviewer/GlyphViewerReact";
 
 const glyphPages: GlyphPage[] = [{name: 'Latin etc', start: 0, end: 0x2FFF, glyphs: []}, {name: "CJK", start: 0x3000, end: 0xDFFF, glyphs: []}, {name: "Private", start: 0xE000, end: 0xFFFF, glyphs: []}]
 for(let glyph of font.glyphs.slice(1)) {
@@ -55,7 +55,13 @@ export function GlyphImg({editorRef, glyph}: GlyphProps) {
 
 export default function GlyphPicker(props: GlyphPickerProps) {
     const {editorRef, fontsrc, ...rest} = props;
+    const ref = useRef<HTMLGlyphViewerElement>(null);
 	let [tab, setTab] = useState<number>(0);
+    const insertGlyph = (ev: MouseEvent) => {
+        const g = ref.current?.selectedGlyph();
+        console.log("Double clicked, want to insert glyph", g);
+        if(g) editorRef.current?.insert(String.fromCodePoint(g.codepoint));
+    }
     return <Card {...rest}>
         <CardHeader>
             <Tabs value={tab} onChange={(e, v) => setTab(v)}>
@@ -71,7 +77,7 @@ export default function GlyphPicker(props: GlyphPickerProps) {
             </Tabs>
         </CardHeader>
         <CardMedia sx={{minWidth: 400, maxHeight: (theme) => 432, overflowY: "scroll"}}>
-            <GlyphViewerReact value={glyphPages[tab].glyphs.map(g => String.fromCodePoint(g.codepoint)).join("")} fontsrc={fontsrc}/>
+            <GlyphViewerReact ref={ref} onDoubleClick={insertGlyph} value={glyphPages[tab].glyphs.map(g => String.fromCodePoint(g.codepoint)).join("")} fontsrc={fontsrc}/>
         {/* {glyphPages[tab].glyphs.map(g => <GlyphP editorRef={editorRef} glyph={g} key={g.codepoint}/>)} */}
         </CardMedia>
     </Card>
