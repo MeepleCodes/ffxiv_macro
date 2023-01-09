@@ -1,7 +1,7 @@
 import { Font, isRawFont } from "./Font";
 import TextController, { Controller } from "./TextController";
 import { Coord, Cursor, TextModel } from "./TextModel";
-import TextViewer from "./TextViewer";
+import TextView from "./TextView";
 
 const STYLESHEET = `
     :host {
@@ -77,7 +77,7 @@ export class BaseTextElement extends HTMLElement {
 
     
     protected model?: TextModel;
-    protected viewer?: TextViewer;
+    protected viewer?: TextView;
     protected controller?: Controller;
 
     
@@ -188,6 +188,7 @@ export class BaseTextElement extends HTMLElement {
     }
     public set value(newValue: string) {
         this._initialValue = newValue;
+        if(this.model) this.model.reset(newValue);
     }
 
     /**
@@ -297,7 +298,7 @@ export default class HTMLTextEditorElement extends BaseTextElement implements Ev
             this.viewer.setFont(this.font, this.fontTexture);
         } else {
             this.model = new TextModel(this.font, this._initialValue);
-            this.viewer = new TextViewer(this.model, this.font, this.fontTexture, this.context, this.textStyle!, this.selectStyle!, this.showWhitespace);
+            this.viewer = new TextView(this.model, this.font, this.fontTexture, this.context, this.textStyle!, this.selectStyle!, this.showWhitespace);
             this.controller = new TextController(this, this.model, this.viewer);
             this.controller.attach();
             this.model.addEventListener("selectionchange", this);

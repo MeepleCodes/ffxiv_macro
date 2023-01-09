@@ -2,7 +2,7 @@ import { Font, Glyph } from "../texteditor/Font";
 import { Controller } from "../texteditor/TextController";
 import { BaseTextElement } from "../texteditor/TextEditor";
 import { Coord, Cursor, GlyphPosition, TextModel } from "../texteditor/TextModel";
-import TextViewer from "../texteditor/TextViewer";
+import TextView from "../texteditor/TextView";
 const STYLESHEET = `
     :host {
         padding: 2px;
@@ -65,7 +65,7 @@ const STYLESHEET = `
       
 `;
 class GlyphController implements Controller, EventListenerObject {
-    constructor(private element: HTMLGlyphViewerElement, private model: GlyphModel, private viewer: TextViewer) {}
+    constructor(private element: HTMLGlyphViewerElement, private model: GlyphModel, private viewer: TextView) {}
     handleEvent(ev: Event): void {
         if(ev.type === "mousemove") this.mouseMoved(ev as MouseEvent);
         if(ev.type === "mouseout") this.mousedOut(ev as MouseEvent);
@@ -91,9 +91,13 @@ class GlyphController implements Controller, EventListenerObject {
     }
 }
 class GlyphModel extends TextModel {
-    private cols = 16;
-    constructor(private canvas: HTMLCanvasElement, font: Font, value: string) {
+    constructor(font: Font, value: string, private cols = 16) {
         super(font, value);
+        // Our own properties aren't defined until after the super call returns
+        // which means the setText call made during the super constructor ran
+        // with an undefined 'cols' value. So, run it again, only this time lay
+        // out properly. This feels...ugly
+        this.reset(value);
     }
     protected setText(newValue: string) {
         // Fix up any newline mess
@@ -101,8 +105,11 @@ class GlyphModel extends TextModel {
         this.lines = [];
         // Respect supplied line breaks, but also hard wrap long lines
         for(let line of this._text.split("\n")) {
+            console.log("Considering", line, "length", line.length);
             while(line.length > this.cols) {
+                console.log("Wrapping long line into", line.substring(0, this.cols), line.substring(this.cols));
                 this.lines.push(line.substring(0, this.cols));
+                
                 line = line.substring(this.cols);
             }
             this.lines.push(line);
@@ -138,6 +145,7 @@ class GlyphModel extends TextModel {
         this.dispatchEvent(new Event("change"));
     }
     public selectGlyph(gp: GlyphPosition) {
+        if(this.anchor === gp && this._caret.c === gp.c + 1) return;
         this.anchor = gp;
         this._caret = this.cursorFromC(gp.c + 1);
         this.updateSelections();
@@ -172,7 +180,7 @@ class GlyphModel extends TextModel {
     }
 }
 
-class GlyphView extends TextViewer {
+class GlyphView extends TextView {
     protected drawGlyph(context: OffscreenCanvasRenderingContext2D, glyph: Glyph, position: Cursor): void {
         const paddingLeft = Math.floor((this.font.maxWidth - (glyph.w + glyph.right))/2);
         context.drawImage(this.fontTexture,
@@ -223,7 +231,7 @@ export default class HTMLGlyphViewerElement extends BaseTextElement {
             this.model.setFont(this.font);
             this.viewer.setFont(this.font, this.fontTexture);
         } else {
-            this.model = new GlyphModel(this.canvas, this.font, this._initialValue);
+            this.model = new GlyphModel(this.font, this._initialValue);
             this.viewer = new GlyphView(this.model, this.font, this.fontTexture, this.context, this.textStyle!, this.selectStyle!, false);
             this.controller = new GlyphController(this, this.model, this.viewer);
             this.controller.attach();

@@ -71,7 +71,7 @@ export default function GlyphPicker(props: GlyphPickerProps) {
             </Tabs>
         </CardHeader>
         <CardContent sx={{maxWidth: 400, maxHeight: 400, overflow: "auto"}}>
-            <GlyphViewerReact value={glyphPages[tab].glyphs.join("")} fontsrc={fontsrc}/>
+            <GlyphViewerReact value={glyphPages[tab].glyphs.map(g => String.fromCodePoint(g.codepoint)).join("")} fontsrc={fontsrc}/>
         {/* {glyphPages[tab].glyphs.map(g => <GlyphP editorRef={editorRef} glyph={g} key={g.codepoint}/>)} */}
         </CardContent>
     </Card>

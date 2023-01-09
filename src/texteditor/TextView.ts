@@ -13,7 +13,7 @@ function hasWhitespace(codepoint: number): codepoint is keyof typeof WhitespaceM
     return codepoint in WhitespaceMap;
 }
 
-export default class TextViewer {
+export default class TextView {
     protected outputBuffer = new OffscreenCanvas(0, 0);
     protected outputContext = this.outputBuffer.getContext("2d") as OffscreenCanvasRenderingContext2D;
     protected selectBuffer = new OffscreenCanvas(0, 0);

@@ -1,6 +1,6 @@
 import HTMLTextEditorElement from "./TextEditor";
 import { Coord, CursorDirection, MoveDistance, TextModel } from "./TextModel";
-import TextViewer from "./TextViewer";
+import TextView from "./TextView";
 import log from 'loglevel';
 const logger = log.getLogger("TextController");
 
@@ -42,7 +42,7 @@ export default class TextController implements EventListenerObject, Controller {
     private intervalRef: ReturnType<typeof setInterval> | null = null;
     private dragImage = new Image();
 
-    constructor(private element: HTMLTextEditorElement, private model: TextModel, private viewer: TextViewer) {}
+    constructor(private element: HTMLTextEditorElement, private model: TextModel, private viewer: TextView) {}
     public attach() {
         for(const [event, eventMap] of Object.entries(EVENT_MAP)) {
             eventMap.source(this.element).addEventListener(event, this);
