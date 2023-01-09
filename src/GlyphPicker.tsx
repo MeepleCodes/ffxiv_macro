@@ -4,7 +4,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Card, {CardProps} from '@mui/material/Card';
 import CardHeader from '@mui/material/CardContent';
-import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
 
 import HTMLTextEditorElement from "./texteditor/TextEditor";
 import { Glyph, GlyphPage } from './texteditor/Font';
@@ -70,9 +70,9 @@ export default function GlyphPicker(props: GlyphPickerProps) {
             ))}
             </Tabs>
         </CardHeader>
-        <CardContent sx={{maxWidth: 400, maxHeight: 400, overflow: "auto"}}>
+        <CardMedia sx={{minWidth: 400, maxHeight: (theme) => 432, overflowY: "scroll"}}>
             <GlyphViewerReact value={glyphPages[tab].glyphs.map(g => String.fromCodePoint(g.codepoint)).join("")} fontsrc={fontsrc}/>
         {/* {glyphPages[tab].glyphs.map(g => <GlyphP editorRef={editorRef} glyph={g} key={g.codepoint}/>)} */}
-        </CardContent>
+        </CardMedia>
     </Card>
 }
