@@ -78,6 +78,7 @@ export class TextModel extends EventTarget {
     }
     public reset(text: string) {
         this.setText(text);
+        this.selectNone();
         this.history.reset(this.getState());
     }
     protected setText(newValue: string) {
@@ -85,7 +86,6 @@ export class TextModel extends EventTarget {
         this._text = newValue.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
         this.lines = this._text.split("\n");
         this.layoutGlyphs();
-        this.selectNone();
     }
     public get text() {
         return this._text;
@@ -217,51 +217,58 @@ export class TextModel extends EventTarget {
      */
     private sliceSelection(text: string = "") {
         text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
-        let newAnchorC, replacement, newCaret;
-        const columnMode = this.columnSelection();
-        if(!columnMode) {
-            newAnchorC = null;
-            replacement = text;
-        } else {
-            const textLines = text.split("\n");
-            if(textLines.length === this.allCarets.length) {
-                replacement = (i:number) => textLines[i];
-            } else {
-                replacement = text;
-            }
-            newAnchorC = this.selectionStart.c + textLines[0].length;
-        }
-
-        if(!this.hasSelection() && replacement === "") {
+        if(!this.hasSelection() && text === "") {
             // No selection, no replacement text - actually a no-op
-            newCaret = this._caret;
-        } else if(!this.columnSelection) {
+        } else if(!this.columnSelection()) {
             // Either a selection, or some insertion text, but not column mode
-            // Use start/end of selection rather than the individual selection rectangles
-            const insert = replacement instanceof Function ? replacement(0) : replacement;
-            const newC = this._caret.c + replacement.length;
-            this.setText(this.text.substring(0, this._caret.c) + insert + this.text.substring(this._caret.c));
-            newCaret = this.cursorFromC(newC);
+            // The cursor will be just after the inserted text; there will be no anchor
+            const newC = this.selectionStart.c + text.length;
+            // Use start/end of selection rather than the individual selection
+            // rectangles as we know they are contiguous
+            this.setText(this.text.substring(0, this.selectionStart.c) + text + this.text.substring(this.selectionEnd.c));
+            this.setCaret(this.cursorFromC(newC));
         } else {
-            // Complex case: take chunks before and after each selection
+            // Column mode, so we are (possibly) slicing discontinuous sections
+            // out and/or inserting in multiple places
+
+            // Work out what we're inserting, if we're inserting anything
+            const textLines = text.split("\n");
+            let insertions;
+            // If the insert is one line (which includes "", ie insert nothing)
+            // then we insert the same thing at every caret            
+            if(textLines.length === 1) {
+                insertions = new Array(this.allCarets.length).fill(text);
+            } else {
+                insertions = this.allCarets.map((c_, i) => i >= textLines.length ? "" : textLines[i]);
+            }
+            // Accumulated new text
             let newText = "";
+            // End of the last selection we removed; include from here to start
+            // of next selection (or EOF) in newText.
             let lastEnd = 0;
             for(const [i, s] of this.selections.entries()) {
-                const insert = replacement instanceof Function ? replacement(i) : replacement;
-                newText += this.text.substring(lastEnd, s.c) + insert;
-                lastEnd = s.c;
+                newText += this.text.substring(lastEnd, s.c) + insertions[i];
+                lastEnd = s.c + s.length;
             }
             // The cursor will be at the end of the last splice location
-            const newC = newText.length;
+            const newCursorC = newText.length;
+            // The anchor will be at the end of the first insertion
+            const newAnchorY = this.selections[0].y;
             newText += this.text.substring(lastEnd);
+            
             this.setText(newText);
-            newCaret = this.cursorFromC(newC);
+            // Now we've replaced the text, get a new caret position
+            const newCursor = this.cursorFromC(newCursorC);
+            // Using *that*, place the anchor at the same X coordinate on its original row
+            this.anchor = this.cursorFromCoord({x: newCursor.x, y: newAnchorY});
+            this.setCaret(newCursor, true, true);
         }
-        this.anchor = newAnchorC !== null ? this.cursorFromC(newAnchorC) : null;
-        this.setCaret(newCaret, columnMode, columnMode);
+        
+        
     }
 
     public insert(text: string, batch = false) {
+        // FIXME: Basic insert now broken!
         this.sliceSelection(text);
         this.history.save(this.getState(UndoType.INSERT), !batch && text.trim().length !== 0); 
     }
@@ -282,7 +289,6 @@ export class TextModel extends EventTarget {
             canReplace = false;
         } else if(!this.columnSelection) {
             if(direction === CursorDirection.Forward) {
-                const newCursor = this.caret;
                 this.setText(this.getPreSelection() + this.getPostSelection().substring(1));
                 // Force a new cursor value even though it's not changed to recalculate selections
                 this.setCaret(this._caret);
@@ -417,7 +423,7 @@ export class TextModel extends EventTarget {
                         this.glyphs[row].at(-1)!
                     );
                 const x = rowStart.x;
-                const w = rowEnd.col === this.glyphs[row].length - 1 ? rowEnd.x - x + EOL_SELECTION_MARGIN : rowEnd.x - x;
+                const w = rowEnd.col === this.glyphs[row].length - 1 && !columnMode ? rowEnd.x - x + EOL_SELECTION_MARGIN : rowEnd.x - x;
                 const length = rowEnd.c - rowStart.c;
                 const c = rowStart.c;
                 const text = this._text.slice(rowStart.c, rowEnd.c);

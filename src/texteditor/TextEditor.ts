@@ -361,6 +361,9 @@ export default class HTMLTextEditorElement extends BaseTextElement implements Ev
     public get selectionPixels(): number {
         return this.model?.getSelectionWidth() || 0;
     }
+    public get columnMode(): boolean {
+        return this.model?.columnSelection() || false;
+    }
     public insert(text: string) {
         if(this.model) this.model.insert(text, true);
     }

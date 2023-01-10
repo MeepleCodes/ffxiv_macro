@@ -26,7 +26,7 @@ import { NavAppBar, NavDrawer, NavHeader, NavMain } from './Nav';
 import { appTheme } from './Theme';
 
 import log, {RootLogger} from 'loglevel';
-import GlyphViewerReact from './glyphviewer/GlyphViewerReact';
+
 declare global {
 	interface Window { log: RootLogger }
 }
@@ -68,7 +68,8 @@ type TEInfo = {
 	cursorRow: number,
 	cursorCol: number,
 	selectionLength: number,
-	selectionPixels: number | null
+	selectionPixels: number | null,
+	columnMode: boolean,
 };
 
 
@@ -89,6 +90,7 @@ function App() {
             cursorCol: t.cursorCol,
             selectionLength: t.selectionLength,
             selectionPixels: t.selectionPixels,
+			columnMode: t.columnMode
         });
     };
 	let selectionText = "";
@@ -186,7 +188,7 @@ function App() {
 						</CardMedia>
 					<CardActions sx={{boxShadow: 1}}>
 							{cur && <div className="status row">
-								Ln {cur.cursorRow}, Col {cur.cursorCol} [{cur.cursorX}, {cur.cursorY}] {selectionText}
+								Ln {cur.cursorRow}, Col {cur.cursorCol} [{cur.cursorX}, {cur.cursorY}] {selectionText} {cur.columnMode && "COL"}
 							</div>}
 						
 						

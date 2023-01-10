@@ -1,5 +1,5 @@
 import HTMLTextEditorElement from "./TextEditor";
-import { Coord, CursorDirection, MoveDistance, TextModel } from "./TextModel";
+import { CursorDirection, MoveDistance, TextModel } from "./TextModel";
 import TextView from "./TextView";
 import log from 'loglevel';
 const logger = log.getLogger("TextController");
