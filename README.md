@@ -34,9 +34,13 @@ Vague list of features still to implement
   [x] Only render what's changed
   - Do a full redraw on requestAnimationFrame but only redraw if needed (would get around not being able to spot CSS changes)
 - Column-mode selection, multiple selections
-  - Copy/paste gets interesting. Desired/imitated behaviour:
+  - Selecting zero characters on multiple rows produces multiple cursors
+  - Copy/paste gets interesting. Desired/imitated behaviour (notepad++, seems to cheat and use internal flag to differentiate):
     - Paste with no selection: insert first row of clipboard data at current caret, each subsequent row in the same column further down
     - Paste with active selection: delete all active selections, then paste as if no selection above
+  - VSCode does it differently:
+    - Paste with no selection: insert as if it was a regular text w/ newlines
+    - Paste with selection *that has the same number of rows*: delete and replace with 
 [x] Refactor TextEditor/TextModel more thoroughly into MVC split
   [x] Model knows about glyphs and pixels
   [x] View is just the canvas/render stuff
@@ -83,6 +87,8 @@ Vague list of features still to implement
     - Owner
     - Tags
   - Authentication and user management
+    - Privacy policy and ToS :<
+    - Upgrading anonymous users (merge by assigning all anonymous user's macros to existing auth)
   - Loading/browsing could eventually use something like https://github.com/bvaughn/react-window for lazy loading
 - Icons from https://xivapi.com/MacroIcon
 - Tags for macros. Use XIVAPI for lists of applicable tags?
