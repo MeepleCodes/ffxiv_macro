@@ -151,6 +151,10 @@ export class TextModel extends EventTarget {
         logger.debug("Setting caret to", cursor, "from", coord);
         this.setCaret(cursor, extendSelection, columnMode);
     }
+    public setCaretToC(c: number, extendSelection = false, columnMode = false) {
+        const cursor = this.cursorFromC(c);
+        this.setCaret(cursor, extendSelection, columnMode);
+    }
     public moveCaret(direction: CursorDirection, distance: MoveDistance, extendSelection = false) {
         const moveFrom: Cursor = (!extendSelection && this.anchor !== null) ? (
             direction === CursorDirection.Backward ? this.selectionStart : this.selectionEnd
@@ -284,10 +288,11 @@ export class TextModel extends EventTarget {
      */
     public delete(direction: CursorDirection = CursorDirection.Forward, bypassUndo = false) {
         let canReplace = true;
+        logger.debug("Delete requested. hasSelection:", this.hasSelection(), "")
         if(this.hasSelection()) {
             this.sliceSelection();
             canReplace = false;
-        } else if(!this.columnSelection) {
+        } else if(!this.columnSelection()) {
             if(direction === CursorDirection.Forward) {
                 this.setText(this.getPreSelection() + this.getPostSelection().substring(1));
                 // Force a new cursor value even though it's not changed to recalculate selections
@@ -305,24 +310,24 @@ export class TextModel extends EventTarget {
             let newText = "";
             let lastEnd = 0;
             let newAnchor = null;
-            console.log("Performing complicated delete");
+            logger.debug("Performing complicated delete");
             for(const c of this.allCarets) {
                 let sliceTo, sliceFrom;
-                console.log("Considering caret", c);
+                logger.debug("Considering caret", c);
                 if(direction === CursorDirection.Forward) {
                     sliceTo = c.c;
                     
                     // Can't delete forward past the end of the line, so no-op
                     sliceFrom = c.col === this.glyphs[c.row].length-1 ? c.c : c.c + 1;
-                    console.log("Deleting forward, added text up to", sliceTo, "next section starts at ", sliceFrom);
+                    logger.debug("Deleting forward, added text up to", sliceTo, "next section starts at ", sliceFrom);
                 } else {
                     sliceFrom = c.c;
                     // Likewise, can't backspace past the start of a line, so no-op
                     sliceTo = c.col === 0 ? c.c : c.c - 1;
-                    console.log("Deleting backward, added text up to", sliceTo, "next section starts at ", sliceFrom);
+                    logger.debug("Deleting backward, added text up to", sliceTo, "next section starts at ", sliceFrom);
                 }
                 if(newAnchor === null) {
-                    console.log("No anchor yet, will use", sliceTo);
+                    logger.debug("No anchor yet, will use", sliceTo);
                     newAnchor = sliceTo;
                 }
                 newText += this.text.substring(lastEnd, sliceTo);
@@ -498,7 +503,7 @@ export class TextModel extends EventTarget {
         else if(col >= this.glyphs[row].length) return this.glyphs[row].at(-1)!;
         else return this.glyphs[row][col];
     }
-    protected cursorFromC(c: number): Cursor {
+    public cursorFromC(c: number): Cursor {
         if(c <= 0) return this.glyphs[0][0];
         for(const g of this) {
             if(g.c === c) return g;
