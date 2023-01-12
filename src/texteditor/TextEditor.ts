@@ -192,40 +192,22 @@ export class BaseTextElement extends HTMLElement {
     }
 
     /**
-     * Return the offset from the top/left of the element and
-     * the top/left of the canvas where we're rendering text,
-     * to allow us to locate clicks correctly relative to text.
-     */
-    public getCanvasOffset(): [number, number] {
-        // Correct for scrolling, but not padding (as the offsetX/Y already does
-        // that for us)
-        let offsetLeft = this.container.offsetLeft;
-        let offsetTop = this.container.offsetTop;
-        // If the text-editor element has a position of 'relative' then it will
-        // be the offsetParent of the container, otherwise both will have a common
-        // offsetParent further up the DOM tree (oddly I don't think you can
-        // prevent this even though it sort of breaches the shadow DOM).
-        if(this.container.offsetParent !== this) {
-            offsetLeft -= this.offsetLeft;
-            offsetTop -= this.offsetTop;
-        }
-        return [
-            this.scrollLeft - offsetLeft,
-            this.scrollTop - offsetTop
-        ];
-    }
-    
-    /**
-     * Apply scrolling and offsets to turn a mouse event (over the whole element) into
-     * coordinates relative to the top/left of the drawing canvas.
+     * Get coordinates on the canvas from a mouse event with clientX/Y
      * 
-     * @param ev MouseEvent
+     * @param ev A MouseEvent or react MouseEvent with clientX and clientY properties
      */
-    public coordFromMouseEvent(ev: MouseEvent): Coord {
-        const [leftOffset, topOffset] = this.getCanvasOffset();
+    public coordFromMouseEvent(ev: {clientX: number, clientY: number}): Coord {
+        const {left, top} = this.canvas.getBoundingClientRect();
         return {
-            x: ev.offsetX + leftOffset,
-            y: ev.offsetY + topOffset
+            x: ev.clientX - left,
+            y: ev.clientY - top
+        }
+    }
+    public clientXYFromCoord(coord: Coord): {x: number, y: number} {
+        const {left, top} = this.canvas.getBoundingClientRect();
+        return {
+            x: coord.x + left,
+            y: coord.y + top
         }
     }
     protected getStyle() {

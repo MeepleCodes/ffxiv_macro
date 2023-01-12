@@ -224,6 +224,9 @@ class GlyphView extends TextView {
 export default class HTMLGlyphViewerElement extends BaseTextElement {
     protected model?: GlyphModel;
     protected controller?: GlyphController;
+    public get canvasElement() {
+        return this.canvas;
+    }
     protected postFontLoad(this: this & {font: Font, fontTexture: ImageBitmap}): void {
           
         if(this.model && this.viewer) {
@@ -248,8 +251,20 @@ export default class HTMLGlyphViewerElement extends BaseTextElement {
             this.removeAttribute("aria-multiline");
         }
     }
-    public selectedGlyph(): Glyph | undefined {
-        return this.model?.getSelectedGlyph();
+    public glyphAtCursor(ev: {clientX: number, clientY: number}): GlyphPosition | null {
+        return this.model?.glyphUnderCoord(this.coordFromMouseEvent(ev)) || null;
+    }
+    public glyphBoundingBox(gp: GlyphPosition): DOMRect {
+        // TODO: If we ever apply global scale, it would need to be applied here
+        const {x, y} = this.clientXYFromCoord(gp);
+        let w, h;
+        if(gp.glyph === undefined) {
+            w = 0; h = 0;
+        } else {
+            w = gp.glyph.w;
+            h = this.font?.lineHeight || 0;
+        }
+        return new DOMRect(x, y, w, h);
     }
 }
 export function installWebComponent() {

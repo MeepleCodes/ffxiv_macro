@@ -5,6 +5,7 @@ export interface RawFont {
     glyphs: Glyph[];
     kerning: Kerning[];
     src: string;
+    blocks: CodeBlock[];
 }
 export function isRawFont(arg: any): arg is RawFont {
     return arg && 
@@ -30,7 +31,8 @@ export class Font {
     defaultGlyph: Glyph;
     glyphs: Glyph[];
     kerning: Kerning[];
-    src: string;    
+    src: string;
+    blocks: CodeBlock[]; 
     constructor(raw: RawFont) {
         this.lineHeight = raw.lineHeight;
         this.maxWidth = raw.maxWidth;
@@ -43,7 +45,8 @@ export class Font {
             raw.kerning.map(group => [group.left, Object.fromEntries(
                 group.kerning.map(row => [row.right, row.kern])
             )])
-        );        
+        );
+        this.blocks = raw.blocks;
     }
 
     public glyph(codepoint?: number) {
@@ -86,9 +89,8 @@ export function isKerning(arg: any): arg is Kerning {
         typeof(arg.left) === "number" &&
         Array.isArray(arg.kerning) && arg.kerning.every((k: any) => k && typeof(k.right) === "number" && typeof(k.kern) === "number");
 }
-export interface GlyphPage {
+export interface CodeBlock {
     name: string;
     start: number;
     end: number;
-    glyphs: Glyph[];
 }

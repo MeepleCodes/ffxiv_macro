@@ -56,11 +56,11 @@ export default class TextController implements EventListenerObject, Controller {
     }
     private restartBlinking() {
         this.blink = false;
-        if(this.viewer) this.viewer.caretVisible = !this.blink && this.hasFocus;
+        if(this.viewer) this.viewer.caretVisible = !this.blink || !this.hasFocus;
         if(this.intervalRef) clearInterval(this.intervalRef);
         this.intervalRef = setInterval(() => {
             this.blink = !this.blink;
-            if(this.viewer) this.viewer.caretVisible = !this.blink && this.hasFocus;
+            if(this.viewer) this.viewer.caretVisible = !this.blink || !this.hasFocus;
         }, this.blinkInterval)        
     }
     public handleEvent(e: Event) : void {
