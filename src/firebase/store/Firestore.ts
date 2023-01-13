@@ -1,11 +1,13 @@
 import {app} from '../Firebase';
-import { Bytes, collection, doc, DocumentData, DocumentReference, FirestoreDataConverter, getDoc, getDocs, getFirestore, query, QueryDocumentSnapshot, setDoc, SnapshotOptions, WithFieldValue } from "firebase/firestore";
+import { auth } from '../auth/FirebaseAuth';
+import { Bytes, collection, doc, DocumentData, DocumentReference, FirestoreDataConverter, getDoc, getDocs, getFirestore, onSnapshot, query, QueryDocumentSnapshot, setDoc, SnapshotOptions, Unsubscribe, where, WithFieldValue } from "firebase/firestore";
 // Initialize Cloud Firestore and get a reference to the service
 const db = getFirestore(app);
 const macros = collection(db, "macros");
 
 export interface MacroDoc {
     id: string | undefined;
+    owner: string;
     /** An empty name is the 'new document' draft */
     name: string;
     text: string;
@@ -17,6 +19,7 @@ const MacroConverter: FirestoreDataConverter<MacroDoc>  = {
         const d = snapshot.data();
         return {
             id: snapshot.id,
+            owner: d.owner,
             name: d.name,
             text: d.text,
             draft: d.draft,
@@ -24,7 +27,7 @@ const MacroConverter: FirestoreDataConverter<MacroDoc>  = {
         }
     },
     toFirestore(macro: WithFieldValue<MacroDoc>): DocumentData {
-        return {name: macro.name, text: macro.text, draft: macro.draft, thumbnail: macro.thumbnail}
+        return {name: macro.name, text: macro.text, draft: macro.draft, thumbnail: macro.thumbnail, onwer: macro.owner}
     },
 }
 
@@ -39,8 +42,13 @@ export const Store = {
         });
     },
     async loadAll(): Promise<MacroDoc[]> {
-        return getDocs(query(macros).withConverter(MacroConverter)).then((snapshot) => {
+        return getDocs(query(macros, where("owner", "==", auth.currentUser?.uid)).withConverter(MacroConverter)).then((snapshot) => {
             return snapshot.docs.filter(snap => snap.exists()).map(snap=>snap.data());
+        });
+    },
+    watchAll(callback: (docs: MacroDoc[])=> void): Unsubscribe {
+        return onSnapshot(query(macros, where("owner", "==", auth.currentUser?.uid)).withConverter(MacroConverter), (snapshot) => {
+            callback(snapshot.docs.filter(snap => snap.exists()).map(snap=>snap.data()));
         });
     },
     async save(id: string|undefined, macro: MacroDoc): Promise<string> {

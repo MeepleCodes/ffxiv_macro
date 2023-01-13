@@ -1,7 +1,7 @@
-import React, { createContext, createRef, RefObject, useContext, useState } from "react";
+import React, { createContext, createRef, RefObject, useContext, useEffect, useState } from "react";
 import { MacroDoc, Store } from './Firestore';
 import { HTMLTextEditorElement } from '../../texteditor/TextEditorReact'
-import { Bytes } from "firebase/firestore";
+import { Bytes, Unsubscribe } from "firebase/firestore";
 
 import SaveIcon from '@mui/icons-material/Save';
 import SaveAsIcon from '@mui/icons-material/SaveAs';
@@ -10,6 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import InputBase from '@mui/material/InputBase';
 import TextField from "@mui/material/TextField";
+import { auth } from "../auth/FirebaseAuth";
 
 
 const dontUseDefault = (nv: any) => {throw new Error("Don't use the default context");};
@@ -38,12 +39,14 @@ export function StoreContextProvider({editor, children}: {editor: RefObject<HTML
 function useSave() {
     let {editor,  setLoading, filename,  setFileid} = useContext(StoreContext);
     const getMacro = async function(): Promise<MacroDoc | null> {
-        if(editor.current === null) return null;
+        const uid = auth.currentUser?.uid;
+        if(editor.current === null || uid === undefined) return null;
         const name = filename;
         const text = editor.current.value;
         return await editor.current.getThumbnail().then(blob => blob.arrayBuffer()).then(arraybuffer => {
                 return {
                     id: undefined,
+                    owner: uid,
                     draft: false,
                     name,
                     text,
@@ -120,7 +123,17 @@ export function SaveControls() {
 export function FileList() {
     let [fileList, setFileList] = useState<MacroDoc[]>([]);
     let {editor, setLoading, setFilename, setFileid} = useContext(StoreContext);
-
+    useEffect(() => {
+        let lastWatcher: Unsubscribe | null = null;
+        const unregister = auth.onAuthStateChanged((user) => {
+            if(lastWatcher !== null) lastWatcher();
+            lastWatcher = Store.watchAll(setFileList);
+        });
+        return () => {
+            unregister();
+            if(lastWatcher) lastWatcher();
+        }
+    }, []);
     const load = async function(id?: string) {
         if(id === undefined) return;
         console.log("Loading started");
@@ -135,11 +148,11 @@ export function FileList() {
         }
         setLoading(false);
     }
-    const refreshFiles = async function() {
-        setFileList(await Store.loadAll());
-    }    
+    // const refreshFiles = async function() {
+    //     setFileList(await Store.loadAll());
+    // }    
     return <>
-        <button onClick={refreshFiles}>Refresh</button>
+        {/* <button onClick={refreshFiles}>Refresh</button> */}
         <ul>
             {fileList.map((macro) => (
                 // Swap for buttons, disabled={loading || refreshing}

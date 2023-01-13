@@ -1,28 +1,38 @@
 import 'firebaseui/dist/firebaseui.css';
-import {auth as uiauth} from 'firebaseui';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
-import { compatApp } from '../Firebase';
+import * as firebaseui from 'firebaseui';
+import 'firebaseui/dist/firebaseui.css';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import Popover from '@mui/material/Popover';
 import LoginIcon from '@mui/icons-material/Login';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import StyledFirebaseAuth from './StyledFirebaseAuth';
+import { compatAuth } from './FirebaseAuth';
 
-const auth = firebase.auth(compatApp);
 
-const firebaseUiConfig = {
+const firebaseUiConfig: firebaseui.auth.Config = {
+    autoUpgradeAnonymousUsers: true,
     signInOptions: [
         firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-        // FacebookAuthProvider.PROVIDER_ID,
-        // TwitterAuthProvider.PROVIDER_ID,
-        // GithubAuthProvider.PROVIDER_ID,
-        // EmailAuthProvider.PROVIDER_ID,
-        // PhoneAuthProvider.PROVIDER_ID,
-        uiauth.AnonymousAuthProvider.PROVIDER_ID        
+        firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID        
     ],
+    callbacks: {
+        signInFailure: function(error) {
+            // For merge conflicts, the error.code will be
+            // 'firebaseui/anonymous-upgrade-merge-conflict'.
+            if (error.code !== 'firebaseui/anonymous-upgrade-merge-conflict') {
+                return Promise.resolve();
+            }
+            // The credential the user tried to sign in with.
+            var cred = error.credential;
+            console.log("Attempting to merge", firebase.auth().currentUser,"with", cred);
+            return firebase.auth().signInWithCredential(cred).then((user) => {
+                console.log("Now signed in as", user);
+            });
+        }
+    },
     signInFlow: 'popup',
     tosUrl: () => { console.error("TODO: Implement TOS")},
     privacyPolicyUrl: () => { console.error("TODO: Implement TOS")},
@@ -32,20 +42,27 @@ export default function AuthMenu() {
     const buttonRef = useRef(null);
     const [open, setOpen] = useState(false);
     const [user, setUser] = useState<firebase.User|null>(null);
-    const updateUser = (newUser: firebase.User|null) => {
-        setUser((currentUser) => {
-            if(newUser !== currentUser) {
-                console.log("User changed, closing menu");
-                setOpen(false);
-            }
-            return newUser;
-        });
-    };
+    const showLogin = user === null || user.isAnonymous;
     const signOut = () => {
-        auth.signOut();
+        compatAuth.signOut();
     }
+    const firebaseUIRef = useCallback((node: Element|null) => {
+        console.log("Ref changed, is now", node);
+        const firebaseUiWidget = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(compatAuth);
+        firebaseUiWidget.reset();
+        if(node) firebaseUiWidget.start(node, firebaseUiConfig);
+    }, []);
     useEffect(() => {
-        const unregisterAuthObserver = auth.onAuthStateChanged(updateUser);
+        const updateUser = (newUser: firebase.User|null) => {
+            setUser((currentUser) => {
+                if(newUser !== currentUser) {
+                    console.log("User changed, closing menu");
+                    setOpen(false);
+                }
+                return newUser;
+            });
+        };
+        const unregisterAuthObserver = compatAuth.onAuthStateChanged(updateUser);
         return () => {
             unregisterAuthObserver();
         }
@@ -59,7 +76,7 @@ export default function AuthMenu() {
           vertical: 'bottom',
           horizontal: 'left',
         }}>
-            {user === null ? <StyledFirebaseAuth uiConfig={firebaseUiConfig} firebaseAuth={auth}/> : <div>Signed in as {user.displayName} <Button onClick={signOut}>Sign out</Button></div>}
+            {showLogin ? <div ref={firebaseUIRef}/> : <div>Signed in as {user.displayName} <Button onClick={signOut}>Sign out</Button></div>}
         </Popover>
     </>
 }

@@ -5,7 +5,6 @@ import { FileList, StoreContextProvider, SaveIconButton, SimpleFileName } from '
 import GlyphPicker from './GlyphPicker';
 
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import ToggleButton from '@mui/material/ToggleButton';
 import Card from '@mui/material/Card';
 import IconButton from '@mui/material/IconButton';
