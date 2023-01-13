@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
 import TextEditor, {HTMLTextEditorElement} from './texteditor/TextEditorReact';
-import { FileList, StoreContextProvider, SaveIconButton, SimpleFileName } from './store/StoreControls';
+import { FileList, StoreContextProvider, SaveIconButton, SimpleFileName } from './firebase/store/StoreControls';
 import GlyphPicker from './GlyphPicker';
 
 import Box from '@mui/material/Box';
@@ -26,17 +26,13 @@ import { NavAppBar, NavDrawer, NavHeader, NavMain } from './Nav';
 import { appTheme } from './Theme';
 
 import log, {RootLogger} from 'loglevel';
+import AuthMenu from './firebase/auth/AuthControls';
 
 declare global {
 	interface Window { log: RootLogger }
 }
 window.log = log;
 log.setLevel(log.levels.DEBUG);
-
-
-// // Force an import of this otherwise webpack doesn't think it's referenced
-// require("./TextEditor");
-
 
 type FontSource = {
 	name: string;
@@ -131,14 +127,7 @@ function App() {
 					</Stack>
 
 					<Box sx={{flexGrow: 1}}/>
-					<Button sx={{color: 'white'}} onClick={() => navigator.clipboard.read().then(items => {
-						console.log("Clipboard currently contains", items);
-						items.forEach(item => {
-							item.types.forEach(t => {
-								item.getType(t).then(b => b.text()).then(txt => console.log(t, ":", txt));
-							})
-						})
-					})}>Hello?!</Button>
+					<AuthMenu/>
 					<ToggleButton
 						value="show whitespace"
 						size="small"

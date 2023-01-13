@@ -14,6 +14,7 @@ extracted from FFXIV (which it uses instead of vector/TTF-based fonts).
 - Cursor not restored correctly when undo/redoing
 - Insert/move cursor/insert is merging undo states; should be separate
 [x] Re-implement autoscroll in refactored editor
+- Mouse events are firing on the scrollbars
 
 ## TODOs
 Vague list of features still to implement
@@ -33,7 +34,7 @@ Vague list of features still to implement
 [x] Optimise rendering
   [x] Only render what's changed
   - Do a full redraw on requestAnimationFrame but only redraw if needed (would get around not being able to spot CSS changes)
-- Column-mode selection, multiple selections
+[x] Column-mode selection, multiple selections
   - Selecting zero characters on multiple rows produces multiple cursors
   - Copy/paste gets interesting. Desired/imitated behaviour (notepad++, seems to cheat and use internal flag to differentiate):
     - Paste with no selection: insert first row of clipboard data at current caret, each subsequent row in the same column further down
@@ -76,6 +77,7 @@ Vague list of features still to implement
 [x] Start using MUI
   [x] Keep is a good template to take inspiration from
 - Overlays for common chat window sizes
+  - Mine is ~466x189px, most standard macros seem to come up maybe a bit shorter
 - Dark theme
 - Line count in status bar (and warn if >15)
 - Move web component to asset-loaded CSS

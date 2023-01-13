@@ -1,23 +1,5 @@
-import { initializeApp } from "firebase/app";
+import {app} from '../Firebase';
 import { Bytes, collection, doc, DocumentData, DocumentReference, FirestoreDataConverter, getDoc, getDocs, getFirestore, query, QueryDocumentSnapshot, setDoc, SnapshotOptions, WithFieldValue } from "firebase/firestore";
-
-// Far from perfect but at least we're not committing the keys to github
-// (they're still accessible from the packed javascript)
-const firebaseConfig = {
-    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-    authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-    storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGE_SENDER_ID,
-    appId: process.env.REACT_APP_FIREBASE_APP_ID
-};
-
-
-// Initialize Firebase
-console.log("Initialising Firebase with appId", firebaseConfig.appId);
-const app = initializeApp(firebaseConfig);
-
-
 // Initialize Cloud Firestore and get a reference to the service
 const db = getFirestore(app);
 const macros = collection(db, "macros");

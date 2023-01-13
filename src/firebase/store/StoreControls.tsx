@@ -1,6 +1,6 @@
 import React, { createContext, createRef, RefObject, useContext, useState } from "react";
-import { MacroDoc, Store } from './Firebase';
-import { HTMLTextEditorElement } from './../texteditor/TextEditorReact'
+import { MacroDoc, Store } from './Firestore';
+import { HTMLTextEditorElement } from '../../texteditor/TextEditorReact'
 import { Bytes } from "firebase/firestore";
 
 import SaveIcon from '@mui/icons-material/Save';
