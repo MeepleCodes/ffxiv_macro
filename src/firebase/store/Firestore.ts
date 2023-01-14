@@ -27,7 +27,7 @@ const MacroConverter: FirestoreDataConverter<MacroDoc>  = {
         }
     },
     toFirestore(macro: WithFieldValue<MacroDoc>): DocumentData {
-        return {name: macro.name, text: macro.text, draft: macro.draft, thumbnail: macro.thumbnail, onwer: macro.owner}
+        return {name: macro.name, text: macro.text, draft: macro.draft, thumbnail: macro.thumbnail, owner: macro.owner}
     },
 }
 
