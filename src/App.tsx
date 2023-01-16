@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
 import TextEditor, {HTMLTextEditorElement} from './texteditor/TextEditorReact';
-import { FileList, StoreContextProvider, SaveIconButton, SimpleFileName } from './firebase/store/StoreControls';
+import { StoreContextProvider, SaveIconButton, SimpleFileName } from './firebase/store/StoreControls';
+import { StyledFileList } from './firebase/store/MacroList';
 import GlyphPicker from './GlyphPicker';
 
 import Box from '@mui/material/Box';
@@ -157,7 +158,7 @@ function App() {
 
 				<Toolbar/>
 				<Box sx={{overflow: "auto"}} >
-					<FileList/>
+					<StyledFileList/>
 				</Box>
 			</NavDrawer>
 			<NavMain open={open}>

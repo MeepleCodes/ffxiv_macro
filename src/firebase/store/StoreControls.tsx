@@ -15,7 +15,7 @@ import { auth } from "../auth/FirebaseAuth";
 
 const dontUseDefault = (nv: any) => {throw new Error("Don't use the default context");};
 
-const StoreContext = createContext<Ctx>({editor: createRef(), loading: false, setLoading: dontUseDefault, filename: "", fileid: undefined, setFilename: dontUseDefault, setFileid: dontUseDefault});
+export const StoreContext = createContext<Ctx>({editor: createRef(), loading: false, setLoading: dontUseDefault, filename: "", fileid: undefined, setFilename: dontUseDefault, setFileid: dontUseDefault});
 
 type Ctx = {
     editor: RefObject<HTMLTextEditorElement>;
