@@ -49,10 +49,12 @@ function FileList(props: any){
     }
     // const refreshFiles = async function() {
     //     setFileList(await Store.loadAll());
-    // }    
+    // }   
+    // TODO: Sort-by dropdown 
     // TODO: Floating 'reload' button
-    // TODO: Foreground colour picked from theme not hard-coded
-    // TODO: gradient overlay on images
+    // [x] TODO: Foreground colour picked from theme not hard-coded
+    // [X] TODO: gradient overlay on images
+    // TODO: momentjs for last-update timestamp formatting
     return <ImageList cols={1} {...props}>
             {fileList.map((macro) => (
                 <ImageListItem key={macro.id} onClick={() => load(macro.id)}>
@@ -61,11 +63,10 @@ function FileList(props: any){
                     </div>
                     <ImageListItemBar
                         title={macro.name}
-                        subtitle="Last modified: whenever"
+                        subtitle={macro.updated !== undefined ? macro.updated.toDate().toString() : "No modified date/time"}
                         actionIcon={
                             <IconButton
                                 aria-label="Delete"
-                                sx={{color: 'white'}}
                                 onClick={() => console.log("TODO: Implement me")}>
                                 <DeleteIcon/>
                             </IconButton>
@@ -86,7 +87,10 @@ const StyledFileList = styled(FileList)(({theme}) => ({
     },
     '& .MuiImageListItemBar-titleWrap': {
         padding: theme.spacing(1, 1.5)
-    }
+    },
+    '& .MuiIconButton-root': {
+        color: theme.palette.primary.contrastText,
+    },
 }));
 
 export { StyledFileList };

@@ -37,49 +37,48 @@ export function StoreContextProvider({editor, children}: {editor: RefObject<HTML
 }
 
 function useSave() {
-    let {editor,  setLoading, filename,  setFileid} = useContext(StoreContext);
-    const getMacro = async function(): Promise<MacroDoc | null> {
+    let {fileid, editor,  setLoading, filename,  setFileid} = useContext(StoreContext);
+    async function prep(editor: RefObject<HTMLTextEditorElement>) {
         const uid = auth.currentUser?.uid;
-        if(editor.current === null || uid === undefined) return null;
-        const name = filename;
-        const text = editor.current.value;
-        return await editor.current.getThumbnail().then(blob => blob.arrayBuffer()).then(arraybuffer => {
-                return {
-                    id: undefined,
-                    owner: uid,
-                    draft: false,
-                    name,
-                    text,
-                    thumbnail: Bytes.fromUint8Array(new Uint8Array(arraybuffer))
-                };
-            });
-    }
-	const save = async function(saveId?: string) {
-        console.log("Saving started, getting thumbnail");
-        setLoading(true);
-        const macro = await getMacro();
-        
-        if(macro !== null) {
-            console.log("Ready to save");
-		    const id = await Store.save(saveId, macro);
-            console.log("Save complete, file ID is", id);
-            setFileid(id);
-        } else {
-            console.error("Unable to generate thumbnail for saving");
+        if(editor.current === null) {
+            throw Error("Trying to save with no editor reference");
+        }else if (uid === undefined) {
+            throw Error("Trying to save when not logged in");
         }
+        console.log("Saving started, getting thumbnail");
+        const thumbnail = await editor.current.getThumbnail().then(blob => blob.arrayBuffer()).then(arraybuffer => Bytes.fromUint8Array(new Uint8Array(arraybuffer)));
+        if(!thumbnail) {
+            throw Error("Unable to generate thumbnail for saving image");
+        }
+        const text = editor.current.value;
+        console.log("Ready to save");
+        return {text, thumbnail};
+    }
+	const save = async function() {
+        setLoading(true);
+        const {text, thumbnail} = await prep(editor);
+        const id = await Store.save(fileid, filename, text, thumbnail);
+        console.log("Save complete, file ID is", id);
         setLoading(false);
-	}
-    return save;
+	};
+    const saveAs = async function() {
+        setLoading(true);
+        const {text, thumbnail} = await prep(editor);
+        const id = await Store.saveAs(filename, text, thumbnail);
+        console.log("Save complete, file ID is", id);
+        setFileid(id);
+        setLoading(false);
+
+    }
+    return {save, saveAs};
 }
 export function SaveButton({asCopy = false}) {
-    let { fileid } = useContext(StoreContext);
-    const save = useSave();
-    return <Button onClick={e => save(asCopy ? undefined : fileid)}>{asCopy ? 'Save Copy' : 'Save'}</Button>
+    const {save, saveAs} = useSave();
+    return <Button onClick={asCopy ? saveAs : save}>{asCopy ? 'Save Copy' : 'Save'}</Button>
 }
 export function SaveIconButton({asCopy = false}) {
-    let { fileid } = useContext(StoreContext);
-    const save = useSave();
-    return <IconButton color="primary" onClick={e => save(asCopy ? undefined : fileid)}>{asCopy ? <SaveAsIcon/> : <SaveIcon/>}</IconButton>
+    const {save, saveAs} = useSave();
+    return <IconButton color="primary" onClick={asCopy ? saveAs : save }>{asCopy ? <SaveAsIcon/> : <SaveIcon/>}</IconButton>
 }
 export function SimpleFileName() {
     let { filename, setFilename } = useContext(StoreContext);
@@ -109,15 +108,6 @@ export function FileName({editable = false}) {
         <Button onClick={e => setState({...state, editing: true})}>Edit</Button>
       ): <></>}
       </>
-}
-export function SaveControls() {
-    let {loading, filename, setFilename, fileid} = useContext(StoreContext);
-    const save = useSave();
-    return <>
-			Filename <input type="text" value={filename} onChange={e => setFilename(e.target.value)}/>
-				<button onClick={e => save(fileid)} disabled={filename === "" || loading}>Save</button>
-				<button onClick={e => save(undefined)} disabled={filename === "" || loading}>Save copy</button>
-    </>
 }
 
 export function FileList() {

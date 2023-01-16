@@ -1,6 +1,6 @@
 import {app} from '../Firebase';
 import { auth } from '../auth/FirebaseAuth';
-import { Bytes, collection, doc, DocumentData, DocumentReference, FirestoreDataConverter, getDoc, getDocs, getFirestore, onSnapshot, query, QueryDocumentSnapshot, setDoc, SnapshotOptions, Unsubscribe, where, WithFieldValue } from "firebase/firestore";
+import { Bytes, Timestamp, collection, doc, DocumentData, DocumentReference, FirestoreDataConverter, getDoc, getDocs, getFirestore, onSnapshot, query, QueryDocumentSnapshot, SnapshotOptions, Unsubscribe, where, WithFieldValue, updateDoc, serverTimestamp, addDoc } from "firebase/firestore";
 // Initialize Cloud Firestore and get a reference to the service
 const db = getFirestore(app);
 const macros = collection(db, "macros");
@@ -8,10 +8,10 @@ const macros = collection(db, "macros");
 export interface MacroDoc {
     id: string | undefined;
     owner: string;
-    /** An empty name is the 'new document' draft */
     name: string;
     text: string;
-    draft: boolean;
+    created: Timestamp;
+    updated: Timestamp;
     thumbnail: Bytes;
 };
 const MacroConverter: FirestoreDataConverter<MacroDoc>  = {
@@ -22,12 +22,13 @@ const MacroConverter: FirestoreDataConverter<MacroDoc>  = {
             owner: d.owner,
             name: d.name,
             text: d.text,
-            draft: d.draft,
+            created: d.created,
+            updated: d.updated,
             thumbnail: d.thumbnail
         }
     },
     toFirestore(macro: WithFieldValue<MacroDoc>): DocumentData {
-        return {name: macro.name, text: macro.text, draft: macro.draft, thumbnail: macro.thumbnail, owner: macro.owner}
+        return {name: macro.name, text: macro.text, created: macro.created, updated: macro.updated, thumbnail: macro.thumbnail, owner: macro.owner}
     },
 }
 
@@ -51,12 +52,22 @@ export const Store = {
             callback(snapshot.docs.filter(snap => snap.exists()).map(snap=>snap.data()));
         });
     },
-    async save(id: string|undefined, macro: MacroDoc): Promise<string> {
-        const ref = (id === undefined ? doc(macros) : doc(macros, id)).withConverter(MacroConverter);
-        console.log(id === undefined ? "Saving copy of " : "Saving", macro, "to", ref.path);
-        return setDoc(ref, macro).then(() => ref.id);
+    async save(id: string|undefined, name: string, text: string, thumbnail: Bytes): Promise<string> {
+        const ref = doc(macros, id).withConverter(MacroConverter);
+        const macro = {
+            name, text, thumbnail,
+            updated: serverTimestamp()
+        };
+        console.log("Saving", macro, "to", ref.path);
+        return updateDoc(ref, macro).then(() => ref.id);
     },
-    async saveNew(macro: MacroDoc): Promise<string> {
-        return this.save(undefined, macro);
+    async saveAs(name: string, text: string, thumbnail: Bytes): Promise<string> {
+        const macro = {
+            name, text, thumbnail,
+            owner: auth.currentUser?.uid,
+            updated: serverTimestamp(),
+            created: serverTimestamp()
+        };
+        return await addDoc(macros, macro).then(docRef => docRef.id);
     }
 };
