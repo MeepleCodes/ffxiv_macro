@@ -15,6 +15,7 @@ extracted from FFXIV (which it uses instead of vector/TTF-based fonts).
 - Insert/move cursor/insert is merging undo states; should be separate
 [x] Re-implement autoscroll in refactored editor
 - Mouse events are firing on the scrollbars
+[x] Show/hide whitespace not toggling
 
 ## TODOs
 Vague list of features still to implement
@@ -85,12 +86,14 @@ Vague list of features still to implement
   - 'New' button
   - Delete button
   - More fields on documents:
-    - Created/last modified
-    - Owner
+    [x] Created/last modified
+    [x] Owner
     - Tags
-  - Authentication and user management
+  - Disabling stuff when load/save is in progress
+  [~] Authentication and user management
     - Privacy policy and ToS :<
     - Upgrading anonymous users (merge by assigning all anonymous user's macros to existing auth)
+    - Move away from firebase-ui as it's a bit rubbish, but doing it by hand will really suck
   - Loading/browsing could eventually use something like https://github.com/bvaughn/react-window for lazy loading
 - Icons from https://xivapi.com/MacroIcon
 - Tags for macros. Use XIVAPI for lists of applicable tags?

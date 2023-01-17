@@ -294,8 +294,7 @@ export default class HTMLTextEditorElement extends BaseTextElement implements Ev
     public attributeChangedCallback(name: string, oldValue: string|null, newValue: string|null): void {
         switch(name) {
             case "show-whitespace":
-                // TODO: Convert to getter/setter?
-                this._showWhitespace = newValue !== null;
+                this.showWhitespace = newValue !== null;
                 break;
             default:
                 super.attributeChangedCallback(name, oldValue, newValue);
