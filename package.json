@@ -22,6 +22,7 @@
     "firebaseui": "^6.0.2",
     "firestore": "^1.1.6",
     "loglevel": "^1.8.1",
+    "mdi-material-ui": "^7.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "typescript": "^4.9.4",

@@ -4,7 +4,7 @@ import { HTMLTextEditorElement } from '../../texteditor/TextEditorReact'
 import { Bytes, Unsubscribe } from "firebase/firestore";
 
 import SaveIcon from '@mui/icons-material/Save';
-import SaveAsIcon from '@mui/icons-material/SaveAs';
+import ContentSavePlus from 'mdi-material-ui/ContentSavePlus';
 
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
@@ -78,7 +78,7 @@ export function SaveButton({asCopy = false}) {
 }
 export function SaveIconButton({asCopy = false}) {
     const {save, saveAs} = useSave();
-    return <IconButton color="primary" onClick={asCopy ? saveAs : save }>{asCopy ? <SaveAsIcon/> : <SaveIcon/>}</IconButton>
+    return <IconButton color="primary" onClick={asCopy ? saveAs : save }>{asCopy ? <ContentSavePlus/> : <SaveIcon/>}</IconButton>
 }
 export function SimpleFileName() {
     let { filename, setFilename } = useContext(StoreContext);

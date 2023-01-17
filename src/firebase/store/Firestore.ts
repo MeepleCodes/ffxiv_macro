@@ -1,6 +1,6 @@
 import {app} from '../Firebase';
 import { auth } from '../auth/FirebaseAuth';
-import { Bytes, Timestamp, collection, doc, DocumentData, DocumentReference, FirestoreDataConverter, getDoc, getDocs, getFirestore, onSnapshot, query, QueryDocumentSnapshot, SnapshotOptions, Unsubscribe, where, WithFieldValue, updateDoc, serverTimestamp, addDoc } from "firebase/firestore";
+import { Bytes, Timestamp, collection, doc, DocumentData, DocumentReference, FirestoreDataConverter, getDoc, getDocs, getFirestore, onSnapshot, query, QueryDocumentSnapshot, SnapshotOptions, Unsubscribe, where, WithFieldValue, updateDoc, serverTimestamp, addDoc, orderBy } from "firebase/firestore";
 // Initialize Cloud Firestore and get a reference to the service
 const db = getFirestore(app);
 const macros = collection(db, "macros");
@@ -31,6 +31,14 @@ const MacroConverter: FirestoreDataConverter<MacroDoc>  = {
         return {name: macro.name, text: macro.text, created: macro.created, updated: macro.updated, thumbnail: macro.thumbnail, owner: macro.owner}
     },
 }
+export enum SortKeys {
+    updated = "updated",
+    name = "name"
+}
+export type Sort = {
+    key: SortKeys,
+    ascending: boolean
+};
 
 export const Store = {
     docRef(id: string): DocumentReference<MacroDoc> {
@@ -47,8 +55,14 @@ export const Store = {
             return snapshot.docs.filter(snap => snap.exists()).map(snap=>snap.data());
         });
     },
-    watchAll(callback: (docs: MacroDoc[])=> void): Unsubscribe {
-        return onSnapshot(query(macros, where("owner", "==", auth.currentUser?.uid)).withConverter(MacroConverter), (snapshot) => {
+    watchAll(callback: (docs: MacroDoc[])=> void, sort?: Sort): Unsubscribe {
+        let q;
+        if(sort !== undefined) {
+            q = query(macros, where("owner", "==", auth.currentUser?.uid), orderBy(sort.key, sort.ascending ? "asc" : "desc"));
+        } else {
+            q = query(macros, where("owner", "==", auth.currentUser?.uid));
+        }
+        return onSnapshot(q.withConverter(MacroConverter), (snapshot) => {
             callback(snapshot.docs.filter(snap => snap.exists()).map(snap=>snap.data()));
         });
     },
