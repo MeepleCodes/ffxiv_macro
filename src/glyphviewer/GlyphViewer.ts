@@ -1,7 +1,7 @@
 import { Font, Glyph } from "../texteditor/Font";
 import { Controller } from "../texteditor/TextController";
 import { BaseTextElement } from "../texteditor/TextEditor";
-import { Coord, Cursor, GlyphPosition, TextModel } from "../texteditor/TextModel";
+import { Coord, GlyphPosition, TextModel } from "../texteditor/TextModel";
 import TextView from "../texteditor/TextView";
 const STYLESHEET = `
     :host {
@@ -25,6 +25,7 @@ const STYLESHEET = `
         position: relative;
         width: 100%;
         height: 100%;
+        line-height: 0;
     }
     slot[name="spinner"], #error {
         display: flex;
@@ -65,18 +66,22 @@ const STYLESHEET = `
       
 `;
 class GlyphController implements Controller, EventListenerObject {
+    private dragImage = new Image();
     constructor(private element: HTMLGlyphViewerElement, private model: GlyphModel, private viewer: TextView) {}
     handleEvent(ev: Event): void {
         if(ev.type === "mousemove") this.mouseMoved(ev as MouseEvent);
         if(ev.type === "mouseout") this.mousedOut(ev as MouseEvent);
+        if(ev.type === "dragstart") this.dragStarted(ev as DragEvent);
     }
     attach(): void {
         this.element.addEventListener("mousemove", this);
         this.element.addEventListener("mouseout", this);
+        this.element.addEventListener("dragstart", this);
     }
     detach(): void {
         this.element.removeEventListener("mousemove", this);
         this.element.removeEventListener("mouseout", this);
+        this.element.removeEventListener("dragstart", this);
     }
     private mousedOut(ev: MouseEvent) {
         this.model.selectNone();
@@ -89,6 +94,23 @@ class GlyphController implements Controller, EventListenerObject {
             this.model.selectNone();
         }
     }
+    protected dragStarted(ev: DragEvent) {
+        const selectedText = this.model.getSelectedText();
+        if(selectedText !== null) {
+            const dt = ev.dataTransfer;
+            if(dt) {
+                dt.clearData();
+                dt.setData("text/plain", selectedText);
+                dt.effectAllowed = "copyMove";
+                dt.dropEffect = "move";
+                // TODO: Set the drag image to the currently selected text (only)
+                dt.setDragImage(this.dragImage, 0, 0);
+            }
+        } else {
+            ev.preventDefault();
+        }
+        
+    }    
 }
 class GlyphModel extends TextModel {
     constructor(font: Font, value: string, private cols = 16) {
@@ -153,7 +175,7 @@ class GlyphModel extends TextModel {
     }
     public getBoundingBox(): {width: number, height: number} {
         return {
-            width: this.cols * this.font.maxWidth,
+            width: Math.min(this.cols, this.text.length) * this.font.maxWidth,
             height: this.glyphs.length * this.font.lineHeight
         }
     }
@@ -179,20 +201,28 @@ class GlyphModel extends TextModel {
         return null;
     }
 }
-
-class GlyphView extends TextView {
-    protected drawGlyph(context: OffscreenCanvasRenderingContext2D, glyph: Glyph, position: Cursor): void {
-        const paddingLeft = Math.floor((this.font.maxWidth - (glyph.w + glyph.right))/2);
-        context.drawImage(this.fontTexture,
-            glyph.x, glyph.y, glyph.w, glyph.h,
-            position.x + paddingLeft, position.y + glyph.top, glyph.w, glyph.h);
+// Augment csstype to add custom property
+declare module 'csstype' {
+    interface Properties {
+      '--glyph-background'?: any;
     }
+}
+class GlyphView extends TextView {
+    protected getCanvasSize(): { width: number; height: number; } {
+        return this.model.getBoundingBox();
+    }
+    /**
+     * Overwrite default text rendering to:
+     * - Align the glyph in the centre of the column
+     * - Draw the glyph's position as a rectangle onto the whitespace buffer
+     */
     protected renderText() {
         this.whitespaceContext.fillStyle = this.textStyle.getPropertyValue("--glyph-background");
         for(const gp of this.model) {
             if(!gp.glyph) continue;
             const paddingLeft = Math.floor((this.font.maxWidth - (gp.glyph.w + gp.glyph.right))/2);
-            this.drawGlyph(this.textContext, gp.glyph, gp);
+            const newPos = {...gp, x: gp.x + paddingLeft};
+            this.drawGlyph(this.textContext, gp.glyph, newPos);
             this.whitespaceContext.fillRect(gp.x + paddingLeft, gp.y + gp.glyph.top, gp.glyph.w + gp.glyph.right, gp.glyph.h);
         }
     }
@@ -202,19 +232,14 @@ class GlyphView extends TextView {
      */
     protected compose() {
 
-        // Use the text buffer to mask the text colour buffer. If we do it this
-        // way around we can keep textBuffer as a black + white (or black +
-        // transparent) version which is then available for thumbnails etc.
-        this.textColourContext.globalCompositeOperation="destination-in";
-        this.textColourContext.drawImage(this.textBuffer, 0, 0);
-
         // Layer the buffers onto the output canvas
-        this.outputContext.drawImage(this.selectBuffer, 0, 0);
-        this.outputContext.drawImage(this.whitespaceBuffer, 0, 0);
-        this.outputContext.drawImage(this.textBuffer, 0, 0);
+        this.outputContext.imageSmoothingEnabled = false;
+        this.outputContext.drawImage(this.selectBuffer, 0, 0, this.outputBuffer.width, this.outputBuffer.height);
+        this.outputContext.drawImage(this.whitespaceBuffer, 0, 0, this.outputBuffer.width, this.outputBuffer.height);
+        this.outputContext.drawImage(this.textColourBuffer, 0, 0, this.outputBuffer.width, this.outputBuffer.height);
 
 
-        this.outputContext.drawImage(this.cursorBuffer, 0, 0);
+        this.outputContext.drawImage(this.cursorBuffer, 0, 0, this.outputBuffer.width, this.outputBuffer.height);
         this.dest.canvas.width = this.outputBuffer.width;
         this.dest.canvas.height = this.outputBuffer.height;
         this.dest.transferFromImageBitmap(this.outputBuffer.transferToImageBitmap());
@@ -234,7 +259,7 @@ export default class HTMLGlyphViewerElement extends BaseTextElement {
             this.viewer.setFont(this.font, this.fontTexture);
         } else {
             this.model = new GlyphModel(this.font, this._initialValue);
-            this.viewer = new GlyphView(this.model, this.font, this.fontTexture, this.context, this.textStyle!, this.selectStyle!, false);
+            this.viewer = new GlyphView(this.model, this.font, this.fontTexture, this.context, this.textStyle!, this.selectStyle!, false, this.scale);
             this.controller = new GlyphController(this, this.model, this.viewer);
             this.controller.attach();
         }

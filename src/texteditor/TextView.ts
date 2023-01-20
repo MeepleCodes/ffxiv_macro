@@ -28,7 +28,7 @@ export default class TextView {
     protected textColourContext = this.textColourBuffer.getContext("2d") as OffscreenCanvasRenderingContext2D;
     protected _insertionCursor: Cursor | null = null;
     protected _caretVisible = false;
-
+    
     constructor(
         protected model: TextModel,
         protected font: Font,
@@ -36,7 +36,8 @@ export default class TextView {
         protected dest: ImageBitmapRenderingContext,
         protected textStyle: CSSStyleDeclaration,
         protected selectionStyle: CSSStyleDeclaration,
-        protected _showWhitespace = false) {
+        protected _showWhitespace = false,
+        protected _scale = 1) {
         // TODO: These *could* redraw subsets
         model.addEventListener("change", e => this.redraw());
         model.addEventListener("selectionchange", e => this.redraw(false, true, true));
@@ -59,6 +60,13 @@ export default class TextView {
     public get showWhitespace() {
         return this._showWhitespace;
     }
+    public set scale(newValue: number) {
+        this._scale = newValue;
+        this.redraw();
+    }
+    public get scale() {
+        return this._scale;
+    }
     public setFont(font: Font, fontTexture: ImageBitmap) {
         this.font = font;
         this.fontTexture = fontTexture;
@@ -73,6 +81,7 @@ export default class TextView {
         drawto.getContext("2d")?.drawImage(this.textBuffer, 0, 0);
         return new Promise<Blob>((resolve, reject) => drawto.toBlob((blob) => blob !== null ? resolve(blob) : reject));
     }
+
     //#endregion
     protected drawGlyph(context: OffscreenCanvasRenderingContext2D, glyph: Glyph, position: Cursor) {
         context.drawImage(this.fontTexture,
@@ -170,19 +179,26 @@ export default class TextView {
             this.cursorContext.stroke();
         }        
     }
-    protected resize(): void {
-        // Setup of contexts
+
+    protected getCanvasSize(): {width: number, height: number} {
         let {width, height} = this.model.getBoundingBox();
-        const EOL = this.font.glyphMap[WhitespaceMap[NEWLINE]];
         if(this.showWhitespace) {
+            const EOL = this.font.glyphMap[WhitespaceMap[NEWLINE]];
             width += EOL.w + Math.max(0, EOL.right);
         } else {
             width += EOL_MARGIN;
         }
-        [this.outputBuffer, this.selectBuffer, this.textBuffer, this.whitespaceBuffer, this.cursorBuffer, this.textColourBuffer].forEach(buffer => {
+        return {width, height};
+    }
+
+    protected resize(): void {
+        const {width, height} = this.getCanvasSize();
+        [this.selectBuffer, this.textBuffer, this.whitespaceBuffer, this.cursorBuffer, this.textColourBuffer].forEach(buffer => {
             buffer.width = width;
             buffer.height = height;
         });
+        this.outputBuffer.width = width * this.scale;
+        this.outputBuffer.height = height * this.scale;
     }
     protected redraw(text = true, selection = true, cursor = true) {
         // Redrawing the text will *always* redraw everything else because a)
@@ -200,13 +216,14 @@ export default class TextView {
     }
     protected compose() {
         // Layer the buffers onto the output canvas
-        this.outputContext.drawImage(this.selectBuffer, 0, 0);
-        this.outputContext.drawImage(this.textBuffer, 0, 0);
+        this.outputContext.imageSmoothingEnabled = false;
+        this.outputContext.drawImage(this.selectBuffer, 0, 0, this.outputBuffer.width, this.outputBuffer.height);
+        this.outputContext.drawImage(this.textColourBuffer, 0, 0, this.outputBuffer.width, this.outputBuffer.height);
         if(this.showWhitespace) {
-            this.outputContext.drawImage(this.whitespaceBuffer, 0, 0);
+            this.outputContext.drawImage(this.whitespaceBuffer, 0, 0, this.outputBuffer.width, this.outputBuffer.height);
         }
 
-        this.outputContext.drawImage(this.cursorBuffer, 0, 0);
+        this.outputContext.drawImage(this.cursorBuffer, 0, 0, this.outputBuffer.width, this.outputBuffer.height);
         this.dest.canvas.width = this.outputBuffer.width;
         this.dest.canvas.height = this.outputBuffer.height;
         this.dest.transferFromImageBitmap(this.outputBuffer.transferToImageBitmap());

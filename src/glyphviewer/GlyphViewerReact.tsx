@@ -4,6 +4,7 @@ export { default as HTMLGlyphViewerElement } from './GlyphViewer';
 interface TextEditorHTMLAttributes<T> extends Omit<React.HTMLAttributes<T>, "children"> {
     fontsrc: string | object;
     value?: string;
+    scale?: number;
 }
 // React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>;
 // type TextEditorAttributes<T> = React.HTMLAttributes<T> & Omit<TextEditor, keyof HTMLCustomElement>;
@@ -18,8 +19,6 @@ declare global {
 installWebComponent();
 
 type GlyphViewerProps = GlyphViewerElementProps & {
-    fontsrc: string | object;
-    value?: string;
     onSelectionChange?: (ev: Event) => any;
 }
 

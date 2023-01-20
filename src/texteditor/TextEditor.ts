@@ -26,6 +26,7 @@ const STYLESHEET = `
         position: relative;
         width: 100%;
         height: 100%;
+        line-height: 0;
     }
     slot[name="spinner"], #error {
         display: flex;
@@ -71,6 +72,7 @@ export class BaseTextElement extends HTMLElement {
 
     /** Starting text value, saved until the first time a font is loaded and we can instantiate a Model */
     protected _initialValue: string = "";
+    protected _scale = 1;
     
     protected font?: Font;
     protected fontTexture?: ImageBitmap;
@@ -127,7 +129,7 @@ export class BaseTextElement extends HTMLElement {
     }
 
     public static get observedAttributes(): string[] {
-        return ["fontsrc", "value"];
+        return ["fontsrc", "value", "scale"];
     }
     public attributeChangedCallback(name: string, oldValue: string|null, newValue: string|null): void {
         switch(name) {
@@ -137,6 +139,10 @@ export class BaseTextElement extends HTMLElement {
             }
             case "value": {
                 this.value = newValue || "";
+                break;
+            }
+            case "scale": {
+                this.scale = newValue === null ? 1 : parseInt(newValue);
                 break;
             }
             default:
@@ -189,6 +195,14 @@ export class BaseTextElement extends HTMLElement {
     public set value(newValue: string) {
         this._initialValue = newValue;
         if(this.model) this.model.reset(newValue);
+    }
+
+    public set scale(newValue: number) {
+        this._scale = newValue;
+        if(this.viewer) this.viewer.scale = newValue;
+    }
+    public get scale() {
+        return this._scale;
     }
 
     /**
@@ -280,7 +294,7 @@ export default class HTMLTextEditorElement extends BaseTextElement implements Ev
             this.viewer.setFont(this.font, this.fontTexture);
         } else {
             this.model = new TextModel(this.font, this._initialValue);
-            this.viewer = new TextView(this.model, this.font, this.fontTexture, this.context, this.textStyle!, this.selectStyle!, this.showWhitespace);
+            this.viewer = new TextView(this.model, this.font, this.fontTexture, this.context, this.textStyle!, this.selectStyle!, this.showWhitespace, this.scale);
             this.controller = new TextController(this, this.model, this.viewer);
             this.controller.attach();
             this.model.addEventListener("selectionchange", this);

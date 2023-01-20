@@ -5,9 +5,11 @@ import Tab from '@mui/material/Tab';
 import Card, {CardProps} from '@mui/material/Card';
 import CardHeader from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import CardContent from '@mui/material/CardContent';
-import Popper from '@mui/material/Popper';
+import Tooltip from '@mui/material/Tooltip';
 import ClickAwayListener from '@mui/base/ClickAwayListener';
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+
 
 import HTMLTextEditorElement from "./texteditor/TextEditor";
 import { Glyph } from './texteditor/Font';
@@ -17,44 +19,22 @@ import GlyphViewerReact, { HTMLGlyphViewerElement } from "./glyphviewer/GlyphVie
 import { GlyphPosition } from "./texteditor/TextModel";
 
 
-const popperModifiers = [
-    {
-        name: 'flip',
-        enabled: true,
-        options: {
-        altBoundary: true,
-        rootBoundary: 'document',
-        padding: 8,
-        },
-    },
-    {
-        name: 'preventOverflow',
-        enabled: true,
-        options: {
-        altAxis: true,
-        altBoundary: true,
-        tether: true,
-        rootBoundary: 'document',
-        padding: 8,
-        },
-    }
-];
-  
 
 export interface GlyphPage {
     name: string;
-    ranges: [number, number][];
+    ranges: ([number, number]|[number])[];
     glyphs: Glyph[];
 }
 
 const glyphPages: GlyphPage[] = [
+    {name: 'Useful', ranges:[[0x20], [0xAD], [0x3000], [0x2010, 0x277E], [0xe000, 0xffff]], glyphs:[]},
     {name: 'Latin etc', ranges: [[0,0x2FFF]], glyphs: []},
     {name: "CJK", ranges: [[0x3000, 0xDFFF]], glyphs: []},
     {name: "Private", ranges: [[0xE000, 0xFFFF]], glyphs: []},
 ];
 for(let glyph of font.glyphs.slice(1)) {
 	for(let page of glyphPages) {
-		if(page.ranges.some(([start,end]) => glyph.codepoint >= start && glyph.codepoint <= end)) {
+		if(page.ranges.some(([start,end]) => end === undefined ? glyph.codepoint === start : (glyph.codepoint >= start && glyph.codepoint <= end))) {
 			page.glyphs.push(glyph);
 		}
 	}
@@ -91,10 +71,19 @@ export function GlyphImg({editorRef, glyph}: GlyphProps) {
         }
     />
 }
+
+function GlyphTooltip({glyph, fontsrc}: {glyph?: Glyph, fontsrc: string}) {
+    return glyph === undefined ? <></> : <Stack>
+        <Typography >U+{glyph.codepoint.toString(16).toUpperCase().padStart(4, '0')}</Typography>
+        <GlyphViewerReact scale={4} style={{padding: 0, color: 'white', background: 'black', '--glyph-background': 'rgba(235, 255, 255, 0.25)'}} value={String.fromCodePoint(glyph.codepoint)} fontsrc={fontsrc}/>        
+        <Typography variant="caption">{glyph.w + glyph.right}x{glyph.h+glyph.top}px</Typography>
+    </Stack>
+}
 export default function GlyphPicker(props: GlyphPickerProps) {
     const {editorRef, fontsrc, ...rest} = props;
     const ref = useRef<HTMLGlyphViewerElement>(null);
     const [pinned, setPinned] = useState(false);
+    const [hover, setHover] = useState(false);
     const [glyph, setGlyph] = useState<GlyphPosition|undefined>();
 	let [tab, setTab] = useState<number>(0);
     const insertGlyph = (ev: MouseEvent) => {
@@ -112,6 +101,11 @@ export default function GlyphPicker(props: GlyphPickerProps) {
             setGlyph(g);
         } 
     }
+    const hoverGlyph = (ev: MouseEvent) => {
+        if(pinned) return;
+        const g = ref.current?.glyphAtCursor(ev);
+        if(g && g.glyph) setGlyph(g);
+    }
     const clickOut = () => {
         setPinned(false);
     }
@@ -120,7 +114,7 @@ export default function GlyphPicker(props: GlyphPickerProps) {
             if(glyph && ref.current) return ref.current?.glyphBoundingBox(glyph);
             return new DOMRect(0, 0, 0, 0);
         },
-        contenxtElement: ref.current?.canvasElement
+        contextElement: ref.current?.canvasElement
     }
     return <Card {...rest}>
         <CardHeader>
@@ -137,15 +131,17 @@ export default function GlyphPicker(props: GlyphPickerProps) {
             </Tabs>
         </CardHeader>
         <CardMedia sx={{minWidth: 400, maxHeight: (theme) => 432, overflowY: "scroll"}}>
-            <Popper open={pinned} anchorEl={anchor} modifiers={popperModifiers}>
+            {/* <Popper open={pinned} anchorEl={anchor} modifiers={popperModifiers}>
                 {glyph !== undefined && glyph.glyph !== undefined && <Card>
                     <CardHeader>{String.fromCodePoint(glyph.glyph.codepoint)} (U+{glyph.glyph.codepoint.toString(16).toUpperCase().padStart(4, '0')})</CardHeader>
                     <CardMedia><GlyphViewerReact style={{width: 40, height: 40}} value={String.fromCodePoint(glyph.glyph.codepoint)} fontsrc={fontsrc}/></CardMedia>
                     <CardContent>{glyph.glyph.w + glyph.glyph.right}x{glyph.glyph.h}px</CardContent>
                 </Card>}
-            </Popper>
+            </Popper> */}
             <ClickAwayListener onClickAway={clickOut}>
-                <GlyphViewerReact ref={ref} onClick={pinGlyph} onDoubleClick={insertGlyph} value={glyphPages[tab].glyphs.map(g => String.fromCodePoint(g.codepoint)).join("")} fontsrc={fontsrc}/>
+                <Tooltip open={hover || pinned} followCursor={!pinned} PopperProps={{anchorEl: anchor}} onClose={() => setHover(false)} onOpen={() => setHover(true)} title={<GlyphTooltip glyph={glyph?.glyph} fontsrc={fontsrc}/>}>
+                <GlyphViewerReact ref={ref} onClick={pinGlyph} onDoubleClick={insertGlyph} onMouseMove={hoverGlyph} value={glyphPages[tab].glyphs.map(g => String.fromCodePoint(g.codepoint)).join("")} fontsrc={fontsrc}/>
+                </Tooltip>
             </ClickAwayListener>
         {/* {glyphPages[tab].glyphs.map(g => <GlyphP editorRef={editorRef} glyph={g} key={g.codepoint}/>)} */}
         </CardMedia>

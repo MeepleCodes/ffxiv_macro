@@ -4,6 +4,7 @@ export { default as HTMLTextEditorElement } from './TextEditor';
 interface TextEditorHTMLAttributes<T> extends Omit<React.HTMLAttributes<T>, "children"> {
     fontsrc: string | object;
     value?: string;
+    scale?: number;
     showWhitespace?: boolean;
 }
 // React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>;
@@ -20,8 +21,6 @@ declare global {
 installWebComponent();
 
 type TextEditorProps = TextEditorElementProps & {
-    fontsrc: string | object;
-    value?: string;
     onSelectionChange?: (ev: Event) => any;
 }
 
