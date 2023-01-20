@@ -5,9 +5,13 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import Typography from '@mui/material/Typography';
+import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+
+import ViewAgendaIcon from '@mui/icons-material/ViewAgenda';
+import ViewListIcon from '@mui/icons-material/ViewList';
 
 import SortAlphabeticalAscending from 'mdi-material-ui/SortAlphabeticalAscending';
 import SortAlphabeticalDescending from 'mdi-material-ui/SortAlphabeticalDescending';
@@ -17,7 +21,7 @@ import SortVariantOff from 'mdi-material-ui/SortVariantOff';
 
 
 
-import { useContext, useEffect, useState } from 'react';
+import { Component, EventHandler, FunctionComponent, PropsWithChildren, ReactEventHandler, useContext, useEffect, useState } from 'react';
 import { StoreContext } from './StoreControls';
 import { Unsubscribe } from 'firebase/firestore';
 import { auth } from '../auth/FirebaseAuth';
@@ -70,10 +74,73 @@ const asc = [true, false];
 const keys = [SortKeys.updated, SortKeys.name];
 const sortOrders: SortOrder[] = (keys.flatMap(k => asc.map(a => ({key: k, ascending: a}))) as SortOrder[]).concat([NO_SORT] as SortOrder[]);
 const defaultSortOrder = sortOrders[1]; // Latest first
+interface Mode {
+    name: string;
+    icon: JSX.Element;
+}
+
+type ViewModeProps = {macros: MacroDoc[], onLoad?: (macro: MacroDoc) => void, onDelete?: (macro: MacroDoc) => void};
+interface ViewMode extends Mode {
+    ListComponent: FunctionComponent<ViewModeProps>;
+};
+const viewModes: ViewMode[] = [
+    {
+        name: "Previews",
+        icon: <ViewAgendaIcon/>,
+        ListComponent:  ({macros, onLoad, onDelete}) => <ImageList cols={1} sx={{marginBottom: 0}}>
+             {macros.map((macro) => <ImageListItem onClick={() => onLoad?.(macro)}>
+                <div className="masking">
+                    <MaskedImage className="MuiImageListItem-img" mask={`data:image/png;base64,${macro.thumbnail.toBase64()}`}/>
+                </div>
+                <ImageListItemBar
+                    title={macro.name}
+                    subtitle={macro.updated ? macro.updated.toDate().toString() : "No modified date/time"}
+                    actionIcon={
+                        <IconButton
+                            aria-label="Delete"
+                            onClick={() => onDelete?.(macro)}>
+                            <DeleteIcon/>
+                        </IconButton>
+                    }
+                />
+            </ImageListItem>)}
+        </ImageList>
+    },
+    {
+        name: "List",
+        icon: <ViewListIcon/>,
+        ListComponent: ({macros, onLoad, onDelete}) => <></>
+    }
+];
+interface ModeMenuProps<T extends Mode> {modes: T[], mode: T, setMode: (newValue: T) => void};
+function ModeMenu<T extends Mode>({modes, mode, setMode}: ModeMenuProps<T>) {
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+    return <div>
+        <IconButton onClick={handleClick}>
+            {mode.icon}
+        </IconButton>
+        <Menu
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}>
+                {modes.map(m => <MenuItem onClick={() => setMode(m)}>
+                    {m.icon} {m.name}
+                </MenuItem>)}
+            </Menu>
+        </div>
+}
 
 function FileList(props: any){
-    let [fileList, setFileList] = useState<MacroDoc[]>([]);
-    let {editor, setLoading, setFilename, setFileid} = useContext(StoreContext);
+    const [fileList, setFileList] = useState<MacroDoc[]>([]);
+    const {editor, setLoading, setFilename, setFileid} = useContext(StoreContext);
+    const [viewMode, setViewMode] = useState<ViewMode>(viewModes[0]);
     const [sortOrder, setSortOrder] = useState<SortOrder>(defaultSortOrder);
     useEffect(() => {
         let lastWatcher: Unsubscribe | null = null;
@@ -108,7 +175,7 @@ function FileList(props: any){
     // [x] TODO: Foreground colour picked from theme not hard-coded
     // [X] TODO: gradient overlay on images
     // TODO: momentjs for last-update timestamp formatting
-    return <Stack>
+    return <Stack sx={{height: "100%"}} {...props}>
         <Stack direction="row" alignItems="center" spacing={2} sx={{paddingLeft: 1}}>
             {/* <ToggleButtonGroup
                 size="small"
@@ -144,27 +211,7 @@ function FileList(props: any){
                 </Select>
             </FormControl>
         </Stack>
-        <ImageList cols={1} {...props}>
-            {fileList.map((macro) => (
-                <ImageListItem key={macro.id} onClick={() => load(macro.id)}>
-                    <div className="masking">
-                        <MaskedImage className="MuiImageListItem-img" mask={`data:image/png;base64,${macro.thumbnail.toBase64()}`}/>
-                    </div>
-                    <ImageListItemBar
-                        title={macro.name}
-                        subtitle={macro.updated ? macro.updated.toDate().toString() : "No modified date/time"}
-                        actionIcon={
-                            <IconButton
-                                aria-label="Delete"
-                                onClick={() => console.log("TODO: Implement me")}>
-                                <DeleteIcon/>
-                            </IconButton>
-                        }
-                    />
-                </ImageListItem>
-
-            ))}
-        </ImageList>
+            <viewMode.ListComponent onLoad={(macro) => load(macro.id)} macros={fileList} />
         </Stack>
 }
 const StyledFileList = styled(FileList)(({theme}) => ({

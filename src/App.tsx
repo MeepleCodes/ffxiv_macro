@@ -34,6 +34,8 @@ declare global {
 window.log = log;
 log.setLevel(log.levels.DEBUG);
 
+const DRAWER_WIDTH = 280;
+
 type FontSource = {
 	name: string;
 	size: string;
@@ -105,7 +107,7 @@ function App() {
 	return (
 		<StoreContextProvider editor={ref}>
 			<ThemeProvider theme={appTheme}>
-			<NavAppBar position="fixed">
+			<NavAppBar position="fixed" width={DRAWER_WIDTH}>
 				<Toolbar>
 					<IconButton
 						color="inherit"
@@ -154,7 +156,7 @@ function App() {
 
 				</Toolbar>
 			</NavAppBar>
-			<NavDrawer variant="persistent" anchor="left" open={open}>
+			<NavDrawer variant="persistent" anchor="left" open={open} width={DRAWER_WIDTH}>
 
 				<Toolbar/>
 				<Box sx={{overflow: "auto"}} >
