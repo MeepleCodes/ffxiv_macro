@@ -124,16 +124,19 @@ class GlyphModel extends TextModel {
     }
     protected setText(newValue: string) {
         // Fix up any newline mess
-        this._text = newValue.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+        newValue = newValue.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
         this.lines = [];
         // Respect supplied line breaks, but also hard wrap long lines
-        for(let line of this._text.split("\n")) {
+        for(let line of newValue.split("\n")) {
             while(line.length > this.cols) {
                 this.lines.push(line.substring(0, this.cols));
                 line = line.substring(this.cols);
             }
             this.lines.push(line);
         }
+        // Use the hardwrapped text as we'll be counting the newlines we inserted
+        // for selections[...].c and so forth
+        this._text = this.lines.join("\n");
         this.layoutGlyphs();
     }
     protected layoutGlyphs() {
@@ -167,8 +170,15 @@ class GlyphModel extends TextModel {
         if(this.anchor === gp && this._caret.c === gp.c + 1) return;
         this.anchor = gp;
         this._caret = this.cursorFromC(gp.c + 1);
+        console.log("Selecting glyph. Anchor", this.anchor,"caret", this._caret);
         this.updateSelections();
+        console.log("Selections now", this.selections);
 
+    }
+    public getSelectedText(): string | null {
+        const sup = super.getSelectedText();
+        console.log("GlyphViewer selected text is", sup, "but my glyph is", String.fromCodePoint(this.getSelectedGlyph()?.codepoint || 0x20), "my selections are", this.selections, "anchor", this.anchor, "caret", this._caret);
+        return sup;
     }
     public getSelectedGlyph(): Glyph | undefined {
         if(this.anchor && this.anchor.c + 1 === this._caret.c) return this.glyphs[this.anchor.row][this.anchor.col].glyph;
