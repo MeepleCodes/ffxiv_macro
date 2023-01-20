@@ -22,13 +22,12 @@ type GlyphViewerProps = GlyphViewerElementProps & {
     onSelectionChange?: (ev: Event) => any;
 }
 
-export default React.forwardRef<HTMLGlyphViewerElement, GlyphViewerProps>((props: GlyphViewerProps, fwdRef: React.ForwardedRef<HTMLGlyphViewerElement>) => {
+export default React.forwardRef<HTMLGlyphViewerElement, GlyphViewerProps>(function GlyphViewer(props: GlyphViewerProps, fwdRef: React.ForwardedRef<HTMLGlyphViewerElement|null>) {
     const {onSelectionChange, ...rest} = props;
     const myRef = React.useRef<HTMLGlyphViewerElement>(null);
-    const ref = (fwdRef!== null && typeof(fwdRef) !== "function") ? fwdRef : myRef;
-    if(typeof(fwdRef) === "function") fwdRef(ref.current);
+    React.useImperativeHandle<HTMLGlyphViewerElement|null, HTMLGlyphViewerElement|null>(fwdRef, () => myRef.current);
     React.useEffect(() => {
-        const tgt = ref.current;
+        const tgt = myRef.current;
         if(onSelectionChange) {
             tgt?.addEventListener("selectionchange", onSelectionChange);
         }
@@ -37,6 +36,6 @@ export default React.forwardRef<HTMLGlyphViewerElement, GlyphViewerProps>((props
                 tgt?.removeEventListener("selectionchange", onSelectionChange);
             }
         }
-    }, [ref, fwdRef, onSelectionChange]);
-    return <glyph-viewer ref={ref} {...rest}/>
+    }, [myRef, onSelectionChange]);
+    return <glyph-viewer ref={myRef} {...rest}/>
 });

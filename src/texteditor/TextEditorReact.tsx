@@ -24,13 +24,12 @@ type TextEditorProps = TextEditorElementProps & {
     onSelectionChange?: (ev: Event) => any;
 }
 
-export default React.forwardRef<HTMLTextEditorElement, TextEditorProps>((props: TextEditorProps, fwdRef: React.ForwardedRef<HTMLTextEditorElement>) => {
+export default React.forwardRef<HTMLTextEditorElement, TextEditorProps>(function TextEditor(props: TextEditorProps, fwdRef: React.ForwardedRef<HTMLTextEditorElement|null>) {
     const {onSelectionChange, showWhitespace, ...rest} = props;
     const myRef = React.useRef<HTMLTextEditorElement>(null);
-    const ref = (fwdRef!== null && typeof(fwdRef) !== "function") ? fwdRef : myRef;
-    if(typeof(fwdRef) === "function") fwdRef(ref.current);
+    React.useImperativeHandle<HTMLTextEditorElement|null, HTMLTextEditorElement|null>(fwdRef, () => myRef.current);
     React.useEffect(() => {
-        const tgt = ref.current;
+        const tgt = myRef.current;
         if(onSelectionChange) {
             tgt?.addEventListener("selectionchange", onSelectionChange);
         }
@@ -39,6 +38,6 @@ export default React.forwardRef<HTMLTextEditorElement, TextEditorProps>((props: 
                 tgt?.removeEventListener("selectionchange", onSelectionChange);
             }
         }
-    }, [ref, fwdRef, onSelectionChange]);
-    return <text-editor ref={ref} show-whitespace={showWhitespace ? "" : null} {...rest}/>
+    }, [myRef, onSelectionChange]);
+    return <text-editor ref={myRef} show-whitespace={showWhitespace ? "" : null} {...rest}/>
 });

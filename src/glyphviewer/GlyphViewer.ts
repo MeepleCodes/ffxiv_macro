@@ -96,6 +96,7 @@ class GlyphController implements Controller, EventListenerObject {
     }
     protected dragStarted(ev: DragEvent) {
         const selectedText = this.model.getSelectedText();
+        console.log("Glyph viewer drag start with", selectedText, this.model.getSelectedGlyph());
         if(selectedText !== null) {
             const dt = ev.dataTransfer;
             if(dt) {
