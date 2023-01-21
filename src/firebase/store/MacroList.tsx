@@ -9,6 +9,11 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
 
 import ViewAgendaIcon from '@mui/icons-material/ViewAgenda';
 import ViewListIcon from '@mui/icons-material/ViewList';
@@ -20,6 +25,8 @@ import SortClockDescendingOutline from 'mdi-material-ui/SortClockDescendingOutli
 import SortVariantOff from 'mdi-material-ui/SortVariantOff';
 
 
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import format from 'date-fns/format'
 
 import { Component, EventHandler, FunctionComponent, PropsWithChildren, ReactEventHandler, useContext, useEffect, useState } from 'react';
 import { StoreContext } from './StoreControls';
@@ -39,41 +46,7 @@ const MaskedImage = styled("div")<{mask: string}>(({theme, mask}) => ({
 }));
 
 
-const NO_SORT = "UNSORTED";
-type SortOrder = Sort | "UNSORTED";
 
-function renderSort(sort: SortOrder) {
-    let name, icon, key;
-    if(sort === NO_SORT) {
-        name = "Unsorted";
-        key = "unsorted";
-        icon = <SortVariantOff/>
-    } else {
-        if(sort.key === SortKeys.name) {
-            if(sort.ascending) {
-                name = "Name";
-                icon = <SortAlphabeticalAscending/>
-            } else {
-                name = "Name (reversed)";
-                icon = <SortAlphabeticalDescending/>
-            }
-        } else {
-            if(sort.ascending) {
-                name = "Oldest first";
-                icon = <SortClockAscendingOutline/>
-            } else {
-                name = "Newest first";
-                icon = <SortClockDescendingOutline/>;
-            }
-        }
-        key = `${name}-${sort.ascending}`;
-    }
-    return {name, icon, key}
-}
-const asc = [true, false];
-const keys = [SortKeys.updated, SortKeys.name];
-const sortOrders: SortOrder[] = (keys.flatMap(k => asc.map(a => ({key: k, ascending: a}))) as SortOrder[]).concat([NO_SORT] as SortOrder[]);
-const defaultSortOrder = sortOrders[1]; // Latest first
 interface Mode {
     name: string;
     icon: JSX.Element;
@@ -83,6 +56,23 @@ type ViewModeProps = {macros: MacroDoc[], onLoad?: (macro: MacroDoc) => void, on
 interface ViewMode extends Mode {
     ListComponent: FunctionComponent<ViewModeProps>;
 };
+interface SortMode extends Mode {
+    sortKey?: Sort;
+};
+const sortModes: SortMode[] = [
+    {name: "Unsorted", icon: <SortVariantOff/>, sortKey: undefined},
+    {name: "Name", icon: <SortAlphabeticalAscending/>, sortKey: {key: SortKeys.name, ascending: true}},
+    {name: "Name (reversed)", icon: <SortAlphabeticalDescending/>, sortKey: {key: SortKeys.name, ascending: false}},
+    {name: "Newest first", icon: <SortClockDescendingOutline/>, sortKey: {key: SortKeys.updated, ascending: false}},
+    {name: "Oldest first", icon: <SortClockAscendingOutline/>, sortKey: {key: SortKeys.updated, ascending: true}},
+];
+const defaultSortMode = sortModes[3];
+function updated(macro: MacroDoc) {
+    // return macro.updated ? formatDistanceToNow(macro.updated.toDate(), {includeSeconds: true, addSuffix: true}) : "No modified date/time"
+    return macro.updated ? 
+        format(macro.updated.toDate(), "PPpp") :
+        "No modified date/time"
+}
 const viewModes: ViewMode[] = [
     {
         name: "Previews",
@@ -94,7 +84,7 @@ const viewModes: ViewMode[] = [
                 </div>
                 <ImageListItemBar
                     title={macro.name}
-                    subtitle={macro.updated ? macro.updated.toDate().toString() : "No modified date/time"}
+                    subtitle={updated(macro)}
                     actionIcon={
                         <IconButton
                             aria-label="Delete"
@@ -109,7 +99,14 @@ const viewModes: ViewMode[] = [
     {
         name: "List",
         icon: <ViewListIcon/>,
-        ListComponent: ({macros, onLoad, onDelete}) => <></>
+        ListComponent: ({macros, onLoad, onDelete}) => <List>
+            {macros.map(macro => <ListItem>
+                <ListItemAvatar>
+                    <Avatar sx={{objectFit: "none"}} src={`data:image/png;base64,${macro.thumbnail.toBase64()}`}/>
+                </ListItemAvatar>
+                <ListItemText primary={macro.name} secondary={updated(macro)}/>
+            </ListItem>)}
+        </List>
     }
 ];
 interface ModeMenuProps<T extends Mode> {modes: T[], mode: T, setMode: (newValue: T) => void};
@@ -123,14 +120,14 @@ function ModeMenu<T extends Mode>({modes, mode, setMode}: ModeMenuProps<T>) {
         setAnchorEl(null);
     };
     return <div>
-        <IconButton onClick={handleClick}>
+        <IconButton size="small" onClick={handleClick}>
             {mode.icon}
         </IconButton>
         <Menu
             anchorEl={anchorEl}
             open={open}
             onClose={handleClose}>
-                {modes.map(m => <MenuItem onClick={() => setMode(m)}>
+                {modes.map(m => <MenuItem onClick={() => {handleClose(); setMode(m);}} selected={m === mode}>
                     {m.icon} {m.name}
                 </MenuItem>)}
             </Menu>
@@ -141,18 +138,18 @@ function FileList(props: any){
     const [fileList, setFileList] = useState<MacroDoc[]>([]);
     const {editor, setLoading, setFilename, setFileid} = useContext(StoreContext);
     const [viewMode, setViewMode] = useState<ViewMode>(viewModes[0]);
-    const [sortOrder, setSortOrder] = useState<SortOrder>(defaultSortOrder);
+    const [sortMode, setSortMode] = useState<SortMode>(defaultSortMode);
     useEffect(() => {
         let lastWatcher: Unsubscribe | null = null;
-        const unregister = auth.onAuthStateChanged((user) => {
+        const unregister = auth.onAuthStateChanged(() => {
             if(lastWatcher !== null) lastWatcher();
-            lastWatcher = Store.watchAll(setFileList, sortOrder === NO_SORT ? undefined : sortOrder);
+            lastWatcher = Store.watchAll(setFileList, sortMode.sortKey);
         });
         return () => {
             unregister();
             if(lastWatcher) lastWatcher();
         }
-    }, [sortOrder]);
+    }, [sortMode]);
     const load = async function(id?: string) {
         if(id === undefined) return;
         console.log("Loading started");
@@ -177,39 +174,8 @@ function FileList(props: any){
     // TODO: momentjs for last-update timestamp formatting
     return <Stack sx={{height: "100%"}} {...props}>
         <Stack direction="row" alignItems="center" spacing={2} sx={{paddingLeft: 1}}>
-            {/* <ToggleButtonGroup
-                size="small"
-                value={sortOrder}
-                exclusive
-                onChange={(ev, value) => setSortOrder(value || NO_SORT)}
-                >
-                    {sortOrders.map(o => {
-                        const r = renderSort(o);
-                        return  <ToggleButton
-                            value={o}
-                            key={r.key}
-                            aria-label={r.name}
-                            >
-                                {r.icon}
-                            </ToggleButton>
-                    }
-                    )}
-            </ToggleButtonGroup> */}
-            <Typography variant="button">Sort</Typography>
-            <FormControl size="small" variant="standard">
-                <Select
-                    value={sortOrder}
-                    renderValue={o => renderSort(o).icon}
-                    onChange={(ev) => setSortOrder(ev.target.value as SortOrder)}
-                    >
-                    {sortOrders.map(o => {
-                        const r = renderSort(o);
-                        return <MenuItem value={o as any} key={r.key}>
-                            {r.icon} {r.name}
-                        </MenuItem>
-                    })}
-                </Select>
-            </FormControl>
+            <ModeMenu modes={sortModes} mode={sortMode} setMode={setSortMode}/>
+            <ModeMenu modes={viewModes} mode={viewMode} setMode={setViewMode}/>
         </Stack>
             <viewMode.ListComponent onLoad={(macro) => load(macro.id)} macros={fileList} />
         </Stack>
@@ -225,9 +191,9 @@ const StyledFileList = styled(FileList)(({theme}) => ({
     '& .MuiImageListItemBar-titleWrap': {
         padding: theme.spacing(1, 1.5)
     },
-    '& .MuiIconButton-root': {
-        color: theme.palette.primary.contrastText,
-    },
+    // '& .MuiIconButton-root': {
+    //     color: theme.palette.primary.contrastText,
+    // },
 }));
 
 export { StyledFileList };
