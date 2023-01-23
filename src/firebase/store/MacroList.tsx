@@ -4,11 +4,8 @@ import ImageListItemBar from '@mui/material/ImageListItemBar';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
@@ -25,10 +22,9 @@ import SortClockDescendingOutline from 'mdi-material-ui/SortClockDescendingOutli
 import SortVariantOff from 'mdi-material-ui/SortVariantOff';
 
 
-import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import format from 'date-fns/format'
 
-import { Component, EventHandler, FunctionComponent, PropsWithChildren, ReactEventHandler, useContext, useEffect, useState } from 'react';
+import { FunctionComponent, useContext, useEffect, useState } from 'react';
 import { StoreContext } from './StoreControls';
 import { Unsubscribe } from 'firebase/firestore';
 import { auth } from '../auth/FirebaseAuth';
