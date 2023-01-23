@@ -64,12 +64,12 @@ Vague list of features still to implement
   - No. of lines selected
 [x] View whitespace (U+00B7 for short space, something for long space)
 - Kerning class, link to unicode definition/names for glyph picker tooltip
-- Common glyphs as well as full browser (types of space, the lines, ???)
+[x] Common glyphs as well as full browser (types of space, the lines, ???)
 - Ctrl-B to cycle between thin and thick lines within selection
 - Glyph browser page?
 - Command to attempt to increase or decrease the length of a selection by replacing spaces/wide spaces
 [x] Replace character picker with a canvas-based solution
-  - Drag/drop still needed on new glyph picker
+  [x] Drag/drop still needed on new glyph picker
 [x] Tooltips on character picker to show glyph dimensions
 [x] Split App.tsx up into components
   [x] Make a proper React component wrapper around text-editor
@@ -101,3 +101,4 @@ Vague list of features still to implement
   - Trials and Raids: https://xivapi.com/search?filters=ContentFinderCondition.ContentType.ID%3E=4,ContentFinderCondition.ContentType.ID%3C=5&pretty=1
    (note this only has the latest Unreal on the list so that's a bit of a pain)
 - Icon browser for /micon selection (XIVAPI again)
+- Better favicons (https://www.emergeinteractive.com/insights/detail/the-essentials-of-favicons/) - 32, 128, 180, 192px

@@ -10,7 +10,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
@@ -37,15 +37,25 @@ import { MacroDoc, Sort, SortKeys, Store } from './Firestore';
 import {  styled } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
 
-const MaskedImage = styled("div")<{mask: string}>(({theme, mask}) => ({
-    background: theme.palette.primary.main,
-    aspectRatio: '3/2',
-    maskComposite: 'source-in',
-    maskImage: `url(${mask})`,
-    maskRepeat: 'no-repeat',
-}));
-
-
+const Preview = styled(({className}: {className?: string, mask: string, textColor?: string, small?: boolean}) => <div className={className}><div></div></div>)( ({theme, small, textColor, mask}) => {
+    const size = small ? 10 : 20;
+    return {
+        width: '100%',
+        '& div': {
+            width: '100%',
+            background: textColor || theme.palette.primary.main,
+            maskComposite: 'source-in',
+            maskRepeat: 'no-repeat',
+            ...(small ? {
+                aspectRatio: '1',
+                maskImage: `url(${mask}), ` + (["top", "left"].map(edge => `linear-gradient(to ${edge}, transparent, black ${size}px)`)).join(", "),
+            } : {
+                aspectRatio: '3/2',
+                maskImage: `url(${mask}), linear-gradient(to bottom, black calc(100% - 80px), transparent calc(100% - 20px), transparent), linear-gradient(to right, black calc(100% - 20px), transparent)`,
+            })
+        }
+    }
+});
 
 interface Mode {
     name: string;
@@ -78,10 +88,8 @@ const viewModes: ViewMode[] = [
         name: "Previews",
         icon: <ViewAgendaIcon/>,
         ListComponent:  ({macros, onLoad, onDelete}) => <ImageList cols={1} sx={{marginBottom: 0}}>
-             {macros.map((macro) => <ImageListItem onClick={() => onLoad?.(macro)}>
-                <div className="masking">
-                    <MaskedImage className="MuiImageListItem-img" mask={`data:image/png;base64,${macro.thumbnail.toBase64()}`}/>
-                </div>
+             {macros.map((macro) => <ImageListItem key={macro.id} onClick={() => onLoad?.(macro)}>
+                <Preview className="MuiImageListItem-img" textColor="black" mask={`data:image/png;base64,${macro.thumbnail.toBase64()}`}/>
                 <ImageListItemBar
                     title={macro.name}
                     subtitle={updated(macro)}
@@ -100,12 +108,12 @@ const viewModes: ViewMode[] = [
         name: "List",
         icon: <ViewListIcon/>,
         ListComponent: ({macros, onLoad, onDelete}) => <List>
-            {macros.map(macro => <ListItem>
+            {macros.map(macro => <ListItemButton key={macro.id} onClick={() => onLoad?.(macro)}>
                 <ListItemAvatar>
-                    <Avatar sx={{objectFit: "none"}} src={`data:image/png;base64,${macro.thumbnail.toBase64()}`}/>
+                    <Avatar variant="square" textColor="white" component={Preview} mask={`data:image/png;base64,${macro.thumbnail.toBase64()}`} small/>
                 </ListItemAvatar>
                 <ListItemText primary={macro.name} secondary={updated(macro)}/>
-            </ListItem>)}
+            </ListItemButton>)}
         </List>
     }
 ];
