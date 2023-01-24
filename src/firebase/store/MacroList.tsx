@@ -4,12 +4,9 @@ import ImageListItemBar from '@mui/material/ImageListItemBar';
 
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import FormControl from '@mui/material/FormControl';
 import Divider from '@mui/material/Divider';
-import InputLabel from '@mui/material/InputLabel';
-import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
-import TextField from '@mui/material/TextField';
+import InputBase from '@mui/material/InputBase';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import List from '@mui/material/List';
@@ -96,7 +93,7 @@ function updated(macro: MacroDoc) {
 }
 
 function PreviewList({macros, onLoad, onDelete}: ViewModeProps) {
-    return <ImageList cols={1} sx={{marginBottom: 0}}>
+    return <ImageList cols={1} sx={{marginBottom: 0, marginTop: 0}}>
         {macros.map((macro) => <ImageListItem key={macro.id} onClick={() => onLoad?.(macro)}>
         <Preview className="MuiImageListItem-img" textColor="black" mask={`data:image/png;base64,${macro.thumbnail.toBase64()}`}/>
         <ImageListItemBar
@@ -206,21 +203,16 @@ function FileList(props: any){
         setLoading(false);
     }
     return <Stack sx={{height: "100%"}} spacing={0} {...props}>
-        <Paper sx={{p: 1, m:1, display: 'flex', alignItems: 'center'}}>
-            <TextField
-                size="small" 
-                sx={{marginRight: 2}}
+        <Paper sx={{p: 0.5, m:0.5, display: 'flex', alignItems: 'center'}}>
+            <InputBase 
                 placeholder="Filter..." 
-                variant="outlined" 
-                value={filterText} 
-                onChange={(e) => setFilterText(e.target.value)}
-                InputProps={{
-                    startAdornment: <InputAdornment position="start" disablePointerEvents><SearchIcon/></InputAdornment>,
-                    endAdornment: filterText === "" ? undefined : <InputAdornment position="end"><IconButton onClick={() => setFilterText("")} edge="end"><ClearIcon/></IconButton></InputAdornment>
-                }}
+                sx={{ml: 1, flex: 1}} value={filterText} onChange={(e) => setFilterText(e.target.value)}
+                startAdornment={<InputAdornment position="start" disablePointerEvents><SearchIcon/></InputAdornment>}
+                endAdornment={filterText === "" ? undefined : <InputAdornment position="end"><IconButton onClick={() => setFilterText("")}><ClearIcon/></IconButton></InputAdornment>}
             />
-            <ModeMenu modes={sortModes} mode={sortMode} setMode={setSortMode} title="Sort order"/>
-            <ModeMenu modes={viewModes} mode={viewMode} setMode={setViewMode} title="Display as..."/>
+            <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+            <ModeMenu color="primary" modes={sortModes} mode={sortMode} setMode={setSortMode} title="Sort order"/>
+            <ModeMenu color="primary" modes={viewModes} mode={viewMode} setMode={setViewMode} title="Display as..."/>
             <Dialog
                 open={deleteMacro !== null}
                 onClose={() => setDeleteMacro(null)}
