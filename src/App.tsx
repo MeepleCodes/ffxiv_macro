@@ -34,7 +34,7 @@ declare global {
 window.log = log;
 log.setLevel(log.levels.DEBUG);
 
-const DRAWER_WIDTH = 280;
+const DRAWER_WIDTH = 300;
 
 type FontSource = {
 	name: string;

@@ -1,6 +1,6 @@
 import {app} from '../Firebase';
 import { auth } from '../auth/FirebaseAuth';
-import { Bytes, Timestamp, collection, doc, DocumentData, DocumentReference, FirestoreDataConverter, getDoc, getDocs, getFirestore, onSnapshot, query, QueryDocumentSnapshot, SnapshotOptions, Unsubscribe, where, WithFieldValue, updateDoc, serverTimestamp, addDoc, orderBy } from "firebase/firestore";
+import { Bytes, Timestamp, collection, doc, DocumentData, DocumentReference, FirestoreDataConverter, getDoc, getFirestore, onSnapshot, query, QueryDocumentSnapshot, SnapshotOptions, Unsubscribe, where, WithFieldValue, updateDoc, serverTimestamp, addDoc, orderBy } from "firebase/firestore";
 // Initialize Cloud Firestore and get a reference to the service
 const db = getFirestore(app);
 const macros = collection(db, "macros");
@@ -13,6 +13,7 @@ export interface MacroDoc {
     created: Timestamp;
     updated: Timestamp;
     thumbnail: Bytes;
+    deleted: boolean;
 };
 const MacroConverter: FirestoreDataConverter<MacroDoc>  = {
     fromFirestore(snapshot: QueryDocumentSnapshot<DocumentData>, options?: SnapshotOptions): MacroDoc {
@@ -24,7 +25,8 @@ const MacroConverter: FirestoreDataConverter<MacroDoc>  = {
             text: d.text,
             created: d.created,
             updated: d.updated,
-            thumbnail: d.thumbnail
+            thumbnail: d.thumbnail,
+            deleted: d.deleted
         }
     },
     toFirestore(macro: WithFieldValue<MacroDoc>): DocumentData {
@@ -50,20 +52,24 @@ export const Store = {
             else return snap.data();
         });
     },
-    async loadAll(): Promise<MacroDoc[]> {
-        return getDocs(query(macros, where("owner", "==", auth.currentUser?.uid)).withConverter(MacroConverter)).then((snapshot) => {
-            return snapshot.docs.filter(snap => snap.exists()).map(snap=>snap.data());
-        });
-    },
-    watchAll(callback: (docs: MacroDoc[])=> void, sort?: Sort): Unsubscribe {
+    watchAll(callback: (docs: MacroDoc[])=> void, sort?: Sort, filterText?: string): Unsubscribe {
+        // TODO: At the moment we filter the macro list client-side because we assume it'll be relatively short
+        // If we want to filter server-side we need to enable one of Firebase's text-indexing extensions
+        let filters = [where("owner", "==", auth.currentUser?.uid), where("deleted", "==", false)];
+        // const filters = [where("owner", "==", auth.currentUser?.uid)];
         let q;
         if(sort !== undefined) {
-            q = query(macros, where("owner", "==", auth.currentUser?.uid), orderBy(sort.key, sort.ascending ? "asc" : "desc"));
+            q = query(macros, ...filters, orderBy(sort.key, sort.ascending ? "asc" : "desc"));
         } else {
-            q = query(macros, where("owner", "==", auth.currentUser?.uid));
+            q = query(macros, ...filters);
         }
         return onSnapshot(q.withConverter(MacroConverter), (snapshot) => {
-            callback(snapshot.docs.filter(snap => snap.exists()).map(snap=>snap.data()));
+            let docs = snapshot.docs.filter(snap => snap.exists()).map(snap=>snap.data());
+            if(filterText !== undefined) {
+                const lowerCase = filterText.toLowerCase();
+                docs = docs.filter(macro => macro.name.toLowerCase().includes(lowerCase));
+            }
+            callback(docs);
         });
     },
     async save(id: string|undefined, name: string, text: string, thumbnail: Bytes): Promise<string> {
@@ -83,5 +89,9 @@ export const Store = {
             created: serverTimestamp()
         };
         return await addDoc(macros, macro).then(docRef => docRef.id);
+    },
+    async markDeleted(id: string): Promise<void> {
+        const ref = doc(macros, id).withConverter(MacroConverter);
+        return updateDoc(ref, {deleted: true});
     }
 };
