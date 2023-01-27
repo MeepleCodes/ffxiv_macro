@@ -5,28 +5,31 @@ import { StoreContextProvider, SaveIconButton, SimpleFileName } from './firebase
 import { StyledFileList } from './firebase/store/MacroList';
 import GlyphPicker from './GlyphPicker';
 
-import Box from '@mui/material/Box';
-import ToggleButton from '@mui/material/ToggleButton';
-import Card from '@mui/material/Card';
-import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import SpaceBarIcon from '@mui/icons-material/SpaceBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select  from '@mui/material/Select';
-import CardActions from '@mui/material/CardActions';
-import CardMedia from '@mui/material/CardMedia';
-import CardHeader from '@mui/material/CardContent';
-import Stack from '@mui/material/Stack';
-import { ThemeProvider } from '@mui/material/styles';
 import { NavAppBar, NavDrawer, NavHeader, NavMain } from './Nav';
 import { appTheme } from './Theme';
 
 import log, {RootLogger} from 'loglevel';
 import AuthMenu from './firebase/auth/AuthControls';
+
+import {
+    Box,
+    ToggleButton,
+    Card,
+    IconButton,
+    Toolbar,
+    Typography,
+    InputLabel,
+    MenuItem,
+    FormControl,
+    Select,
+    CardActions,
+    CardMedia,
+    CardContent as CardHeader,
+    Stack,
+    ThemeProvider,
+} from '@mui/material';
 
 declare global {
 	interface Window { log: RootLogger }

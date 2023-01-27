@@ -1,26 +1,5 @@
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
-import ImageListItemBar from '@mui/material/ImageListItemBar';
-
-import IconButton, { IconButtonProps } from '@mui/material/IconButton';
+import { IconButtonProps } from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import Divider from '@mui/material/Divider';
-import InputAdornment from '@mui/material/InputAdornment';
-import InputBase from '@mui/material/InputBase';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
-import Dialog from '@mui/material/Dialog';
-import Paper from '@mui/material/Paper';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import Button from '@mui/material/Button';
 
 import ViewAgendaIcon from '@mui/icons-material/ViewAgenda';
 import ViewListIcon from '@mui/icons-material/ViewList';
@@ -42,8 +21,31 @@ import { Unsubscribe } from 'firebase/firestore';
 import { auth } from '../auth/FirebaseAuth';
 import { MacroDoc, Sort, SortKeys, Store } from './Firestore';
 
-import {  styled } from '@mui/material/styles';
-import Stack from '@mui/material/Stack';
+import {
+    ImageList,
+    ImageListItem,
+    ImageListItemBar,
+    IconButton,
+    Divider,
+    InputAdornment,
+    InputBase,
+    Menu,
+    MenuItem,
+    List,
+    ListItem,
+    ListItemButton,
+    ListItemText,
+    ListItemAvatar,
+    Avatar,
+    Dialog,
+    Paper,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    Button,
+    styled,
+    Stack,
+} from '@mui/material';
 
 const Preview = styled(({className}: {className?: string, mask: string, textColor?: string, small?: boolean}) => <div className={className}><div></div></div>)( ({theme, small, textColor, mask}) => {
     const size = small ? 10 : 20;
@@ -73,10 +75,10 @@ interface Mode {
 type ViewModeProps = {macros: MacroDoc[], onLoad?: (macro: MacroDoc) => void, onDelete?: (macro: MacroDoc) => void};
 interface ViewMode extends Mode {
     ListComponent: FunctionComponent<ViewModeProps>;
-};
+}
 interface SortMode extends Mode {
     sortKey?: Sort;
-};
+}
 const sortModes: SortMode[] = [
     {name: "Unsorted", icon: <SortVariantOff/>, sortKey: undefined},
     {name: "Name", icon: <SortAlphabeticalAscending/>, sortKey: {key: SortKeys.name, ascending: true}},
@@ -139,7 +141,7 @@ const viewModes: ViewMode[] = [
         ListComponent: ListList
     }
 ];
-interface ModeMenuProps<T extends Mode> extends IconButtonProps {modes: T[], mode: T, setMode: (newValue: T) => void};
+interface ModeMenuProps<T extends Mode> extends IconButtonProps {modes: T[], mode: T, setMode: (newValue: T) => void}
 function ModeMenu<T extends Mode>({modes, mode, setMode, ...props}: ModeMenuProps<T>) {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);

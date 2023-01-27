@@ -1,6 +1,5 @@
-import { styled, Theme } from '@mui/material/styles';
-import Drawer from '@mui/material/Drawer';
-import AppBar from '@mui/material/AppBar';
+import { Theme } from '@mui/material/styles';
+import { styled, Drawer, AppBar } from '@mui/material';
 
 
 /**
@@ -18,7 +17,7 @@ function omitProps<T>(...omit: (keyof T)[]) {
     return {
         shouldForwardProp: (prop: PropertyKey) => !(omit as PropertyKey[]).includes(prop)
     }
-};
+}
 
 export type NavProps = {
     open?: boolean,

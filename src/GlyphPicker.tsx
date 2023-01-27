@@ -1,14 +1,7 @@
 import { MouseEvent, RefObject, useRef, useState } from "react";
 
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Card, {CardProps} from '@mui/material/Card';
-import CardHeader from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Tooltip from '@mui/material/Tooltip';
+import { CardProps } from '@mui/material/Card';
 import ClickAwayListener from '@mui/base/ClickAwayListener';
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
 
 
 import HTMLTextEditorElement from "./texteditor/TextEditor";
@@ -17,6 +10,19 @@ import font from './axis-12-lobby.json';
 import spritesheet from './res/axis-12-lobby.png'
 import GlyphViewerReact, { HTMLGlyphViewerElement } from "./glyphviewer/GlyphViewerReact";
 import { GlyphPosition } from "./texteditor/TextModel";
+
+
+
+import {
+    Tabs,
+    Tab,
+    Card,
+    CardContent as CardHeader,
+    CardMedia,
+    Tooltip,
+    Stack,
+    Typography,
+} from '@mui/material';
 
 
 

@@ -30,18 +30,24 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
+    "babel-plugin-import": "^1.13.6",
+    "customize-cra": "^1.0.0",
     "firebase-admin": "^11.5.0",
     "jest": "^29.3.1",
+    "react-app-rewired": "^2.2.1",
     "react-scripts": "^5.0.1",
     "rewire": "^6.0.0",
     "webpack-cli": "^5.0.1"
   },
   "scripts": {
-    "r-s-start": "react-scripts start",
-    "r-s-build": "react-scripts build",
-    "start": "node ./rewrite.js start",
-    "build": "node ./rewrite.js build",
-    "test": "react-scripts test",
+    "cra-start": "react-scripts start",
+    "cra-build": "react-scripts build",
+    "cra-test": "react-scripts test",
+    "my-start": "node ./rewrite.js start",
+    "my-build": "node ./rewrite.js build",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

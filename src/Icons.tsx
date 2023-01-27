@@ -1,5 +1,7 @@
 import { ReactComponent as Icon } from './icon.svg';
-import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
+import { SvgIconProps } from '@mui/material/SvgIcon';
+
+import { SvgIcon } from '@mui/material';
 
 export function THRMIcon(props: SvgIconProps) {
 	return (

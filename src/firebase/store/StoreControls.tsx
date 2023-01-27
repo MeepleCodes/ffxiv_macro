@@ -6,11 +6,10 @@ import { Bytes, Unsubscribe } from "firebase/firestore";
 import SaveIcon from '@mui/icons-material/Save';
 import ContentSavePlus from 'mdi-material-ui/ContentSavePlus';
 
-import IconButton from '@mui/material/IconButton';
-import Button from '@mui/material/Button';
-import InputBase from '@mui/material/InputBase';
-import TextField from "@mui/material/TextField";
 import { auth } from "../auth/FirebaseAuth";
+
+
+import { IconButton, Button, InputBase, TextField } from '@mui/material';
 
 
 const dontUseDefault = (nv: any) => {throw new Error("Don't use the default context");};

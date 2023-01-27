@@ -4,12 +4,12 @@ import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import * as firebaseui from 'firebaseui';
 import 'firebaseui/dist/firebaseui.css';
-import IconButton from '@mui/material/IconButton';
-import Button from '@mui/material/Button';
-import Popover from '@mui/material/Popover';
 import LoginIcon from '@mui/icons-material/Login';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { compatAuth } from './FirebaseAuth';
+
+
+import { IconButton, Button, Popover } from '@mui/material';
 
 
 const firebaseUiConfig: firebaseui.auth.Config = {

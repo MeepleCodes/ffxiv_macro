@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme } from '@mui/material';
 export let appTheme = createTheme();
 appTheme = createTheme(appTheme, {
     palette: {
