@@ -8,7 +8,6 @@ const STYLESHEET = `
         padding: 2px;
         position: relative;
         display: block;
-        color: black;
         --glyph-background: rgba(0,0,0,0.1);
     }
     :host:focus {

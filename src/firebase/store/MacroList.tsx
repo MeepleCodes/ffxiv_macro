@@ -43,9 +43,9 @@ import {
     DialogContent,
     DialogContentText,
     Button,
-    styled,
     Stack,
 } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
 const Preview = styled(({className}: {className?: string, mask: string, textColor?: string, small?: boolean}) => <div className={className}><div></div></div>)( ({theme, small, textColor, mask}) => {
     const size = small ? 10 : 20;
@@ -53,7 +53,7 @@ const Preview = styled(({className}: {className?: string, mask: string, textColo
         width: '100%',
         '& div': {
             width: '100%',
-            background: textColor || theme.palette.primary.main,
+            background: textColor || theme.palette.text.secondary,
             maskComposite: 'source-in',
             maskRepeat: 'no-repeat',
             ...(small ? {
@@ -97,12 +97,13 @@ function updated(macro: MacroDoc) {
 function PreviewList({macros, onLoad, onDelete}: ViewModeProps) {
     return <ImageList cols={1} sx={{marginBottom: 0, marginTop: 0}}>
         {macros.map((macro) => <ImageListItem key={macro.id} onClick={() => onLoad?.(macro)}>
-        <Preview className="MuiImageListItem-img" textColor="black" mask={`data:image/png;base64,${macro.thumbnail.toBase64()}`}/>
+        <Preview className="MuiImageListItem-img"  mask={`data:image/png;base64,${macro.thumbnail.toBase64()}`}/>
         <ImageListItemBar
             title={macro.name}
             subtitle={updated(macro)}
             actionIcon={
                 <IconButton
+                    color="inherit"
                     aria-label="Delete"
                     onClick={(e) => {e.stopPropagation(); onDelete?.(macro)}}>
                     <DeleteIcon/>
@@ -115,6 +116,7 @@ function PreviewList({macros, onLoad, onDelete}: ViewModeProps) {
 function ListList({macros, onLoad, onDelete}: ViewModeProps) {
     return <List dense>
         {macros.map(macro => <ListItem title={macro.name} disableGutters disablePadding key={macro.id} secondaryAction={<IconButton
+                    color="inherit"
                     aria-label="Delete"
                     onClick={(e) => {e.stopPropagation(); onDelete?.(macro)}}>
                     <DeleteIcon/>

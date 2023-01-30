@@ -113,7 +113,9 @@ export default class TextView {
         if(this.showWhitespace) {
             // Recolour the black/alpha whitespace buffer in place
             // TODO: Use a CSS --custom-property for this style
-            this.whitespaceContext.fillStyle = "rgba(0,0,0,0.25)";            
+            this.whitespaceContext.fillStyle = this.textStyle.getPropertyValue("--whitespace-color");
+            console.log("Using whitespace-color of", this.textStyle.getPropertyValue("--whitespace-color"));
+
             this.whitespaceContext.globalCompositeOperation = "source-in";
             this.whitespaceContext.fillRect(0, 0, this.whitespaceBuffer.width, this.whitespaceBuffer.height);        
         }
@@ -158,7 +160,7 @@ export default class TextView {
         }
         // Cursor is drawn in text colour
         // TODO: Should use caret-color really
-        this.cursorContext.strokeStyle = this.textStyle.color;
+        this.cursorContext.strokeStyle = this.textStyle.caretColor;
         this.cursorContext.lineWidth = 1;
         if(this._caretVisible) {
             

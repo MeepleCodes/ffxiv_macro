@@ -13,11 +13,9 @@ const STYLESHEET = `
         padding: 2px;
         position: relative;
         display: block;
-        color: black;
     }
     :host::selection {
         background-color: #b0b8e0;
-        color: black;
     }
     slot {
         display: none;

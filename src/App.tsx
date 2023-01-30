@@ -4,7 +4,7 @@ import TextEditor, {HTMLTextEditorElement} from './texteditor/TextEditorReact';
 import { StoreContextProvider, SaveIconButton, SimpleFileName } from './firebase/store/StoreControls';
 import { StyledFileList } from './firebase/store/MacroList';
 import GlyphPicker from './GlyphPicker';
-
+import { styled } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import SpaceBarIcon from '@mui/icons-material/SpaceBar';
 import { NavAppBar, NavDrawer, NavHeader, NavMain } from './Nav';
@@ -28,8 +28,9 @@ import {
     CardMedia,
     CardContent as CardHeader,
     Stack,
-    ThemeProvider,
+	CssBaseline
 } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
 
 declare global {
 	interface Window { log: RootLogger }
@@ -73,7 +74,15 @@ type TEInfo = {
 	columnMode: boolean,
 };
 
-
+const StyledTextEditor = styled(TextEditor, {shouldForwardProp: () => true})(({theme}) => ({
+    color: theme.palette.text.primary,
+    '--whitespace-color': theme.palette.text.disabled,
+	width: 400,
+	height: 400,
+	padding: theme.spacing(0.5, 1),
+	border: 0,
+	outline: 0
+}));
 
 function App() {
 	let [font, setFont] = useState<number>(0);
@@ -110,6 +119,7 @@ function App() {
 	return (
 		<StoreContextProvider editor={ref}>
 			<ThemeProvider theme={appTheme}>
+				<CssBaseline/>
 			<NavAppBar position="fixed" width={DRAWER_WIDTH}>
 				<Toolbar>
 					<IconButton
@@ -178,7 +188,7 @@ function App() {
 						</Stack>
 						</CardHeader>
 						<CardMedia>
-							<TextEditor fontsrc={fontSources[font].src} ref={ref} onSelectionChange={updateCursor}  showWhitespace={showWhitespace} value={"line\n\nline"}/>
+							<StyledTextEditor fontsrc={fontSources[font].src} ref={ref} onSelectionChange={updateCursor}  showWhitespace={showWhitespace} value={"line\n\nline"}/>
 						</CardMedia>
 					<CardActions sx={{boxShadow: 1}}>
 							{cur && <div className="status row">
