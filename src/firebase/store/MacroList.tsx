@@ -46,7 +46,6 @@ import {
     Stack,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { spacing } from '@mui/system';
 
 interface PreviewProps {
     className?: string;
