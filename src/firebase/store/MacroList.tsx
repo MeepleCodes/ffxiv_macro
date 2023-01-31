@@ -46,8 +46,16 @@ import {
     Stack,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { spacing } from '@mui/system';
 
-const Preview = styled(({className}: {className?: string, mask: string, textColor?: string, small?: boolean}) => <div className={className}><div></div></div>)( ({theme, small, textColor, mask}) => {
+interface PreviewProps {
+    className?: string;
+    mask: string;
+    textColor?: string;
+    small?: boolean;
+}
+const UnstyledPreview = ({className}: PreviewProps) => <div className={className}><div></div></div>;
+const Preview = styled(UnstyledPreview)( ({theme, small, textColor, mask}) => {
     const size = small ? 10 : 20;
     return {
         width: '100%',
@@ -94,23 +102,36 @@ function updated(macro: MacroDoc) {
         "No modified date/time"
 }
 
+const RoundedImageListItem = styled(ImageListItem)(({theme}) => ({
+    // borderColor: "white",
+    borderColor: theme.palette.grey[600],
+    borderRadius: theme.shape.borderRadius,
+    borderWidth: 1,
+    borderStyle: "solid",
+    background: theme.palette.background.paper,
+    overflow: "hidden"
+}));
+
 function PreviewList({macros, onLoad, onDelete}: ViewModeProps) {
-    return <ImageList cols={1} sx={{marginBottom: 0, marginTop: 0}}>
-        {macros.map((macro) => <ImageListItem key={macro.id} onClick={() => onLoad?.(macro)}>
-        <Preview className="MuiImageListItem-img"  mask={`data:image/png;base64,${macro.thumbnail.toBase64()}`}/>
-        <ImageListItemBar
-            title={macro.name}
-            subtitle={updated(macro)}
-            actionIcon={
-                <IconButton
-                    color="inherit"
-                    aria-label="Delete"
-                    onClick={(e) => {e.stopPropagation(); onDelete?.(macro)}}>
-                    <DeleteIcon/>
-                </IconButton>
-            }
-        />
-    </ImageListItem>)}
+    return <ImageList cols={1} variant="masonry" gap={8} sx={{marginBottom: 0, marginTop: 0, padding: "2px 4px"}}>
+        {macros.map((macro) => (
+        <RoundedImageListItem
+            key={macro.id}
+            onClick={() => onLoad?.(macro)}>
+            <Preview className="MuiImageListItem-img"  mask={`data:image/png;base64,${macro.thumbnail.toBase64()}`}/>
+            <ImageListItemBar
+                title={macro.name}
+                subtitle={updated(macro)}
+                actionIcon={
+                    <IconButton
+                        color="inherit"
+                        aria-label="Delete"
+                        onClick={(e) => {e.stopPropagation(); onDelete?.(macro)}}>
+                        <DeleteIcon/>
+                    </IconButton>
+                }
+            />
+        </RoundedImageListItem>))}
     </ImageList>;
 }
 function ListList({macros, onLoad, onDelete}: ViewModeProps) {

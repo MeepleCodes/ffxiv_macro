@@ -7,15 +7,16 @@ extracted from FFXIV (which it uses instead of vector/TTF-based fonts).
 - There's *some* order of delete/insert (maybe clipboard) that doesn't create two undo states, just one
 - Moving the cursor doesn't finalise the previous undo state so insert > move > insert is a single state
 - Scrolling from keyboard navigation isn't quite working (down arrow, at least)
+- Cursor not restored correctly when undo/redoing
+- Mouse events are firing on the scrollbars
+- Save New isn't working properly (might not be setting deleted=false, but also console errors)
+- If the screen is to wide for both editor and glyph picker to be in one row, it doesn't scroll properly
 
-## Bugs
+## Fixed bugs
 [x] CPU usage wtf
 [x] Drop insertion point drawn in the wrong place at the end of a line
-- Cursor not restored correctly when undo/redoing
-- Insert/move cursor/insert is merging undo states; should be separate
-[x] Re-implement autoscroll in refactored editor
-- Mouse events are firing on the scrollbars
 [x] Show/hide whitespace not toggling
+[x] Re-implement autoscroll in refactored editor
 
 ## TODOs
 Vague list of features still to implement
@@ -25,7 +26,7 @@ Vague list of features still to implement
 [~] Refactor control key bindings in TextEditor
 [x] Last character in selection should select max of g.w/g.advanceWidth (vertical line have a huge +ve right margin)
 [x] Insert by drag/drop or glyph picker should be its own Undo state
-- Always show cursor (maybe don't blink if not focused?)
+[x] Always show cursor (maybe don't blink if not focused?)
 [x] Styling via CSS (including ::selection)
 [x] Drag and drop from glyph picker into editor window
 - Zoom button as well as font size
@@ -63,33 +64,61 @@ Vague list of features still to implement
 [x] Status bar with current cursor and pixel position
   - No. of lines selected
 [x] View whitespace (U+00B7 for short space, something for long space)
-- Kerning class, link to unicode definition/names for glyph picker tooltip
 [x] Common glyphs as well as full browser (types of space, the lines, ???)
+- Glyph picker enhancements
+  - Don't auto-sort glyphs in sections so we can have all the spaces at the start of the 'useful' section
+    - OR remove them from 'useful' and put them in the "insert some space" button list
+  - Kerning class/table
+  - unicode names for glyph picker tooltip
+  - Double-click to insert should un-pin the tooltip
+  - Close button when the tooltip is pinned
+  - Double-clicking repeatedly doesn't insert as often as you'd expect
 - Ctrl-B to cycle between thin and thick lines within selection
-- Glyph browser page?
+- Separate glyph browser page?
+- Help/tips page(s)?
 - Command to attempt to increase or decrease the length of a selection by replacing spaces/wide spaces
+- List of possible pixel-width spaces and buttons to insert them (3, 6, 7, 9, 10, 12, 13, 14[, 15, 16 etc all trivial from here])
 [x] Replace character picker with a canvas-based solution
   [x] Drag/drop still needed on new glyph picker
 [x] Tooltips on character picker to show glyph dimensions
 [x] Split App.tsx up into components
   [x] Make a proper React component wrapper around text-editor
-    - onChange event from text-editor to make that work better
+    [x] onChange event from text-editor to make that work better
   - Would making the statusbar a memo()d component improve performance?
 [x] Start using MUI
   [x] Keep is a good template to take inspiration from
 - Overlays for common chat window sizes
   - Mine is ~466x189px, most standard macros seem to come up maybe a bit shorter
-- Dark theme
+[x] Dark theme
+- Further UI improvements
+  - Remove app bar, replace with small title box
+  - Left panel for logins, hidden if logged out
+  - Move glyphs etc. to right drawer?
+
+- Amusing default macro contents
 - Line count in status bar (and warn if >15)
 - Move web component to asset-loaded CSS
 [~] Saving and loading macros with firebase storeage or similar
   - 'New' button
   - Delete button
+  - Mark dirty
+    - Warn on load/navigate away
+    - Disable save unless dirty
+  - Auto-saving drafts (including for anonymous users)
   - More fields on documents:
     [x] Created/last modified
     [x] Owner
     - Tags
   - Disabling stuff when load/save is in progress
+  - Shippable alpha auth/user state:
+    - No signups
+    - Signin button reasonably well hidden
+    - Save buttons removed
+    - Remove anonymous auth (? browser-local storage of current editor *probably* achieves the same thing)
+      - BUT if we want last-editor-state/drafts to persist to account then maybe not...
+  - Beta:
+    - Signup via e-mail/google/???
+    - Can only view own macros
   [~] Authentication and user management
     - Privacy policy and ToS :<
     - Upgrading anonymous users (merge by assigning all anonymous user's macros to existing auth)
@@ -100,5 +129,5 @@ Vague list of features still to implement
   - Class/job: https://xivapi.com/ClassJob?pretty=1
   - Trials and Raids: https://xivapi.com/search?filters=ContentFinderCondition.ContentType.ID%3E=4,ContentFinderCondition.ContentType.ID%3C=5&pretty=1
    (note this only has the latest Unreal on the list so that's a bit of a pain)
-- Icon browser for /micon selection (XIVAPI again)
-- Better favicons (https://www.emergeinteractive.com/insights/detail/the-essentials-of-favicons/) - 32, 128, 180, 192px
+[~] Icon browser for /micon selection (XIVAPI again)
+[x] Better favicons (https://www.emergeinteractive.com/insights/detail/the-essentials-of-favicons/) - 32, 128, 180, 192px

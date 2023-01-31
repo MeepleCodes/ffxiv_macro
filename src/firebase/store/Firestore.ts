@@ -76,9 +76,9 @@ export const Store = {
         const ref = doc(macros, id).withConverter(MacroConverter);
         const macro = {
             name, text, thumbnail,
-            updated: serverTimestamp()
+            updated: serverTimestamp(),
+            deleted: false
         };
-        console.log("Saving", macro, "to", ref.path);
         return updateDoc(ref, macro).then(() => ref.id);
     },
     async saveAs(name: string, text: string, thumbnail: Bytes): Promise<string> {
@@ -86,9 +86,10 @@ export const Store = {
             name, text, thumbnail,
             owner: auth.currentUser?.uid,
             updated: serverTimestamp(),
-            created: serverTimestamp()
+            created: serverTimestamp(),
+            deleted: false
         };
-        return await addDoc(macros, macro).then(docRef => docRef.id);
+        return addDoc(macros, macro).then(docRef => docRef.id);
     },
     async markDeleted(id: string): Promise<void> {
         const ref = doc(macros, id).withConverter(MacroConverter);
