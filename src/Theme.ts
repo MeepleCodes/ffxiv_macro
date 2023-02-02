@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme, Theme } from '@mui/material/styles';
 export let appTheme = createTheme();
 appTheme = createTheme(appTheme, {
     palette: {
@@ -19,9 +19,18 @@ appTheme = createTheme(appTheme, {
           main: '#f50057',
         },
         background: {
-          paper: 'rgba(66,66,66,0.84)',
+          paper: 'rgba(66,66,66,0.74)',
         },        
     },
+    components: {
+        MuiCardHeader: {
+            styleOverrides: {
+                root: ({theme}: {theme: Theme}) => ({
+                    padding: theme.spacing(1)
+                })
+            }
+        }
+    }
 });
 declare module '@mui/material/styles' {
     interface Palette {

@@ -1,5 +1,13 @@
 #root {
+  overflow: auto;
+}
+#bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
   background-image: url("https://img.finalfantasyxiv.com/lds/promo/h/n/gWltIgn8JKPpCsUwtLpwJSGGQQ.jpg");
   background-position: center;
   background-size: cover;
+  z-index: -10000;
+  filter: brightness(50%);
 }

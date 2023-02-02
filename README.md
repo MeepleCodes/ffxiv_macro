@@ -20,6 +20,7 @@ extracted from FFXIV (which it uses instead of vector/TTF-based fonts).
 
 ## TODOs
 Vague list of features still to implement
+- Migrate off CRA to Next.js, Gatsby or ???
 [x] Kerning
 [x] Character picker (slightly better one, but performance suffers)
 [x] Line wrapping and/or scrolling

@@ -6,8 +6,9 @@ import { StyledFileList } from './firebase/store/MacroList';
 import GlyphPicker from './GlyphPicker';
 import { styled } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
-import SpaceBarIcon from '@mui/icons-material/SpaceBar';
-import { NavAppBar, NavDrawer, NavHeader, NavMain } from './Nav';
+import CloseIcon from '@mui/icons-material/Close';
+
+import { NavDrawer, NavMain } from './Nav';
 import { appTheme } from './Theme';
 
 import log, {RootLogger} from 'loglevel';
@@ -15,20 +16,22 @@ import AuthMenu from './firebase/auth/AuthControls';
 
 import {
     Box,
-    ToggleButton,
     Card,
     IconButton,
-    Toolbar,
     Typography,
     InputLabel,
     MenuItem,
     FormControl,
+	FormControlLabel,
+	FormGroup,
     Select,
     CardActions,
     CardMedia,
-    CardContent as CardHeader,
+    CardHeader,
     Stack,
-	CssBaseline
+	Switch,
+	CssBaseline,
+	Divider
 } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 
@@ -120,39 +123,51 @@ function App() {
 		<StoreContextProvider editor={ref}>
 			<ThemeProvider theme={appTheme}>
 				<CssBaseline/>
-			<NavAppBar position="fixed" width={DRAWER_WIDTH}>
-				<Toolbar>
-					<IconButton
-						color="inherit"
-						aria-label="open drawer"
-						onClick={e => setOpen(!open)}
-						edge="start"
-						sx={{mr: 2}}
-						// sx={{ ...(open && { display: 'none' }) }}
-					>
-						<MenuIcon />
-					</IconButton>
-					<Stack>
-					<Typography variant="h6" noWrap>
-							DON'T STAND IN BAD
-						</Typography>
-						<Typography variant="subtitle2" noWrap>
-							A raid macro editor for Final Fantasy XIV
-						</Typography>
-					</Stack>
+				<div id="bg"/>
+				<IconButton
+					color="inherit"
+					aria-label="open drawer"
+					onClick={e => setOpen(!open)}
+					sx={{
+						position: "absolute",
+						top: 2,
+						left: 2,
+						...(open && { display: 'none' })
+					}}
+				>
+					<MenuIcon />
+				</IconButton>
+					
 
-					<Box sx={{flexGrow: 1}}/>
-					<AuthMenu/>
-					<ToggleButton
-						value="show whitespace"
-						size="small"
-						selected={showWhitespace}
-						onChange={() => {
-							setShowWhitespace(!showWhitespace);
-						}}
+			<NavDrawer variant="persistent" anchor="left" open={open} width={DRAWER_WIDTH}>
+				<Stack direction="column" height="100%" p={1}>
+					<Stack direction="row" justifyItems="top">
+						<Typography variant="h6" flex={1} sx={{lineHeight: 2}}>Don't Stand In Bad</Typography>
+						<AuthMenu/>
+						<IconButton
+							color="inherit"
+							aria-label="close drawer"
+							onClick={e => setOpen(!open)}
 						>
-						<SpaceBarIcon /> Show whitespace
-					</ToggleButton>
+							<CloseIcon />
+						</IconButton>
+						
+					</Stack>
+					<Stack direction="column" alignItems="stretch" spacing={1}>
+						<Typography variant="subtitle1" flex={1} sx={{lineHeight: 2}}>Settings</Typography>
+					<FormGroup>
+					<FormControlLabel 
+						labelPlacement="start" 
+						checked={showWhitespace}  
+						onChange={() => setShowWhitespace(!showWhitespace)} 
+						control={<Switch/>} 
+						// sx={{justifyContent: "flex-end"}}
+						slotProps={{typography: {flex: 1}}}
+						sx={{ml: 1}}
+						label="Show whitespace" 
+						// label={<><SpaceBarIcon /> Show whitespace</>}
+						/>
+					</FormGroup>
 					<FormControl size="small" color="inverted">
 						<InputLabel sx={{color:"inherit", borderColor: "currentcolor"}} id="font-size">Font size</InputLabel>
 						<InputLabel id="font-size">Font size</InputLabel>
@@ -166,40 +181,33 @@ function App() {
 							{fontSources.map((fontSource: FontSource, i: number) => <MenuItem key={fontSource.request} value={i}>{fontSource.name}</MenuItem>)}
 						</Select>
 					</FormControl>
-
-				</Toolbar>
-			</NavAppBar>
-			<NavDrawer variant="persistent" anchor="left" open={open} width={DRAWER_WIDTH}>
-
-				<Toolbar/>
-				<Box sx={{overflow: "auto"}} >
-					<StyledFileList/>
-				</Box>
+					</Stack>
+					<Divider variant="middle" sx={{m:1}}/>
+					<Box sx={{overflow: "auto", mx: -1}} >
+						<StyledFileList/>
+					</Box>
+				</Stack>
 			</NavDrawer>
 			<NavMain open={open}>
-				<NavHeader/>
-				<Stack direction="row" spacing={3} justifyContent="center" sx={{flexWrap: 'wrap'}}>
-					<Card>
-						<CardHeader sx={{boxShadow: 1}}>
-						<Stack direction="row">
-							<SimpleFileName/>
-							<SaveIconButton/>
-							<SaveIconButton asCopy={true}/>
-						</Stack>
-						</CardHeader>
+				<Stack direction="row" spacing={2} flexWrap="wrap" justifyContent="center">
+					<Card sx={{display: "flex", flexDirection: "column"}}>
+						<CardHeader sx={{boxShadow: 1}} title={(
+							<Stack direction="row">
+								<SimpleFileName/>
+								<SaveIconButton/>
+								<SaveIconButton asCopy={true}/>
+							</Stack>
+						)}/>
 						<CardMedia>
-							<StyledTextEditor fontsrc={fontSources[font].src} ref={ref} onSelectionChange={updateCursor}  showWhitespace={showWhitespace} value={"line\n\nline"}/>
+							<StyledTextEditor fontsrc={fontSources[font].src} ref={ref} onSelectionChange={updateCursor} showWhitespace={showWhitespace} value={"line\n\nline"}/>
 						</CardMedia>
-					<CardActions sx={{boxShadow: 1}}>
+						<CardActions sx={{boxShadow: 1}}>
 							{cur && <div className="status row">
 								Ln {cur.cursorRow}, Col {cur.cursorCol} [{cur.cursorX}, {cur.cursorY}] {selectionText} {cur.columnMode && "COL"}
 							</div>}
-						
-						
-					</CardActions>
+						</CardActions>
 					</Card>
 					<GlyphPicker editorRef={ref} fontsrc={fontSources[font].src}/>
-
 				</Stack>
 			</NavMain>
 			</ThemeProvider>
