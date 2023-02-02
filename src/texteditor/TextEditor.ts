@@ -351,8 +351,8 @@ export default class HTMLTextEditorElement extends BaseTextElement implements Ev
     public get selectionLength(): number {
         return this.model?.getSelectionLength() || 0;
     }
-    public get selectionPixels(): number {
-        return this.model?.getSelectionWidth() || 0;
+    public get selectionPixels(): number | undefined {
+        return this.model?.getSelectionWidth();
     }
     public get columnMode(): boolean {
         return this.model?.columnSelection() || false;

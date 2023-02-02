@@ -11,6 +11,7 @@ extracted from FFXIV (which it uses instead of vector/TTF-based fonts).
 - Mouse events are firing on the scrollbars
 - Save New isn't working properly (might not be setting deleted=false, but also console errors)
 - If the screen is to wide for both editor and glyph picker to be in one row, it doesn't scroll properly
+- Selection information doesn't work on column selections where the caret is to the left of the anchor
 
 ## Fixed bugs
 [x] CPU usage wtf

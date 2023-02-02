@@ -103,8 +103,18 @@ export class TextModel extends EventTarget {
     public getSelectionLength(): number {
         return this.selections.reduce((v, s) => v + s.length, 0);
     }
-    public getSelectionWidth(): number {
-        return this.selections.reduce((total, selection) => total + selection.w, 0);
+    /**
+     * Get the 'width' of the selection, if that is meaningful to do so.
+     *
+     * Width is only calculated for column-mode selections or normal selections
+     * that don't span multiple lines. Otherwise, or if there is no selection,
+     * we return undefined.
+     *
+     * @returns The width, if meaningful, otherwise undefined
+     */
+    public getSelectionWidth(): number | undefined {
+        if(this.anchor === null || (this.anchor.y !== this._caret.y && !this.columnSelection())) return undefined;
+        return Math.abs(this._caret.x - this.anchor.x);
     }
     public getSelectedText(): string|null {
         if(this.anchor === null) return null;

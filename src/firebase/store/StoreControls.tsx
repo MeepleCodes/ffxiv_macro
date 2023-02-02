@@ -5,6 +5,7 @@ import { Bytes, Unsubscribe } from "firebase/firestore";
 
 import SaveIcon from '@mui/icons-material/Save';
 import ContentSavePlus from 'mdi-material-ui/ContentSavePlus';
+import FileOutline from 'mdi-material-ui/FileOutline';
 
 import { auth } from "../auth/FirebaseAuth";
 
@@ -70,6 +71,15 @@ function useSave() {
 
     }
     return {save, saveAs};
+}
+export function NewIconButton() {
+    let {editor, setFileid, setFilename} = useContext(StoreContext);
+    const handleNew = function() {
+        if(editor.current) editor.current.value = "";
+        setFileid(undefined);
+        setFilename("");
+    }
+    return <IconButton color="primary" onClick={handleNew}><FileOutline/></IconButton>
 }
 export function SaveButton({asCopy = false}) {
     const {save, saveAs} = useSave();

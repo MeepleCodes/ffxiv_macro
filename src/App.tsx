@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
 import TextEditor, {HTMLTextEditorElement} from './texteditor/TextEditorReact';
-import { StoreContextProvider, SaveIconButton, SimpleFileName } from './firebase/store/StoreControls';
+import { StoreContextProvider, SaveIconButton, SimpleFileName, NewIconButton } from './firebase/store/StoreControls';
 import { StyledFileList } from './firebase/store/MacroList';
 import GlyphPicker from './GlyphPicker';
 import { styled } from '@mui/material/styles';
@@ -42,6 +42,14 @@ window.log = log;
 log.setLevel(log.levels.DEBUG);
 
 const DRAWER_WIDTH = 300;
+const DEFAULT_MACRO_TEXT = `┏‹  D S│B  ›━━┳━━━━━━━┓
+┃　　　　　　　┃　　　　　┃
+┃　  ※※※※  　┃　↑　　　↑　┃
+┃  ｟｠  ┃　 ｟ＢＡＤ｠　┃
+┃　  ※※※※  　┃　↓　　　↓　┃
+┃　　　　　　　┃　　　　　┃
+┃　　­­(ﾉ°口°)ﾉ┃ 　　\\(＾ｏ＾)/┃
+┗━━━━━━━┻━━━━━━━┛`;
 
 type FontSource = {
 	name: string;
@@ -73,7 +81,7 @@ type TEInfo = {
 	cursorRow: number,
 	cursorCol: number,
 	selectionLength: number,
-	selectionPixels: number | null,
+	selectionPixels: number | undefined,
 	columnMode: boolean,
 };
 
@@ -108,7 +116,7 @@ function App() {
     };
 	let selectionText = "";
 	if(cur && cur.selectionLength > 0) {
-		if(cur.selectionPixels !== null) {
+		if(cur.selectionPixels !== undefined) {
 			selectionText = `(${cur.selectionLength} selected, ${cur.selectionPixels}px)`;
 		} else {
 			selectionText = `(${cur.selectionLength} selected)`;
@@ -193,13 +201,14 @@ function App() {
 					<Card sx={{display: "flex", flexDirection: "column"}}>
 						<CardHeader sx={{boxShadow: 1}} title={(
 							<Stack direction="row">
+								<NewIconButton/>
 								<SimpleFileName/>
 								<SaveIconButton/>
 								<SaveIconButton asCopy={true}/>
 							</Stack>
 						)}/>
 						<CardMedia>
-							<StyledTextEditor fontsrc={fontSources[font].src} ref={ref} onSelectionChange={updateCursor} showWhitespace={showWhitespace} value={"line\n\nline"}/>
+							<StyledTextEditor fontsrc={fontSources[font].src} ref={ref} onSelectionChange={updateCursor} showWhitespace={showWhitespace} value={DEFAULT_MACRO_TEXT}/>
 						</CardMedia>
 						<CardActions sx={{boxShadow: 1}}>
 							{cur && <div className="status row">
