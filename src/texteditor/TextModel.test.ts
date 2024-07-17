@@ -1,10 +1,10 @@
-import { Cursor, CursorDirection, TextModel } from './TextModel';
+import { Position, TextDirection, TextModel } from './TextModel';
 import { Font, RawFont } from './Font';
 import fontfile from './../res/axis-12-lobby.json';
 import {expect} from '@jest/globals';
 import type {MatcherFunction} from 'expect';
 const toBeSane: MatcherFunction<[model: TextModel]> = function(actual: unknown, model: TextModel) {
-    const cursor = actual as Cursor;
+    const cursor = actual as Position;
     // This will have clamped to bounds, so we must also check cursor.c is in
     // range
     const inModel = model.cursorFromC(cursor.c);
@@ -36,26 +36,26 @@ describe("text editing", () => {
         model.setCaretToC(1);
         model.insert("a");
         expect(model.text).toBe("1a23");
-        expect(model.caret.c).toBe(2);
-        expect(model.caret).toBeSane(model);
+        expect(model.cursor.c).toBe(2);
+        expect(model.cursor).toBeSane(model);
     });
     test("insert replacing selection", () => {
         model.reset("123");
         model.setCaretToC(1, true);
         model.insert("a");
         expect(model.text).toBe("a23");
-        expect(model.caret.c).toBe(1);
-        expect(model.caret).toBeSane(model);
+        expect(model.cursor.c).toBe(1);
+        expect(model.cursor).toBeSane(model);
     });
     test("simple backspace", () => {
         model.reset("123");
         model.setCaretToC(2);
         const selchange = jest.fn();
         model.addEventListener("selectionchange", selchange);
-        model.delete(CursorDirection.Backward);
+        model.delete(TextDirection.Backward);
         expect(selchange).toHaveBeenCalled();
         expect(model.text).toBe("13");
-        expect(model.caret).toBeSane(model);
-        expect(model.caret.c).toBe(1);
+        expect(model.cursor).toBeSane(model);
+        expect(model.cursor.c).toBe(1);
     });
 });

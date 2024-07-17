@@ -1,5 +1,5 @@
 import HTMLTextEditorElement from "./TextEditor";
-import { CursorDirection, MoveDistance, TextModel } from "./TextModel";
+import { TextDirection, MoveDistance, TextModel } from "./TextModel";
 import TextView from "./TextView";
 import log from 'loglevel';
 const logger = log.getLogger("TextController");
@@ -8,13 +8,13 @@ type EventMap = {
     [type in keyof HTMLElementEventMap]?: {
         handler: (evt: HTMLElementEventMap[type]) => void,
         // handler: any,
-        source: (that: HTMLTextEditorElement) => DocumentAndElementEventHandlers,
+        source: (that: HTMLTextEditorElement) => EventTarget,
         requiresReady: boolean
     }
 }
 const EVENT_MAP: EventMap = {};
 
-function Handler(type: keyof HTMLElementEventMap, eventSource: (that: HTMLTextEditorElement) => DocumentAndElementEventHandlers = (that: HTMLTextEditorElement) => that, requiresReady = true) {
+function Handler(type: keyof HTMLElementEventMap, eventSource: (that: HTMLTextEditorElement) => EventTarget = (that: HTMLTextEditorElement) => that, requiresReady = true) {
     return function (target: TextController, propertyKey: any, descriptor: PropertyDescriptor) {
         EVENT_MAP[type] = {
             handler: target[propertyKey as keyof TextController] as any,
@@ -205,7 +205,7 @@ export default class TextController implements EventListenerObject, Controller {
     @Handler("dragend")
     protected dragEnded(ev: DragEvent) {
         if(ev.dataTransfer?.dropEffect === "move" && this.model.getSelectedText() !== null) {
-            this.model.delete(CursorDirection.Forward);
+            this.model.delete(TextDirection.Forward);
         }
         this.dragging = false;
     }
@@ -245,7 +245,7 @@ export default class TextController implements EventListenerObject, Controller {
             // If this was a move, and from ourself to ourself, delete the existing
             // text first (as this event fires before dragEnded does)
             if(this.dragging && !ev.ctrlKey) {
-                this.model.delete(CursorDirection.Forward, true);
+                this.model.delete(TextDirection.Forward, true);
             }
             // Clear the existing selection and move to the insertion point
             this.model.setCaretToCoord(coord, false);
@@ -314,12 +314,12 @@ export default class TextController implements EventListenerObject, Controller {
                 if(ev.shiftKey) {
                     this.clipboardCut(ev);
                 } else {
-                    this.model.delete(CursorDirection.Forward);
+                    this.model.delete(TextDirection.Forward);
                     this.restartBlinking();
                 }
                 break;
             case "Backspace":
-                this.model.delete(CursorDirection.Backward);
+                this.model.delete(TextDirection.Backward);
                 this.restartBlinking();
                 break;
             case "Insert":
@@ -331,36 +331,36 @@ export default class TextController implements EventListenerObject, Controller {
                 break;
             case "Right":
             case "ArrowRight": {
-                this.model.moveCaret(CursorDirection.Forward, ev.ctrlKey ? MoveDistance.Word : MoveDistance.Character, ev.shiftKey);
+                this.model.moveCaret(TextDirection.Forward, ev.ctrlKey ? MoveDistance.Word : MoveDistance.Character, ev.shiftKey);
                 this.restartBlinking();
                 break;
             }
             case "Left":
             case "ArrowLeft": {
-                this.model.moveCaret(CursorDirection.Backward, ev.ctrlKey ? MoveDistance.Word : MoveDistance.Character, ev.shiftKey);
+                this.model.moveCaret(TextDirection.Backward, ev.ctrlKey ? MoveDistance.Word : MoveDistance.Character, ev.shiftKey);
                 this.restartBlinking();
                 break;
             }
             // TODO: Ctrl+Up/Down could be scroll instead of move
             case "Up":
             case "ArrowUp": {
-                this.model.moveCaret(CursorDirection.Backward, MoveDistance.Line, ev.shiftKey);
+                this.model.moveCaret(TextDirection.Backward, MoveDistance.Line, ev.shiftKey);
                 this.restartBlinking();
                 break;
             }
             case "Down":
             case "ArrowDown": {
-                this.model.moveCaret(CursorDirection.Forward, MoveDistance.Line, ev.shiftKey);
+                this.model.moveCaret(TextDirection.Forward, MoveDistance.Line, ev.shiftKey);
                 this.restartBlinking();
                 break;
             }
             case "Home": {
-                this.model.moveCaret(CursorDirection.Backward, ev.ctrlKey ? MoveDistance.Document : MoveDistance.LineEnd, ev.shiftKey);
+                this.model.moveCaret(TextDirection.Backward, ev.ctrlKey ? MoveDistance.Document : MoveDistance.LineEnd, ev.shiftKey);
                 this.restartBlinking();
                 break;
             }
             case "End": {
-                this.model.moveCaret(CursorDirection.Forward, ev.ctrlKey ? MoveDistance.Document : MoveDistance.LineEnd, ev.shiftKey);
+                this.model.moveCaret(TextDirection.Forward, ev.ctrlKey ? MoveDistance.Document : MoveDistance.LineEnd, ev.shiftKey);
                 this.restartBlinking();
                 break;
             }

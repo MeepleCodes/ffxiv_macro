@@ -166,21 +166,21 @@ class GlyphModel extends TextModel {
         this.dispatchEvent(new Event("change"));
     }
     public selectGlyph(gp: GlyphPosition) {
-        if(this.anchor === gp && this._caret.c === gp.c + 1) return;
+        if(this.anchor === gp && this.cursor.c === gp.c + 1) return;
         this.anchor = gp;
-        this._caret = this.cursorFromC(gp.c + 1);
-        console.log("Selecting glyph. Anchor", this.anchor,"caret", this._caret);
+        this.cursor = this.cursorFromC(gp.c + 1);
+        console.log("Selecting glyph. Anchor", this.anchor,"caret", this.cursor);
         this.updateSelections();
         console.log("Selections now", this.selections);
 
     }
     public getSelectedText(): string | null {
         const sup = super.getSelectedText();
-        console.log("GlyphViewer selected text is", sup, "but my glyph is", String.fromCodePoint(this.getSelectedGlyph()?.codepoint || 0x20), "my selections are", this.selections, "anchor", this.anchor, "caret", this._caret);
+        console.log("GlyphViewer selected text is", sup, "but my glyph is", String.fromCodePoint(this.getSelectedGlyph()?.codepoint || 0x20), "my selections are", this.selections, "anchor", this.anchor, "caret", this.cursor);
         return sup;
     }
     public getSelectedGlyph(): Glyph | undefined {
-        if(this.anchor && this.anchor.c + 1 === this._caret.c) return this.glyphs[this.anchor.row][this.anchor.col].glyph;
+        if(this.anchor && this.anchor.c + 1 === this.cursor.c) return this.glyphs[this.anchor.row][this.anchor.col].glyph;
         return undefined;
     }
     public getBoundingBox(): {width: number, height: number} {

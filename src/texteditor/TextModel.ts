@@ -5,34 +5,76 @@ const logger = log.getLogger("TextModel");
 
 
 export const EOL_SELECTION_MARGIN = 3;
+/**
+ * A screen-space coordinate.
+ * 
+ * 0,0 is at the top-left of the screen; x increases towards the right and y
+ * increases downward.
+ */
 export type Coord = {
     readonly y: number,
     readonly x: number
 }
-export type Cursor = Coord & {
+/**
+ * The position of a glyph within the rendered document.
+ *
+ * It has both a location within the document (row, col, c) and on the screen
+ * (x, y).
+ *
+ * Positions can normally only reflect where a glyph actually exists in the
+ * document, but if a position is derived from a screen location that doesn't
+ * map exactly to the location of a glyph (either because it sits mid-glyph, or
+ * outside the bounds of a row) then `virtualX` will be set to the true screen X
+ * location. This is used for column selection and mouse input.
+ */
+export type Position = Coord & {
     readonly virtualX?: number;
     readonly row: number;
     readonly col: number;
     readonly c: number;
 }
-const DEFAULT_CURSOR: Cursor = {x: 0, y: 0, row: 0, col: 0, c: 0};
-export type GlyphPosition = Cursor & {
+/**
+ * A glyph in a document with its accompanying position data
+ */
+export type GlyphPosition = Position & {
     glyph?: Glyph;
 }
-export interface Selection {
+
+const DEFAULT_CURSOR_POSITION: Position = {x: 0, y: 0, row: 0, col: 0, c: 0};
+/**
+ * A rectangular block of selected characters on one row. The complete selection
+ * can contain multiple of these, even in normal selection mode (if the
+ * selection spans multiple lines).
+ */
+export interface SelectionPart {
+    /** Pixel coordinate of the left end */
     x: number;
+    /** Pixel coordinate of the top */
     y: number;
+    /** Pixel width */
     w: number;
+    /** Pixel height (same as the font's row height) */
     h: number;
+    /** The character index of the left end of the selection */
     c: number;
+    /** The number of glyphs selected */
     length: number;
+    /** The actual text selected */
     text: string;
 }
 
-export enum CursorDirection {
+/**
+ * Enum of forward/backward in text, used for moving cursors/selections and
+ * deleting. Forward is always towards the beginning of the document but may
+ * mean "up" or "left".
+ */
+export enum TextDirection {
     Forward,
     Backward
 }
+/**
+ * Distances to move a cursor
+ */
 export enum MoveDistance {
     // One character left or right
     Character,
@@ -51,20 +93,22 @@ enum UndoType {
 }
 type TextState = {
     text: string;
-    caret: Cursor;
+    caret: Position;
     type: UndoType | null;
 }
 export class TextModel extends EventTarget {
     protected lines = [""];
     protected _text = "";
     /** Glyphs and cursors for every line plus an extra 'glyph' position at the end of each line with a null glyph and the location where the line ends */
-    protected glyphs: GlyphPosition[][] = [[DEFAULT_CURSOR]];
-    /** The 'main' (only in non-column mode) caret which defines one end of the selection box or strip */
-    protected _caret = DEFAULT_CURSOR;
-    /** All carets we render and/or insert text at. Outside of column mode, this is just _caret above. */
-    protected _allCarets: Cursor[] = [DEFAULT_CURSOR];
-    protected anchor: Cursor|null = null;
-    private _selections: Selection[] = [];
+    protected glyphs: GlyphPosition[][] = [[DEFAULT_CURSOR_POSITION]];
+    /** Position of the 'main' (only in non-column mode) caret which defines one end of the selection box or strip. Outside of selection mode, the insertion point. */
+    protected _cursor = DEFAULT_CURSOR_POSITION;
+    /** All carets we render and/or insert text at. Outside of column mode, this is just cursor above. In column mode, there is one caret per row in the selection. */
+    protected _carets: Position[] = [DEFAULT_CURSOR_POSITION];
+    /** The origin of the current selection (or null outside of select mode). This is where the cursor was when selecting started; the other end of the selection is defined by `cursor`. */
+    protected anchor: Position|null = null;
+    /** The individual parts that make up the current select; empty if there's none */
+    private selectionParts: SelectionPart[] = [];
     private history: UndoBuffer<TextState> = new UndoBuffer<TextState>(this.getState());
 
     constructor(protected font: Font, initialValue: string = "") {
@@ -91,14 +135,20 @@ export class TextModel extends EventTarget {
         return this._text;
     }
     
-    public get caret() {
-        return this._caret;
+    public get cursor() {
+        return this._cursor;
     }
-    public get allCarets() {
-        return this._allCarets;
+    protected set cursor(value: Position) {
+        this._cursor = value;
+    }
+    public get carets() {
+        return this._carets;
+    }
+    protected set carets(value: Position[]) {
+        this._carets = value;
     }
     public get selections() {
-        return [...this._selections];
+        return [...this.selectionParts];
     }
     public getSelectionLength(): number {
         return this.selections.reduce((v, s) => v + s.length, 0);
@@ -113,8 +163,8 @@ export class TextModel extends EventTarget {
      * @returns The width, if meaningful, otherwise undefined
      */
     public getSelectionWidth(): number | undefined {
-        if(this.anchor === null || (this.anchor.y !== this._caret.y && !this.columnSelection())) return undefined;
-        return Math.abs(this._caret.x - this.anchor.x);
+        if(this.anchor === null || (this.anchor.y !== this.cursor.y && !this.columnSelection())) return undefined;
+        return Math.abs(this.cursor.x - this.anchor.x);
     }
     public getSelectedText(): string|null {
         if(this.anchor === null) return null;
@@ -127,7 +177,7 @@ export class TextModel extends EventTarget {
         return this.getSelectionLength() > 0;
     }
     public columnSelection() {
-        return this.allCarets.length > 1;
+        return this.carets.length > 1;
     }
     [Symbol.iterator]() {
         return this.glyphs.flat(1)[Symbol.iterator]();
@@ -148,41 +198,41 @@ export class TextModel extends EventTarget {
         }
     }
     public selectAll() {
-        this.anchor = DEFAULT_CURSOR;
-        this.setCaret(this.cursorAtEOF(), true);
+        this.anchor = DEFAULT_CURSOR_POSITION;
+        this.setCursor(this.cursorAtEOF(), true);
     }
     public selectNone() {
-        if(this.anchor === null && this.caret === DEFAULT_CURSOR) return;
+        if(this.anchor === null && this.cursor === DEFAULT_CURSOR_POSITION) return;
         this.anchor = null;
-        this.setCaret(DEFAULT_CURSOR);
+        this.setCursor(DEFAULT_CURSOR_POSITION);
     }
     public setCaretToCoord(coord: Coord, extendSelection = false, columnMode = false) {
         const cursor = this.cursorFromCoord(coord);
         logger.debug("Setting caret to", cursor, "from", coord);
-        this.setCaret(cursor, extendSelection, columnMode);
+        this.setCursor(cursor, extendSelection, columnMode);
     }
     public setCaretToC(c: number, extendSelection = false, columnMode = false) {
         const cursor = this.cursorFromC(c);
-        this.setCaret(cursor, extendSelection, columnMode);
+        this.setCursor(cursor, extendSelection, columnMode);
     }
-    public moveCaret(direction: CursorDirection, distance: MoveDistance, extendSelection = false) {
-        const moveFrom: Cursor = (!extendSelection && this.anchor !== null) ? (
-            direction === CursorDirection.Backward ? this.selectionStart : this.selectionEnd
-        ) : this._caret;
-        let newCursor: Cursor|null = null;
+    public moveCaret(direction: TextDirection, distance: MoveDistance, extendSelection = false) {
+        const moveFrom: Position = (!extendSelection && this.anchor !== null) ? (
+            direction === TextDirection.Backward ? this.selectionStart : this.selectionEnd
+        ) : this.cursor;
+        let newCursor: Position|null = null;
         switch(distance) {
             case MoveDistance.Character: {
-                const mod = direction === CursorDirection.Forward ? +1 : -1;
+                const mod = direction === TextDirection.Forward ? +1 : -1;
                 newCursor = this.cursorFromC(moveFrom.c + mod);
                 break;
             }
             case MoveDistance.Line: {
-                const mod = (direction === CursorDirection.Forward ? +1 : -1) * this.font.lineHeight;
+                const mod = (direction === TextDirection.Forward ? +1 : -1) * this.font.lineHeight;
                 newCursor = this.cursorFromCoord({x: moveFrom.x, y: moveFrom.y + mod}, true);
                 break;
             }
             case MoveDistance.LineEnd: {
-                if(direction === CursorDirection.Forward) {
+                if(direction === TextDirection.Forward) {
                     newCursor = this.cursorFromRowCol(moveFrom.row, this.glyphs[moveFrom.row].length)
                 } else {
                     newCursor = this.cursorFromRowCol(moveFrom.row, 0);
@@ -198,30 +248,30 @@ export class TextModel extends EventTarget {
                 // this The reversing is still not *perfect* (it might fuck up
                 // combined characters for accents etc) but for what we need it
                 // should be ok
-                const scanCPs = direction === CursorDirection.Forward ? 
+                const scanCPs = direction === TextDirection.Forward ? 
                     [...this._text].slice(from).join("") :
                     [...this._text].slice(0, from).reverse().join("");
                 
                 const offset = scanCPs.search(/(?<=\S)\s/);
-                if(direction === CursorDirection.Forward) {
+                if(direction === TextDirection.Forward) {
                     if(offset === -1) newCursor = this.cursorAtEOF();
                     else newCursor = this.cursorFromC(from + offset);
                 } else {
-                    if(offset === -1) newCursor = {...DEFAULT_CURSOR};
+                    if(offset === -1) newCursor = {...DEFAULT_CURSOR_POSITION};
                     else newCursor = this.cursorFromC(from - offset);
                 }
                 break;
             }
             case MoveDistance.Document: {
-                if(direction === CursorDirection.Forward) {
+                if(direction === TextDirection.Forward) {
                     newCursor = this.cursorAtEOF();
                 } else {
-                    newCursor = {...DEFAULT_CURSOR};
+                    newCursor = {...DEFAULT_CURSOR_POSITION};
                 }
             }
             
         }
-        this.setCaret(newCursor, extendSelection);
+        this.setCursor(newCursor, extendSelection);
     }
     /**
      * Delete all selected text, calling setText() with what remains.
@@ -240,7 +290,7 @@ export class TextModel extends EventTarget {
             // Use start/end of selection rather than the individual selection
             // rectangles as we know they are contiguous
             this.setText(this.text.substring(0, this.selectionStart.c) + text + this.text.substring(this.selectionEnd.c));
-            this.setCaret(this.cursorFromC(newC));
+            this.setCursor(this.cursorFromC(newC));
         } else {
             // Column mode, so we are (possibly) slicing discontinuous sections
             // out and/or inserting in multiple places
@@ -251,9 +301,9 @@ export class TextModel extends EventTarget {
             // If the insert is one line (which includes "", ie insert nothing)
             // then we insert the same thing at every caret            
             if(textLines.length === 1) {
-                insertions = new Array(this.allCarets.length).fill(text);
+                insertions = new Array(this.carets.length).fill(text);
             } else {
-                insertions = this.allCarets.map((c_, i) => i >= textLines.length ? "" : textLines[i]);
+                insertions = this.carets.map((c_, i) => i >= textLines.length ? "" : textLines[i]);
             }
             // Accumulated new text
             let newText = "";
@@ -275,7 +325,7 @@ export class TextModel extends EventTarget {
             const newCursor = this.cursorFromC(newCursorC);
             // Using *that*, place the anchor at the same X coordinate on its original row
             this.anchor = this.cursorFromCoord({x: newCursor.x, y: newAnchorY});
-            this.setCaret(newCursor, true, true);
+            this.setCursor(newCursor, true, true);
         }
         
         
@@ -296,21 +346,21 @@ export class TextModel extends EventTarget {
      * @param direction Which direction to delete if there is no active selection
      * @param bypassUndo If true, do not create an undo state
      */
-    public delete(direction: CursorDirection = CursorDirection.Forward, bypassUndo = false) {
+    public delete(direction: TextDirection = TextDirection.Forward, bypassUndo = false) {
         let canReplace = true;
         logger.debug("Delete requested. hasSelection:", this.hasSelection(), "")
         if(this.hasSelection()) {
             this.sliceSelection();
             canReplace = false;
         } else if(!this.columnSelection()) {
-            if(direction === CursorDirection.Forward) {
+            if(direction === TextDirection.Forward) {
                 this.setText(this.getPreSelection() + this.getPostSelection().substring(1));
                 // Force a new cursor value even though it's not changed to recalculate selections
-                this.setCaret(this._caret);
+                this.setCursor(this.cursor);
             } else {
-                const newC = Math.max(0, this.caret.c - 1);
+                const newC = Math.max(0, this.cursor.c - 1);
                 this.setText(this.getPreSelection().substring(0, newC) + this.getPostSelection());
-                this.setCaret(this.cursorFromC(newC));
+                this.setCursor(this.cursorFromC(newC));
 
             }
             // Clear the selection
@@ -321,10 +371,10 @@ export class TextModel extends EventTarget {
             let lastEnd = 0;
             let newAnchor = null;
             logger.debug("Performing complicated delete");
-            for(const c of this.allCarets) {
+            for(const c of this.carets) {
                 let sliceTo, sliceFrom;
                 logger.debug("Considering caret", c);
-                if(direction === CursorDirection.Forward) {
+                if(direction === TextDirection.Forward) {
                     sliceTo = c.c;
                     
                     // Can't delete forward past the end of the line, so no-op
@@ -348,7 +398,7 @@ export class TextModel extends EventTarget {
             newText += this.text.substring(lastEnd);
             this.setText(newText);
             this.anchor = this.cursorFromC(newAnchor || 0);
-            this.setCaret(this.cursorFromC(newC), true, true);
+            this.setCursor(this.cursorFromC(newC), true, true);
         }
 
         if(!bypassUndo) this.history.save(this.getState(UndoType.DELETE), canReplace);
@@ -406,45 +456,102 @@ export class TextModel extends EventTarget {
 
         this.dispatchEvent(new Event("change"));
     }
-    private get selectionStart(): Cursor {
-        return this.anchor === null ? this._caret : (
-            this.anchor.c > this._caret.c ? this._caret : this.anchor
+    /**
+     * The cursor position at the start (left/topmost end) of the current selection.
+     * 
+     * Returns whichever of anchor and caret are closer to the start of the document.
+     */
+    private get selectionStart(): Position {
+        return this.anchor === null ? this.cursor : (
+            this.anchor.c > this.cursor.c ? this.cursor : this.anchor
         );
     }
-    private get selectionEnd(): Cursor {
-        return this.anchor === null ? this._caret : (
-            this.anchor.c > this._caret.c ? this.anchor : this._caret
+    /**
+     * The cursor position at the end (right/bottom most) of the current selection
+     * 
+     * Returns whichever of anchor and caret are closer to the end of the document.
+     */
+    private get selectionEnd(): Position {
+        return this.anchor === null ? this.cursor : (
+            this.anchor.c > this.cursor.c ? this.anchor : this.cursor
         );
     }
     protected updateSelections(columnMode = false) {
-        this._selections = [];
-        this._allCarets = [];
-        if(!columnMode) this._allCarets = [this._caret];
-        if(this.anchor !== null) {
-            const [start, end] = [this.selectionStart, this.selectionEnd];
-            for(let row = start.row; row<=end.row; row++) {
-                const y = this.font.lineHeight * row;
-                const h = this.font.lineHeight;
-                const rowStart = row === start.row ? 
-                    start :
-                    (columnMode ? 
-                        this.cursorFromCoord({x: start.x, y}) : 
-                        this.glyphs[row][0]
-                    );
-                const rowEnd = row === end.row ?
-                    end :
-                    (columnMode ? 
-                        this.cursorFromCoord({x: end.x, y}) :
-                        this.glyphs[row].at(-1)!
-                    );
-                const x = rowStart.x;
-                const w = rowEnd.col === this.glyphs[row].length - 1 && !columnMode ? rowEnd.x - x + EOL_SELECTION_MARGIN : rowEnd.x - x;
-                const length = rowEnd.c - rowStart.c;
-                const c = rowStart.c;
-                const text = this._text.slice(rowStart.c, rowEnd.c);
-                this._selections.push({x, y, w, h, c, length, text});
-                if(columnMode) this._allCarets.push(rowEnd);
+        console.debug("Updating selections - calculating from anchor", this.anchor, "to cursor", this.cursor);
+        this.selectionParts = [];
+        if(!columnMode) {
+            // In normal select mode there's a single caret
+            this.carets = [this.cursor];
+            // Because we already set the caret, we can just iterate the
+            // selection parts from top to bottom as we don't need to know which
+            // end of it to draw the caret on
+            if(this.anchor !== null) {
+                for(let row = this.selectionStart.row; row<=this.selectionEnd.row; row++) {
+                    // Cursor position of the start of the selection on this row
+                    // On the first row of the selection it's the selection start point,
+                    // on all subsequent rows it's the start of that row
+                    const rowStart = row === this.selectionStart.row ? 
+                        this.selectionStart :
+                        this.glyphs[row][0];
+                    // End of the selection on this row - inverse logic to start
+                    const rowEnd = row === this.selectionEnd.row ?
+                        this.selectionEnd :
+                        this.glyphs[row].at(-1)!;
+
+                    let w = rowEnd.x - rowStart.x;
+                    // When the selection wraps over a line, we include a few
+                    // extra characters to show the newline is selected too
+                    if(rowEnd.col === this.glyphs[row].length - 1 && rowEnd !== this.selectionEnd) w += EOL_SELECTION_MARGIN;
+                    this.selectionParts.push({
+                        x: rowStart.x,
+                        y: this.font.lineHeight * row,
+                        w, 
+                        h: this.font.lineHeight,
+                        c: rowStart.c,
+                        length: rowEnd.c - rowStart.c,
+                        text: this._text.slice(rowStart.c, rowEnd.c)
+                    });
+                }
             }
+
+        } else if(this.anchor === null) {
+            // Column mode with no selection, just set the one caret and done
+            // Shouldn't really happen but no sense breaking if it does
+            this.carets = [this.cursor];
+        } else {
+            this.carets = [];
+            // Get the horizontal bounds of the selection box, which is
+            // independent of where anchor and cursor sit in the document order
+            const [xMin, xMax, caretAtEnd] = this.cursor.x >= this.anchor.x ?
+                [this.anchor.x, this.cursor.x, true] :
+                [this.cursor.x, this.anchor.x, false];
+            for(let row = this.selectionStart.row; row <= this.selectionEnd.row; row++) {
+                const y = this.font.lineHeight * row;
+                // Cursor position of the leftmost end of the selection on this row
+                const rowStart = this.cursorFromCoord({x: xMin, y});
+                // Cursor position of the rightmost end of the selection on this row
+                const rowEnd = this.cursorFromCoord({x: xMax, y});
+                
+                this.selectionParts.push({
+                    x: rowStart.x,
+                    y: y,
+                    w: rowEnd.x - rowStart.x,
+                    h: this.font.lineHeight,
+                    c: rowStart.c,
+                    length: rowEnd.c - rowStart.c,
+                    text: this._text.slice(rowStart.c, rowEnd.c)
+                });
+                // Make sure if we're on the cursor row we push the actual cursor object, so it
+                // matches with === elsewhere
+                if(row === this.cursor.row) {
+                    this.carets.push(this.cursor);
+                    console.log("Pushing cursor onto carets list because we're on row", row);
+                // Otherwise, put a caret at the right end of the row
+                } else {
+                    this.carets.push(caretAtEnd ? rowEnd : rowStart);
+                }
+            }
+
         }
         this.dispatchEvent(new Event("selectionchange"));
     }
@@ -457,7 +564,7 @@ export class TextModel extends EventTarget {
      * @param extendX Whether to save an X value that exceeds line width in virtualX
      * @returns 
      */
-    public cursorFromCoord(coord: Coord, extendX = false): Cursor {
+    public cursorFromCoord(coord: Coord, extendX = false): Position {
         let row = Math.floor(coord.y / this.font.lineHeight);
         let col = 0;
         // If you click below everything, snap to the end of the last line
@@ -503,17 +610,17 @@ export class TextModel extends EventTarget {
             virtualX: extendX ? coord.x : g.x
         };
     }
-    private cursorAtEOF(): Cursor {
+    private cursorAtEOF(): Position {
         return this.glyphs.at(-1)!.at(-1)!;
     }
-    private cursorFromRowCol(row: number, col: number): Cursor {
+    private cursorFromRowCol(row: number, col: number): Position {
         if(row < 0) return this.glyphs[0][0];
         else if(row >= this.glyphs.length) return this.cursorAtEOF();
         else if(col < 0) return this.glyphs[row][0];
         else if(col >= this.glyphs[row].length) return this.glyphs[row].at(-1)!;
         else return this.glyphs[row][col];
     }
-    public cursorFromC(c: number): Cursor {
+    public cursorFromC(c: number): Position {
         if(c <= 0) return this.glyphs[0][0];
         for(const g of this) {
             if(g.c === c) return g;
@@ -521,19 +628,19 @@ export class TextModel extends EventTarget {
         return this.glyphs.at(-1)!.at(-1)!;
     }
     
-    private setCaret(newValue: Cursor, extendSelection = false, columnMode = false) {
-        if(extendSelection && this.anchor === null && newValue.c !== this._caret.c) {
-            this.anchor = {...this._caret};
+    private setCursor(newValue: Position, extendSelection = false, columnMode = false) {
+        if(extendSelection && this.anchor === null && newValue.c !== this.cursor.c) {
+            this.anchor = {...this.cursor};
         } else if(!extendSelection || newValue.c === this.anchor?.c) {
             this.anchor = null;
         }
-        this._caret = newValue;
+        this.cursor = newValue;
         this.updateSelections(columnMode);
     }
     private getState(type: UndoType | null = null): TextState {
         return {
             text: this.text,
-            caret: {...this.caret},
+            caret: {...this.cursor},
             type
         }
     }
@@ -541,7 +648,7 @@ export class TextModel extends EventTarget {
         if(state) {
             this.setText(state.text);
             this.anchor = null;
-            this.setCaret(state.caret);
+            this.setCursor(state.caret);
         }
     }    
 }

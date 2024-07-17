@@ -1,5 +1,5 @@
 import { Font, Glyph } from "./Font";
-import { Cursor, TextModel, EOL_SELECTION_MARGIN } from "./TextModel";
+import { Position, TextModel, EOL_SELECTION_MARGIN } from "./TextModel";
 
 const EOL_MARGIN = EOL_SELECTION_MARGIN;
 const NEWLINE = 0x0A;
@@ -26,7 +26,7 @@ export default class TextView {
     protected cursorContext = this.cursorBuffer.getContext("2d") as OffscreenCanvasRenderingContext2D;
     protected textColourBuffer = new OffscreenCanvas(0, 0)
     protected textColourContext = this.textColourBuffer.getContext("2d") as OffscreenCanvasRenderingContext2D;
-    protected _insertionCursor: Cursor | null = null;
+    protected _insertionCursor: Position | null = null;
     protected _caretVisible = false;
     
     constructor(
@@ -48,7 +48,7 @@ export default class TextView {
         this._caretVisible = newValue;
         this.redraw(false, false, true);
     }
-    public set insertionCursor(newValue: Cursor|null) {
+    public set insertionCursor(newValue: Position|null) {
         this._insertionCursor = newValue;
         this.redraw(false, false, true);
     }
@@ -83,7 +83,7 @@ export default class TextView {
     }
 
     //#endregion
-    protected drawGlyph(context: OffscreenCanvasRenderingContext2D, glyph: Glyph, position: Cursor) {
+    protected drawGlyph(context: OffscreenCanvasRenderingContext2D, glyph: Glyph, position: Position) {
         context.drawImage(this.fontTexture,
             glyph.x, glyph.y, glyph.w, glyph.h,
             position.x, position.y + glyph.top, glyph.w, glyph.h);
@@ -152,20 +152,19 @@ export default class TextView {
     }
 
     /**
-     * Render the caret and/or insertion cursors if they're current visible
+     * Render the cursor and/or insertion carets if they're current visible
      */
     protected renderCursors(alreadyCleared = false) {
         if(!alreadyCleared) {
             this.cursorContext.clearRect(0, 0, this.cursorBuffer.width, this.cursorBuffer.height);
         }
-        // Cursor is drawn in text colour
-        // TODO: Should use caret-color really
+        // Cursor is drawn in CSS caret-color
         this.cursorContext.strokeStyle = this.textStyle.caretColor;
         this.cursorContext.lineWidth = 1;
         if(this._caretVisible) {
             
-            for(const c of this.model.allCarets) {
-                if(c === this.model.caret) this.cursorContext.setLineDash([]);
+            for(const c of this.model.carets) {
+                if(c === this.model.cursor) this.cursorContext.setLineDash([]);
                 else this.cursorContext.setLineDash([1]);
                 this.cursorContext.beginPath();
                 this.cursorContext.moveTo(c.x + 0.5, c.y);

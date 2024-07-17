@@ -1,6 +1,6 @@
 import { Font, isRawFont } from "./Font";
 import TextController, { Controller } from "./TextController";
-import { Coord, Cursor, TextModel } from "./TextModel";
+import { Coord, Position, TextModel } from "./TextModel";
 import TextView from "./TextView";
 
 const STYLESHEET = `
@@ -333,20 +333,20 @@ export default class HTMLTextEditorElement extends BaseTextElement implements Ev
     public set value(newValue: string) {
         super.value = newValue;
     }
-    public get cursor(): Cursor | undefined {
-        return this.model?.caret;
+    public get cursor(): Position | undefined {
+        return this.model?.cursor;
     }
     public get cursorX(): number {
-        return this.model?.caret.x || 0;
+        return this.model?.cursor.x || 0;
     }
     public get cursorY(): number {
-        return this.model?.caret.y || 0;
+        return this.model?.cursor.y || 0;
     }
     public get cursorRow(): number {
-        return this.model?.caret.row || 0;
+        return this.model?.cursor.row || 0;
     }
     public get cursorCol(): number {
-        return this.model?.caret.col || 0;
+        return this.model?.cursor.col || 0;
     }
     public get selectionLength(): number {
         return this.model?.getSelectionLength() || 0;
@@ -368,8 +368,8 @@ export default class HTMLTextEditorElement extends BaseTextElement implements Ev
         if(!this.model) return;
         // Turn the caret coordinates (which are relative to the canvas)
         // into coordinates relative to the container
-        const relX = this.model.caret.x + this.canvas.offsetLeft;
-        const relY = this.model.caret.y + this.canvas.offsetTop;
+        const relX = this.model.cursor.x + this.canvas.offsetLeft;
+        const relY = this.model.cursor.y + this.canvas.offsetTop;
         let targetX = this.scrollLeft;
         let targetY = this.scrollTop;
         for(const x of [relX - this.scrollMargin.left, relX + this.scrollMargin.right]) {
