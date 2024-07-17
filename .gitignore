@@ -26,3 +26,4 @@ example-webpack.config.js
 .env
 .firebase/
 firebaseCredentials.json
+.ssh/
