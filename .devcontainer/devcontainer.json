@@ -6,6 +6,9 @@
 	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bullseye",
 	// // Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {
+		"ghcr.io/devcontainers-contrib/features/firebase-cli:2": {},
+		// firebase emulators require java
+		"ghcr.io/devcontainers/features/java:1": {}
 	},
 	"customizations": {
 		"vscode": {
