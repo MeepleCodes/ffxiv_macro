@@ -257,8 +257,8 @@ class GlyphView extends TextView {
 }
 
 export default class HTMLGlyphViewerElement extends BaseTextElement {
-    protected model?: GlyphModel;
-    protected controller?: GlyphController;
+    declare protected model?: GlyphModel;
+    declare protected controller?: GlyphController;
     public get canvasElement() {
         return this.canvas;
     }

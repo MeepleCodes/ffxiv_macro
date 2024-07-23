@@ -15,13 +15,14 @@ type EventMap = {
 const EVENT_MAP: EventMap = {};
 
 function Handler(type: keyof HTMLElementEventMap, eventSource: (that: HTMLTextEditorElement) => EventTarget = (that: HTMLTextEditorElement) => that, requiresReady = true) {
-    return function (target: TextController, propertyKey: any, descriptor: PropertyDescriptor) {
+    return function(originalFunction: any, context: ClassMemberDecoratorContext) {
         EVENT_MAP[type] = {
-            handler: target[propertyKey as keyof TextController] as any,
+            handler: originalFunction,
             source: eventSource,
             requiresReady
-        };
+        }
     }
+
 }
 export interface Controller {
     attach(): void;
@@ -255,7 +256,7 @@ export default class TextController implements EventListenerObject, Controller {
         }
     }
     @Handler("dragleave")
-    protected dragLeft(ev: DragEvent) {
+    protected dragLeft(_ev: DragEvent) {
         // If the drag-over ended with a drop, insertion will have already been
         // nulled so skip the redraw
         if(this.viewer.insertionCursor !== null) {

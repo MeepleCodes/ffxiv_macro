@@ -58,22 +58,17 @@ type FontSource = {
 	request: string;
 }
 const fontSources: FontSource[] = [];
-
-function importRes(requireContext: __WebpackModuleApi.RequireContext, cache = false) {
-	requireContext.keys().forEach((request) => {
-		const src = requireContext(request);
-		if(cache) {
-				const parts = (request.startsWith("./") ? request.substring(2) : request).split(/[-.]/).slice(0,2);
-				const name = parts[0].charAt(0).toUpperCase() + parts[0].substring(1) + " " + parts[1];
-				const size = parts[1];
-				fontSources.push({name, size, src, request});
-		}
-		
-	});
+import.meta.glob("./res/*.png");
+const fontJsonURLs = import.meta.glob('./res/*-combined.json', {
+  query: '?url',
+  import: 'default',
+});
+for(const module in fontJsonURLs) {
+	const parts = (module.startsWith("./") ? module.substring(2) : module).split(/[-.]/).slice(0,2);
+	const name = parts[0].charAt(0).toUpperCase() + parts[0].substring(1) + " " + parts[1];
+	const size = parts[1];
+	fontSources.push({name, size, src: await fontJsonURLs[module]() as string, request: module});
 }
-
-importRes(require.context('./res/', true, /\.png$/), false);
-importRes(require.context('./res/', true, /-combined\.json$/), true);
 
 type TEInfo = {
 	cursorX: number,

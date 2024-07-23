@@ -1,7 +1,7 @@
 import { MouseEvent, RefObject, useRef, useState } from "react";
 
 import { CardProps } from '@mui/material/Card';
-import ClickAwayListener from '@mui/base/ClickAwayListener';
+
 
 
 import HTMLTextEditorElement from "./texteditor/TextEditor";
@@ -21,6 +21,7 @@ import {
     Tooltip,
     Stack,
     Typography,
+    ClickAwayListener,
 } from '@mui/material';
 
 

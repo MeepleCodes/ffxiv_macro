@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    // "composite": true,
+    // "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    // "target": "ES2020",
+    "target": "esnext",
+    "useDefineForClassFields": true,
+    // "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "module": "esnext",
+    "skipLibCheck": true,
+    "experimentalDecorators": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    // "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+    
+
+    /* Linting */
+    "strict": true,
+    // Let eslint flag these two (so it can allow '_param')
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noFallthroughCasesInSwitch": true
+    
+  },
+  "include": ["src"]
+}

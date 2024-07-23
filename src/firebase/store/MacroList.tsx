@@ -13,8 +13,8 @@ import SortClockDescendingOutline from 'mdi-material-ui/SortClockDescendingOutli
 import SortVariantOff from 'mdi-material-ui/SortVariantOff';
 
 
-import format from 'date-fns/format'
-
+import { format } from 'date-fns/format'
+import React from 'react';
 import { FunctionComponent, useContext, useEffect, useState } from 'react';
 import { StoreContext } from './StoreControls';
 import { Unsubscribe } from 'firebase/firestore';
