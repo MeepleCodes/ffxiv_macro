@@ -1,0 +1,3 @@
+[submodule "packages/ffxiv-client-data"]
+	path = packages/ffxiv-client-data
+	url = git@github.com:MeepleCodes/ffxiv-client-data.git
