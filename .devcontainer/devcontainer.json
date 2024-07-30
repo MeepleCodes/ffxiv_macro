@@ -7,6 +7,7 @@
 	// // Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {
 		"ghcr.io/devcontainers-contrib/features/firebase-cli:2": {},
+	    // "ghcr.io/devcontainers-contrib/features/corepack:1": {},
 		// firebase emulators require java
 		"ghcr.io/devcontainers/features/java:1": {}
 	},
@@ -14,7 +15,8 @@
 		"vscode": {
 			"extensions": [
 				"donjayamanne.githistory",
-				"ms-azuretools.vscode-docker"
+				"ms-azuretools.vscode-docker",
+				"arcanis.vscode-zipfs"
 			]
 		}
 	},
@@ -24,7 +26,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "npm install",
+	"postCreateCommand": ["sudo corepack enable", "yarn"],
 
 	// Configure tool-specific properties.
 	// "customizations": {},
