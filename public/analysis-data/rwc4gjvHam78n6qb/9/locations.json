@@ -1,0 +1,8587 @@
+[
+  {
+    "actorID": 2,
+    "locations": [
+      {
+        "timestamp": 4283903,
+        "x": 10115,
+        "y": 11119,
+        "facing": -164,
+        "alive": true
+      },
+      {
+        "timestamp": 4284579,
+        "x": 10115,
+        "y": 11119,
+        "facing": -164,
+        "alive": true
+      },
+      {
+        "timestamp": 4285547,
+        "x": 10112,
+        "y": 11115,
+        "facing": -165,
+        "alive": true
+      },
+      {
+        "timestamp": 4288891,
+        "x": 10191,
+        "y": 10146,
+        "facing": -294,
+        "alive": true
+      },
+      {
+        "timestamp": 4291358,
+        "x": 10191,
+        "y": 10146,
+        "facing": -245,
+        "alive": true
+      },
+      {
+        "timestamp": 4291962,
+        "x": 10191,
+        "y": 10146,
+        "facing": -245,
+        "alive": true
+      },
+      {
+        "timestamp": 4293800,
+        "x": 10191,
+        "y": 10146,
+        "facing": -245,
+        "alive": true
+      },
+      {
+        "timestamp": 4294467,
+        "x": 10191,
+        "y": 10146,
+        "facing": -245,
+        "alive": true
+      },
+      {
+        "timestamp": 4295122,
+        "x": 10191,
+        "y": 10146,
+        "facing": -245,
+        "alive": true
+      },
+      {
+        "timestamp": 4295443,
+        "x": 10191,
+        "y": 10146,
+        "facing": -245,
+        "alive": true
+      },
+      {
+        "timestamp": 4296069,
+        "x": 10191,
+        "y": 10146,
+        "facing": -245,
+        "alive": true
+      },
+      {
+        "timestamp": 4296204,
+        "x": 10191,
+        "y": 10146,
+        "facing": -245,
+        "alive": true
+      },
+      {
+        "timestamp": 4296244,
+        "x": 10191,
+        "y": 10146,
+        "facing": -245,
+        "alive": true
+      },
+      {
+        "timestamp": 4296559,
+        "x": 10191,
+        "y": 10146,
+        "facing": -245,
+        "alive": true
+      },
+      {
+        "timestamp": 4296908,
+        "x": 10191,
+        "y": 10146,
+        "facing": -245,
+        "alive": true
+      },
+      {
+        "timestamp": 4297219,
+        "x": 10191,
+        "y": 10146,
+        "facing": -245,
+        "alive": true
+      },
+      {
+        "timestamp": 4297619,
+        "x": 10191,
+        "y": 10146,
+        "facing": -245,
+        "alive": true
+      },
+      {
+        "timestamp": 4297926,
+        "x": 10191,
+        "y": 10146,
+        "facing": -245,
+        "alive": true
+      },
+      {
+        "timestamp": 4298239,
+        "x": 10191,
+        "y": 10146,
+        "facing": -245,
+        "alive": true
+      },
+      {
+        "timestamp": 4298685,
+        "x": 10191,
+        "y": 10146,
+        "facing": -245,
+        "alive": true
+      },
+      {
+        "timestamp": 4299174,
+        "x": 10191,
+        "y": 10146,
+        "facing": -245,
+        "alive": true
+      },
+      {
+        "timestamp": 4299307,
+        "x": 10191,
+        "y": 10146,
+        "facing": -245,
+        "alive": true
+      },
+      {
+        "timestamp": 4299312,
+        "x": 10191,
+        "y": 10146,
+        "facing": -245,
+        "alive": true
+      },
+      {
+        "timestamp": 4299408,
+        "x": 10191,
+        "y": 10146,
+        "facing": -245,
+        "alive": true
+      },
+      {
+        "timestamp": 4300330,
+        "x": 10191,
+        "y": 10146,
+        "facing": -245,
+        "alive": true
+      },
+      {
+        "timestamp": 4300967,
+        "x": 10191,
+        "y": 10146,
+        "facing": -245,
+        "alive": true
+      },
+      {
+        "timestamp": 4301137,
+        "x": 10191,
+        "y": 10146,
+        "facing": -245,
+        "alive": true
+      },
+      {
+        "timestamp": 4301534,
+        "x": 10191,
+        "y": 10146,
+        "facing": -245,
+        "alive": true
+      },
+      {
+        "timestamp": 4301773,
+        "x": 10191,
+        "y": 10146,
+        "facing": -245,
+        "alive": true
+      },
+      {
+        "timestamp": 4302081,
+        "x": 10191,
+        "y": 10146,
+        "facing": -243,
+        "alive": true
+      },
+      {
+        "timestamp": 4302175,
+        "x": 10191,
+        "y": 10146,
+        "facing": -247,
+        "alive": true
+      },
+      {
+        "timestamp": 4303819,
+        "x": 10021,
+        "y": 10423,
+        "facing": -161,
+        "alive": true
+      },
+      {
+        "timestamp": 4304486,
+        "x": 10021,
+        "y": 10423,
+        "facing": -161,
+        "alive": true
+      },
+      {
+        "timestamp": 4305189,
+        "x": 10021,
+        "y": 10423,
+        "facing": -161,
+        "alive": true
+      },
+      {
+        "timestamp": 4306224,
+        "x": 10021,
+        "y": 10423,
+        "facing": -161,
+        "alive": true
+      },
+      {
+        "timestamp": 4308190,
+        "x": 10021,
+        "y": 10423,
+        "facing": -161,
+        "alive": true
+      },
+      {
+        "timestamp": 4308674,
+        "x": 10021,
+        "y": 10423,
+        "facing": -161,
+        "alive": true
+      },
+      {
+        "timestamp": 4310196,
+        "x": 10021,
+        "y": 10423,
+        "facing": -161,
+        "alive": true
+      },
+      {
+        "timestamp": 4313569,
+        "x": 10021,
+        "y": 10423,
+        "facing": -163,
+        "alive": true
+      },
+      {
+        "timestamp": 4316070,
+        "x": 10042,
+        "y": 10134,
+        "facing": -189,
+        "alive": true
+      },
+      {
+        "timestamp": 4319097,
+        "x": 11015,
+        "y": 10109,
+        "facing": -286,
+        "alive": true
+      },
+      {
+        "timestamp": 4321817,
+        "x": 11107,
+        "y": 9981,
+        "facing": -316,
+        "alive": true
+      },
+      {
+        "timestamp": 4322165,
+        "x": 11107,
+        "y": 9981,
+        "facing": -316,
+        "alive": true
+      },
+      {
+        "timestamp": 4322478,
+        "x": 11107,
+        "y": 9981,
+        "facing": -314,
+        "alive": true
+      },
+      {
+        "timestamp": 4323425,
+        "x": 10984,
+        "y": 9973,
+        "facing": -308,
+        "alive": true
+      },
+      {
+        "timestamp": 4323466,
+        "x": 10894,
+        "y": 9968,
+        "facing": -308,
+        "alive": true
+      },
+      {
+        "timestamp": 4324136,
+        "x": 10697,
+        "y": 9953,
+        "facing": -308,
+        "alive": true
+      },
+      {
+        "timestamp": 4326399,
+        "x": 9939,
+        "y": 10706,
+        "facing": -320,
+        "alive": true
+      },
+      {
+        "timestamp": 4329438,
+        "x": 10335,
+        "y": 10409,
+        "facing": -648,
+        "alive": true
+      }
+    ]
+  },
+  {
+    "actorID": 3,
+    "locations": [
+      {
+        "timestamp": 4315972,
+        "x": 10217,
+        "y": 10222,
+        "facing": -278,
+        "alive": true
+      },
+      {
+        "timestamp": 4323230,
+        "x": 9999,
+        "y": 9999,
+        "facing": -401,
+        "alive": true
+      },
+      {
+        "timestamp": 4327107,
+        "x": 9999,
+        "y": 9999,
+        "facing": -710,
+        "alive": true
+      },
+      {
+        "timestamp": 4331041,
+        "x": 9999,
+        "y": 9999,
+        "facing": -714,
+        "alive": true
+      }
+    ]
+  },
+  {
+    "actorID": 4,
+    "locations": [
+      {
+        "timestamp": 4283196,
+        "x": 9734,
+        "y": 11025,
+        "facing": -771,
+        "alive": true
+      },
+      {
+        "timestamp": 4284745,
+        "x": 9734,
+        "y": 11023,
+        "facing": -770,
+        "alive": true
+      },
+      {
+        "timestamp": 4288188,
+        "x": 9773,
+        "y": 10368,
+        "facing": -709,
+        "alive": true
+      },
+      {
+        "timestamp": 4288855,
+        "x": 9773,
+        "y": 10368,
+        "facing": -711,
+        "alive": true
+      },
+      {
+        "timestamp": 4289691,
+        "x": 9773,
+        "y": 10368,
+        "facing": -729,
+        "alive": true
+      },
+      {
+        "timestamp": 4291358,
+        "x": 9773,
+        "y": 10368,
+        "facing": -730,
+        "alive": true
+      },
+      {
+        "timestamp": 4292197,
+        "x": 9773,
+        "y": 10368,
+        "facing": -730,
+        "alive": true
+      },
+      {
+        "timestamp": 4292865,
+        "x": 9773,
+        "y": 10368,
+        "facing": -730,
+        "alive": true
+      },
+      {
+        "timestamp": 4293524,
+        "x": 9773,
+        "y": 10368,
+        "facing": -299,
+        "alive": true
+      },
+      {
+        "timestamp": 4294727,
+        "x": 9773,
+        "y": 10368,
+        "facing": -448,
+        "alive": true
+      },
+      {
+        "timestamp": 4295122,
+        "x": 9773,
+        "y": 10368,
+        "facing": -730,
+        "alive": true
+      },
+      {
+        "timestamp": 4295402,
+        "x": 9773,
+        "y": 10368,
+        "facing": -730,
+        "alive": true
+      },
+      {
+        "timestamp": 4295443,
+        "x": 9773,
+        "y": 10368,
+        "facing": -730,
+        "alive": true
+      },
+      {
+        "timestamp": 4296101,
+        "x": 9773,
+        "y": 10368,
+        "facing": -730,
+        "alive": true
+      },
+      {
+        "timestamp": 4296204,
+        "x": 9764,
+        "y": 10392,
+        "facing": -371,
+        "alive": true
+      },
+      {
+        "timestamp": 4296280,
+        "x": 9758,
+        "y": 10411,
+        "facing": -416,
+        "alive": true
+      },
+      {
+        "timestamp": 4296559,
+        "x": 9749,
+        "y": 10437,
+        "facing": -550,
+        "alive": true
+      },
+      {
+        "timestamp": 4297224,
+        "x": 9740,
+        "y": 10466,
+        "facing": -716,
+        "alive": true
+      },
+      {
+        "timestamp": 4297303,
+        "x": 9749,
+        "y": 10437,
+        "facing": -550,
+        "alive": true
+      },
+      {
+        "timestamp": 4297619,
+        "x": 9740,
+        "y": 10466,
+        "facing": -734,
+        "alive": true
+      },
+      {
+        "timestamp": 4298327,
+        "x": 9740,
+        "y": 10466,
+        "facing": -734,
+        "alive": true
+      },
+      {
+        "timestamp": 4298648,
+        "x": 9740,
+        "y": 10466,
+        "facing": -734,
+        "alive": true
+      },
+      {
+        "timestamp": 4298685,
+        "x": 9740,
+        "y": 10466,
+        "facing": -734,
+        "alive": true
+      },
+      {
+        "timestamp": 4299174,
+        "x": 9740,
+        "y": 10466,
+        "facing": -734,
+        "alive": true
+      },
+      {
+        "timestamp": 4299400,
+        "x": 9740,
+        "y": 10466,
+        "facing": -734,
+        "alive": true
+      },
+      {
+        "timestamp": 4299712,
+        "x": 9740,
+        "y": 10466,
+        "facing": -734,
+        "alive": true
+      },
+      {
+        "timestamp": 4300428,
+        "x": 9740,
+        "y": 10466,
+        "facing": -734,
+        "alive": true
+      },
+      {
+        "timestamp": 4300967,
+        "x": 9740,
+        "y": 10466,
+        "facing": -734,
+        "alive": true
+      },
+      {
+        "timestamp": 4301680,
+        "x": 9740,
+        "y": 10466,
+        "facing": -734,
+        "alive": true
+      },
+      {
+        "timestamp": 4301804,
+        "x": 9740,
+        "y": 10466,
+        "facing": -734,
+        "alive": true
+      },
+      {
+        "timestamp": 4302175,
+        "x": 9740,
+        "y": 10466,
+        "facing": -759,
+        "alive": true
+      },
+      {
+        "timestamp": 4302342,
+        "x": 9740,
+        "y": 10466,
+        "facing": -762,
+        "alive": true
+      },
+      {
+        "timestamp": 4303236,
+        "x": 9740,
+        "y": 10466,
+        "facing": -734,
+        "alive": true
+      },
+      {
+        "timestamp": 4305189,
+        "x": 9755,
+        "y": 10445,
+        "facing": -731,
+        "alive": true
+      },
+      {
+        "timestamp": 4305822,
+        "x": 9755,
+        "y": 10445,
+        "facing": -735,
+        "alive": true
+      },
+      {
+        "timestamp": 4307333,
+        "x": 9755,
+        "y": 10445,
+        "facing": -735,
+        "alive": true
+      },
+      {
+        "timestamp": 4308190,
+        "x": 9755,
+        "y": 10445,
+        "facing": -735,
+        "alive": true
+      },
+      {
+        "timestamp": 4310803,
+        "x": 9755,
+        "y": 10445,
+        "facing": -735,
+        "alive": true
+      },
+      {
+        "timestamp": 4311917,
+        "x": 9640,
+        "y": 10267,
+        "facing": -183,
+        "alive": true
+      },
+      {
+        "timestamp": 4313310,
+        "x": 9636,
+        "y": 10231,
+        "facing": -687,
+        "alive": true
+      },
+      {
+        "timestamp": 4315810,
+        "x": 9636,
+        "y": 10231,
+        "facing": -687,
+        "alive": true
+      },
+      {
+        "timestamp": 4318333,
+        "x": 9071,
+        "y": 9963,
+        "facing": -625,
+        "alive": true
+      },
+      {
+        "timestamp": 4320824,
+        "x": 9023,
+        "y": 9969,
+        "facing": -626,
+        "alive": true
+      },
+      {
+        "timestamp": 4321817,
+        "x": 9021,
+        "y": 9969,
+        "facing": -686,
+        "alive": true
+      },
+      {
+        "timestamp": 4321822,
+        "x": 9021,
+        "y": 9969,
+        "facing": -686,
+        "alive": true
+      },
+      {
+        "timestamp": 4321983,
+        "x": 9018,
+        "y": 9969,
+        "facing": -215,
+        "alive": false
+      }
+    ]
+  },
+  {
+    "actorID": 5,
+    "locations": [
+      {
+        "timestamp": 4284044,
+        "x": 10285,
+        "y": 10906,
+        "facing": -175,
+        "alive": true
+      },
+      {
+        "timestamp": 4285547,
+        "x": 10463,
+        "y": 10448,
+        "facing": -220,
+        "alive": true
+      },
+      {
+        "timestamp": 4288053,
+        "x": 10867,
+        "y": 9212,
+        "facing": -259,
+        "alive": true
+      },
+      {
+        "timestamp": 4288753,
+        "x": 10889,
+        "y": 9157,
+        "facing": -368,
+        "alive": true
+      },
+      {
+        "timestamp": 4290458,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4292902,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4293618,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4295122,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4295362,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4295443,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4296106,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4296204,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4296280,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4296369,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4296559,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4296823,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4297526,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4297619,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4297671,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4297847,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4298562,
+        "x": 10873,
+        "y": 9140,
+        "facing": -394,
+        "alive": true
+      },
+      {
+        "timestamp": 4298685,
+        "x": 10873,
+        "y": 9140,
+        "facing": -394,
+        "alive": true
+      },
+      {
+        "timestamp": 4299133,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4299174,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4299623,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4299809,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4300651,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4300967,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4301088,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4302081,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4302175,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4302484,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4302743,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4302838,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4305189,
+        "x": 10873,
+        "y": 9140,
+        "facing": -394,
+        "alive": true
+      },
+      {
+        "timestamp": 4305290,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4305989,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4307734,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4308190,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4308592,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4310236,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4311306,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4312684,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4313346,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4315124,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4315928,
+        "x": 10873,
+        "y": 9140,
+        "facing": -388,
+        "alive": true
+      },
+      {
+        "timestamp": 4317581,
+        "x": 10873,
+        "y": 9140,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4318649,
+        "x": 10819,
+        "y": 9187,
+        "facing": -382,
+        "alive": true
+      },
+      {
+        "timestamp": 4321020,
+        "x": 10795,
+        "y": 9205,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4321186,
+        "x": 10795,
+        "y": 9205,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4321817,
+        "x": 10810,
+        "y": 9132,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4322478,
+        "x": 10810,
+        "y": 9132,
+        "facing": -393,
+        "alive": true
+      },
+      {
+        "timestamp": 4322531,
+        "x": 10810,
+        "y": 9132,
+        "facing": -397,
+        "alive": true
+      },
+      {
+        "timestamp": 4323466,
+        "x": 10810,
+        "y": 9132,
+        "facing": -397,
+        "alive": true
+      },
+      {
+        "timestamp": 4324034,
+        "x": 10810,
+        "y": 9132,
+        "facing": -397,
+        "alive": true
+      },
+      {
+        "timestamp": 4324172,
+        "x": 10810,
+        "y": 9132,
+        "facing": -397,
+        "alive": true
+      },
+      {
+        "timestamp": 4324392,
+        "x": 10810,
+        "y": 9132,
+        "facing": -397,
+        "alive": true
+      },
+      {
+        "timestamp": 4324670,
+        "x": 10810,
+        "y": 9132,
+        "facing": -397,
+        "alive": true
+      },
+      {
+        "timestamp": 4325550,
+        "x": 10810,
+        "y": 9132,
+        "facing": -397,
+        "alive": true
+      },
+      {
+        "timestamp": 4327075,
+        "x": 10810,
+        "y": 9132,
+        "facing": -397,
+        "alive": true
+      },
+      {
+        "timestamp": 4327152,
+        "x": 10810,
+        "y": 9132,
+        "facing": -397,
+        "alive": true
+      },
+      {
+        "timestamp": 4327640,
+        "x": 10810,
+        "y": 9132,
+        "facing": -397,
+        "alive": true
+      },
+      {
+        "timestamp": 4330184,
+        "x": 10810,
+        "y": 9132,
+        "facing": -397,
+        "alive": true
+      },
+      {
+        "timestamp": 4330642,
+        "x": 10810,
+        "y": 9132,
+        "facing": -397,
+        "alive": true
+      },
+      {
+        "timestamp": 4331750,
+        "x": 10810,
+        "y": 9132,
+        "facing": -397,
+        "alive": true
+      },
+      {
+        "timestamp": 4332688,
+        "x": 10724,
+        "y": 9460,
+        "facing": -472,
+        "alive": true
+      },
+      {
+        "timestamp": 4332901,
+        "x": 10723,
+        "y": 9590,
+        "facing": -472,
+        "alive": false
+      }
+    ]
+  },
+  {
+    "actorID": 6,
+    "locations": [
+      {
+        "timestamp": 4283737,
+        "x": 10002,
+        "y": 11060,
+        "facing": -225,
+        "alive": true
+      },
+      {
+        "timestamp": 4284705,
+        "x": 10021,
+        "y": 10875,
+        "facing": -783,
+        "alive": true
+      },
+      {
+        "timestamp": 4285782,
+        "x": 10021,
+        "y": 10869,
+        "facing": -158,
+        "alive": true
+      },
+      {
+        "timestamp": 4285908,
+        "x": 10021,
+        "y": 10864,
+        "facing": -160,
+        "alive": true
+      },
+      {
+        "timestamp": 4287289,
+        "x": 10021,
+        "y": 10190,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4288085,
+        "x": 10021,
+        "y": 10190,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4288806,
+        "x": 10002,
+        "y": 9285,
+        "facing": -382,
+        "alive": true
+      },
+      {
+        "timestamp": 4289153,
+        "x": 9999,
+        "y": 9254,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4290316,
+        "x": 9999,
+        "y": 9242,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4291114,
+        "x": 9999,
+        "y": 9242,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4291264,
+        "x": 9997,
+        "y": 9361,
+        "facing": -470,
+        "alive": true
+      },
+      {
+        "timestamp": 4291962,
+        "x": 9996,
+        "y": 9386,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4292557,
+        "x": 9996,
+        "y": 9386,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4292637,
+        "x": 9996,
+        "y": 9386,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4293800,
+        "x": 9996,
+        "y": 9386,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4294560,
+        "x": 9996,
+        "y": 9386,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4295122,
+        "x": 9996,
+        "y": 9386,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4295220,
+        "x": 9996,
+        "y": 9386,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4295443,
+        "x": 9996,
+        "y": 9386,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4295928,
+        "x": 9996,
+        "y": 9441,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4296204,
+        "x": 9996,
+        "y": 9441,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4296235,
+        "x": 9996,
+        "y": 9386,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4296280,
+        "x": 9996,
+        "y": 9441,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4296559,
+        "x": 9996,
+        "y": 9441,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4296908,
+        "x": 9996,
+        "y": 9441,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4297359,
+        "x": 9996,
+        "y": 9442,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4297619,
+        "x": 9996,
+        "y": 9442,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4298167,
+        "x": 9996,
+        "y": 9441,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4298372,
+        "x": 9996,
+        "y": 9441,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4298685,
+        "x": 9996,
+        "y": 9441,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4298826,
+        "x": 9996,
+        "y": 9441,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4299174,
+        "x": 9996,
+        "y": 9441,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4299312,
+        "x": 9996,
+        "y": 9441,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4299441,
+        "x": 9996,
+        "y": 9441,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4299486,
+        "x": 9996,
+        "y": 9441,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4300967,
+        "x": 9996,
+        "y": 9441,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4301177,
+        "x": 9996,
+        "y": 9441,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4301314,
+        "x": 9996,
+        "y": 9441,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4301680,
+        "x": 9996,
+        "y": 9441,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4302081,
+        "x": 9996,
+        "y": 9441,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4302175,
+        "x": 9996,
+        "y": 9441,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4302694,
+        "x": 9996,
+        "y": 9441,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4302922,
+        "x": 9996,
+        "y": 9441,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4303584,
+        "x": 9996,
+        "y": 9441,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4304297,
+        "x": 9996,
+        "y": 9441,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4304787,
+        "x": 9996,
+        "y": 9441,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4305189,
+        "x": 9996,
+        "y": 9441,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4305453,
+        "x": 9996,
+        "y": 9442,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4305587,
+        "x": 9996,
+        "y": 9441,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4305899,
+        "x": 9996,
+        "y": 9441,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4305989,
+        "x": 9996,
+        "y": 9441,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4306090,
+        "x": 9996,
+        "y": 9441,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 4306703,
+        "x": 10007,
+        "y": 9409,
+        "facing": -503,
+        "alive": true
+      },
+      {
+        "timestamp": 4306796,
+        "x": 10010,
+        "y": 9403,
+        "facing": -548,
+        "alive": true
+      },
+      {
+        "timestamp": 4306987,
+        "x": 10014,
+        "y": 9395,
+        "facing": -471,
+        "alive": true
+      },
+      {
+        "timestamp": 4307192,
+        "x": 10017,
+        "y": 9390,
+        "facing": -471,
+        "alive": true
+      },
+      {
+        "timestamp": 4307821,
+        "x": 10018,
+        "y": 9389,
+        "facing": -471,
+        "alive": true
+      },
+      {
+        "timestamp": 4307906,
+        "x": 10018,
+        "y": 9389,
+        "facing": -471,
+        "alive": true
+      },
+      {
+        "timestamp": 4307956,
+        "x": 10018,
+        "y": 9389,
+        "facing": -471,
+        "alive": true
+      },
+      {
+        "timestamp": 4308044,
+        "x": 10018,
+        "y": 9389,
+        "facing": -471,
+        "alive": true
+      },
+      {
+        "timestamp": 4308190,
+        "x": 10018,
+        "y": 9389,
+        "facing": -471,
+        "alive": true
+      },
+      {
+        "timestamp": 4308847,
+        "x": 10018,
+        "y": 9389,
+        "facing": -471,
+        "alive": true
+      },
+      {
+        "timestamp": 4308994,
+        "x": 10018,
+        "y": 9389,
+        "facing": -471,
+        "alive": true
+      },
+      {
+        "timestamp": 4309075,
+        "x": 10018,
+        "y": 9389,
+        "facing": -471,
+        "alive": true
+      },
+      {
+        "timestamp": 4309337,
+        "x": 10018,
+        "y": 9389,
+        "facing": -471,
+        "alive": true
+      },
+      {
+        "timestamp": 4309474,
+        "x": 10018,
+        "y": 9389,
+        "facing": -471,
+        "alive": true
+      },
+      {
+        "timestamp": 4309867,
+        "x": 10018,
+        "y": 9389,
+        "facing": -471,
+        "alive": true
+      },
+      {
+        "timestamp": 4310103,
+        "x": 10018,
+        "y": 9389,
+        "facing": -471,
+        "alive": true
+      },
+      {
+        "timestamp": 4310196,
+        "x": 10018,
+        "y": 9389,
+        "facing": -471,
+        "alive": true
+      },
+      {
+        "timestamp": 4311881,
+        "x": 10018,
+        "y": 9389,
+        "facing": -471,
+        "alive": true
+      },
+      {
+        "timestamp": 4312006,
+        "x": 10018,
+        "y": 9389,
+        "facing": -471,
+        "alive": true
+      },
+      {
+        "timestamp": 4312108,
+        "x": 10018,
+        "y": 9389,
+        "facing": -471,
+        "alive": true
+      },
+      {
+        "timestamp": 4312406,
+        "x": 10018,
+        "y": 9389,
+        "facing": -471,
+        "alive": true
+      },
+      {
+        "timestamp": 4312861,
+        "x": 10018,
+        "y": 9389,
+        "facing": -471,
+        "alive": true
+      },
+      {
+        "timestamp": 4312909,
+        "x": 10018,
+        "y": 9389,
+        "facing": -471,
+        "alive": true
+      },
+      {
+        "timestamp": 4313169,
+        "x": 10018,
+        "y": 9389,
+        "facing": -470,
+        "alive": true
+      },
+      {
+        "timestamp": 4314723,
+        "x": 10018,
+        "y": 9389,
+        "facing": -469,
+        "alive": true
+      },
+      {
+        "timestamp": 4315008,
+        "x": 10018,
+        "y": 9389,
+        "facing": -469,
+        "alive": true
+      },
+      {
+        "timestamp": 4316251,
+        "x": 10018,
+        "y": 9389,
+        "facing": -469,
+        "alive": true
+      },
+      {
+        "timestamp": 4317816,
+        "x": 10018,
+        "y": 9389,
+        "facing": -469,
+        "alive": true
+      },
+      {
+        "timestamp": 4317982,
+        "x": 10018,
+        "y": 9389,
+        "facing": -469,
+        "alive": true
+      },
+      {
+        "timestamp": 4319622,
+        "x": 10018,
+        "y": 9382,
+        "facing": -602,
+        "alive": true
+      },
+      {
+        "timestamp": 4321817,
+        "x": 10005,
+        "y": 8893,
+        "facing": -556,
+        "alive": true
+      },
+      {
+        "timestamp": 4321822,
+        "x": 10005,
+        "y": 8893,
+        "facing": -556,
+        "alive": true
+      },
+      {
+        "timestamp": 4322027,
+        "x": 10018,
+        "y": 8967,
+        "facing": -515,
+        "alive": false
+      }
+    ]
+  },
+  {
+    "actorID": 7,
+    "locations": [
+      {
+        "timestamp": 4283281,
+        "x": 9599,
+        "y": 10900,
+        "facing": -765,
+        "alive": true
+      },
+      {
+        "timestamp": 4283996,
+        "x": 9868,
+        "y": 9835,
+        "facing": -762,
+        "alive": true
+      },
+      {
+        "timestamp": 4285147,
+        "x": 9654,
+        "y": 9899,
+        "facing": -710,
+        "alive": true
+      },
+      {
+        "timestamp": 4286488,
+        "x": 9480,
+        "y": 10235,
+        "facing": -421,
+        "alive": true
+      },
+      {
+        "timestamp": 4288753,
+        "x": 9527,
+        "y": 10442,
+        "facing": -708,
+        "alive": true
+      },
+      {
+        "timestamp": 4288988,
+        "x": 9529,
+        "y": 10442,
+        "facing": -724,
+        "alive": true
+      },
+      {
+        "timestamp": 4291033,
+        "x": 9546,
+        "y": 10363,
+        "facing": -738,
+        "alive": true
+      },
+      {
+        "timestamp": 4291560,
+        "x": 9548,
+        "y": 10356,
+        "facing": -740,
+        "alive": true
+      },
+      {
+        "timestamp": 4292273,
+        "x": 9548,
+        "y": 10356,
+        "facing": -696,
+        "alive": true
+      },
+      {
+        "timestamp": 4292865,
+        "x": 9548,
+        "y": 10356,
+        "facing": -696,
+        "alive": true
+      },
+      {
+        "timestamp": 4292998,
+        "x": 9549,
+        "y": 10358,
+        "facing": -642,
+        "alive": true
+      },
+      {
+        "timestamp": 4293303,
+        "x": 9602,
+        "y": 10446,
+        "facing": -644,
+        "alive": true
+      },
+      {
+        "timestamp": 4294065,
+        "x": 9711,
+        "y": 10530,
+        "facing": -714,
+        "alive": true
+      },
+      {
+        "timestamp": 4294727,
+        "x": 9715,
+        "y": 10530,
+        "facing": -736,
+        "alive": true
+      },
+      {
+        "timestamp": 4295122,
+        "x": 9715,
+        "y": 10530,
+        "facing": -736,
+        "alive": true
+      },
+      {
+        "timestamp": 4295443,
+        "x": 9715,
+        "y": 10530,
+        "facing": -736,
+        "alive": true
+      },
+      {
+        "timestamp": 4295479,
+        "x": 9715,
+        "y": 10530,
+        "facing": -736,
+        "alive": true
+      },
+      {
+        "timestamp": 4295568,
+        "x": 9715,
+        "y": 10530,
+        "facing": -736,
+        "alive": true
+      },
+      {
+        "timestamp": 4296204,
+        "x": 9715,
+        "y": 10530,
+        "facing": -736,
+        "alive": true
+      },
+      {
+        "timestamp": 4296280,
+        "x": 9715,
+        "y": 10530,
+        "facing": -736,
+        "alive": true
+      },
+      {
+        "timestamp": 4296559,
+        "x": 9715,
+        "y": 10530,
+        "facing": -736,
+        "alive": true
+      },
+      {
+        "timestamp": 4296644,
+        "x": 9715,
+        "y": 10530,
+        "facing": -736,
+        "alive": true
+      },
+      {
+        "timestamp": 4297396,
+        "x": 9715,
+        "y": 10530,
+        "facing": -736,
+        "alive": true
+      },
+      {
+        "timestamp": 4297619,
+        "x": 9715,
+        "y": 10530,
+        "facing": -736,
+        "alive": true
+      },
+      {
+        "timestamp": 4297847,
+        "x": 9715,
+        "y": 10530,
+        "facing": -736,
+        "alive": true
+      },
+      {
+        "timestamp": 4298421,
+        "x": 9715,
+        "y": 10530,
+        "facing": -736,
+        "alive": true
+      },
+      {
+        "timestamp": 4298510,
+        "x": 9715,
+        "y": 10530,
+        "facing": -736,
+        "alive": true
+      },
+      {
+        "timestamp": 4298685,
+        "x": 9715,
+        "y": 10530,
+        "facing": -736,
+        "alive": true
+      },
+      {
+        "timestamp": 4299174,
+        "x": 9715,
+        "y": 10530,
+        "facing": -736,
+        "alive": true
+      },
+      {
+        "timestamp": 4299369,
+        "x": 9715,
+        "y": 10530,
+        "facing": -736,
+        "alive": true
+      },
+      {
+        "timestamp": 4299486,
+        "x": 9715,
+        "y": 10530,
+        "facing": -736,
+        "alive": true
+      },
+      {
+        "timestamp": 4300113,
+        "x": 9718,
+        "y": 10501,
+        "facing": -774,
+        "alive": true
+      },
+      {
+        "timestamp": 4300250,
+        "x": 9718,
+        "y": 10500,
+        "facing": -777,
+        "alive": true
+      },
+      {
+        "timestamp": 4300914,
+        "x": 9718,
+        "y": 10500,
+        "facing": -734,
+        "alive": true
+      },
+      {
+        "timestamp": 4300967,
+        "x": 9718,
+        "y": 10500,
+        "facing": -734,
+        "alive": true
+      },
+      {
+        "timestamp": 4301935,
+        "x": 9718,
+        "y": 10500,
+        "facing": -734,
+        "alive": true
+      },
+      {
+        "timestamp": 4301940,
+        "x": 9718,
+        "y": 10500,
+        "facing": -734,
+        "alive": true
+      },
+      {
+        "timestamp": 4302175,
+        "x": 9718,
+        "y": 10500,
+        "facing": -734,
+        "alive": true
+      },
+      {
+        "timestamp": 4302382,
+        "x": 9718,
+        "y": 10500,
+        "facing": -734,
+        "alive": true
+      },
+      {
+        "timestamp": 4302657,
+        "x": 9718,
+        "y": 10500,
+        "facing": -734,
+        "alive": true
+      },
+      {
+        "timestamp": 4303686,
+        "x": 9718,
+        "y": 10500,
+        "facing": -734,
+        "alive": true
+      },
+      {
+        "timestamp": 4304385,
+        "x": 9718,
+        "y": 10500,
+        "facing": -734,
+        "alive": true
+      },
+      {
+        "timestamp": 4304662,
+        "x": 9718,
+        "y": 10500,
+        "facing": -734,
+        "alive": true
+      },
+      {
+        "timestamp": 4305189,
+        "x": 9718,
+        "y": 10500,
+        "facing": -734,
+        "alive": true
+      },
+      {
+        "timestamp": 4305382,
+        "x": 9718,
+        "y": 10500,
+        "facing": -734,
+        "alive": true
+      },
+      {
+        "timestamp": 4306931,
+        "x": 9718,
+        "y": 10500,
+        "facing": -734,
+        "alive": true
+      },
+      {
+        "timestamp": 4307956,
+        "x": 9718,
+        "y": 10500,
+        "facing": -734,
+        "alive": true
+      },
+      {
+        "timestamp": 4308190,
+        "x": 9718,
+        "y": 10500,
+        "facing": -734,
+        "alive": true
+      },
+      {
+        "timestamp": 4308709,
+        "x": 9718,
+        "y": 10500,
+        "facing": -734,
+        "alive": true
+      },
+      {
+        "timestamp": 4309199,
+        "x": 9718,
+        "y": 10500,
+        "facing": -734,
+        "alive": true
+      },
+      {
+        "timestamp": 4310055,
+        "x": 9718,
+        "y": 10500,
+        "facing": -734,
+        "alive": true
+      },
+      {
+        "timestamp": 4311480,
+        "x": 9718,
+        "y": 10500,
+        "facing": -734,
+        "alive": true
+      },
+      {
+        "timestamp": 4312643,
+        "x": 9718,
+        "y": 10500,
+        "facing": -734,
+        "alive": true
+      },
+      {
+        "timestamp": 4313310,
+        "x": 9718,
+        "y": 10500,
+        "facing": -735,
+        "alive": true
+      },
+      {
+        "timestamp": 4313748,
+        "x": 9718,
+        "y": 10500,
+        "facing": -735,
+        "alive": true
+      },
+      {
+        "timestamp": 4314012,
+        "x": 9718,
+        "y": 10500,
+        "facing": -735,
+        "alive": true
+      },
+      {
+        "timestamp": 4315615,
+        "x": 9611,
+        "y": 10517,
+        "facing": -171,
+        "alive": true
+      },
+      {
+        "timestamp": 4316017,
+        "x": 9612,
+        "y": 10428,
+        "facing": -711,
+        "alive": true
+      },
+      {
+        "timestamp": 4316251,
+        "x": 9612,
+        "y": 10414,
+        "facing": -711,
+        "alive": true
+      },
+      {
+        "timestamp": 4316919,
+        "x": 9612,
+        "y": 10414,
+        "facing": -711,
+        "alive": true
+      },
+      {
+        "timestamp": 4318296,
+        "x": 9588,
+        "y": 10414,
+        "facing": -236,
+        "alive": true
+      },
+      {
+        "timestamp": 4318658,
+        "x": 9565,
+        "y": 10414,
+        "facing": -252,
+        "alive": true
+      },
+      {
+        "timestamp": 4319360,
+        "x": 9584,
+        "y": 10419,
+        "facing": -245,
+        "alive": true
+      },
+      {
+        "timestamp": 4321817,
+        "x": 9110,
+        "y": 10856,
+        "facing": -711,
+        "alive": true
+      },
+      {
+        "timestamp": 4322263,
+        "x": 9231,
+        "y": 10700,
+        "facing": -719,
+        "alive": true
+      },
+      {
+        "timestamp": 4322478,
+        "x": 9307,
+        "y": 10608,
+        "facing": -707,
+        "alive": true
+      },
+      {
+        "timestamp": 4322625,
+        "x": 9344,
+        "y": 10565,
+        "facing": -710,
+        "alive": true
+      },
+      {
+        "timestamp": 4322932,
+        "x": 9408,
+        "y": 10492,
+        "facing": -713,
+        "alive": true
+      },
+      {
+        "timestamp": 4323368,
+        "x": 9481,
+        "y": 10400,
+        "facing": -694,
+        "alive": true
+      },
+      {
+        "timestamp": 4323466,
+        "x": 9524,
+        "y": 10410,
+        "facing": -674,
+        "alive": true
+      },
+      {
+        "timestamp": 4323734,
+        "x": 9637,
+        "y": 10473,
+        "facing": -615,
+        "alive": true
+      },
+      {
+        "timestamp": 4324489,
+        "x": 9726,
+        "y": 10448,
+        "facing": -778,
+        "alive": true
+      },
+      {
+        "timestamp": 4324662,
+        "x": 9706,
+        "y": 10455,
+        "facing": -166,
+        "alive": true
+      },
+      {
+        "timestamp": 4324890,
+        "x": 9683,
+        "y": 10463,
+        "facing": -250,
+        "alive": true
+      },
+      {
+        "timestamp": 4325150,
+        "x": 9668,
+        "y": 10469,
+        "facing": -306,
+        "alive": true
+      },
+      {
+        "timestamp": 4326399,
+        "x": 9647,
+        "y": 10471,
+        "facing": -258,
+        "alive": true
+      },
+      {
+        "timestamp": 4327152,
+        "x": 9642,
+        "y": 10473,
+        "facing": -285,
+        "alive": true
+      },
+      {
+        "timestamp": 4329382,
+        "x": 9339,
+        "y": 10709,
+        "facing": -372,
+        "alive": true
+      },
+      {
+        "timestamp": 4332364,
+        "x": 8717,
+        "y": 10985,
+        "facing": -766,
+        "alive": true
+      },
+      {
+        "timestamp": 4332688,
+        "x": 8721,
+        "y": 10978,
+        "facing": -765,
+        "alive": true
+      },
+      {
+        "timestamp": 4332984,
+        "x": 8796,
+        "y": 10826,
+        "facing": -750,
+        "alive": true
+      },
+      {
+        "timestamp": 4335358,
+        "x": 8857,
+        "y": 10076,
+        "facing": -645,
+        "alive": true
+      },
+      {
+        "timestamp": 4335969,
+        "x": 8856,
+        "y": 10072,
+        "facing": -713,
+        "alive": true
+      },
+      {
+        "timestamp": 4336591,
+        "x": 8852,
+        "y": 10072,
+        "facing": -178,
+        "alive": false
+      }
+    ]
+  },
+  {
+    "actorID": 8,
+    "locations": [
+      {
+        "timestamp": 4283595,
+        "x": 10030,
+        "y": 11006,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4285422,
+        "x": 10028,
+        "y": 10446,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4285685,
+        "x": 10024,
+        "y": 10380,
+        "facing": -161,
+        "alive": true
+      },
+      {
+        "timestamp": 4287952,
+        "x": 10000,
+        "y": 9796,
+        "facing": -163,
+        "alive": true
+      },
+      {
+        "timestamp": 4288005,
+        "x": 9997,
+        "y": 9735,
+        "facing": -161,
+        "alive": true
+      },
+      {
+        "timestamp": 4290231,
+        "x": 9990,
+        "y": 9477,
+        "facing": -160,
+        "alive": true
+      },
+      {
+        "timestamp": 4290458,
+        "x": 9990,
+        "y": 9477,
+        "facing": -752,
+        "alive": true
+      },
+      {
+        "timestamp": 4291213,
+        "x": 9990,
+        "y": 9477,
+        "facing": -476,
+        "alive": true
+      },
+      {
+        "timestamp": 4291921,
+        "x": 9990,
+        "y": 9477,
+        "facing": -476,
+        "alive": true
+      },
+      {
+        "timestamp": 4292463,
+        "x": 9990,
+        "y": 9477,
+        "facing": -476,
+        "alive": true
+      },
+      {
+        "timestamp": 4292958,
+        "x": 9990,
+        "y": 9477,
+        "facing": -476,
+        "alive": true
+      },
+      {
+        "timestamp": 4293702,
+        "x": 9990,
+        "y": 9477,
+        "facing": -476,
+        "alive": true
+      },
+      {
+        "timestamp": 4294467,
+        "x": 9990,
+        "y": 9477,
+        "facing": -476,
+        "alive": true
+      },
+      {
+        "timestamp": 4294727,
+        "x": 9990,
+        "y": 9477,
+        "facing": -476,
+        "alive": true
+      },
+      {
+        "timestamp": 4295122,
+        "x": 9990,
+        "y": 9477,
+        "facing": -476,
+        "alive": true
+      },
+      {
+        "timestamp": 4295443,
+        "x": 9990,
+        "y": 9477,
+        "facing": -476,
+        "alive": true
+      },
+      {
+        "timestamp": 4296158,
+        "x": 9990,
+        "y": 9477,
+        "facing": -476,
+        "alive": true
+      },
+      {
+        "timestamp": 4296163,
+        "x": 9990,
+        "y": 9477,
+        "facing": -476,
+        "alive": true
+      },
+      {
+        "timestamp": 4296204,
+        "x": 9990,
+        "y": 9477,
+        "facing": -476,
+        "alive": true
+      },
+      {
+        "timestamp": 4296559,
+        "x": 9990,
+        "y": 9477,
+        "facing": -476,
+        "alive": true
+      },
+      {
+        "timestamp": 4297005,
+        "x": 9990,
+        "y": 9477,
+        "facing": -476,
+        "alive": true
+      },
+      {
+        "timestamp": 4297171,
+        "x": 9990,
+        "y": 9477,
+        "facing": -476,
+        "alive": true
+      },
+      {
+        "timestamp": 4297271,
+        "x": 9990,
+        "y": 9477,
+        "facing": -476,
+        "alive": true
+      },
+      {
+        "timestamp": 4297619,
+        "x": 9990,
+        "y": 9477,
+        "facing": -476,
+        "alive": true
+      },
+      {
+        "timestamp": 4297972,
+        "x": 9990,
+        "y": 9477,
+        "facing": -476,
+        "alive": true
+      },
+      {
+        "timestamp": 4298283,
+        "x": 9990,
+        "y": 9477,
+        "facing": -476,
+        "alive": true
+      },
+      {
+        "timestamp": 4298685,
+        "x": 9990,
+        "y": 9477,
+        "facing": -476,
+        "alive": true
+      },
+      {
+        "timestamp": 4299174,
+        "x": 9990,
+        "y": 9477,
+        "facing": -476,
+        "alive": true
+      },
+      {
+        "timestamp": 4299275,
+        "x": 9990,
+        "y": 9477,
+        "facing": -476,
+        "alive": true
+      },
+      {
+        "timestamp": 4299364,
+        "x": 9990,
+        "y": 9477,
+        "facing": -476,
+        "alive": true
+      },
+      {
+        "timestamp": 4300076,
+        "x": 9992,
+        "y": 9438,
+        "facing": -198,
+        "alive": true
+      },
+      {
+        "timestamp": 4300477,
+        "x": 10002,
+        "y": 9325,
+        "facing": -743,
+        "alive": true
+      },
+      {
+        "timestamp": 4300967,
+        "x": 10002,
+        "y": 9325,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4301177,
+        "x": 10002,
+        "y": 9325,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4301404,
+        "x": 10002,
+        "y": 9325,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4301538,
+        "x": 10002,
+        "y": 9325,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4301890,
+        "x": 10002,
+        "y": 9325,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4302081,
+        "x": 10002,
+        "y": 9325,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4302175,
+        "x": 10002,
+        "y": 9325,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4302979,
+        "x": 10002,
+        "y": 9325,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4303236,
+        "x": 10002,
+        "y": 9325,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4303722,
+        "x": 10002,
+        "y": 9325,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4303779,
+        "x": 10002,
+        "y": 9325,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4303859,
+        "x": 10002,
+        "y": 9325,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4304787,
+        "x": 10002,
+        "y": 9325,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4305189,
+        "x": 10002,
+        "y": 9325,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4305462,
+        "x": 10002,
+        "y": 9325,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4305635,
+        "x": 10002,
+        "y": 9325,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4305899,
+        "x": 10002,
+        "y": 9325,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4306041,
+        "x": 10002,
+        "y": 9325,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4306748,
+        "x": 10002,
+        "y": 9325,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4306848,
+        "x": 10002,
+        "y": 9325,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4306987,
+        "x": 10002,
+        "y": 9325,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4307862,
+        "x": 10002,
+        "y": 9325,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4307956,
+        "x": 10002,
+        "y": 9325,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4308044,
+        "x": 10002,
+        "y": 9325,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4308190,
+        "x": 10002,
+        "y": 9325,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4308307,
+        "x": 10002,
+        "y": 9325,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4308900,
+        "x": 10002,
+        "y": 9325,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4309075,
+        "x": 10002,
+        "y": 9325,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4309835,
+        "x": 10002,
+        "y": 9325,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4310504,
+        "x": 10002,
+        "y": 9325,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4310597,
+        "x": 10002,
+        "y": 9325,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4311917,
+        "x": 9996,
+        "y": 9694,
+        "facing": -470,
+        "alive": true
+      },
+      {
+        "timestamp": 4312059,
+        "x": 9993,
+        "y": 9835,
+        "facing": -470,
+        "alive": true
+      },
+      {
+        "timestamp": 4312861,
+        "x": 9978,
+        "y": 10281,
+        "facing": -469,
+        "alive": true
+      },
+      {
+        "timestamp": 4313043,
+        "x": 9983,
+        "y": 10404,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4315087,
+        "x": 9987,
+        "y": 10549,
+        "facing": -475,
+        "alive": true
+      },
+      {
+        "timestamp": 4315124,
+        "x": 9987,
+        "y": 10549,
+        "facing": -475,
+        "alive": true
+      },
+      {
+        "timestamp": 4315527,
+        "x": 9987,
+        "y": 10549,
+        "facing": -475,
+        "alive": true
+      },
+      {
+        "timestamp": 4315972,
+        "x": 9987,
+        "y": 10549,
+        "facing": -784,
+        "alive": true
+      },
+      {
+        "timestamp": 4316643,
+        "x": 10003,
+        "y": 10550,
+        "facing": -680,
+        "alive": true
+      },
+      {
+        "timestamp": 4317414,
+        "x": 10014,
+        "y": 10552,
+        "facing": -620,
+        "alive": true
+      },
+      {
+        "timestamp": 4318021,
+        "x": 10014,
+        "y": 10552,
+        "facing": -620,
+        "alive": true
+      },
+      {
+        "timestamp": 4319676,
+        "x": 10014,
+        "y": 10552,
+        "facing": -161,
+        "alive": true
+      },
+      {
+        "timestamp": 4320618,
+        "x": 10017,
+        "y": 10562,
+        "facing": -584,
+        "alive": true
+      },
+      {
+        "timestamp": 4321817,
+        "x": 10041,
+        "y": 11143,
+        "facing": -504,
+        "alive": true
+      },
+      {
+        "timestamp": 4322478,
+        "x": 10044,
+        "y": 11167,
+        "facing": -532,
+        "alive": true
+      },
+      {
+        "timestamp": 4323106,
+        "x": 10052,
+        "y": 10745,
+        "facing": -769,
+        "alive": true
+      },
+      {
+        "timestamp": 4323466,
+        "x": 10046,
+        "y": 10545,
+        "facing": -165,
+        "alive": true
+      },
+      {
+        "timestamp": 4323993,
+        "x": 10045,
+        "y": 10430,
+        "facing": -161,
+        "alive": true
+      },
+      {
+        "timestamp": 4324088,
+        "x": 10045,
+        "y": 10430,
+        "facing": -161,
+        "alive": true
+      },
+      {
+        "timestamp": 4324537,
+        "x": 10045,
+        "y": 10430,
+        "facing": -161,
+        "alive": true
+      },
+      {
+        "timestamp": 4324711,
+        "x": 10045,
+        "y": 10430,
+        "facing": -161,
+        "alive": true
+      },
+      {
+        "timestamp": 4325598,
+        "x": 10045,
+        "y": 10430,
+        "facing": -168,
+        "alive": true
+      },
+      {
+        "timestamp": 4326274,
+        "x": 10045,
+        "y": 10430,
+        "facing": -168,
+        "alive": true
+      },
+      {
+        "timestamp": 4327075,
+        "x": 10052,
+        "y": 10430,
+        "facing": -719,
+        "alive": true
+      },
+      {
+        "timestamp": 4328096,
+        "x": 10216,
+        "y": 10396,
+        "facing": -637,
+        "alive": true
+      },
+      {
+        "timestamp": 4328545,
+        "x": 10216,
+        "y": 10396,
+        "facing": -208,
+        "alive": true
+      },
+      {
+        "timestamp": 4328944,
+        "x": 10216,
+        "y": 10396,
+        "facing": -208,
+        "alive": true
+      },
+      {
+        "timestamp": 4330045,
+        "x": 10216,
+        "y": 10396,
+        "facing": -208,
+        "alive": true
+      },
+      {
+        "timestamp": 4330642,
+        "x": 10216,
+        "y": 10396,
+        "facing": -208,
+        "alive": true
+      },
+      {
+        "timestamp": 4330808,
+        "x": 10216,
+        "y": 10396,
+        "facing": -208,
+        "alive": true
+      },
+      {
+        "timestamp": 4330949,
+        "x": 10217,
+        "y": 10400,
+        "facing": -285,
+        "alive": true
+      },
+      {
+        "timestamp": 4331382,
+        "x": 10245,
+        "y": 10569,
+        "facing": -452,
+        "alive": true
+      },
+      {
+        "timestamp": 4332153,
+        "x": 10284,
+        "y": 10804,
+        "facing": -487,
+        "alive": true
+      },
+      {
+        "timestamp": 4332688,
+        "x": 10286,
+        "y": 10814,
+        "facing": -489,
+        "alive": true
+      },
+      {
+        "timestamp": 4332812,
+        "x": 10286,
+        "y": 10814,
+        "facing": -489,
+        "alive": true
+      },
+      {
+        "timestamp": 4332954,
+        "x": 10286,
+        "y": 10814,
+        "facing": -170,
+        "alive": true
+      },
+      {
+        "timestamp": 4333047,
+        "x": 10286,
+        "y": 10814,
+        "facing": -170,
+        "alive": true
+      },
+      {
+        "timestamp": 4333653,
+        "x": 10067,
+        "y": 9045,
+        "facing": -170,
+        "alive": true
+      },
+      {
+        "timestamp": 4334108,
+        "x": 10294,
+        "y": 9016,
+        "facing": -667,
+        "alive": true
+      },
+      {
+        "timestamp": 4335969,
+        "x": 10594,
+        "y": 8629,
+        "facing": -166,
+        "alive": true
+      },
+      {
+        "timestamp": 4336058,
+        "x": 10594,
+        "y": 8629,
+        "facing": -166,
+        "alive": true
+      },
+      {
+        "timestamp": 4336160,
+        "x": 10594,
+        "y": 8629,
+        "facing": -166,
+        "alive": true
+      },
+      {
+        "timestamp": 4336369,
+        "x": 10594,
+        "y": 8629,
+        "facing": -293,
+        "alive": true
+      },
+      {
+        "timestamp": 4336591,
+        "x": 10594,
+        "y": 8629,
+        "facing": -293,
+        "alive": true
+      },
+      {
+        "timestamp": 4339060,
+        "x": 10322,
+        "y": 9263,
+        "facing": -441,
+        "alive": true
+      },
+      {
+        "timestamp": 4339669,
+        "x": 10292,
+        "y": 9367,
+        "facing": -429,
+        "alive": true
+      },
+      {
+        "timestamp": 4341548,
+        "x": 9798,
+        "y": 10340,
+        "facing": -360,
+        "alive": true
+      },
+      {
+        "timestamp": 4341948,
+        "x": 9447,
+        "y": 10245,
+        "facing": -231,
+        "alive": true
+      },
+      {
+        "timestamp": 4342073,
+        "x": 9397,
+        "y": 10230,
+        "facing": -248,
+        "alive": true
+      },
+      {
+        "timestamp": 4343328,
+        "x": 8920,
+        "y": 10221,
+        "facing": -543,
+        "alive": true
+      },
+      {
+        "timestamp": 4344181,
+        "x": 9236,
+        "y": 10229,
+        "facing": -599,
+        "alive": true
+      },
+      {
+        "timestamp": 4344835,
+        "x": 8886,
+        "y": 10413,
+        "facing": -334,
+        "alive": true
+      },
+      {
+        "timestamp": 4345076,
+        "x": 8682,
+        "y": 10404,
+        "facing": -324,
+        "alive": true
+      }
+    ]
+  },
+  {
+    "actorID": 9,
+    "locations": [
+      {
+        "timestamp": 4283644,
+        "x": 10182,
+        "y": 10997,
+        "facing": -190,
+        "alive": true
+      },
+      {
+        "timestamp": 4284445,
+        "x": 10060,
+        "y": 9847,
+        "facing": -169,
+        "alive": true
+      },
+      {
+        "timestamp": 4285199,
+        "x": 10016,
+        "y": 10037,
+        "facing": -343,
+        "alive": true
+      },
+      {
+        "timestamp": 4285949,
+        "x": 10017,
+        "y": 10044,
+        "facing": -633,
+        "alive": true
+      },
+      {
+        "timestamp": 4286544,
+        "x": 10351,
+        "y": 10206,
+        "facing": -631,
+        "alive": true
+      },
+      {
+        "timestamp": 4286751,
+        "x": 10399,
+        "y": 10206,
+        "facing": -663,
+        "alive": true
+      },
+      {
+        "timestamp": 4288627,
+        "x": 10445,
+        "y": 10207,
+        "facing": -296,
+        "alive": true
+      },
+      {
+        "timestamp": 4288753,
+        "x": 10445,
+        "y": 10207,
+        "facing": -296,
+        "alive": true
+      },
+      {
+        "timestamp": 4289463,
+        "x": 10445,
+        "y": 10207,
+        "facing": -279,
+        "alive": true
+      },
+      {
+        "timestamp": 4290668,
+        "x": 10493,
+        "y": 10226,
+        "facing": -243,
+        "alive": true
+      },
+      {
+        "timestamp": 4291436,
+        "x": 10500,
+        "y": 10228,
+        "facing": -270,
+        "alive": true
+      },
+      {
+        "timestamp": 4292273,
+        "x": 10517,
+        "y": 10236,
+        "facing": -756,
+        "alive": true
+      },
+      {
+        "timestamp": 4293038,
+        "x": 10536,
+        "y": 10246,
+        "facing": -273,
+        "alive": true
+      },
+      {
+        "timestamp": 4293303,
+        "x": 10536,
+        "y": 10246,
+        "facing": -275,
+        "alive": true
+      },
+      {
+        "timestamp": 4294200,
+        "x": 10536,
+        "y": 10246,
+        "facing": -275,
+        "alive": true
+      },
+      {
+        "timestamp": 4294364,
+        "x": 10536,
+        "y": 10246,
+        "facing": -270,
+        "alive": true
+      },
+      {
+        "timestamp": 4295002,
+        "x": 10536,
+        "y": 10246,
+        "facing": -270,
+        "alive": true
+      },
+      {
+        "timestamp": 4295122,
+        "x": 10536,
+        "y": 10246,
+        "facing": -270,
+        "alive": true
+      },
+      {
+        "timestamp": 4295402,
+        "x": 10536,
+        "y": 10246,
+        "facing": -270,
+        "alive": true
+      },
+      {
+        "timestamp": 4295443,
+        "x": 10536,
+        "y": 10246,
+        "facing": -270,
+        "alive": true
+      },
+      {
+        "timestamp": 4296106,
+        "x": 10545,
+        "y": 10249,
+        "facing": -708,
+        "alive": true
+      },
+      {
+        "timestamp": 4296195,
+        "x": 10536,
+        "y": 10246,
+        "facing": -270,
+        "alive": true
+      },
+      {
+        "timestamp": 4296204,
+        "x": 10560,
+        "y": 10255,
+        "facing": -681,
+        "alive": true
+      },
+      {
+        "timestamp": 4296470,
+        "x": 10597,
+        "y": 10271,
+        "facing": -612,
+        "alive": true
+      },
+      {
+        "timestamp": 4296559,
+        "x": 10597,
+        "y": 10271,
+        "facing": -612,
+        "alive": true
+      },
+      {
+        "timestamp": 4296964,
+        "x": 10610,
+        "y": 10277,
+        "facing": -589,
+        "alive": true
+      },
+      {
+        "timestamp": 4297437,
+        "x": 10597,
+        "y": 10271,
+        "facing": -612,
+        "alive": true
+      },
+      {
+        "timestamp": 4297531,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4297619,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4297766,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4298473,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4298567,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4298685,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4298873,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4299007,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4299174,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4299529,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4299627,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4300688,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4300829,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4300967,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4301579,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4301773,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4301979,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4302081,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4302175,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4302207,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4302744,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4302838,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4303495,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4303896,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4304662,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4304925,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4305189,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4305462,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4305989,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4306629,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4307032,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4307333,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4308190,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4308535,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4309110,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4309301,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4310504,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4311164,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4312406,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4313208,
+        "x": 10610,
+        "y": 10277,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4314322,
+        "x": 10481,
+        "y": 10040,
+        "facing": -236,
+        "alive": true
+      },
+      {
+        "timestamp": 4315266,
+        "x": 10566,
+        "y": 10080,
+        "facing": -532,
+        "alive": true
+      },
+      {
+        "timestamp": 4316328,
+        "x": 10676,
+        "y": 10166,
+        "facing": -506,
+        "alive": true
+      },
+      {
+        "timestamp": 4317322,
+        "x": 10596,
+        "y": 10372,
+        "facing": -365,
+        "alive": true
+      },
+      {
+        "timestamp": 4318257,
+        "x": 10505,
+        "y": 10386,
+        "facing": -364,
+        "alive": true
+      },
+      {
+        "timestamp": 4319056,
+        "x": 10457,
+        "y": 10405,
+        "facing": -262,
+        "alive": true
+      },
+      {
+        "timestamp": 4319418,
+        "x": 10454,
+        "y": 10403,
+        "facing": -255,
+        "alive": true
+      },
+      {
+        "timestamp": 4320218,
+        "x": 10434,
+        "y": 10394,
+        "facing": -258,
+        "alive": true
+      },
+      {
+        "timestamp": 4321817,
+        "x": 10748,
+        "y": 10739,
+        "facing": -548,
+        "alive": true
+      },
+      {
+        "timestamp": 4322478,
+        "x": 10791,
+        "y": 10782,
+        "facing": -404,
+        "alive": true
+      },
+      {
+        "timestamp": 4322790,
+        "x": 10778,
+        "y": 10769,
+        "facing": -308,
+        "alive": true
+      },
+      {
+        "timestamp": 4323024,
+        "x": 10773,
+        "y": 10764,
+        "facing": -272,
+        "alive": true
+      },
+      {
+        "timestamp": 4323466,
+        "x": 10391,
+        "y": 10387,
+        "facing": -237,
+        "alive": true
+      },
+      {
+        "timestamp": 4323543,
+        "x": 10391,
+        "y": 10387,
+        "facing": -237,
+        "alive": true
+      },
+      {
+        "timestamp": 4323868,
+        "x": 10392,
+        "y": 10382,
+        "facing": -192,
+        "alive": true
+      },
+      {
+        "timestamp": 4324260,
+        "x": 10417,
+        "y": 10242,
+        "facing": -291,
+        "alive": true
+      },
+      {
+        "timestamp": 4325598,
+        "x": 10488,
+        "y": 10127,
+        "facing": -163,
+        "alive": true
+      },
+      {
+        "timestamp": 4325776,
+        "x": 10503,
+        "y": 10123,
+        "facing": -308,
+        "alive": true
+      },
+      {
+        "timestamp": 4325999,
+        "x": 10516,
+        "y": 10119,
+        "facing": -293,
+        "alive": true
+      },
+      {
+        "timestamp": 4327695,
+        "x": 10614,
+        "y": 10077,
+        "facing": -309,
+        "alive": true
+      },
+      {
+        "timestamp": 4328980,
+        "x": 10671,
+        "y": 9988,
+        "facing": -420,
+        "alive": true
+      },
+      {
+        "timestamp": 4329038,
+        "x": 10671,
+        "y": 9988,
+        "facing": -420,
+        "alive": true
+      },
+      {
+        "timestamp": 4329746,
+        "x": 10673,
+        "y": 10101,
+        "facing": -460,
+        "alive": true
+      },
+      {
+        "timestamp": 4329839,
+        "x": 10644,
+        "y": 10150,
+        "facing": -408,
+        "alive": true
+      },
+      {
+        "timestamp": 4330949,
+        "x": 10520,
+        "y": 10433,
+        "facing": -374,
+        "alive": true
+      },
+      {
+        "timestamp": 4332005,
+        "x": 10706,
+        "y": 10821,
+        "facing": -517,
+        "alive": true
+      },
+      {
+        "timestamp": 4332010,
+        "x": 10706,
+        "y": 10821,
+        "facing": -517,
+        "alive": true
+      },
+      {
+        "timestamp": 4332688,
+        "x": 10897,
+        "y": 11173,
+        "facing": -522,
+        "alive": true
+      },
+      {
+        "timestamp": 4333042,
+        "x": 11013,
+        "y": 11385,
+        "facing": -522,
+        "alive": true
+      },
+      {
+        "timestamp": 4333088,
+        "x": 11013,
+        "y": 11385,
+        "facing": -522,
+        "alive": true
+      }
+    ]
+  },
+  {
+    "actorID": 10,
+    "locations": [
+      {
+        "timestamp": 4284344,
+        "x": 9883,
+        "y": 11055,
+        "facing": -163,
+        "alive": true
+      },
+      {
+        "timestamp": 4285057,
+        "x": 9883,
+        "y": 11055,
+        "facing": -779,
+        "alive": true
+      },
+      {
+        "timestamp": 4285782,
+        "x": 9883,
+        "y": 11055,
+        "facing": -777,
+        "alive": true
+      },
+      {
+        "timestamp": 4286851,
+        "x": 9776,
+        "y": 10663,
+        "facing": -182,
+        "alive": true
+      },
+      {
+        "timestamp": 4287426,
+        "x": 9682,
+        "y": 10230,
+        "facing": -781,
+        "alive": true
+      },
+      {
+        "timestamp": 4287512,
+        "x": 9682,
+        "y": 10230,
+        "facing": -781,
+        "alive": true
+      },
+      {
+        "timestamp": 4288188,
+        "x": 9542,
+        "y": 9768,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4289291,
+        "x": 9395,
+        "y": 9325,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4289956,
+        "x": 9395,
+        "y": 9325,
+        "facing": -546,
+        "alive": true
+      },
+      {
+        "timestamp": 4290458,
+        "x": 9395,
+        "y": 9325,
+        "facing": -546,
+        "alive": true
+      },
+      {
+        "timestamp": 4290668,
+        "x": 9395,
+        "y": 9325,
+        "facing": -546,
+        "alive": true
+      },
+      {
+        "timestamp": 4291796,
+        "x": 9395,
+        "y": 9325,
+        "facing": -546,
+        "alive": true
+      },
+      {
+        "timestamp": 4292500,
+        "x": 9395,
+        "y": 9325,
+        "facing": -547,
+        "alive": true
+      },
+      {
+        "timestamp": 4293218,
+        "x": 9395,
+        "y": 9325,
+        "facing": -547,
+        "alive": true
+      },
+      {
+        "timestamp": 4293524,
+        "x": 9395,
+        "y": 9325,
+        "facing": -547,
+        "alive": true
+      },
+      {
+        "timestamp": 4294276,
+        "x": 9395,
+        "y": 9325,
+        "facing": -547,
+        "alive": true
+      },
+      {
+        "timestamp": 4294962,
+        "x": 9395,
+        "y": 9325,
+        "facing": -547,
+        "alive": true
+      },
+      {
+        "timestamp": 4295122,
+        "x": 9395,
+        "y": 9325,
+        "facing": -547,
+        "alive": true
+      },
+      {
+        "timestamp": 4295443,
+        "x": 9395,
+        "y": 9325,
+        "facing": -547,
+        "alive": true
+      },
+      {
+        "timestamp": 4295621,
+        "x": 9395,
+        "y": 9325,
+        "facing": -547,
+        "alive": true
+      },
+      {
+        "timestamp": 4296204,
+        "x": 9378,
+        "y": 9305,
+        "facing": -754,
+        "alive": true
+      },
+      {
+        "timestamp": 4296323,
+        "x": 9395,
+        "y": 9325,
+        "facing": -547,
+        "alive": true
+      },
+      {
+        "timestamp": 4296559,
+        "x": 9336,
+        "y": 9263,
+        "facing": -197,
+        "alive": true
+      },
+      {
+        "timestamp": 4296563,
+        "x": 9336,
+        "y": 9263,
+        "facing": -197,
+        "alive": true
+      },
+      {
+        "timestamp": 4296729,
+        "x": 9281,
+        "y": 9242,
+        "facing": -241,
+        "alive": true
+      },
+      {
+        "timestamp": 4297405,
+        "x": 9239,
+        "y": 9227,
+        "facing": -551,
+        "alive": true
+      },
+      {
+        "timestamp": 4297481,
+        "x": 9336,
+        "y": 9263,
+        "facing": -197,
+        "alive": true
+      },
+      {
+        "timestamp": 4297619,
+        "x": 9239,
+        "y": 9227,
+        "facing": -551,
+        "alive": true
+      },
+      {
+        "timestamp": 4298505,
+        "x": 9239,
+        "y": 9227,
+        "facing": -551,
+        "alive": true
+      },
+      {
+        "timestamp": 4298685,
+        "x": 9239,
+        "y": 9227,
+        "facing": -551,
+        "alive": true
+      },
+      {
+        "timestamp": 4299174,
+        "x": 9239,
+        "y": 9227,
+        "facing": -551,
+        "alive": true
+      },
+      {
+        "timestamp": 4299227,
+        "x": 9239,
+        "y": 9227,
+        "facing": -551,
+        "alive": true
+      },
+      {
+        "timestamp": 4299574,
+        "x": 9239,
+        "y": 9227,
+        "facing": -551,
+        "alive": true
+      },
+      {
+        "timestamp": 4299627,
+        "x": 9239,
+        "y": 9227,
+        "facing": -551,
+        "alive": true
+      },
+      {
+        "timestamp": 4300967,
+        "x": 9239,
+        "y": 9227,
+        "facing": -551,
+        "alive": true
+      },
+      {
+        "timestamp": 4301717,
+        "x": 9005,
+        "y": 9224,
+        "facing": -318,
+        "alive": true
+      },
+      {
+        "timestamp": 4302175,
+        "x": 8936,
+        "y": 9219,
+        "facing": -567,
+        "alive": true
+      },
+      {
+        "timestamp": 4302337,
+        "x": 8926,
+        "y": 9218,
+        "facing": -567,
+        "alive": true
+      },
+      {
+        "timestamp": 4302520,
+        "x": 8925,
+        "y": 9218,
+        "facing": -567,
+        "alive": true
+      },
+      {
+        "timestamp": 4302694,
+        "x": 8925,
+        "y": 9218,
+        "facing": -567,
+        "alive": true
+      },
+      {
+        "timestamp": 4303183,
+        "x": 8925,
+        "y": 9218,
+        "facing": -567,
+        "alive": true
+      },
+      {
+        "timestamp": 4304220,
+        "x": 8925,
+        "y": 9218,
+        "facing": -567,
+        "alive": true
+      },
+      {
+        "timestamp": 4304925,
+        "x": 8925,
+        "y": 9218,
+        "facing": -567,
+        "alive": true
+      },
+      {
+        "timestamp": 4305189,
+        "x": 8925,
+        "y": 9218,
+        "facing": -567,
+        "alive": true
+      },
+      {
+        "timestamp": 4305782,
+        "x": 8925,
+        "y": 9218,
+        "facing": -567,
+        "alive": true
+      },
+      {
+        "timestamp": 4306704,
+        "x": 8925,
+        "y": 9218,
+        "facing": -567,
+        "alive": true
+      },
+      {
+        "timestamp": 4308190,
+        "x": 8925,
+        "y": 9218,
+        "facing": -567,
+        "alive": true
+      },
+      {
+        "timestamp": 4308852,
+        "x": 8925,
+        "y": 9218,
+        "facing": -567,
+        "alive": true
+      },
+      {
+        "timestamp": 4309160,
+        "x": 8925,
+        "y": 9218,
+        "facing": -567,
+        "alive": true
+      },
+      {
+        "timestamp": 4311659,
+        "x": 9209,
+        "y": 9206,
+        "facing": -562,
+        "alive": true
+      },
+      {
+        "timestamp": 4311917,
+        "x": 9209,
+        "y": 9206,
+        "facing": -552,
+        "alive": true
+      },
+      {
+        "timestamp": 4314149,
+        "x": 9209,
+        "y": 9206,
+        "facing": -550,
+        "alive": true
+      },
+      {
+        "timestamp": 4315008,
+        "x": 9209,
+        "y": 9206,
+        "facing": -550,
+        "alive": true
+      },
+      {
+        "timestamp": 4316652,
+        "x": 9209,
+        "y": 9206,
+        "facing": -550,
+        "alive": true
+      },
+      {
+        "timestamp": 4317581,
+        "x": 9209,
+        "y": 9206,
+        "facing": -550,
+        "alive": true
+      },
+      {
+        "timestamp": 4318074,
+        "x": 9208,
+        "y": 9205,
+        "facing": -513,
+        "alive": true
+      },
+      {
+        "timestamp": 4319136,
+        "x": 9065,
+        "y": 9071,
+        "facing": -243,
+        "alive": true
+      },
+      {
+        "timestamp": 4319858,
+        "x": 9065,
+        "y": 9071,
+        "facing": -551,
+        "alive": true
+      },
+      {
+        "timestamp": 4320561,
+        "x": 9065,
+        "y": 9071,
+        "facing": -551,
+        "alive": true
+      },
+      {
+        "timestamp": 4321136,
+        "x": 9065,
+        "y": 9071,
+        "facing": -551,
+        "alive": true
+      },
+      {
+        "timestamp": 4321586,
+        "x": 9065,
+        "y": 9071,
+        "facing": -551,
+        "alive": true
+      },
+      {
+        "timestamp": 4321817,
+        "x": 9065,
+        "y": 9071,
+        "facing": -551,
+        "alive": true
+      },
+      {
+        "timestamp": 4322478,
+        "x": 9065,
+        "y": 9071,
+        "facing": -551,
+        "alive": true
+      },
+      {
+        "timestamp": 4323190,
+        "x": 9128,
+        "y": 9136,
+        "facing": -554,
+        "alive": true
+      },
+      {
+        "timestamp": 4323230,
+        "x": 9191,
+        "y": 9198,
+        "facing": -553,
+        "alive": true
+      },
+      {
+        "timestamp": 4323860,
+        "x": 9261,
+        "y": 9264,
+        "facing": -557,
+        "alive": true
+      },
+      {
+        "timestamp": 4324088,
+        "x": 9261,
+        "y": 9261,
+        "facing": -609,
+        "alive": true
+      },
+      {
+        "timestamp": 4324228,
+        "x": 9261,
+        "y": 9261,
+        "facing": -550,
+        "alive": true
+      },
+      {
+        "timestamp": 4326177,
+        "x": 9261,
+        "y": 9261,
+        "facing": -550,
+        "alive": true
+      },
+      {
+        "timestamp": 4326577,
+        "x": 9261,
+        "y": 9261,
+        "facing": -550,
+        "alive": true
+      },
+      {
+        "timestamp": 4327107,
+        "x": 9261,
+        "y": 9261,
+        "facing": -550,
+        "alive": true
+      },
+      {
+        "timestamp": 4327293,
+        "x": 9261,
+        "y": 9261,
+        "facing": -550,
+        "alive": true
+      },
+      {
+        "timestamp": 4327743,
+        "x": 9261,
+        "y": 9261,
+        "facing": -550,
+        "alive": true
+      },
+      {
+        "timestamp": 4327876,
+        "x": 9261,
+        "y": 9261,
+        "facing": -550,
+        "alive": true
+      },
+      {
+        "timestamp": 4328545,
+        "x": 9261,
+        "y": 9261,
+        "facing": -550,
+        "alive": true
+      },
+      {
+        "timestamp": 4329204,
+        "x": 9261,
+        "y": 9261,
+        "facing": -550,
+        "alive": true
+      },
+      {
+        "timestamp": 4329244,
+        "x": 9261,
+        "y": 9261,
+        "facing": -550,
+        "alive": true
+      },
+      {
+        "timestamp": 4330358,
+        "x": 9261,
+        "y": 9261,
+        "facing": -550,
+        "alive": true
+      },
+      {
+        "timestamp": 4331041,
+        "x": 9261,
+        "y": 9261,
+        "facing": -550,
+        "alive": true
+      },
+      {
+        "timestamp": 4331648,
+        "x": 9262,
+        "y": 9261,
+        "facing": -626,
+        "alive": true
+      },
+      {
+        "timestamp": 4332188,
+        "x": 9307,
+        "y": 9235,
+        "facing": -676,
+        "alive": true
+      },
+      {
+        "timestamp": 4332688,
+        "x": 9494,
+        "y": 9064,
+        "facing": -697,
+        "alive": true
+      },
+      {
+        "timestamp": 4332853,
+        "x": 9598,
+        "y": 8978,
+        "facing": -701,
+        "alive": false
+      }
+    ]
+  },
+  {
+    "actorID": 12,
+    "locations": [
+      {
+        "timestamp": 4300967,
+        "x": 9997,
+        "y": 9975,
+        "facing": -448,
+        "alive": true
+      }
+    ]
+  },
+  {
+    "actorID": 15,
+    "locations": [
+      {
+        "timestamp": 4288886,
+        "x": 10648,
+        "y": 10123,
+        "facing": -234,
+        "alive": true
+      },
+      {
+        "timestamp": 4292063,
+        "x": 10643,
+        "y": 10088,
+        "facing": -300,
+        "alive": true
+      },
+      {
+        "timestamp": 4294632,
+        "x": 10643,
+        "y": 10088,
+        "facing": -300,
+        "alive": true
+      },
+      {
+        "timestamp": 4296195,
+        "x": 10643,
+        "y": 10088,
+        "facing": -300,
+        "alive": true
+      },
+      {
+        "timestamp": 4298239,
+        "x": 10643,
+        "y": 10088,
+        "facing": -300,
+        "alive": true
+      }
+    ]
+  },
+  {
+    "actorID": 17,
+    "locations": [
+      {
+        "timestamp": 4304921,
+        "x": 10875,
+        "y": 8891,
+        "facing": -393,
+        "alive": true
+      }
+    ]
+  },
+  {
+    "actorID": 18,
+    "locations": [
+      {
+        "timestamp": 4317220,
+        "x": 10875,
+        "y": 8891,
+        "facing": -393,
+        "alive": true
+      }
+    ]
+  },
+  {
+    "actorID": 19,
+    "locations": [
+      {
+        "timestamp": 4329155,
+        "x": 10802,
+        "y": 8884,
+        "facing": -397,
+        "alive": true
+      }
+    ]
+  },
+  {
+    "actorID": 246,
+    "locations": [
+      {
+        "timestamp": 4283196,
+        "x": 10003,
+        "y": 9300,
+        "facing": -472,
+        "alive": true
+      },
+      {
+        "timestamp": 4283281,
+        "x": 10003,
+        "y": 9300,
+        "facing": -472,
+        "alive": true
+      },
+      {
+        "timestamp": 4283595,
+        "x": 10003,
+        "y": 9300,
+        "facing": -472,
+        "alive": true
+      },
+      {
+        "timestamp": 4283644,
+        "x": 10003,
+        "y": 9300,
+        "facing": -472,
+        "alive": true
+      },
+      {
+        "timestamp": 4283737,
+        "x": 10003,
+        "y": 9300,
+        "facing": -472,
+        "alive": true
+      },
+      {
+        "timestamp": 4283903,
+        "x": 10003,
+        "y": 9300,
+        "facing": -472,
+        "alive": true
+      },
+      {
+        "timestamp": 4283996,
+        "x": 10003,
+        "y": 9300,
+        "facing": -472,
+        "alive": true
+      },
+      {
+        "timestamp": 4284044,
+        "x": 10003,
+        "y": 9300,
+        "facing": -472,
+        "alive": true
+      },
+      {
+        "timestamp": 4284254,
+        "x": 10003,
+        "y": 9300,
+        "facing": -472,
+        "alive": true
+      },
+      {
+        "timestamp": 4284344,
+        "x": 10003,
+        "y": 9300,
+        "facing": -472,
+        "alive": true
+      },
+      {
+        "timestamp": 4284445,
+        "x": 10002,
+        "y": 9297,
+        "facing": -471,
+        "alive": true
+      },
+      {
+        "timestamp": 4284570,
+        "x": 10002,
+        "y": 9297,
+        "facing": -463,
+        "alive": true
+      },
+      {
+        "timestamp": 4284699,
+        "x": 10002,
+        "y": 9326,
+        "facing": -464,
+        "alive": true
+      },
+      {
+        "timestamp": 4284745,
+        "x": 10002,
+        "y": 9326,
+        "facing": -464,
+        "alive": true
+      },
+      {
+        "timestamp": 4284846,
+        "x": 10002,
+        "y": 9362,
+        "facing": -467,
+        "alive": true
+      },
+      {
+        "timestamp": 4284972,
+        "x": 10002,
+        "y": 9402,
+        "facing": -470,
+        "alive": true
+      },
+      {
+        "timestamp": 4285101,
+        "x": 10003,
+        "y": 9468,
+        "facing": -470,
+        "alive": true
+      },
+      {
+        "timestamp": 4285199,
+        "x": 10004,
+        "y": 9639,
+        "facing": -472,
+        "alive": true
+      },
+      {
+        "timestamp": 4285279,
+        "x": 10004,
+        "y": 9639,
+        "facing": -472,
+        "alive": true
+      },
+      {
+        "timestamp": 4285422,
+        "x": 10006,
+        "y": 9727,
+        "facing": -472,
+        "alive": true
+      },
+      {
+        "timestamp": 4285547,
+        "x": 10008,
+        "y": 9831,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4285648,
+        "x": 10009,
+        "y": 9906,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4285685,
+        "x": 10009,
+        "y": 9906,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4285773,
+        "x": 10011,
+        "y": 10017,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4285782,
+        "x": 10011,
+        "y": 10017,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4285908,
+        "x": 10011,
+        "y": 10068,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4286050,
+        "x": 10011,
+        "y": 10102,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4286215,
+        "x": 10011,
+        "y": 10124,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4286305,
+        "x": 10011,
+        "y": 10124,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4286452,
+        "x": 10011,
+        "y": 10124,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4286488,
+        "x": 10011,
+        "y": 10124,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4286544,
+        "x": 10011,
+        "y": 10124,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4286661,
+        "x": 10011,
+        "y": 10124,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4286751,
+        "x": 10011,
+        "y": 10124,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4286851,
+        "x": 10011,
+        "y": 10124,
+        "facing": -473,
+        "alive": true
+      },
+      {
+        "timestamp": 4287016,
+        "x": 10011,
+        "y": 10124,
+        "facing": -475,
+        "alive": true
+      },
+      {
+        "timestamp": 4287061,
+        "x": 10011,
+        "y": 10124,
+        "facing": -475,
+        "alive": true
+      },
+      {
+        "timestamp": 4287289,
+        "x": 10011,
+        "y": 10124,
+        "facing": -519,
+        "alive": true
+      },
+      {
+        "timestamp": 4287376,
+        "x": 10011,
+        "y": 10124,
+        "facing": -562,
+        "alive": true
+      },
+      {
+        "timestamp": 4287426,
+        "x": 10011,
+        "y": 10124,
+        "facing": -612,
+        "alive": true
+      },
+      {
+        "timestamp": 4287512,
+        "x": 10011,
+        "y": 10124,
+        "facing": -612,
+        "alive": true
+      },
+      {
+        "timestamp": 4287655,
+        "x": 10011,
+        "y": 10124,
+        "facing": -652,
+        "alive": true
+      },
+      {
+        "timestamp": 4287952,
+        "x": 10011,
+        "y": 10124,
+        "facing": -770,
+        "alive": true
+      },
+      {
+        "timestamp": 4288005,
+        "x": 10011,
+        "y": 10124,
+        "facing": -780,
+        "alive": true
+      },
+      {
+        "timestamp": 4288053,
+        "x": 10011,
+        "y": 10124,
+        "facing": -780,
+        "alive": true
+      },
+      {
+        "timestamp": 4288179,
+        "x": 10011,
+        "y": 10124,
+        "facing": -781,
+        "alive": true
+      },
+      {
+        "timestamp": 4288188,
+        "x": 10011,
+        "y": 10124,
+        "facing": -783,
+        "alive": true
+      },
+      {
+        "timestamp": 4288485,
+        "x": 10011,
+        "y": 10124,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4288547,
+        "x": 10011,
+        "y": 10115,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4288578,
+        "x": 10011,
+        "y": 10115,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4288627,
+        "x": 10011,
+        "y": 10115,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4288753,
+        "x": 10011,
+        "y": 10055,
+        "facing": -158,
+        "alive": true
+      },
+      {
+        "timestamp": 4288806,
+        "x": 10011,
+        "y": 10027,
+        "facing": -158,
+        "alive": true
+      },
+      {
+        "timestamp": 4288855,
+        "x": 10011,
+        "y": 10027,
+        "facing": -158,
+        "alive": true
+      },
+      {
+        "timestamp": 4288886,
+        "x": 10011,
+        "y": 10027,
+        "facing": -158,
+        "alive": true
+      },
+      {
+        "timestamp": 4288891,
+        "x": 10011,
+        "y": 10027,
+        "facing": -158,
+        "alive": true
+      },
+      {
+        "timestamp": 4288988,
+        "x": 10011,
+        "y": 10019,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4289153,
+        "x": 10011,
+        "y": 10003,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4289254,
+        "x": 10011,
+        "y": 10003,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4289286,
+        "x": 10011,
+        "y": 9995,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4289291,
+        "x": 10011,
+        "y": 9995,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4289423,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4289553,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4289686,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4289691,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4289821,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4290057,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4290231,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4290316,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4290458,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4290668,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4290757,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4291024,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4291033,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4291208,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4291264,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4291358,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4291521,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4291560,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4291796,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4291921,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4291962,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4292063,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4292188,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4292197,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4292273,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4292463,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4292557,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4292589,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4292637,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4292812,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4292865,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4292897,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4292902,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4292958,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4292989,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4292998,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4293038,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4293075,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4293213,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4293218,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4293265,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4293303,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4293524,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4293564,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4293618,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4293697,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4293702,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4293791,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4293800,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4293830,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4294017,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4294065,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4294191,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4294200,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4294230,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4294276,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4294364,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4294467,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4294498,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4294560,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4294592,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4294632,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4294722,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4294727,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4294868,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4294900,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4294962,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4295002,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4295220,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4295268,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4295362,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4295402,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4295433,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4295443,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4295479,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4295523,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4295568,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4295621,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4295669,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4295794,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4295833,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4295923,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4295928,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4296069,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4296101,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4296106,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4296163,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4296195,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4296244,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4296280,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4296470,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4296559,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4296563,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4296644,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4296724,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4296729,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4296823,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4296902,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4296908,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4296964,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4297005,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4297036,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4297171,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4297224,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4297271,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4297303,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4297405,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4297526,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4297531,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4297619,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4297766,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4297797,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4297847,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4297926,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4297972,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4298073,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4298198,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4298239,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4298283,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4298327,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4298372,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4298473,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4298510,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4298567,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4298640,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4298685,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4298826,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4298873,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4299039,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4299084,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4299133,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4299174,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4299223,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4299227,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4299275,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4299312,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4299441,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4299486,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4299627,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4299712,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4299809,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4299842,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4299931,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4300108,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4300113,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4300201,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4300250,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4300286,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4300330,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4300375,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4300428,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4300477,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4300508,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4300513,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4300642,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4300688,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4300776,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4300829,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4300914,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4300967,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4301088,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4301137,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4301226,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4301314,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4301404,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4301538,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4301712,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4301717,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4301773,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4301890,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4301935,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4301940,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4301979,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4302081,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4302207,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4302292,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4302342,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4302382,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4302520,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4302657,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4302694,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4302744,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4302838,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4302917,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4302922,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4302979,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4303049,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4303183,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4303232,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4303409,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4303450,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4303495,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4303539,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4303544,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4303686,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4303779,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4303819,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4303850,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4303896,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4304033,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4304086,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4304220,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4304297,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4304385,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4304434,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4304486,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4304612,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4304662,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4304787,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4304836,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4304921,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4304925,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4305013,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4305143,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4305188,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4305236,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4305290,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4305382,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4305453,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4305462,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4305587,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4305688,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4305720,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4305782,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4305822,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4305899,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4305944,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4305989,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4306041,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4306090,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4306224,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4306525,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4306530,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4306619,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4306629,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4306703,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4306704,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4306748,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4306796,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4306896,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4306925,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4306931,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4306987,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4307022,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4307032,
+        "x": 10011,
+        "y": 9993,
+        "facing": -159,
+        "alive": true
+      },
+      {
+        "timestamp": 4307333,
+        "x": 10011,
+        "y": 9993,
+        "facing": -158,
+        "alive": true
+      },
+      {
+        "timestamp": 4307460,
+        "x": 10011,
+        "y": 9993,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4307550,
+        "x": 10011,
+        "y": 9993,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4307699,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4307734,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4307821,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4307906,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4307956,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4308044,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4308222,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4308307,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4308351,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4308535,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4308592,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4308674,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4308709,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4308799,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4308847,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4308852,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4309066,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4309075,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4309110,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4309154,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4309160,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4309199,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4309301,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4309332,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4309337,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4309466,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4309474,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4309511,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4309600,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4309648,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4309733,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4309867,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4309956,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4310001,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4310055,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4310103,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4310196,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4310236,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4310402,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4310504,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4310597,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4310629,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4310759,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4310803,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4310905,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4311071,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4311116,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4311164,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4311306,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4311480,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4311659,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4311707,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4311832,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4311872,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4311881,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4311917,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4312006,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4312055,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4312108,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4312232,
+        "x": 10011,
+        "y": 9993,
+        "facing": -785,
+        "alive": true
+      },
+      {
+        "timestamp": 4312406,
+        "x": 10011,
+        "y": 9993,
+        "facing": -180,
+        "alive": true
+      },
+      {
+        "timestamp": 4312509,
+        "x": 10011,
+        "y": 9993,
+        "facing": -180,
+        "alive": true
+      },
+      {
+        "timestamp": 4312643,
+        "x": 10011,
+        "y": 9993,
+        "facing": -284,
+        "alive": true
+      },
+      {
+        "timestamp": 4312674,
+        "x": 10011,
+        "y": 9993,
+        "facing": -284,
+        "alive": true
+      },
+      {
+        "timestamp": 4312684,
+        "x": 10011,
+        "y": 9993,
+        "facing": -284,
+        "alive": true
+      },
+      {
+        "timestamp": 4312861,
+        "x": 10003,
+        "y": 9998,
+        "facing": -362,
+        "alive": true
+      },
+      {
+        "timestamp": 4312909,
+        "x": 10003,
+        "y": 9998,
+        "facing": -362,
+        "alive": true
+      },
+      {
+        "timestamp": 4313043,
+        "x": 9999,
+        "y": 9999,
+        "facing": -362,
+        "alive": true
+      },
+      {
+        "timestamp": 4313119,
+        "x": 9999,
+        "y": 9999,
+        "facing": -362,
+        "alive": true
+      },
+      {
+        "timestamp": 4313208,
+        "x": 9999,
+        "y": 9999,
+        "facing": -362,
+        "alive": true
+      },
+      {
+        "timestamp": 4313256,
+        "x": 9999,
+        "y": 9999,
+        "facing": -362,
+        "alive": true
+      },
+      {
+        "timestamp": 4313310,
+        "x": 9999,
+        "y": 9999,
+        "facing": -362,
+        "alive": true
+      },
+      {
+        "timestamp": 4313346,
+        "x": 9999,
+        "y": 9999,
+        "facing": -362,
+        "alive": true
+      },
+      {
+        "timestamp": 4313434,
+        "x": 9999,
+        "y": 9999,
+        "facing": -362,
+        "alive": true
+      },
+      {
+        "timestamp": 4313569,
+        "x": 9999,
+        "y": 9999,
+        "facing": -362,
+        "alive": true
+      },
+      {
+        "timestamp": 4313658,
+        "x": 9999,
+        "y": 9999,
+        "facing": -362,
+        "alive": true
+      },
+      {
+        "timestamp": 4313743,
+        "x": 9999,
+        "y": 9999,
+        "facing": -362,
+        "alive": true
+      },
+      {
+        "timestamp": 4313748,
+        "x": 9999,
+        "y": 9999,
+        "facing": -362,
+        "alive": true
+      },
+      {
+        "timestamp": 4314012,
+        "x": 9999,
+        "y": 9999,
+        "facing": -362,
+        "alive": true
+      },
+      {
+        "timestamp": 4314113,
+        "x": 9999,
+        "y": 9999,
+        "facing": -362,
+        "alive": true
+      },
+      {
+        "timestamp": 4314149,
+        "x": 9999,
+        "y": 9999,
+        "facing": -362,
+        "alive": true
+      },
+      {
+        "timestamp": 4314278,
+        "x": 9999,
+        "y": 9999,
+        "facing": -362,
+        "alive": true
+      },
+      {
+        "timestamp": 4314322,
+        "x": 9999,
+        "y": 9999,
+        "facing": -362,
+        "alive": true
+      },
+      {
+        "timestamp": 4314366,
+        "x": 9999,
+        "y": 9999,
+        "facing": -362,
+        "alive": true
+      },
+      {
+        "timestamp": 4314723,
+        "x": 9999,
+        "y": 9999,
+        "facing": -241,
+        "alive": true
+      },
+      {
+        "timestamp": 4315008,
+        "x": 9999,
+        "y": 9999,
+        "facing": -197,
+        "alive": true
+      },
+      {
+        "timestamp": 4315038,
+        "x": 9999,
+        "y": 9999,
+        "facing": -180,
+        "alive": true
+      },
+      {
+        "timestamp": 4315124,
+        "x": 9999,
+        "y": 9999,
+        "facing": -161,
+        "alive": true
+      },
+      {
+        "timestamp": 4315266,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4315346,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4315527,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4315615,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4315664,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4315753,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4315810,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4315842,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4315928,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4316017,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4316070,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4316251,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4316283,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4316328,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4316416,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4316550,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4316652,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4316772,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4316870,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4316919,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4317220,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4317322,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4317414,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4317581,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4317621,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4317816,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4317887,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4317932,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4318021,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4318074,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4318123,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4318257,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4318296,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4318333,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4318524,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4318649,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4318658,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4318778,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4318823,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4319097,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4319136,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4319326,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4319360,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4319418,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4319449,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4319622,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4319676,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4319858,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4319889,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4319934,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4320156,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4320218,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4320249,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4320335,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4320561,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4320618,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4320650,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4320824,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4321019,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4321020,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4321136,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4321180,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4321186,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4321226,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4321537,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4321586,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4321675,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4321893,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4322165,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4322254,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4322263,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4322531,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4322625,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4322790,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4322931,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4322932,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4322964,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4323056,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4323106,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4323141,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4323190,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4323543,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4323631,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4323734,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4323868,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4323993,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4324034,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4324083,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4324088,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4324172,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4324228,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4324392,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4324436,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4324489,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4324537,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4324662,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4324711,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4324890,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4324970,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4325063,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4325150,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4325193,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4325464,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4325550,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4325598,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4325771,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4325776,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4326140,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4326172,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4326274,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4326577,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4326665,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4326705,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4326794,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4327075,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4327152,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4327293,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4327515,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4327690,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4327695,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4327876,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4328043,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4328096,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4328237,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4328545,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4328669,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4328709,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4328944,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4329111,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4329155,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4329244,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4329377,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4329746,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4329839,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4330184,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4330273,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4330358,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4330549,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4330642,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4330715,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4330808,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4331114,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4331350,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4331382,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4331750,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4331885,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4332408,
+        "x": 9999,
+        "y": 9446,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4332812,
+        "x": 9999,
+        "y": 8498,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4333385,
+        "x": 9999,
+        "y": 8498,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4333528,
+        "x": 9999,
+        "y": 8498,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4333653,
+        "x": 9999,
+        "y": 8498,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4334108,
+        "x": 9999,
+        "y": 8498,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4334281,
+        "x": 9999,
+        "y": 8498,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4334682,
+        "x": 9999,
+        "y": 8498,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4336160,
+        "x": 9999,
+        "y": 8498,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4336369,
+        "x": 9999,
+        "y": 8498,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4336511,
+        "x": 9999,
+        "y": 8498,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4336559,
+        "x": 9999,
+        "y": 8498,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4336912,
+        "x": 9999,
+        "y": 8498,
+        "facing": -220,
+        "alive": true
+      },
+      {
+        "timestamp": 4339060,
+        "x": 9999,
+        "y": 9999,
+        "facing": -327,
+        "alive": true
+      },
+      {
+        "timestamp": 4339543,
+        "x": 9999,
+        "y": 9999,
+        "facing": -168,
+        "alive": true
+      },
+      {
+        "timestamp": 4339624,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4339669,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4340207,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4341548,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4341948,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4342473,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4342526,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4342830,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4344181,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4344746,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4345283,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4346353,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      },
+      {
+        "timestamp": 4347424,
+        "x": 9999,
+        "y": 9999,
+        "facing": -786,
+        "alive": true
+      }
+    ]
+  },
+  {
+    "actorID": 247,
+    "locations": [
+      {
+        "timestamp": 4321817,
+        "x": 10000,
+        "y": 10000,
+        "facing": -312,
+        "alive": true
+      },
+      {
+        "timestamp": 4321822,
+        "x": 10000,
+        "y": 10000,
+        "facing": -158,
+        "alive": true
+      },
+      {
+        "timestamp": 4332688,
+        "x": 10000,
+        "y": 8500,
+        "facing": -472,
+        "alive": true
+      },
+      {
+        "timestamp": 4335969,
+        "x": 10000,
+        "y": 10000,
+        "facing": -158,
+        "alive": true
+      }
+    ]
+  }
+]

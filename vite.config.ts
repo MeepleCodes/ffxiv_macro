@@ -1,5 +1,7 @@
+/// <reference types="vitest" />
 import { defineConfig } from 'vite'
 import react from "@vitejs/plugin-react-swc"
+import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 // import swc from "unplugin-swc";
 // import react from '@vitejs/plugin-react'
 
@@ -7,6 +9,7 @@ import react from "@vitejs/plugin-react-swc"
 export default defineConfig({
   base: "/ffxiv_macro/",
   plugins: [
+    TanStackRouterVite(),
     react({tsDecorators: true}),
     // swc.vite({
     //   tsconfigFile: './tsconfig.app.json',
@@ -20,6 +23,7 @@ export default defineConfig({
     // })
   ],
   server: {
+    host: "0.0.0.0",
     port: 5175
   },
   build: {
@@ -34,5 +38,8 @@ export default defineConfig({
         }
       }
     }
+  },
+  test: {
+    dir: "src"
   }
 })

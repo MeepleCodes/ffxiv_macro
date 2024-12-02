@@ -14,7 +14,7 @@ export default tseslint.config(
   {
     languageOptions: {
       parserOptions: {
-        project: true,
+        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
         tsconfigRootDir: import.meta.dirname,
       },
       globals: {
@@ -58,6 +58,12 @@ export default tseslint.config(
       "@typescript-eslint/strict-boolean-expressions": "error",
       // Otherwise this will yell about things like "obj?.property === true" which I find a better habit
       "@typescript-eslint/no-unnecessary-boolean-literal-compare": "off",
+      "@typescript-eslint/no-invalid-void-type": [
+        "error",
+        {
+          "allowAsThisParameter": true
+        }
+      ],
       "@typescript-eslint/restrict-template-expressions": [
         "error",
         {

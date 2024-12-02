@@ -1,0 +1,4983 @@
+{
+  "code": "KV1MBZ4Af8PCb9qD",
+  "title": "AAC Light-Heavyweight",
+  "startTime": 1732908088655,
+  "endTime": 1732917779220,
+  "fights": [
+    {
+      "endTime": 1655654,
+      "combatTime": 275709,
+      "bossPercentage": 64.16,
+      "id": 1,
+      "name": "Brute Bomber",
+      "gameZone": {
+        "id": 1230,
+        "name": "Blasting Ring"
+      },
+      "encounterID": 95,
+      "startTime": 1378875,
+      "enemyNPCs": [
+        {
+          "id": 13,
+          "gameID": 17094,
+          "instanceCount": 1,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 25,
+          "gameID": 2000025,
+          "instanceCount": 4,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 26,
+          "gameID": 17095,
+          "instanceCount": 8,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 18,
+          "gameID": 2000018,
+          "instanceCount": 9,
+          "groupCount": 5,
+          "petOwner": null
+        }
+      ],
+      "friendlyPlayers": [
+        15,
+        10,
+        9,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3
+      ]
+    },
+    {
+      "endTime": 2073041,
+      "combatTime": 287080,
+      "bossPercentage": 56.77,
+      "id": 2,
+      "name": "Brute Bomber",
+      "gameZone": {
+        "id": 1230,
+        "name": "Blasting Ring"
+      },
+      "encounterID": 95,
+      "startTime": 1784890,
+      "enemyNPCs": [
+        {
+          "id": 13,
+          "gameID": 17094,
+          "instanceCount": 1,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 25,
+          "gameID": 2000025,
+          "instanceCount": 4,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 18,
+          "gameID": 2000018,
+          "instanceCount": 9,
+          "groupCount": 5,
+          "petOwner": null
+        }
+      ],
+      "friendlyPlayers": [
+        15,
+        10,
+        9,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3
+      ]
+    },
+    {
+      "endTime": 2440316,
+      "combatTime": 326170,
+      "bossPercentage": 50.59,
+      "id": 3,
+      "name": "Brute Bomber",
+      "gameZone": {
+        "id": 1230,
+        "name": "Blasting Ring"
+      },
+      "encounterID": 95,
+      "startTime": 2113085,
+      "enemyNPCs": [
+        {
+          "id": 13,
+          "gameID": 17094,
+          "instanceCount": 1,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 25,
+          "gameID": 2000025,
+          "instanceCount": 4,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 26,
+          "gameID": 17095,
+          "instanceCount": 8,
+          "groupCount": 2,
+          "petOwner": null
+        },
+        {
+          "id": 28,
+          "gameID": 17098,
+          "instanceCount": 8,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 18,
+          "gameID": 2000018,
+          "instanceCount": 9,
+          "groupCount": 5,
+          "petOwner": null
+        }
+      ],
+      "friendlyPlayers": [
+        15,
+        10,
+        9,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3
+      ]
+    },
+    {
+      "endTime": 3086502,
+      "combatTime": 349711,
+      "bossPercentage": 55.16,
+      "id": 4,
+      "name": "Brute Bomber",
+      "gameZone": {
+        "id": 1230,
+        "name": "Blasting Ring"
+      },
+      "encounterID": 95,
+      "startTime": 2735729,
+      "enemyNPCs": [
+        {
+          "id": 13,
+          "gameID": 17094,
+          "instanceCount": 1,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 25,
+          "gameID": 2000025,
+          "instanceCount": 4,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 26,
+          "gameID": 17095,
+          "instanceCount": 8,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 28,
+          "gameID": 17098,
+          "instanceCount": 8,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 18,
+          "gameID": 2000018,
+          "instanceCount": 9,
+          "groupCount": 6,
+          "petOwner": null
+        }
+      ],
+      "friendlyPlayers": [
+        15,
+        10,
+        9,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3
+      ]
+    },
+    {
+      "endTime": 3491451,
+      "combatTime": 334860,
+      "bossPercentage": 50.57,
+      "id": 5,
+      "name": "Brute Bomber",
+      "gameZone": {
+        "id": 1230,
+        "name": "Blasting Ring"
+      },
+      "encounterID": 95,
+      "startTime": 3155519,
+      "enemyNPCs": [
+        {
+          "id": 29,
+          "gameID": 1000029,
+          "instanceCount": 1,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 13,
+          "gameID": 17094,
+          "instanceCount": 1,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 25,
+          "gameID": 2000025,
+          "instanceCount": 4,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 28,
+          "gameID": 17098,
+          "instanceCount": 8,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 18,
+          "gameID": 2000018,
+          "instanceCount": 9,
+          "groupCount": 6,
+          "petOwner": null
+        }
+      ],
+      "friendlyPlayers": [
+        15,
+        10,
+        9,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3
+      ]
+    },
+    {
+      "endTime": 3766239,
+      "combatTime": 240078,
+      "bossPercentage": 64.38,
+      "id": 6,
+      "name": "Brute Bomber",
+      "gameZone": {
+        "id": 1230,
+        "name": "Blasting Ring"
+      },
+      "encounterID": 95,
+      "startTime": 3525101,
+      "enemyNPCs": [
+        {
+          "id": 13,
+          "gameID": 17094,
+          "instanceCount": 1,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 25,
+          "gameID": 2000025,
+          "instanceCount": 4,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 18,
+          "gameID": 2000018,
+          "instanceCount": 9,
+          "groupCount": 4,
+          "petOwner": null
+        }
+      ],
+      "friendlyPlayers": [
+        15,
+        10,
+        9,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3
+      ]
+    },
+    {
+      "endTime": 4279362,
+      "combatTime": 464906,
+      "bossPercentage": 48.43,
+      "id": 7,
+      "name": "Brute Bomber",
+      "gameZone": {
+        "id": 1230,
+        "name": "Blasting Ring"
+      },
+      "encounterID": 95,
+      "startTime": 3813478,
+      "enemyNPCs": [
+        {
+          "id": 29,
+          "gameID": 1000029,
+          "instanceCount": 1,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 13,
+          "gameID": 17094,
+          "instanceCount": 1,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 25,
+          "gameID": 2000025,
+          "instanceCount": 8,
+          "groupCount": 2,
+          "petOwner": null
+        },
+        {
+          "id": 28,
+          "gameID": 17098,
+          "instanceCount": 8,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 18,
+          "gameID": 2000018,
+          "instanceCount": 10,
+          "groupCount": 8,
+          "petOwner": null
+        }
+      ],
+      "friendlyPlayers": [
+        15,
+        30,
+        10,
+        9,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3
+      ]
+    },
+    {
+      "endTime": 5312251,
+      "combatTime": 344511,
+      "bossPercentage": 48.82,
+      "id": 8,
+      "name": "Brute Bomber",
+      "gameZone": {
+        "id": 1230,
+        "name": "Blasting Ring"
+      },
+      "encounterID": 95,
+      "startTime": 4966680,
+      "enemyNPCs": [
+        {
+          "id": 13,
+          "gameID": 17094,
+          "instanceCount": 1,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 25,
+          "gameID": 2000025,
+          "instanceCount": 4,
+          "groupCount": 2,
+          "petOwner": null
+        },
+        {
+          "id": 28,
+          "gameID": 17098,
+          "instanceCount": 8,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 18,
+          "gameID": 2000018,
+          "instanceCount": 9,
+          "groupCount": 5,
+          "petOwner": null
+        }
+      ],
+      "friendlyPlayers": [
+        15,
+        10,
+        9,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3
+      ]
+    },
+    {
+      "endTime": 5889457,
+      "combatTime": 466098,
+      "bossPercentage": 36.29,
+      "id": 9,
+      "name": "Brute Bomber",
+      "gameZone": {
+        "id": 1230,
+        "name": "Blasting Ring"
+      },
+      "encounterID": 95,
+      "startTime": 5422286,
+      "enemyNPCs": [
+        {
+          "id": 29,
+          "gameID": 1000029,
+          "instanceCount": 1,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 13,
+          "gameID": 17094,
+          "instanceCount": 1,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 25,
+          "gameID": 2000025,
+          "instanceCount": 8,
+          "groupCount": 3,
+          "petOwner": null
+        },
+        {
+          "id": 26,
+          "gameID": 17095,
+          "instanceCount": 8,
+          "groupCount": 3,
+          "petOwner": null
+        },
+        {
+          "id": 28,
+          "gameID": 17098,
+          "instanceCount": 8,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 18,
+          "gameID": 2000018,
+          "instanceCount": 10,
+          "groupCount": 7,
+          "petOwner": null
+        }
+      ],
+      "friendlyPlayers": [
+        15,
+        10,
+        9,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3
+      ]
+    },
+    {
+      "endTime": 6354863,
+      "combatTime": 318742,
+      "bossPercentage": 51.43,
+      "id": 10,
+      "name": "Brute Bomber",
+      "gameZone": {
+        "id": 1230,
+        "name": "Blasting Ring"
+      },
+      "encounterID": 95,
+      "startTime": 6035084,
+      "enemyNPCs": [
+        {
+          "id": 13,
+          "gameID": 17094,
+          "instanceCount": 1,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 25,
+          "gameID": 2000025,
+          "instanceCount": 4,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 26,
+          "gameID": 17095,
+          "instanceCount": 8,
+          "groupCount": 2,
+          "petOwner": null
+        },
+        {
+          "id": 28,
+          "gameID": 17098,
+          "instanceCount": 8,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 18,
+          "gameID": 2000018,
+          "instanceCount": 9,
+          "groupCount": 5,
+          "petOwner": null
+        }
+      ],
+      "friendlyPlayers": [
+        15,
+        10,
+        9,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3
+      ]
+    },
+    {
+      "endTime": 6727343,
+      "combatTime": null,
+      "bossPercentage": null,
+      "id": 11,
+      "name": "Brute Bomber",
+      "gameZone": {
+        "id": 1230,
+        "name": "Blasting Ring"
+      },
+      "encounterID": 0,
+      "startTime": 6712192,
+      "enemyNPCs": [
+        {
+          "id": 13,
+          "gameID": 17094,
+          "instanceCount": 1,
+          "groupCount": 1,
+          "petOwner": null
+        }
+      ],
+      "friendlyPlayers": [
+        15,
+        10
+      ]
+    },
+    {
+      "endTime": 7273067,
+      "combatTime": 502654,
+      "bossPercentage": 34.06,
+      "id": 12,
+      "name": "Brute Bomber",
+      "gameZone": {
+        "id": 1230,
+        "name": "Blasting Ring"
+      },
+      "encounterID": 95,
+      "startTime": 6769574,
+      "enemyNPCs": [
+        {
+          "id": 29,
+          "gameID": 1000029,
+          "instanceCount": 1,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 13,
+          "gameID": 17094,
+          "instanceCount": 1,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 25,
+          "gameID": 2000025,
+          "instanceCount": 8,
+          "groupCount": 3,
+          "petOwner": null
+        },
+        {
+          "id": 26,
+          "gameID": 17095,
+          "instanceCount": 8,
+          "groupCount": 4,
+          "petOwner": null
+        },
+        {
+          "id": 28,
+          "gameID": 17098,
+          "instanceCount": 8,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 18,
+          "gameID": 2000018,
+          "instanceCount": 10,
+          "groupCount": 8,
+          "petOwner": null
+        }
+      ],
+      "friendlyPlayers": [
+        31,
+        15,
+        30,
+        10,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3
+      ]
+    },
+    {
+      "endTime": 7878616,
+      "combatTime": 230992,
+      "bossPercentage": 64.61,
+      "id": 13,
+      "name": "Brute Bomber",
+      "gameZone": {
+        "id": 1230,
+        "name": "Blasting Ring"
+      },
+      "encounterID": 95,
+      "startTime": 7646559,
+      "enemyNPCs": [
+        {
+          "id": 29,
+          "gameID": 1000029,
+          "instanceCount": 1,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 13,
+          "gameID": 17094,
+          "instanceCount": 1,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 25,
+          "gameID": 2000025,
+          "instanceCount": 4,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 18,
+          "gameID": 2000018,
+          "instanceCount": 9,
+          "groupCount": 4,
+          "petOwner": null
+        }
+      ],
+      "friendlyPlayers": [
+        31,
+        15,
+        10,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3
+      ]
+    },
+    {
+      "endTime": 8021459,
+      "combatTime": 115527,
+      "bossPercentage": 83.4,
+      "id": 14,
+      "name": "Brute Bomber",
+      "gameZone": {
+        "id": 1230,
+        "name": "Blasting Ring"
+      },
+      "encounterID": 95,
+      "startTime": 7905179,
+      "enemyNPCs": [
+        {
+          "id": 29,
+          "gameID": 1000029,
+          "instanceCount": 1,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 13,
+          "gameID": 17094,
+          "instanceCount": 1,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 18,
+          "gameID": 2000018,
+          "instanceCount": 9,
+          "groupCount": 2,
+          "petOwner": null
+        }
+      ],
+      "friendlyPlayers": [
+        31,
+        15,
+        10,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3
+      ]
+    },
+    {
+      "endTime": 8570219,
+      "combatTime": 492039,
+      "bossPercentage": 30.76,
+      "id": 15,
+      "name": "Brute Bomber",
+      "gameZone": {
+        "id": 1230,
+        "name": "Blasting Ring"
+      },
+      "encounterID": 95,
+      "startTime": 8077107,
+      "enemyNPCs": [
+        {
+          "id": 29,
+          "gameID": 1000029,
+          "instanceCount": 1,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 13,
+          "gameID": 17094,
+          "instanceCount": 1,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 25,
+          "gameID": 2000025,
+          "instanceCount": 8,
+          "groupCount": 4,
+          "petOwner": null
+        },
+        {
+          "id": 28,
+          "gameID": 17098,
+          "instanceCount": 8,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 18,
+          "gameID": 2000018,
+          "instanceCount": 10,
+          "groupCount": 7,
+          "petOwner": null
+        }
+      ],
+      "friendlyPlayers": [
+        31,
+        15,
+        10,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3
+      ]
+    },
+    {
+      "endTime": 9456412,
+      "combatTime": 592157,
+      "bossPercentage": 18.06,
+      "id": 16,
+      "name": "Brute Bomber",
+      "gameZone": {
+        "id": 1230,
+        "name": "Blasting Ring"
+      },
+      "encounterID": 95,
+      "startTime": 8863317,
+      "enemyNPCs": [
+        {
+          "id": 29,
+          "gameID": 1000029,
+          "instanceCount": 1,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 13,
+          "gameID": 17094,
+          "instanceCount": 1,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 25,
+          "gameID": 2000025,
+          "instanceCount": 8,
+          "groupCount": 2,
+          "petOwner": null
+        },
+        {
+          "id": 26,
+          "gameID": 17095,
+          "instanceCount": 8,
+          "groupCount": 5,
+          "petOwner": null
+        },
+        {
+          "id": 28,
+          "gameID": 17098,
+          "instanceCount": 8,
+          "groupCount": 1,
+          "petOwner": null
+        },
+        {
+          "id": 18,
+          "gameID": 2000018,
+          "instanceCount": 12,
+          "groupCount": 11,
+          "petOwner": null
+        }
+      ],
+      "friendlyPlayers": [
+        31,
+        15,
+        10,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3
+      ]
+    }
+  ],
+  "actors": [
+    {
+      "gameID": 0,
+      "icon": "NPC",
+      "id": -1,
+      "name": "Environment",
+      "petOwner": null,
+      "server": null,
+      "subType": "NPC",
+      "type": "NPC"
+    },
+    {
+      "gameID": 1000001,
+      "icon": "Unknown",
+      "id": 1,
+      "name": "Armantel Terrechant",
+      "petOwner": null,
+      "server": null,
+      "subType": "Unknown",
+      "type": "Player"
+    },
+    {
+      "gameID": 1000002,
+      "icon": "Unknown",
+      "id": 2,
+      "name": "",
+      "petOwner": null,
+      "server": null,
+      "subType": "Unknown",
+      "type": "NPC"
+    },
+    {
+      "gameID": 1000003,
+      "icon": "Astrologian",
+      "id": 3,
+      "name": "Armantel Terrechant",
+      "petOwner": null,
+      "server": "Cerberus",
+      "subType": "Astrologian",
+      "type": "Player"
+    },
+    {
+      "gameID": 1000004,
+      "icon": "Scholar",
+      "id": 4,
+      "name": "Idena Fermont",
+      "petOwner": null,
+      "server": "Sagittarius",
+      "subType": "Scholar",
+      "type": "Player"
+    },
+    {
+      "gameID": 1000005,
+      "icon": "Paladin",
+      "id": 5,
+      "name": "Kympfwyda Syhrankawyn",
+      "petOwner": null,
+      "server": "Sagittarius",
+      "subType": "Paladin",
+      "type": "Player"
+    },
+    {
+      "gameID": 1000006,
+      "icon": "Monk",
+      "id": 6,
+      "name": "Penelope Spinkick",
+      "petOwner": null,
+      "server": "Cerberus",
+      "subType": "Monk",
+      "type": "Player"
+    },
+    {
+      "gameID": 1000007,
+      "icon": "Summoner",
+      "id": 7,
+      "name": "Krystlona Trachymlwyn",
+      "petOwner": null,
+      "server": "Sagittarius",
+      "subType": "Summoner",
+      "type": "Player"
+    },
+    {
+      "gameID": 1000008,
+      "icon": "Bard",
+      "id": 8,
+      "name": "Ninami Taih",
+      "petOwner": null,
+      "server": "Ragnarok",
+      "subType": "Bard",
+      "type": "Player"
+    },
+    {
+      "gameID": 1000009,
+      "icon": "Dragoon",
+      "id": 9,
+      "name": "Hale Arkwright",
+      "petOwner": null,
+      "server": "Cerberus",
+      "subType": "Dragoon",
+      "type": "Player"
+    },
+    {
+      "gameID": 1000010,
+      "icon": "Warrior",
+      "id": 10,
+      "name": "Caell Celedran",
+      "petOwner": null,
+      "server": "Ragnarok",
+      "subType": "Warrior",
+      "type": "Player"
+    },
+    {
+      "gameID": 1008,
+      "icon": "abilities/002000-002823.png",
+      "id": 11,
+      "name": "Selene",
+      "petOwner": 4,
+      "server": null,
+      "subType": "Pet",
+      "type": "Pet"
+    },
+    {
+      "gameID": 13498,
+      "icon": "abilities/000000-000516.png",
+      "id": 12,
+      "name": "Topaz Carbuncle",
+      "petOwner": 7,
+      "server": null,
+      "subType": "Pet",
+      "type": "Pet"
+    },
+    {
+      "gameID": 17094,
+      "icon": "Boss",
+      "id": 13,
+      "name": "Brute Bomber",
+      "petOwner": null,
+      "server": null,
+      "subType": "Boss",
+      "type": "NPC"
+    },
+    {
+      "gameID": 7245,
+      "icon": "abilities/003000-003143.png",
+      "id": 14,
+      "name": "Earthly Star",
+      "petOwner": 3,
+      "server": null,
+      "subType": "Pet",
+      "type": "Pet"
+    },
+    {
+      "gameID": 1000015,
+      "icon": "LimitBreak",
+      "id": 15,
+      "name": "Multiple Players",
+      "petOwner": null,
+      "server": null,
+      "subType": "LimitBreak",
+      "type": "Player"
+    },
+    {
+      "gameID": 16926,
+      "icon": "Pet",
+      "id": 16,
+      "name": "Solar Bahamut",
+      "petOwner": 7,
+      "server": null,
+      "subType": "Pet",
+      "type": "Pet"
+    },
+    {
+      "gameID": 13505,
+      "icon": "abilities/002000-002772.png",
+      "id": 17,
+      "name": "Ruby Ifrit",
+      "petOwner": 7,
+      "server": null,
+      "subType": "Pet",
+      "type": "Pet"
+    },
+    {
+      "gameID": 2000018,
+      "icon": "NPC",
+      "id": 18,
+      "name": "Brute Bomber",
+      "petOwner": null,
+      "server": null,
+      "subType": "NPC",
+      "type": "NPC"
+    },
+    {
+      "gameID": 13507,
+      "icon": "abilities/002000-002773.png",
+      "id": 19,
+      "name": "Topaz Titan",
+      "petOwner": 7,
+      "server": null,
+      "subType": "Pet",
+      "type": "Pet"
+    },
+    {
+      "gameID": 13506,
+      "icon": "abilities/002000-002774.png",
+      "id": 20,
+      "name": "Emerald Garuda",
+      "petOwner": 7,
+      "server": null,
+      "subType": "Pet",
+      "type": "Pet"
+    },
+    {
+      "gameID": 10487,
+      "icon": "abilities/002000-002850.png",
+      "id": 21,
+      "name": "Seraph",
+      "petOwner": 4,
+      "server": null,
+      "subType": "Pet",
+      "type": "Pet"
+    },
+    {
+      "gameID": 6982,
+      "icon": "abilities/002000-002691.png",
+      "id": 22,
+      "name": "Demi-Bahamut",
+      "petOwner": 7,
+      "server": null,
+      "subType": "Pet",
+      "type": "Pet"
+    },
+    {
+      "gameID": 1000023,
+      "icon": "NPC",
+      "id": 23,
+      "name": "",
+      "petOwner": null,
+      "server": null,
+      "subType": "NPC",
+      "type": "NPC"
+    },
+    {
+      "gameID": 17099,
+      "icon": "NPC",
+      "id": 24,
+      "name": "Brute Distortion",
+      "petOwner": null,
+      "server": null,
+      "subType": "NPC",
+      "type": "NPC"
+    },
+    {
+      "gameID": 2000025,
+      "icon": "NPC",
+      "id": 25,
+      "name": "Brute Distortion",
+      "petOwner": null,
+      "server": null,
+      "subType": "NPC",
+      "type": "NPC"
+    },
+    {
+      "gameID": 17095,
+      "icon": "NPC",
+      "id": 26,
+      "name": "Lit Fuse",
+      "petOwner": null,
+      "server": null,
+      "subType": "NPC",
+      "type": "NPC"
+    },
+    {
+      "gameID": 10488,
+      "icon": "abilities/002000-002765.png",
+      "id": 27,
+      "name": "Demi-Phoenix",
+      "petOwner": 7,
+      "server": null,
+      "subType": "Pet",
+      "type": "Pet"
+    },
+    {
+      "gameID": 17098,
+      "icon": "NPC",
+      "id": 28,
+      "name": "Sinister Spark",
+      "petOwner": null,
+      "server": null,
+      "subType": "NPC",
+      "type": "NPC"
+    },
+    {
+      "gameID": 1000029,
+      "icon": "NPC",
+      "id": 29,
+      "name": "Multiple Enemies",
+      "petOwner": null,
+      "server": null,
+      "subType": "NPC",
+      "type": "NPC"
+    },
+    {
+      "gameID": 1000030,
+      "icon": "LimitBreak",
+      "id": 30,
+      "name": "Limit Break",
+      "petOwner": null,
+      "server": null,
+      "subType": "LimitBreak",
+      "type": "Player"
+    },
+    {
+      "gameID": 1000031,
+      "icon": "Reaper",
+      "id": 31,
+      "name": "Hale Arkwright",
+      "petOwner": null,
+      "server": "Cerberus",
+      "subType": "Reaper",
+      "type": "Player"
+    }
+  ],
+  "abilities": [
+    {
+      "gameID": 0,
+      "icon": "000000-000405.png",
+      "name": "Unknown Ability",
+      "type": "0"
+    },
+    {
+      "gameID": 1001080,
+      "icon": "216000-216513.png",
+      "name": "Squadron Battle Manual",
+      "type": "1"
+    },
+    {
+      "gameID": 1001083,
+      "icon": "216000-216509.png",
+      "name": "Squadron Spiritbonding Manual",
+      "type": "1"
+    },
+    {
+      "gameID": 1001085,
+      "icon": "216000-216510.png",
+      "name": "Squadron Gear Maintenance Manual",
+      "type": "1"
+    },
+    {
+      "gameID": 1001084,
+      "icon": "216000-216508.png",
+      "name": "Rationing",
+      "type": "1"
+    },
+    {
+      "gameID": 1000048,
+      "icon": "216000-216202.png",
+      "name": "Well Fed",
+      "type": "1"
+    },
+    {
+      "gameID": 1302,
+      "icon": "../../warcraft/abilities/spell_nature_regeneration_02.jpg",
+      "name": "Regeneration",
+      "type": "8"
+    },
+    {
+      "gameID": 34598610,
+      "icon": "216000-216203.png",
+      "name": "Medicated",
+      "type": "1"
+    },
+    {
+      "gameID": 28,
+      "icon": "002000-002505.png",
+      "name": "Iron Will",
+      "type": "1"
+    },
+    {
+      "gameID": 1000079,
+      "icon": "212000-212506.png",
+      "name": "Iron Will",
+      "type": "1"
+    },
+    {
+      "gameID": 36942,
+      "icon": "000000-000218.png",
+      "name": "Forbidden Meditation",
+      "type": "1"
+    },
+    {
+      "gameID": 17215,
+      "icon": "002000-002823.png",
+      "name": "Summon Eos",
+      "type": "1"
+    },
+    {
+      "gameID": 802,
+      "icon": "002000-002826.png",
+      "name": "Embrace",
+      "type": "8"
+    },
+    {
+      "gameID": 816,
+      "icon": "000000-000405.png",
+      "name": "unknown_330",
+      "type": "1"
+    },
+    {
+      "gameID": 48,
+      "icon": "002000-002551.png",
+      "name": "Defiance",
+      "type": "1"
+    },
+    {
+      "gameID": 1000091,
+      "icon": "212000-212551.png",
+      "name": "Defiance",
+      "type": "1"
+    },
+    {
+      "gameID": 33569384,
+      "icon": "216000-216203.png",
+      "name": "Medicated",
+      "type": "1"
+    },
+    {
+      "gameID": 33569385,
+      "icon": "216000-216203.png",
+      "name": "Medicated",
+      "type": "1"
+    },
+    {
+      "gameID": 34598614,
+      "icon": "216000-216203.png",
+      "name": "Medicated",
+      "type": "1"
+    },
+    {
+      "gameID": 4262,
+      "icon": "002000-002536.png",
+      "name": "Form Shift",
+      "type": "1"
+    },
+    {
+      "gameID": 1002513,
+      "icon": "212000-212535.png",
+      "name": "Formless Fist",
+      "type": "1"
+    },
+    {
+      "gameID": 25766,
+      "icon": "002000-002978.png",
+      "name": "Riddle of Wind",
+      "type": "1"
+    },
+    {
+      "gameID": 1002687,
+      "icon": "212000-212537.png",
+      "name": "Riddle of Wind",
+      "type": "1"
+    },
+    {
+      "gameID": 1003842,
+      "icon": "212000-212540.png",
+      "name": "Wind's Rumination",
+      "type": "1"
+    },
+    {
+      "gameID": 25767,
+      "icon": "002000-002979.png",
+      "name": "Shadow of the Destroyer",
+      "type": "1"
+    },
+    {
+      "gameID": 25867,
+      "icon": "002000-002877.png",
+      "name": "Protraction",
+      "type": "8"
+    },
+    {
+      "gameID": 16542,
+      "icon": "002000-002822.png",
+      "name": "Recitation",
+      "type": "1"
+    },
+    {
+      "gameID": 1001896,
+      "icon": "212000-212813.png",
+      "name": "Recitation",
+      "type": "1"
+    },
+    {
+      "gameID": 1002710,
+      "icon": "212000-212815.png",
+      "name": "Protraction",
+      "type": "1"
+    },
+    {
+      "gameID": 185,
+      "icon": "002000-002801.png",
+      "name": "Adloquium",
+      "type": "8"
+    },
+    {
+      "gameID": 1000297,
+      "icon": "212000-212801.png",
+      "name": "Galvanize",
+      "type": "8"
+    },
+    {
+      "gameID": 1001918,
+      "icon": "212000-212814.png",
+      "name": "Catalyze",
+      "type": "8"
+    },
+    {
+      "gameID": 7439,
+      "icon": "003000-003143.png",
+      "name": "Earthly Star",
+      "type": "1"
+    },
+    {
+      "gameID": 1001224,
+      "icon": "213000-213241.png",
+      "name": "Earthly Dominance",
+      "type": "1"
+    },
+    {
+      "gameID": 3585,
+      "icon": "002000-002808.png",
+      "name": "Deployment Tactics",
+      "type": "1"
+    },
+    {
+      "gameID": 25871,
+      "icon": "003000-003559.png",
+      "name": "Fall Malefic",
+      "type": "1024"
+    },
+    {
+      "gameID": 7384,
+      "icon": "002000-002514.png",
+      "name": "Holy Spirit",
+      "type": "1024"
+    },
+    {
+      "gameID": 46,
+      "icon": "000000-000261.png",
+      "name": "Tomahawk",
+      "type": "128"
+    },
+    {
+      "gameID": 25865,
+      "icon": "002000-002875.png",
+      "name": "Broil IV",
+      "type": "1024"
+    },
+    {
+      "gameID": 25762,
+      "icon": "002000-002975.png",
+      "name": "Thunderclap",
+      "type": "1"
+    },
+    {
+      "gameID": 7407,
+      "icon": "002000-002614.png",
+      "name": "Stormbite",
+      "type": "128"
+    },
+    {
+      "gameID": 8,
+      "icon": "../../warcraft/abilities/ability_hunter_assassinate2.jpg",
+      "name": "Shot",
+      "type": "128"
+    },
+    {
+      "gameID": 7533,
+      "icon": "000000-000803.png",
+      "name": "Provoke",
+      "type": "1"
+    },
+    {
+      "gameID": 74,
+      "icon": "002000-002528.png",
+      "name": "Dragon Kick",
+      "type": "128"
+    },
+    {
+      "gameID": 7,
+      "icon": "000000-000101.png",
+      "name": "Attack",
+      "type": "128"
+    },
+    {
+      "gameID": 1000108,
+      "icon": "210000-210213.png",
+      "name": "Raptor Form",
+      "type": "1"
+    },
+    {
+      "gameID": 75,
+      "icon": "000000-000310.png",
+      "name": "True Thrust",
+      "type": "128"
+    },
+    {
+      "gameID": 16554,
+      "icon": "003000-003554.png",
+      "name": "Combust III",
+      "type": "1"
+    },
+    {
+      "gameID": 101,
+      "icon": "000000-000352.png",
+      "name": "Raging Strikes",
+      "type": "1"
+    },
+    {
+      "gameID": 25798,
+      "icon": "000000-000516.png",
+      "name": "Summon Carbuncle",
+      "type": "1"
+    },
+    {
+      "gameID": 52,
+      "icon": "002000-002555.png",
+      "name": "Infuriate",
+      "type": "1"
+    },
+    {
+      "gameID": 1001897,
+      "icon": "212000-212560.png",
+      "name": "Nascent Chaos",
+      "type": "1"
+    },
+    {
+      "gameID": 3547,
+      "icon": "002000-002535.png",
+      "name": "The Forbidden Chakra",
+      "type": "128"
+    },
+    {
+      "gameID": 1001881,
+      "icon": "213000-213248.png",
+      "name": "Combust III",
+      "type": "64"
+    },
+    {
+      "gameID": 1000791,
+      "icon": "212000-212805.png",
+      "name": "Dissipation",
+      "type": "1"
+    },
+    {
+      "gameID": 1000304,
+      "icon": "210000-210501.png",
+      "name": "Aetherflow",
+      "type": "1"
+    },
+    {
+      "gameID": 3587,
+      "icon": "002000-002810.png",
+      "name": "Dissipation",
+      "type": "1"
+    },
+    {
+      "gameID": 1000125,
+      "icon": "210000-210354.png",
+      "name": "Raging Strikes",
+      "type": "1"
+    },
+    {
+      "gameID": 9,
+      "icon": "000000-000158.png",
+      "name": "Fast Blade",
+      "type": "128"
+    },
+    {
+      "gameID": 1001201,
+      "icon": "212000-212617.png",
+      "name": "Stormbite",
+      "type": "1"
+    },
+    {
+      "gameID": 3559,
+      "icon": "002000-002607.png",
+      "name": "The Wanderer's Minuet",
+      "type": "1"
+    },
+    {
+      "gameID": 1002216,
+      "icon": "212000-212610.png",
+      "name": "The Wanderer's Minuet",
+      "type": "1"
+    },
+    {
+      "gameID": 85,
+      "icon": "000000-000309.png",
+      "name": "Lance Charge",
+      "type": "1"
+    },
+    {
+      "gameID": 69,
+      "icon": "000000-000217.png",
+      "name": "Perfect Balance",
+      "type": "1"
+    },
+    {
+      "gameID": 1000110,
+      "icon": "217000-217564.png",
+      "name": "Perfect Balance",
+      "type": "1"
+    },
+    {
+      "gameID": 31,
+      "icon": "000000-000260.png",
+      "name": "Heavy Swing",
+      "type": "128"
+    },
+    {
+      "gameID": 16540,
+      "icon": "002000-002820.png",
+      "name": "Biolysis",
+      "type": "1"
+    },
+    {
+      "gameID": 1001864,
+      "icon": "210000-210304.png",
+      "name": "Lance Charge",
+      "type": "1"
+    },
+    {
+      "gameID": 36945,
+      "icon": "002000-002982.png",
+      "name": "Leaping Opo",
+      "type": "128"
+    },
+    {
+      "gameID": 7406,
+      "icon": "002000-002613.png",
+      "name": "Caustic Bite",
+      "type": "128"
+    },
+    {
+      "gameID": 1001895,
+      "icon": "212000-212812.png",
+      "name": "Biolysis",
+      "type": "64"
+    },
+    {
+      "gameID": 36955,
+      "icon": "002000-002077.png",
+      "name": "Spiral Blow",
+      "type": "128"
+    },
+    {
+      "gameID": 1002720,
+      "icon": "210000-210303.png",
+      "name": "Power Surge",
+      "type": "1"
+    },
+    {
+      "gameID": 39554,
+      "icon": "000000-000101.png",
+      "name": "Attack",
+      "type": "128"
+    },
+    {
+      "gameID": 3558,
+      "icon": "002000-002606.png",
+      "name": "Empyreal Arrow",
+      "type": "128"
+    },
+    {
+      "gameID": 36992,
+      "icon": "002000-002782.png",
+      "name": "Summon Solar Bahamut",
+      "type": "1"
+    },
+    {
+      "gameID": 1003874,
+      "icon": "212000-212751.png",
+      "name": "Refulgent Lux",
+      "type": "1"
+    },
+    {
+      "gameID": 3557,
+      "icon": "002000-002585.png",
+      "name": "Battle Litany",
+      "type": "1"
+    },
+    {
+      "gameID": 500000,
+      "icon": "000000-000405.png",
+      "name": "Combined DoTs",
+      "type": "1"
+    },
+    {
+      "gameID": 15,
+      "icon": "000000-000156.png",
+      "name": "Riot Blade",
+      "type": "128"
+    },
+    {
+      "gameID": 1001200,
+      "icon": "212000-212616.png",
+      "name": "Caustic Bite",
+      "type": "1"
+    },
+    {
+      "gameID": 36975,
+      "icon": "002000-002623.png",
+      "name": "Heartbreak Shot",
+      "type": "128"
+    },
+    {
+      "gameID": 25801,
+      "icon": "002000-002780.png",
+      "name": "Searing Light",
+      "type": "1"
+    },
+    {
+      "gameID": 1002703,
+      "icon": "212000-212699.png",
+      "name": "Searing Light",
+      "type": "1"
+    },
+    {
+      "gameID": 1003873,
+      "icon": "212000-212750.png",
+      "name": "Ruby's Glimmer",
+      "type": "1"
+    },
+    {
+      "gameID": 1000786,
+      "icon": "212000-212578.png",
+      "name": "Battle Litany",
+      "type": "1"
+    },
+    {
+      "gameID": 3555,
+      "icon": "002000-002583.png",
+      "name": "Geirskogul",
+      "type": "128"
+    },
+    {
+      "gameID": 1003177,
+      "icon": "214000-214935.png",
+      "name": "Life of the Dragon",
+      "type": "1"
+    },
+    {
+      "gameID": 1003844,
+      "icon": "212000-212589.png",
+      "name": "Nastrond Ready",
+      "type": "1"
+    },
+    {
+      "gameID": 37,
+      "icon": "000000-000255.png",
+      "name": "Maim",
+      "type": "128"
+    },
+    {
+      "gameID": 3606,
+      "icon": "003000-003135.png",
+      "name": "Lightspeed",
+      "type": "1"
+    },
+    {
+      "gameID": 1000841,
+      "icon": "213000-213220.png",
+      "name": "Lightspeed",
+      "type": "1"
+    },
+    {
+      "gameID": 16508,
+      "icon": "000000-000514.png",
+      "name": "Energy Drain",
+      "type": "1024"
+    },
+    {
+      "gameID": 1002701,
+      "icon": "212000-212690.png",
+      "name": "Further Ruin",
+      "type": "1"
+    },
+    {
+      "gameID": 16495,
+      "icon": "002000-002618.png",
+      "name": "Burst Shot",
+      "type": "128"
+    },
+    {
+      "gameID": 1003861,
+      "icon": "213000-213075.png",
+      "name": "Hawk's Eye",
+      "type": "1"
+    },
+    {
+      "gameID": 25772,
+      "icon": "002000-002596.png",
+      "name": "Chaotic Spring",
+      "type": "128"
+    },
+    {
+      "gameID": 7396,
+      "icon": "002000-002542.png",
+      "name": "Brotherhood",
+      "type": "1"
+    },
+    {
+      "gameID": 118,
+      "icon": "002000-002601.png",
+      "name": "Battle Voice",
+      "type": "1"
+    },
+    {
+      "gameID": 1002719,
+      "icon": "212000-212586.png",
+      "name": "Chaotic Spring",
+      "type": "1"
+    },
+    {
+      "gameID": 36994,
+      "icon": "002000-002784.png",
+      "name": "Umbral Impulse",
+      "type": "1024"
+    },
+    {
+      "gameID": 37023,
+      "icon": "003000-003110.png",
+      "name": "The Balance",
+      "type": "1"
+    },
+    {
+      "gameID": 16480,
+      "icon": "002000-002593.png",
+      "name": "Stardiver",
+      "type": "128"
+    },
+    {
+      "gameID": 1003846,
+      "icon": "212000-212588.png",
+      "name": "Starcross Ready",
+      "type": "1"
+    },
+    {
+      "gameID": 3539,
+      "icon": "002000-002507.png",
+      "name": "Royal Authority",
+      "type": "128"
+    },
+    {
+      "gameID": 1001902,
+      "icon": "210000-210207.png",
+      "name": "Atonement Ready",
+      "type": "1"
+    },
+    {
+      "gameID": 1002673,
+      "icon": "212000-212521.png",
+      "name": "Divine Might",
+      "type": "1"
+    },
+    {
+      "gameID": 37925,
+      "icon": "000000-000405.png",
+      "name": "Brutal Impact",
+      "type": "128"
+    },
+    {
+      "gameID": 1000141,
+      "icon": "212000-212601.png",
+      "name": "Battle Voice",
+      "type": "1"
+    },
+    {
+      "gameID": 1001182,
+      "icon": "212000-212529.png",
+      "name": "Meditative Brotherhood",
+      "type": "1"
+    },
+    {
+      "gameID": 1001185,
+      "icon": "212000-212532.png",
+      "name": "Brotherhood",
+      "type": "1"
+    },
+    {
+      "gameID": 25785,
+      "icon": "002000-002622.png",
+      "name": "Radiant Finale",
+      "type": "1"
+    },
+    {
+      "gameID": 1003863,
+      "icon": "213000-213077.png",
+      "name": "Radiant Encore Ready",
+      "type": "1"
+    },
+    {
+      "gameID": 1001248,
+      "icon": "213000-213242.png",
+      "name": "Giant Dominance",
+      "type": "1"
+    },
+    {
+      "gameID": 36993,
+      "icon": "002000-002783.png",
+      "name": "Luxwave",
+      "type": "1024"
+    },
+    {
+      "gameID": 16552,
+      "icon": "003000-003553.png",
+      "name": "Divination",
+      "type": "1"
+    },
+    {
+      "gameID": 1003893,
+      "icon": "213000-213264.png",
+      "name": "Divining",
+      "type": "1"
+    },
+    {
+      "gameID": 1003887,
+      "icon": "213000-213204.png",
+      "name": "The Balance",
+      "type": "1"
+    },
+    {
+      "gameID": 45,
+      "icon": "000000-000264.png",
+      "name": "Storm's Eye",
+      "type": "128"
+    },
+    {
+      "gameID": 1002677,
+      "icon": "212000-212561.png",
+      "name": "Surging Tempest",
+      "type": "1"
+    },
+    {
+      "gameID": 20,
+      "icon": "000000-000166.png",
+      "name": "Fight or Flight",
+      "type": "1"
+    },
+    {
+      "gameID": 1003847,
+      "icon": "213000-213053.png",
+      "name": "Goring Blade Ready",
+      "type": "1"
+    },
+    {
+      "gameID": 1002964,
+      "icon": "212000-212624.png",
+      "name": "Radiant Finale",
+      "type": "1"
+    },
+    {
+      "gameID": 1002722,
+      "icon": "212000-212622.png",
+      "name": "Radiant Finale",
+      "type": "1"
+    },
+    {
+      "gameID": 1001878,
+      "icon": "213000-213245.png",
+      "name": "Divination",
+      "type": "1"
+    },
+    {
+      "gameID": 7395,
+      "icon": "002000-002541.png",
+      "name": "Riddle of Fire",
+      "type": "1"
+    },
+    {
+      "gameID": 1001181,
+      "icon": "212000-212528.png",
+      "name": "Riddle of Fire",
+      "type": "1"
+    },
+    {
+      "gameID": 1003843,
+      "icon": "212000-212541.png",
+      "name": "Fire's Rumination",
+      "type": "1"
+    },
+    {
+      "gameID": 36977,
+      "icon": "002000-002100.png",
+      "name": "Radiant Encore",
+      "type": "128"
+    },
+    {
+      "gameID": 7389,
+      "icon": "002000-002564.png",
+      "name": "Inner Release",
+      "type": "1"
+    },
+    {
+      "gameID": 1001177,
+      "icon": "217000-217247.png",
+      "name": "Inner Release",
+      "type": "1"
+    },
+    {
+      "gameID": 1002624,
+      "icon": "212000-212566.png",
+      "name": "Primal Rend Ready",
+      "type": "1"
+    },
+    {
+      "gameID": 1002663,
+      "icon": "212000-212556.png",
+      "name": "Inner Strength",
+      "type": "1"
+    },
+    {
+      "gameID": 1000076,
+      "icon": "210000-210155.png",
+      "name": "Fight or Flight",
+      "type": "1"
+    },
+    {
+      "gameID": 36921,
+      "icon": "002000-002955.png",
+      "name": "Imperator",
+      "type": "1024"
+    },
+    {
+      "gameID": 1001368,
+      "icon": "218000-218345.png",
+      "name": "Requiescat",
+      "type": "1"
+    },
+    {
+      "gameID": 1003019,
+      "icon": "212000-212520.png",
+      "name": "Confiteor Ready",
+      "type": "1"
+    },
+    {
+      "gameID": 3556,
+      "icon": "002000-002584.png",
+      "name": "Wheeling Thrust",
+      "type": "128"
+    },
+    {
+      "gameID": 7560,
+      "icon": "000000-000861.png",
+      "name": "Addle",
+      "type": "1"
+    },
+    {
+      "gameID": 107,
+      "icon": "000000-000353.png",
+      "name": "Barrage",
+      "type": "1"
+    },
+    {
+      "gameID": 1000128,
+      "icon": "210000-210356.png",
+      "name": "Barrage",
+      "type": "1"
+    },
+    {
+      "gameID": 1003862,
+      "icon": "213000-213076.png",
+      "name": "Resonant Arrow Ready",
+      "type": "1"
+    },
+    {
+      "gameID": 7386,
+      "icon": "002000-002561.png",
+      "name": "Onslaught",
+      "type": "128"
+    },
+    {
+      "gameID": 36948,
+      "icon": "002000-002985.png",
+      "name": "Elixir Burst",
+      "type": "128"
+    },
+    {
+      "gameID": 7444,
+      "icon": "003000-003147.png",
+      "name": "Lord of Crowns",
+      "type": "1024"
+    },
+    {
+      "gameID": 96,
+      "icon": "002000-002578.png",
+      "name": "Dragonfire Dive",
+      "type": "128"
+    },
+    {
+      "gameID": 1003845,
+      "icon": "212000-212587.png",
+      "name": "Dragon's Flight",
+      "type": "1"
+    },
+    {
+      "gameID": 1001203,
+      "icon": "213000-213917.png",
+      "name": "Addle",
+      "type": "1"
+    },
+    {
+      "gameID": 16459,
+      "icon": "002000-002518.png",
+      "name": "Confiteor",
+      "type": "1024"
+    },
+    {
+      "gameID": 188,
+      "icon": "002000-002804.png",
+      "name": "Sacred Soil",
+      "type": "8"
+    },
+    {
+      "gameID": 7404,
+      "icon": "002000-002611.png",
+      "name": "Pitch Perfect",
+      "type": "128"
+    },
+    {
+      "gameID": 37018,
+      "icon": "003000-003565.png",
+      "name": "Umbral Draw",
+      "type": "1"
+    },
+    {
+      "gameID": 1001944,
+      "icon": "212000-212802.png",
+      "name": "Sacred Soil",
+      "type": "8"
+    },
+    {
+      "gameID": 1000299,
+      "icon": "212000-212803.png",
+      "name": "Sacred Soil",
+      "type": "1"
+    },
+    {
+      "gameID": 23,
+      "icon": "000000-000161.png",
+      "name": "Circle of Scorn",
+      "type": "128"
+    },
+    {
+      "gameID": 16478,
+      "icon": "002000-002591.png",
+      "name": "High Jump",
+      "type": "128"
+    },
+    {
+      "gameID": 16465,
+      "icon": "002000-002568.png",
+      "name": "Inner Chaos",
+      "type": "128"
+    },
+    {
+      "gameID": 1001243,
+      "icon": "212000-212583.png",
+      "name": "Dive Ready",
+      "type": "1"
+    },
+    {
+      "gameID": 1001965,
+      "icon": "219000-219721.png",
+      "name": "Summon Order III",
+      "type": "1"
+    },
+    {
+      "gameID": 36998,
+      "icon": "002000-002788.png",
+      "name": "Enkindle Solar Bahamut",
+      "type": "1"
+    },
+    {
+      "gameID": 36976,
+      "icon": "002000-002624.png",
+      "name": "Resonant Arrow",
+      "type": "128"
+    },
+    {
+      "gameID": 25747,
+      "icon": "002000-002951.png",
+      "name": "Expiacion",
+      "type": "128"
+    },
+    {
+      "gameID": 7535,
+      "icon": "000000-000806.png",
+      "name": "Reprisal",
+      "type": "1"
+    },
+    {
+      "gameID": 1000248,
+      "icon": "210000-210158.png",
+      "name": "Circle of Scorn",
+      "type": "1"
+    },
+    {
+      "gameID": 36952,
+      "icon": "002000-002599.png",
+      "name": "Drakesbane",
+      "type": "128"
+    },
+    {
+      "gameID": 1001863,
+      "icon": "212000-212585.png",
+      "name": "Draconian Fire",
+      "type": "1"
+    },
+    {
+      "gameID": 36996,
+      "icon": "002000-002786.png",
+      "name": "Sunflare",
+      "type": "1024"
+    },
+    {
+      "gameID": 1001193,
+      "icon": "213000-213901.png",
+      "name": "Reprisal",
+      "type": "1"
+    },
+    {
+      "gameID": 7387,
+      "icon": "002000-002562.png",
+      "name": "Upheaval",
+      "type": "128"
+    },
+    {
+      "gameID": 37026,
+      "icon": "003000-003113.png",
+      "name": "The Spear",
+      "type": "1"
+    },
+    {
+      "gameID": 7436,
+      "icon": "002000-002815.png",
+      "name": "Chain Stratagem",
+      "type": "1"
+    },
+    {
+      "gameID": 3562,
+      "icon": "002000-002610.png",
+      "name": "Sidewinder",
+      "type": "128"
+    },
+    {
+      "gameID": 1003882,
+      "icon": "212000-212818.png",
+      "name": "Impact Imminent",
+      "type": "1"
+    },
+    {
+      "gameID": 36953,
+      "icon": "002000-002075.png",
+      "name": "Rise of the Dragon",
+      "type": "128"
+    },
+    {
+      "gameID": 36999,
+      "icon": "002000-002789.png",
+      "name": "Exodus",
+      "type": "1024"
+    },
+    {
+      "gameID": 25748,
+      "icon": "002000-002952.png",
+      "name": "Blade of Faith",
+      "type": "1024"
+    },
+    {
+      "gameID": 1003889,
+      "icon": "213000-213207.png",
+      "name": "The Spear",
+      "type": "1"
+    },
+    {
+      "gameID": 37029,
+      "icon": "003000-003566.png",
+      "name": "Oracle",
+      "type": "1024"
+    },
+    {
+      "gameID": 1001221,
+      "icon": "212000-212809.png",
+      "name": "Chain Stratagem",
+      "type": "1"
+    },
+    {
+      "gameID": 36956,
+      "icon": "002000-002078.png",
+      "name": "Starcross",
+      "type": "128"
+    },
+    {
+      "gameID": 3549,
+      "icon": "002000-002557.png",
+      "name": "Fell Cleave",
+      "type": "128"
+    },
+    {
+      "gameID": 16461,
+      "icon": "002000-002520.png",
+      "name": "Intervene",
+      "type": "128"
+    },
+    {
+      "gameID": 1003833,
+      "icon": "218000-218147.png",
+      "name": "Burgeoning Fury",
+      "type": "1"
+    },
+    {
+      "gameID": 36991,
+      "icon": "002000-002781.png",
+      "name": "Searing Flash",
+      "type": "1024"
+    },
+    {
+      "gameID": 36949,
+      "icon": "002000-002986.png",
+      "name": "Wind's Reply",
+      "type": "128"
+    },
+    {
+      "gameID": 37926,
+      "icon": "000000-000405.png",
+      "name": "Brutal Impact",
+      "type": "128"
+    },
+    {
+      "gameID": 7409,
+      "icon": "002000-002616.png",
+      "name": "Refulgent Arrow",
+      "type": "128"
+    },
+    {
+      "gameID": 36990,
+      "icon": "002000-002699.png",
+      "name": "Necrotize",
+      "type": "1024"
+    },
+    {
+      "gameID": 16479,
+      "icon": "002000-002592.png",
+      "name": "Raiden Thrust",
+      "type": "128"
+    },
+    {
+      "gameID": 65,
+      "icon": "000000-000216.png",
+      "name": "Mantra",
+      "type": "1"
+    },
+    {
+      "gameID": 167,
+      "icon": "000000-000514.png",
+      "name": "Energy Drain",
+      "type": "1024"
+    },
+    {
+      "gameID": 7400,
+      "icon": "002000-002589.png",
+      "name": "Nastrond",
+      "type": "128"
+    },
+    {
+      "gameID": 25749,
+      "icon": "002000-002953.png",
+      "name": "Blade of Truth",
+      "type": "1024"
+    },
+    {
+      "gameID": 36950,
+      "icon": "002000-002987.png",
+      "name": "Fire's Reply",
+      "type": "128"
+    },
+    {
+      "gameID": 7399,
+      "icon": "002000-002588.png",
+      "name": "Mirage Dive",
+      "type": "128"
+    },
+    {
+      "gameID": 1000102,
+      "icon": "210000-210206.png",
+      "name": "Mantra",
+      "type": "1"
+    },
+    {
+      "gameID": 36954,
+      "icon": "002000-002076.png",
+      "name": "Lance Barrage",
+      "type": "128"
+    },
+    {
+      "gameID": 37923,
+      "icon": "000000-000405.png",
+      "name": "Knuckle Sandwich",
+      "type": "128"
+    },
+    {
+      "gameID": 25750,
+      "icon": "002000-002954.png",
+      "name": "Blade of Valor",
+      "type": "1024"
+    },
+    {
+      "gameID": 1003831,
+      "icon": "213000-213052.png",
+      "name": "Blade of Honor Ready",
+      "type": "1"
+    },
+    {
+      "gameID": 83,
+      "icon": "000000-000304.png",
+      "name": "Life Surge",
+      "type": "1"
+    },
+    {
+      "gameID": 1000116,
+      "icon": "210000-210302.png",
+      "name": "Life Surge",
+      "type": "8"
+    },
+    {
+      "gameID": 37027,
+      "icon": "003000-003111.png",
+      "name": "The Bole",
+      "type": "1"
+    },
+    {
+      "gameID": 1001966,
+      "icon": "219000-219731.png",
+      "name": "Summon Order IV",
+      "type": "1"
+    },
+    {
+      "gameID": 7441,
+      "icon": "003000-003143.png",
+      "name": "Stellar Explosion",
+      "type": "1024"
+    },
+    {
+      "gameID": 1003901,
+      "icon": "212000-212571.png",
+      "name": "Wrathful",
+      "type": "1"
+    },
+    {
+      "gameID": 36922,
+      "icon": "002000-002956.png",
+      "name": "Blade of Honor",
+      "type": "1024"
+    },
+    {
+      "gameID": 1003890,
+      "icon": "213000-213205.png",
+      "name": "The Bole",
+      "type": "1"
+    },
+    {
+      "gameID": 25873,
+      "icon": "003000-003561.png",
+      "name": "Exaltation",
+      "type": "1"
+    },
+    {
+      "gameID": 3560,
+      "icon": "002000-002608.png",
+      "name": "Iron Jaws",
+      "type": "128"
+    },
+    {
+      "gameID": 36923,
+      "icon": "002000-002573.png",
+      "name": "Damnation",
+      "type": "1"
+    },
+    {
+      "gameID": 36920,
+      "icon": "002000-002524.png",
+      "name": "Guardian",
+      "type": "1"
+    },
+    {
+      "gameID": 1002717,
+      "icon": "213000-213262.png",
+      "name": "Exaltation",
+      "type": "8"
+    },
+    {
+      "gameID": 25771,
+      "icon": "002000-002595.png",
+      "name": "Heavens' Thrust",
+      "type": "128"
+    },
+    {
+      "gameID": 1003832,
+      "icon": "212000-212568.png",
+      "name": "Damnation",
+      "type": "128"
+    },
+    {
+      "gameID": 1003829,
+      "icon": "213000-213050.png",
+      "name": "Guardian",
+      "type": "1"
+    },
+    {
+      "gameID": 1003830,
+      "icon": "213000-213051.png",
+      "name": "Guardian's Will",
+      "type": "8"
+    },
+    {
+      "gameID": 7531,
+      "icon": "000000-000801.png",
+      "name": "Rampart",
+      "type": "1"
+    },
+    {
+      "gameID": 3579,
+      "icon": "002000-002682.png",
+      "name": "Ruin III",
+      "type": "1024"
+    },
+    {
+      "gameID": 3538,
+      "icon": "002000-002506.png",
+      "name": "Goring Blade",
+      "type": "128"
+    },
+    {
+      "gameID": 166,
+      "icon": "000000-000510.png",
+      "name": "Aetherflow",
+      "type": "1"
+    },
+    {
+      "gameID": 1001191,
+      "icon": "213000-213911.png",
+      "name": "Rampart",
+      "type": "1"
+    },
+    {
+      "gameID": 16556,
+      "icon": "003000-003556.png",
+      "name": "Celestial Intersection",
+      "type": "8"
+    },
+    {
+      "gameID": 1001889,
+      "icon": "213000-213250.png",
+      "name": "Intersection",
+      "type": "8"
+    },
+    {
+      "gameID": 25753,
+      "icon": "002000-002571.png",
+      "name": "Primal Rend",
+      "type": "128"
+    },
+    {
+      "gameID": 1003834,
+      "icon": "212000-212569.png",
+      "name": "Primal Ruination Ready",
+      "type": "1"
+    },
+    {
+      "gameID": 25746,
+      "icon": "002000-002950.png",
+      "name": "Holy Sheltron",
+      "type": "1"
+    },
+    {
+      "gameID": 1002674,
+      "icon": "212000-212515.png",
+      "name": "Holy Sheltron",
+      "type": "1"
+    },
+    {
+      "gameID": 1002675,
+      "icon": "212000-212516.png",
+      "name": "Knight's Resolve",
+      "type": "1"
+    },
+    {
+      "gameID": 1002676,
+      "icon": "212000-212517.png",
+      "name": "Knight's Benediction",
+      "type": "8"
+    },
+    {
+      "gameID": 500001,
+      "icon": "000000-000405.png",
+      "name": "Combined HoTs",
+      "type": "8"
+    },
+    {
+      "gameID": 3554,
+      "icon": "002000-002582.png",
+      "name": "Fang and Claw",
+      "type": "128"
+    },
+    {
+      "gameID": 25751,
+      "icon": "002000-002569.png",
+      "name": "Bloodwhetting",
+      "type": "1"
+    },
+    {
+      "gameID": 25838,
+      "icon": "002000-002772.png",
+      "name": "Summon Ifrit II",
+      "type": "1"
+    },
+    {
+      "gameID": 1002724,
+      "icon": "212000-212696.png",
+      "name": "Ifrit's Favor",
+      "type": "1"
+    },
+    {
+      "gameID": 1002678,
+      "icon": "212000-212562.png",
+      "name": "Bloodwhetting",
+      "type": "8"
+    },
+    {
+      "gameID": 1002679,
+      "icon": "212000-212563.png",
+      "name": "Stem the Flow",
+      "type": "1"
+    },
+    {
+      "gameID": 1002680,
+      "icon": "212000-212564.png",
+      "name": "Stem the Tide",
+      "type": "8"
+    },
+    {
+      "gameID": 36924,
+      "icon": "002000-002574.png",
+      "name": "Primal Wrath",
+      "type": "128"
+    },
+    {
+      "gameID": 1003900,
+      "icon": "212000-212570.png",
+      "name": "Primeval Impulse",
+      "type": "8"
+    },
+    {
+      "gameID": 16460,
+      "icon": "002000-002519.png",
+      "name": "Atonement",
+      "type": "128"
+    },
+    {
+      "gameID": 37012,
+      "icon": "002000-002879.png",
+      "name": "Baneful Impaction",
+      "type": "1"
+    },
+    {
+      "gameID": 1003827,
+      "icon": "212000-212523.png",
+      "name": "Supplication Ready",
+      "type": "1"
+    },
+    {
+      "gameID": 37924,
+      "icon": "000000-000405.png",
+      "name": "Knuckle Sandwich",
+      "type": "128"
+    },
+    {
+      "gameID": 36925,
+      "icon": "002000-002050.png",
+      "name": "Primal Ruination",
+      "type": "128"
+    },
+    {
+      "gameID": 1003883,
+      "icon": "212000-212819.png",
+      "name": "Baneful Impaction",
+      "type": "64"
+    },
+    {
+      "gameID": 37013,
+      "icon": "002000-002880.png",
+      "name": "Concitation",
+      "type": "8"
+    },
+    {
+      "gameID": 25852,
+      "icon": "000000-000405.png",
+      "name": "Inferno",
+      "type": "1024"
+    },
+    {
+      "gameID": 25835,
+      "icon": "002000-002769.png",
+      "name": "Crimson Cyclone",
+      "type": "1024"
+    },
+    {
+      "gameID": 1004403,
+      "icon": "212000-212752.png",
+      "name": "Crimson Strike Ready",
+      "type": "1"
+    },
+    {
+      "gameID": 36918,
+      "icon": "002000-002522.png",
+      "name": "Supplication",
+      "type": "128"
+    },
+    {
+      "gameID": 1003828,
+      "icon": "212000-212524.png",
+      "name": "Sepulchre Ready",
+      "type": "1"
+    },
+    {
+      "gameID": 25885,
+      "icon": "002000-002779.png",
+      "name": "Crimson Strike",
+      "type": "1024"
+    },
+    {
+      "gameID": 25773,
+      "icon": "002000-002597.png",
+      "name": "Wyrmwind Thrust",
+      "type": "128"
+    },
+    {
+      "gameID": 36919,
+      "icon": "002000-002523.png",
+      "name": "Sepulchre",
+      "type": "128"
+    },
+    {
+      "gameID": 61,
+      "icon": "000000-000213.png",
+      "name": "Twin Snakes",
+      "type": "128"
+    },
+    {
+      "gameID": 1000109,
+      "icon": "210000-210214.png",
+      "name": "Coeurl Form",
+      "type": "1"
+    },
+    {
+      "gameID": 37876,
+      "icon": "000000-000405.png",
+      "name": "unknown_93f4",
+      "type": "1"
+    },
+    {
+      "gameID": 25823,
+      "icon": "002000-002760.png",
+      "name": "Ruby Rite",
+      "type": "1024"
+    },
+    {
+      "gameID": 66,
+      "icon": "000000-000204.png",
+      "name": "Demolish",
+      "type": "128"
+    },
+    {
+      "gameID": 1000107,
+      "icon": "210000-210212.png",
+      "name": "Opo-Opo Form",
+      "type": "1"
+    },
+    {
+      "gameID": 37850,
+      "icon": "000000-000405.png",
+      "name": "Quadruple Lariat",
+      "type": "1"
+    },
+    {
+      "gameID": 37866,
+      "icon": "000000-000405.png",
+      "name": "Quadruple Lariat",
+      "type": "1"
+    },
+    {
+      "gameID": 7562,
+      "icon": "000000-000865.png",
+      "name": "Lucid Dreaming",
+      "type": "1"
+    },
+    {
+      "gameID": 1001204,
+      "icon": "213000-213909.png",
+      "name": "Lucid Dreaming",
+      "type": "1"
+    },
+    {
+      "gameID": 42,
+      "icon": "000000-000258.png",
+      "name": "Storm's Path",
+      "type": "128"
+    },
+    {
+      "gameID": 25874,
+      "icon": "003000-003562.png",
+      "name": "Macrocosmos",
+      "type": "1024"
+    },
+    {
+      "gameID": 1002718,
+      "icon": "213000-213263.png",
+      "name": "Macrocosmos",
+      "type": "8"
+    },
+    {
+      "gameID": 36946,
+      "icon": "002000-002983.png",
+      "name": "Rising Raptor",
+      "type": "128"
+    },
+    {
+      "gameID": 25839,
+      "icon": "002000-002773.png",
+      "name": "Summon Titan II",
+      "type": "1"
+    },
+    {
+      "gameID": 7549,
+      "icon": "000000-000828.png",
+      "name": "Feint",
+      "type": "1"
+    },
+    {
+      "gameID": 1001195,
+      "icon": "213000-213904.png",
+      "name": "Feint",
+      "type": "1"
+    },
+    {
+      "gameID": 36947,
+      "icon": "002000-002984.png",
+      "name": "Pouncing Coeurl",
+      "type": "128"
+    },
+    {
+      "gameID": 25853,
+      "icon": "000000-000405.png",
+      "name": "Earthen Fury",
+      "type": "1024"
+    },
+    {
+      "gameID": 25824,
+      "icon": "002000-002761.png",
+      "name": "Topaz Rite",
+      "type": "1024"
+    },
+    {
+      "gameID": 1002853,
+      "icon": "212000-212698.png",
+      "name": "Titan's Favor",
+      "type": "1"
+    },
+    {
+      "gameID": 25836,
+      "icon": "002000-002770.png",
+      "name": "Mountain Buster",
+      "type": "1024"
+    },
+    {
+      "gameID": 37853,
+      "icon": "000000-000405.png",
+      "name": "Blazing Lariat",
+      "type": "128"
+    },
+    {
+      "gameID": 1002940,
+      "icon": "215000-215053.png",
+      "name": "Physical Vulnerability Up",
+      "type": "1"
+    },
+    {
+      "gameID": 17870,
+      "icon": "000000-000502.png",
+      "name": "Ruin II",
+      "type": "1024"
+    },
+    {
+      "gameID": 1001915,
+      "icon": "219000-219701.png",
+      "name": "Summon Order",
+      "type": "1"
+    },
+    {
+      "gameID": 16537,
+      "icon": "002000-002852.png",
+      "name": "Whispering Dawn",
+      "type": "1"
+    },
+    {
+      "gameID": 803,
+      "icon": "002000-002827.png",
+      "name": "Whispering Dawn",
+      "type": "1"
+    },
+    {
+      "gameID": 37856,
+      "icon": "000000-000405.png",
+      "name": "Quadroboom Dive",
+      "type": "1"
+    },
+    {
+      "gameID": 37877,
+      "icon": "000000-000405.png",
+      "name": "Quadroboom Dive",
+      "type": "1024"
+    },
+    {
+      "gameID": 25875,
+      "icon": "003000-003563.png",
+      "name": "Microcosmos",
+      "type": "1"
+    },
+    {
+      "gameID": 1000315,
+      "icon": "212000-212826.png",
+      "name": "Whispering Dawn",
+      "type": "8"
+    },
+    {
+      "gameID": 16543,
+      "icon": "002000-002854.png",
+      "name": "Fey Blessing",
+      "type": "1"
+    },
+    {
+      "gameID": 16544,
+      "icon": "002000-002855.png",
+      "name": "Fey Blessing",
+      "type": "8"
+    },
+    {
+      "gameID": 3,
+      "icon": "000000-000104.png",
+      "name": "Sprint",
+      "type": "1"
+    },
+    {
+      "gameID": 1000050,
+      "icon": "210000-210101.png",
+      "name": "Sprint",
+      "type": "1"
+    },
+    {
+      "gameID": 7394,
+      "icon": "002000-002537.png",
+      "name": "Riddle of Earth",
+      "type": "1"
+    },
+    {
+      "gameID": 1001179,
+      "icon": "212000-212527.png",
+      "name": "Riddle of Earth",
+      "type": "1"
+    },
+    {
+      "gameID": 1003841,
+      "icon": "212000-212539.png",
+      "name": "Earth's Rumination",
+      "type": "1"
+    },
+    {
+      "gameID": 114,
+      "icon": "002000-002602.png",
+      "name": "Mage's Ballad",
+      "type": "1"
+    },
+    {
+      "gameID": 1002217,
+      "icon": "212000-212603.png",
+      "name": "Mage's Ballad",
+      "type": "1"
+    },
+    {
+      "gameID": 25840,
+      "icon": "002000-002774.png",
+      "name": "Summon Garuda II",
+      "type": "1"
+    },
+    {
+      "gameID": 1002725,
+      "icon": "212000-212697.png",
+      "name": "Garuda's Favor",
+      "type": "1"
+    },
+    {
+      "gameID": 36951,
+      "icon": "002000-002598.png",
+      "name": "Winged Glide",
+      "type": "1"
+    },
+    {
+      "gameID": 1001180,
+      "icon": "212000-212531.png",
+      "name": "Earth's Resolve",
+      "type": "8"
+    },
+    {
+      "gameID": 25854,
+      "icon": "000000-000405.png",
+      "name": "Aerial Blast",
+      "type": "1024"
+    },
+    {
+      "gameID": 25825,
+      "icon": "002000-002762.png",
+      "name": "Emerald Rite",
+      "type": "1024"
+    },
+    {
+      "gameID": 37859,
+      "icon": "000000-000405.png",
+      "name": "Diveboom",
+      "type": "128"
+    },
+    {
+      "gameID": 36944,
+      "icon": "002000-002549.png",
+      "name": "Earth's Reply",
+      "type": "8"
+    },
+    {
+      "gameID": 7445,
+      "icon": "003000-003146.png",
+      "name": "Lady of Crowns",
+      "type": "8"
+    },
+    {
+      "gameID": 25837,
+      "icon": "002000-002771.png",
+      "name": "Slipstream",
+      "type": "1024"
+    },
+    {
+      "gameID": 16557,
+      "icon": "003000-003550.png",
+      "name": "Horoscope",
+      "type": "1"
+    },
+    {
+      "gameID": 1001890,
+      "icon": "213000-213251.png",
+      "name": "Horoscope",
+      "type": "1"
+    },
+    {
+      "gameID": 37030,
+      "icon": "003000-003567.png",
+      "name": "Helios Conjunction",
+      "type": "8"
+    },
+    {
+      "gameID": 3540,
+      "icon": "002000-002508.png",
+      "name": "Divine Veil",
+      "type": "8"
+    },
+    {
+      "gameID": 1001362,
+      "icon": "212000-212509.png",
+      "name": "Divine Veil",
+      "type": "8"
+    },
+    {
+      "gameID": 1001891,
+      "icon": "213000-213252.png",
+      "name": "Horoscope Helios",
+      "type": "8"
+    },
+    {
+      "gameID": 1003894,
+      "icon": "213000-213265.png",
+      "name": "Helios Conjunction",
+      "type": "8"
+    },
+    {
+      "gameID": 7426,
+      "icon": "002000-002686.png",
+      "name": "Ruin IV",
+      "type": "1024"
+    },
+    {
+      "gameID": 1002706,
+      "icon": "212000-212695.png",
+      "name": "Slipstream",
+      "type": "64"
+    },
+    {
+      "gameID": 16545,
+      "icon": "002000-002850.png",
+      "name": "Summon Seraph",
+      "type": "1"
+    },
+    {
+      "gameID": 16548,
+      "icon": "002000-002847.png",
+      "name": "Seraphic Veil",
+      "type": "8"
+    },
+    {
+      "gameID": 1001917,
+      "icon": "212000-212848.png",
+      "name": "Seraphic Veil",
+      "type": "8"
+    },
+    {
+      "gameID": 16546,
+      "icon": "002000-002851.png",
+      "name": "Consolation",
+      "type": "1"
+    },
+    {
+      "gameID": 16547,
+      "icon": "002000-002846.png",
+      "name": "Consolation",
+      "type": "8"
+    },
+    {
+      "gameID": 37028,
+      "icon": "003000-003114.png",
+      "name": "The Ewer",
+      "type": "1"
+    },
+    {
+      "gameID": 7427,
+      "icon": "002000-002691.png",
+      "name": "Summon Bahamut",
+      "type": "1"
+    },
+    {
+      "gameID": 1003891,
+      "icon": "213000-213208.png",
+      "name": "The Ewer",
+      "type": "8"
+    },
+    {
+      "gameID": 37017,
+      "icon": "003000-003564.png",
+      "name": "Astral Draw",
+      "type": "1"
+    },
+    {
+      "gameID": 25820,
+      "icon": "002000-002757.png",
+      "name": "Astral Impulse",
+      "type": "1024"
+    },
+    {
+      "gameID": 7428,
+      "icon": "002000-002692.png",
+      "name": "Wyrmwave",
+      "type": "1024"
+    },
+    {
+      "gameID": 7429,
+      "icon": "002000-002693.png",
+      "name": "Enkindle Bahamut",
+      "type": "1"
+    },
+    {
+      "gameID": 7449,
+      "icon": "002000-002694.png",
+      "name": "Akh Morn",
+      "type": "1024"
+    },
+    {
+      "gameID": 37883,
+      "icon": "000000-000405.png",
+      "name": "Barbarous Barrage",
+      "type": "1"
+    },
+    {
+      "gameID": 3582,
+      "icon": "002000-002685.png",
+      "name": "Deathflare",
+      "type": "1024"
+    },
+    {
+      "gameID": 16496,
+      "icon": "002000-002619.png",
+      "name": "Apex Arrow",
+      "type": "128"
+    },
+    {
+      "gameID": 1002692,
+      "icon": "212000-212621.png",
+      "name": "Blast Arrow Ready",
+      "type": "1"
+    },
+    {
+      "gameID": 25768,
+      "icon": "002000-002980.png",
+      "name": "Rising Phoenix",
+      "type": "128"
+    },
+    {
+      "gameID": 25784,
+      "icon": "002000-002621.png",
+      "name": "Blast Arrow",
+      "type": "128"
+    },
+    {
+      "gameID": 116,
+      "icon": "002000-002603.png",
+      "name": "Army's Paeon",
+      "type": "1"
+    },
+    {
+      "gameID": 1002218,
+      "icon": "212000-212605.png",
+      "name": "Army's Paeon",
+      "type": "1"
+    },
+    {
+      "gameID": 7546,
+      "icon": "000000-000830.png",
+      "name": "True North",
+      "type": "1"
+    },
+    {
+      "gameID": 1001250,
+      "icon": "213000-213903.png",
+      "name": "True North",
+      "type": "1"
+    },
+    {
+      "gameID": 3595,
+      "icon": "003000-003127.png",
+      "name": "Aspected Benefic",
+      "type": "8"
+    },
+    {
+      "gameID": 1000835,
+      "icon": "213000-213215.png",
+      "name": "Aspected Benefic",
+      "type": "8"
+    },
+    {
+      "gameID": 38542,
+      "icon": "000000-000405.png",
+      "name": "Explosion",
+      "type": "1024"
+    },
+    {
+      "gameID": 37886,
+      "icon": "000000-000405.png",
+      "name": "Murderous Mist",
+      "type": "1024"
+    },
+    {
+      "gameID": 37884,
+      "icon": "000000-000405.png",
+      "name": "Explosion",
+      "type": "1024"
+    },
+    {
+      "gameID": 38543,
+      "icon": "000000-000405.png",
+      "name": "Explosion",
+      "type": "1024"
+    },
+    {
+      "gameID": 40,
+      "icon": "000000-000263.png",
+      "name": "Thrill of Battle",
+      "type": "8"
+    },
+    {
+      "gameID": 7561,
+      "icon": "000000-000866.png",
+      "name": "Swiftcast",
+      "type": "1"
+    },
+    {
+      "gameID": 1000167,
+      "icon": "210000-210454.png",
+      "name": "Swiftcast",
+      "type": "1"
+    },
+    {
+      "gameID": 1000087,
+      "icon": "210000-210254.png",
+      "name": "Thrill of Battle",
+      "type": "1"
+    },
+    {
+      "gameID": 7388,
+      "icon": "002000-002563.png",
+      "name": "Shake It Off",
+      "type": "8"
+    },
+    {
+      "gameID": 1001457,
+      "icon": "212000-212557.png",
+      "name": "Shake It Off",
+      "type": "8"
+    },
+    {
+      "gameID": 1002108,
+      "icon": "212000-212567.png",
+      "name": "Shake It Off (Over Time)",
+      "type": "8"
+    },
+    {
+      "gameID": 173,
+      "icon": "000000-000511.png",
+      "name": "Resurrection",
+      "type": "1"
+    },
+    {
+      "gameID": 3603,
+      "icon": "003000-003132.png",
+      "name": "Ascend",
+      "type": "1"
+    },
+    {
+      "gameID": 1000148,
+      "icon": "210000-210406.png",
+      "name": "Raise",
+      "type": "1"
+    },
+    {
+      "gameID": 1000043,
+      "icon": "215000-215010.png",
+      "name": "Weakness",
+      "type": "1"
+    },
+    {
+      "gameID": 1000418,
+      "icon": "215000-215273.png",
+      "name": "Transcendent",
+      "type": "1"
+    },
+    {
+      "gameID": 37895,
+      "icon": "000000-000405.png",
+      "name": "Doping Draught",
+      "type": "1"
+    },
+    {
+      "gameID": 3614,
+      "icon": "003000-003141.png",
+      "name": "Essential Dignity",
+      "type": "8"
+    },
+    {
+      "gameID": 1004022,
+      "icon": "218000-218917.png",
+      "name": "Dangerously Doped",
+      "type": "1"
+    },
+    {
+      "gameID": 1001932,
+      "icon": "212000-212619.png",
+      "name": "Army's Muse",
+      "type": "1"
+    },
+    {
+      "gameID": 25769,
+      "icon": "002000-002981.png",
+      "name": "Phantom Rush",
+      "type": "128"
+    },
+    {
+      "gameID": 7434,
+      "icon": "002000-002813.png",
+      "name": "Excogitation",
+      "type": "1"
+    },
+    {
+      "gameID": 37849,
+      "icon": "000000-000405.png",
+      "name": "Octuple Lariat",
+      "type": "1"
+    },
+    {
+      "gameID": 37865,
+      "icon": "000000-000405.png",
+      "name": "Octuple Lariat",
+      "type": "1024"
+    },
+    {
+      "gameID": 1001220,
+      "icon": "212000-212808.png",
+      "name": "Excogitation",
+      "type": "8"
+    },
+    {
+      "gameID": 3613,
+      "icon": "003000-003140.png",
+      "name": "Collective Unconscious",
+      "type": "1"
+    },
+    {
+      "gameID": 1000849,
+      "icon": "213000-213226.png",
+      "name": "Collective Unconscious",
+      "type": "1"
+    },
+    {
+      "gameID": 1000848,
+      "icon": "213000-213227.png",
+      "name": "Collective Unconscious",
+      "type": "1"
+    },
+    {
+      "gameID": 1000956,
+      "icon": "213000-213225.png",
+      "name": "Wheel of Fortune",
+      "type": "8"
+    },
+    {
+      "gameID": 37852,
+      "icon": "000000-000405.png",
+      "name": "Blazing Lariat",
+      "type": "128"
+    },
+    {
+      "gameID": 36997,
+      "icon": "002000-002787.png",
+      "name": "Lux Solaris",
+      "type": "8"
+    },
+    {
+      "gameID": 3583,
+      "icon": "002000-002806.png",
+      "name": "Indomitability",
+      "type": "8"
+    },
+    {
+      "gameID": 37855,
+      "icon": "000000-000405.png",
+      "name": "Octoboom Dive",
+      "type": "1"
+    },
+    {
+      "gameID": 37869,
+      "icon": "000000-000405.png",
+      "name": "Octoboom Dive",
+      "type": "1024"
+    },
+    {
+      "gameID": 7548,
+      "icon": "000000-000822.png",
+      "name": "Arm's Length",
+      "type": "1"
+    },
+    {
+      "gameID": 7559,
+      "icon": "000000-000869.png",
+      "name": "Surecast",
+      "type": "1"
+    },
+    {
+      "gameID": 1000160,
+      "icon": "210000-210452.png",
+      "name": "Surecast",
+      "type": "1"
+    },
+    {
+      "gameID": 1001209,
+      "icon": "213000-213915.png",
+      "name": "Arm's Length",
+      "type": "1"
+    },
+    {
+      "gameID": 37858,
+      "icon": "000000-000405.png",
+      "name": "Diveboom",
+      "type": "128"
+    },
+    {
+      "gameID": 7405,
+      "icon": "002000-002612.png",
+      "name": "Troubadour",
+      "type": "1"
+    },
+    {
+      "gameID": 1001934,
+      "icon": "212000-212615.png",
+      "name": "Troubadour",
+      "type": "1"
+    },
+    {
+      "gameID": 16559,
+      "icon": "003000-003552.png",
+      "name": "Neutral Sect",
+      "type": "1"
+    },
+    {
+      "gameID": 1003895,
+      "icon": "213000-213266.png",
+      "name": "Suntouched",
+      "type": "1"
+    },
+    {
+      "gameID": 1001892,
+      "icon": "213000-213253.png",
+      "name": "Neutral Sect",
+      "type": "1"
+    },
+    {
+      "gameID": 7541,
+      "icon": "000000-000821.png",
+      "name": "Second Wind",
+      "type": "8"
+    },
+    {
+      "gameID": 1001921,
+      "icon": "213000-213255.png",
+      "name": "Neutral Sect",
+      "type": "8"
+    },
+    {
+      "gameID": 16558,
+      "icon": "003000-003551.png",
+      "name": "Horoscope",
+      "type": "8"
+    },
+    {
+      "gameID": 37031,
+      "icon": "003000-003109.png",
+      "name": "Sun Sign",
+      "type": "1"
+    },
+    {
+      "gameID": 1003896,
+      "icon": "213000-213267.png",
+      "name": "Sun Sign",
+      "type": "1"
+    },
+    {
+      "gameID": 43,
+      "icon": "000000-000266.png",
+      "name": "Holmgang",
+      "type": "1"
+    },
+    {
+      "gameID": 1000409,
+      "icon": "210000-210266.png",
+      "name": "Holmgang",
+      "type": "8"
+    },
+    {
+      "gameID": 34577600,
+      "icon": "216000-216203.png",
+      "name": "Medicated",
+      "type": "1"
+    },
+    {
+      "gameID": 3552,
+      "icon": "002000-002560.png",
+      "name": "Equilibrium",
+      "type": "8"
+    },
+    {
+      "gameID": 1002681,
+      "icon": "212000-212565.png",
+      "name": "Equilibrium",
+      "type": "8"
+    },
+    {
+      "gameID": 3586,
+      "icon": "002000-002809.png",
+      "name": "Emergency Tactics",
+      "type": "8"
+    },
+    {
+      "gameID": 1000792,
+      "icon": "212000-212806.png",
+      "name": "Emergency Tactics",
+      "type": "1"
+    },
+    {
+      "gameID": 37863,
+      "icon": "000000-000405.png",
+      "name": "Tag Team",
+      "type": "1"
+    },
+    {
+      "gameID": 37862,
+      "icon": "000000-000405.png",
+      "name": "Chain Deathmatch",
+      "type": "1"
+    },
+    {
+      "gameID": 37861,
+      "icon": "000000-000405.png",
+      "name": "Chain Deathmatch",
+      "type": "1"
+    },
+    {
+      "gameID": 25868,
+      "icon": "002000-002878.png",
+      "name": "Expedient",
+      "type": "1"
+    },
+    {
+      "gameID": 1002711,
+      "icon": "212000-212816.png",
+      "name": "Desperate Measures",
+      "type": "1"
+    },
+    {
+      "gameID": 1002712,
+      "icon": "212000-212817.png",
+      "name": "Expedience",
+      "type": "1"
+    },
+    {
+      "gameID": 1004019,
+      "icon": "214000-214132.png",
+      "name": "Chain Deathmatch",
+      "type": "1"
+    },
+    {
+      "gameID": 39724,
+      "icon": "000000-000405.png",
+      "name": "Lariat Combo",
+      "type": "1"
+    },
+    {
+      "gameID": 39726,
+      "icon": "000000-000405.png",
+      "name": "Lariat Combo",
+      "type": "1"
+    },
+    {
+      "gameID": 39733,
+      "icon": "000000-000405.png",
+      "name": "Lariat Combo",
+      "type": "128"
+    },
+    {
+      "gameID": 39732,
+      "icon": "000000-000405.png",
+      "name": "Lariat Combo",
+      "type": "128"
+    },
+    {
+      "gameID": 39809,
+      "icon": "000000-000405.png",
+      "name": "unknown_9b81",
+      "type": "1"
+    },
+    {
+      "gameID": 39741,
+      "icon": "000000-000405.png",
+      "name": "unknown_9b3d",
+      "type": "1"
+    },
+    {
+      "gameID": 1000044,
+      "icon": "215000-215011.png",
+      "name": "Brink of Death",
+      "type": "1"
+    },
+    {
+      "gameID": 1002911,
+      "icon": "215000-215520.png",
+      "name": "Damage Down",
+      "type": "1"
+    },
+    {
+      "gameID": 39728,
+      "icon": "000000-000405.png",
+      "name": "Lariat Combo",
+      "type": "1"
+    },
+    {
+      "gameID": 39730,
+      "icon": "000000-000405.png",
+      "name": "Lariat Combo",
+      "type": "1"
+    },
+    {
+      "gameID": 39735,
+      "icon": "000000-000405.png",
+      "name": "Lariat Combo",
+      "type": "128"
+    },
+    {
+      "gameID": 39734,
+      "icon": "000000-000405.png",
+      "name": "Lariat Combo",
+      "type": "128"
+    },
+    {
+      "gameID": 16553,
+      "icon": "003000-003142.png",
+      "name": "Celestial Opposition",
+      "type": "8"
+    },
+    {
+      "gameID": 39886,
+      "icon": "000000-000405.png",
+      "name": "Punishing Chain",
+      "type": "32"
+    },
+    {
+      "gameID": 1001879,
+      "icon": "213000-213246.png",
+      "name": "Opposition",
+      "type": "8"
+    },
+    {
+      "gameID": 39742,
+      "icon": "000000-000405.png",
+      "name": "unknown_9b3e",
+      "type": "1"
+    },
+    {
+      "gameID": 37851,
+      "icon": "000000-000405.png",
+      "name": "Quadruple Lariat",
+      "type": "1"
+    },
+    {
+      "gameID": 37867,
+      "icon": "000000-000405.png",
+      "name": "Quadruple Lariat",
+      "type": "1"
+    },
+    {
+      "gameID": 7542,
+      "icon": "000000-000823.png",
+      "name": "Bloodbath",
+      "type": "1"
+    },
+    {
+      "gameID": 1000084,
+      "icon": "213000-213913.png",
+      "name": "Bloodbath",
+      "type": "8"
+    },
+    {
+      "gameID": 16464,
+      "icon": "002000-002567.png",
+      "name": "Nascent Flash",
+      "type": "1"
+    },
+    {
+      "gameID": 3600,
+      "icon": "003000-003129.png",
+      "name": "Helios",
+      "type": "8"
+    },
+    {
+      "gameID": 1001858,
+      "icon": "212000-212559.png",
+      "name": "Nascent Glint",
+      "type": "8"
+    },
+    {
+      "gameID": 1001857,
+      "icon": "212000-212558.png",
+      "name": "Nascent Flash",
+      "type": "8"
+    },
+    {
+      "gameID": 37894,
+      "icon": "000000-000405.png",
+      "name": "Final Fusedown",
+      "type": "1"
+    },
+    {
+      "gameID": 1004015,
+      "icon": "000000-000405.png",
+      "name": "Unknown_FAF",
+      "type": "1"
+    },
+    {
+      "gameID": 1004016,
+      "icon": "000000-000405.png",
+      "name": "Unknown_FB0",
+      "type": "1"
+    },
+    {
+      "gameID": 1004024,
+      "icon": "000000-000405.png",
+      "name": "Unknown_FB8",
+      "type": "1"
+    },
+    {
+      "gameID": 1004025,
+      "icon": "000000-000405.png",
+      "name": "Unknown_FB9",
+      "type": "1"
+    },
+    {
+      "gameID": 1004017,
+      "icon": "000000-000405.png",
+      "name": "Unknown_FB1",
+      "type": "1"
+    },
+    {
+      "gameID": 1004018,
+      "icon": "000000-000405.png",
+      "name": "Unknown_FB2",
+      "type": "1"
+    },
+    {
+      "gameID": 1004026,
+      "icon": "000000-000405.png",
+      "name": "Unknown_FBA",
+      "type": "1"
+    },
+    {
+      "gameID": 1004027,
+      "icon": "000000-000405.png",
+      "name": "Unknown_FBB",
+      "type": "1"
+    },
+    {
+      "gameID": 37889,
+      "icon": "000000-000405.png",
+      "name": "Self-Destruct",
+      "type": "1024"
+    },
+    {
+      "gameID": 37890,
+      "icon": "000000-000405.png",
+      "name": "Self-Destruct",
+      "type": "1024"
+    },
+    {
+      "gameID": 190,
+      "icon": "000000-000518.png",
+      "name": "Physick",
+      "type": "8"
+    },
+    {
+      "gameID": 37892,
+      "icon": "000000-000405.png",
+      "name": "Explosion",
+      "type": "1024"
+    },
+    {
+      "gameID": 1002941,
+      "icon": "215000-215057.png",
+      "name": "Magic Vulnerability Up",
+      "type": "1"
+    },
+    {
+      "gameID": 37893,
+      "icon": "000000-000405.png",
+      "name": "Explosion",
+      "type": "1024"
+    },
+    {
+      "gameID": 16473,
+      "icon": "002000-002544.png",
+      "name": "Four-Point Fury",
+      "type": "1"
+    },
+    {
+      "gameID": 70,
+      "icon": "002000-002529.png",
+      "name": "Rockbreaker",
+      "type": "1"
+    },
+    {
+      "gameID": 37848,
+      "icon": "000000-000405.png",
+      "name": "Octuple Lariat",
+      "type": "1"
+    },
+    {
+      "gameID": 37864,
+      "icon": "000000-000405.png",
+      "name": "Octuple Lariat",
+      "type": "128"
+    },
+    {
+      "gameID": 189,
+      "icon": "002000-002805.png",
+      "name": "Lustrate",
+      "type": "8"
+    },
+    {
+      "gameID": 1001964,
+      "icon": "219000-219711.png",
+      "name": "Summon Order II",
+      "type": "1"
+    },
+    {
+      "gameID": 16538,
+      "icon": "002000-002853.png",
+      "name": "Fey Illumination",
+      "type": "1"
+    },
+    {
+      "gameID": 805,
+      "icon": "002000-002829.png",
+      "name": "Fey Illumination",
+      "type": "1"
+    },
+    {
+      "gameID": 1000317,
+      "icon": "212000-212828.png",
+      "name": "Fey Illumination",
+      "type": "1"
+    },
+    {
+      "gameID": 94,
+      "icon": "002000-002577.png",
+      "name": "Elusive Jump",
+      "type": "1"
+    },
+    {
+      "gameID": 1001870,
+      "icon": "212000-212590.png",
+      "name": "Enhanced Piercing Talon",
+      "type": "1"
+    },
+    {
+      "gameID": 16474,
+      "icon": "002000-002545.png",
+      "name": "Enlightenment",
+      "type": "128"
+    },
+    {
+      "gameID": 22,
+      "icon": "000000-000167.png",
+      "name": "Bulwark",
+      "type": "1"
+    },
+    {
+      "gameID": 1000077,
+      "icon": "210000-210156.png",
+      "name": "Bulwark",
+      "type": "1"
+    },
+    {
+      "gameID": 25831,
+      "icon": "002000-002765.png",
+      "name": "Summon Phoenix",
+      "type": "1"
+    },
+    {
+      "gameID": 16517,
+      "icon": "002000-002731.png",
+      "name": "Everlasting Flight",
+      "type": "1"
+    },
+    {
+      "gameID": 25830,
+      "icon": "002000-002764.png",
+      "name": "Rekindle",
+      "type": "8"
+    },
+    {
+      "gameID": 1001868,
+      "icon": "212000-212732.png",
+      "name": "Everlasting Flight",
+      "type": "8"
+    },
+    {
+      "gameID": 1002704,
+      "icon": "212000-212693.png",
+      "name": "Rekindle",
+      "type": "1"
+    },
+    {
+      "gameID": 16514,
+      "icon": "002000-002735.png",
+      "name": "Fountain of Fire",
+      "type": "1024"
+    },
+    {
+      "gameID": 16519,
+      "icon": "002000-002733.png",
+      "name": "Scarlet Flame",
+      "type": "1024"
+    },
+    {
+      "gameID": 16516,
+      "icon": "002000-002737.png",
+      "name": "Enkindle Phoenix",
+      "type": "1"
+    },
+    {
+      "gameID": 16518,
+      "icon": "002000-002732.png",
+      "name": "Revelation",
+      "type": "1024"
+    },
+    {
+      "gameID": 1002705,
+      "icon": "212000-212694.png",
+      "name": "Undying Flame",
+      "type": "8"
+    },
+    {
+      "gameID": 90,
+      "icon": "000000-000315.png",
+      "name": "Piercing Talon",
+      "type": "128"
+    },
+    {
+      "gameID": 24,
+      "icon": "000000-000164.png",
+      "name": "Shield Lob",
+      "type": "128"
+    },
+    {
+      "gameID": 37857,
+      "icon": "000000-000405.png",
+      "name": "Quadroboom Dive",
+      "type": "1"
+    },
+    {
+      "gameID": 37878,
+      "icon": "000000-000405.png",
+      "name": "Quadroboom Dive",
+      "type": "1024"
+    },
+    {
+      "gameID": 37854,
+      "icon": "000000-000405.png",
+      "name": "Octoboom Dive",
+      "type": "1"
+    },
+    {
+      "gameID": 37868,
+      "icon": "000000-000405.png",
+      "name": "Octoboom Dive",
+      "type": "1024"
+    },
+    {
+      "gameID": 7568,
+      "icon": "000000-000884.png",
+      "name": "Esuna",
+      "type": "32"
+    },
+    {
+      "gameID": 7408,
+      "icon": "002000-002615.png",
+      "name": "Nature's Minne",
+      "type": "1"
+    },
+    {
+      "gameID": 1001202,
+      "icon": "212000-212618.png",
+      "name": "Nature's Minne",
+      "type": "1"
+    },
+    {
+      "gameID": 25799,
+      "icon": "002000-002750.png",
+      "name": "Radiant Aegis",
+      "type": "1"
+    },
+    {
+      "gameID": 25841,
+      "icon": "002000-002775.png",
+      "name": "Radiant Aegis",
+      "type": "1"
+    },
+    {
+      "gameID": 1002702,
+      "icon": "212000-212691.png",
+      "name": "Radiant Aegis",
+      "type": "8"
+    },
+    {
+      "gameID": 7385,
+      "icon": "002000-002515.png",
+      "name": "Passage of Arms",
+      "type": "1"
+    },
+    {
+      "gameID": 1001176,
+      "icon": "212000-212513.png",
+      "name": "Arms Up",
+      "type": "1"
+    },
+    {
+      "gameID": 1001175,
+      "icon": "212000-212512.png",
+      "name": "Passage of Arms",
+      "type": "1"
+    },
+    {
+      "gameID": 37870,
+      "icon": "000000-000405.png",
+      "name": "Fusefield",
+      "type": "1"
+    },
+    {
+      "gameID": 1004020,
+      "icon": "214000-214133.png",
+      "name": "Bombarium",
+      "type": "1"
+    },
+    {
+      "gameID": 37871,
+      "icon": "000000-000405.png",
+      "name": "Bombarian Flame",
+      "type": "1"
+    },
+    {
+      "gameID": 37872,
+      "icon": "000000-000405.png",
+      "name": "unknown_93f0",
+      "type": "1"
+    },
+    {
+      "gameID": 1003289,
+      "icon": "214000-214186.png",
+      "name": "Fusefield",
+      "type": "1"
+    },
+    {
+      "gameID": 1003913,
+      "icon": "000000-000405.png",
+      "name": "Unknown_F49",
+      "type": "1"
+    },
+    {
+      "gameID": 37875,
+      "icon": "000000-000405.png",
+      "name": "Mana Explosion",
+      "type": "1024"
+    },
+    {
+      "gameID": 1003065,
+      "icon": "215000-215524.png",
+      "name": "Burns",
+      "type": "1"
+    },
+    {
+      "gameID": 1003066,
+      "icon": "215000-215524.png",
+      "name": "Burns",
+      "type": "1"
+    },
+    {
+      "gameID": 39527,
+      "icon": "000000-000405.png",
+      "name": "Mana Explosion",
+      "type": "32"
+    },
+    {
+      "gameID": 37874,
+      "icon": "000000-000405.png",
+      "name": "Fuseflare",
+      "type": "32"
+    },
+    {
+      "gameID": 37873,
+      "icon": "000000-000405.png",
+      "name": "unknown_93f1",
+      "type": "1"
+    },
+    {
+      "gameID": 7537,
+      "icon": "000000-000810.png",
+      "name": "Shirk",
+      "type": "1"
+    },
+    {
+      "gameID": 37885,
+      "icon": "000000-000405.png",
+      "name": "Unmitigated Explosion",
+      "type": "1024"
+    },
+    {
+      "gameID": 1004149,
+      "icon": "219000-219941.png",
+      "name": "Sustained Damage",
+      "type": "1"
+    },
+    {
+      "gameID": 1002089,
+      "icon": "215000-215007.png",
+      "name": "Poison",
+      "type": "64"
+    },
+    {
+      "gameID": 39921,
+      "icon": "000000-000405.png",
+      "name": "Bomb Out",
+      "type": "32"
+    },
+    {
+      "gameID": 16550,
+      "icon": "002000-002848.png",
+      "name": "Angel's Whisper",
+      "type": "1"
+    },
+    {
+      "gameID": 1001874,
+      "icon": "212000-212846.png",
+      "name": "Angel's Whisper",
+      "type": "8"
+    },
+    {
+      "gameID": 1001933,
+      "icon": "212000-212620.png",
+      "name": "Army's Ethos",
+      "type": "1"
+    },
+    {
+      "gameID": 8324,
+      "icon": "003000-003144.png",
+      "name": "Stellar Detonation",
+      "type": "1"
+    },
+    {
+      "gameID": 7382,
+      "icon": "002000-002512.png",
+      "name": "Intervention",
+      "type": "1"
+    },
+    {
+      "gameID": 1001174,
+      "icon": "212000-212511.png",
+      "name": "Intervention",
+      "type": "1"
+    },
+    {
+      "gameID": 30,
+      "icon": "002000-002502.png",
+      "name": "Hallowed Ground",
+      "type": "1"
+    },
+    {
+      "gameID": 1000082,
+      "icon": "212000-212504.png",
+      "name": "Hallowed Ground",
+      "type": "1"
+    },
+    {
+      "gameID": 3610,
+      "icon": "003000-003128.png",
+      "name": "Benefic II",
+      "type": "8"
+    },
+    {
+      "gameID": 37927,
+      "icon": "000000-000405.png",
+      "name": "Doping Draught",
+      "type": "1"
+    },
+    {
+      "gameID": 1004023,
+      "icon": "214000-214135.png",
+      "name": "Doped and Detonative",
+      "type": "1"
+    },
+    {
+      "gameID": 38738,
+      "icon": "000000-000405.png",
+      "name": "Octoboom Bombarian Special",
+      "type": "1"
+    },
+    {
+      "gameID": 37908,
+      "icon": "000000-000405.png",
+      "name": "Bombarian Special",
+      "type": "128"
+    },
+    {
+      "gameID": 37906,
+      "icon": "000000-000405.png",
+      "name": "Bombarian Special",
+      "type": "128"
+    },
+    {
+      "gameID": 37905,
+      "icon": "000000-000405.png",
+      "name": "Bombarian Special",
+      "type": "1024"
+    },
+    {
+      "gameID": 37907,
+      "icon": "000000-000405.png",
+      "name": "Bombarian Special",
+      "type": "1"
+    },
+    {
+      "gameID": 37904,
+      "icon": "000000-000405.png",
+      "name": "Bombarian Special",
+      "type": "128"
+    },
+    {
+      "gameID": 37902,
+      "icon": "000000-000405.png",
+      "name": "Bombarian Special",
+      "type": "128"
+    },
+    {
+      "gameID": 37901,
+      "icon": "000000-000405.png",
+      "name": "Bombarian Special",
+      "type": "128"
+    },
+    {
+      "gameID": 37900,
+      "icon": "000000-000405.png",
+      "name": "Bombarian Special",
+      "type": "128"
+    },
+    {
+      "gameID": 37899,
+      "icon": "000000-000405.png",
+      "name": "Bombarian Special",
+      "type": "128"
+    },
+    {
+      "gameID": 37903,
+      "icon": "000000-000405.png",
+      "name": "Bombarian Special",
+      "type": "128"
+    },
+    {
+      "gameID": 4248,
+      "icon": "000000-000103.png",
+      "name": "Astral Stasis",
+      "type": "256"
+    },
+    {
+      "gameID": 38739,
+      "icon": "000000-000405.png",
+      "name": "Bombariboom",
+      "type": "128"
+    },
+    {
+      "gameID": 37887,
+      "icon": "000000-000405.png",
+      "name": "Fuses of Fury",
+      "type": "1"
+    },
+    {
+      "gameID": 39917,
+      "icon": "000000-000405.png",
+      "name": "Lariat Combo",
+      "type": "128"
+    },
+    {
+      "gameID": 39986,
+      "icon": "000000-000405.png",
+      "name": "unknown_9c32",
+      "type": "1"
+    },
+    {
+      "gameID": 39984,
+      "icon": "000000-000405.png",
+      "name": "unknown_9c30",
+      "type": "1"
+    },
+    {
+      "gameID": 39895,
+      "icon": "000000-000405.png",
+      "name": "Murderous Mist",
+      "type": "1024"
+    },
+    {
+      "gameID": 39896,
+      "icon": "000000-000405.png",
+      "name": "Lariat Combo",
+      "type": "1"
+    },
+    {
+      "gameID": 39913,
+      "icon": "000000-000405.png",
+      "name": "Lariat Combo",
+      "type": "1"
+    },
+    {
+      "gameID": 39919,
+      "icon": "000000-000405.png",
+      "name": "Lariat Combo",
+      "type": "128"
+    },
+    {
+      "gameID": 39985,
+      "icon": "000000-000405.png",
+      "name": "unknown_9c31",
+      "type": "1"
+    },
+    {
+      "gameID": 2470,
+      "icon": "000000-000405.png",
+      "name": "unknown_9a6",
+      "type": "1"
+    },
+    {
+      "gameID": 33571361,
+      "icon": "216000-216203.png",
+      "name": "Medicated",
+      "type": "1"
+    },
+    {
+      "gameID": 7551,
+      "icon": "000000-000848.png",
+      "name": "Head Graze",
+      "type": "32"
+    },
+    {
+      "gameID": 36943,
+      "icon": "000000-000219.png",
+      "name": "Enlightened Meditation",
+      "type": "1"
+    },
+    {
+      "gameID": 37024,
+      "icon": "003000-003112.png",
+      "name": "The Arrow",
+      "type": "1"
+    },
+    {
+      "gameID": 1003888,
+      "icon": "213000-213206.png",
+      "name": "The Arrow",
+      "type": "1"
+    },
+    {
+      "gameID": 34593388,
+      "icon": "216000-216203.png",
+      "name": "Medicated",
+      "type": "8"
+    },
+    {
+      "gameID": 39898,
+      "icon": "000000-000405.png",
+      "name": "Lariat Combo",
+      "type": "1"
+    },
+    {
+      "gameID": 39918,
+      "icon": "000000-000405.png",
+      "name": "Lariat Combo",
+      "type": "128"
+    },
+    {
+      "gameID": 39915,
+      "icon": "000000-000405.png",
+      "name": "Lariat Combo",
+      "type": "1"
+    },
+    {
+      "gameID": 39920,
+      "icon": "000000-000405.png",
+      "name": "Lariat Combo",
+      "type": "128"
+    },
+    {
+      "gameID": 37025,
+      "icon": "003000-003115.png",
+      "name": "The Spire",
+      "type": "1"
+    },
+    {
+      "gameID": 1003892,
+      "icon": "213000-213209.png",
+      "name": "The Spire",
+      "type": "8"
+    },
+    {
+      "gameID": 16476,
+      "icon": "002000-002547.png",
+      "name": "Six-Sided Star",
+      "type": "128"
+    },
+    {
+      "gameID": 1002514,
+      "icon": "212000-212536.png",
+      "name": "Six-Sided Star",
+      "type": "1"
+    },
+    {
+      "gameID": 24387,
+      "icon": "003000-003615.png",
+      "name": "Soulsow",
+      "type": "1"
+    },
+    {
+      "gameID": 1002594,
+      "icon": "212000-212932.png",
+      "name": "Soulsow",
+      "type": "1"
+    },
+    {
+      "gameID": 24378,
+      "icon": "003000-003606.png",
+      "name": "Shadow of Death",
+      "type": "128"
+    },
+    {
+      "gameID": 1002586,
+      "icon": "212000-212926.png",
+      "name": "Death's Design",
+      "type": "1"
+    },
+    {
+      "gameID": 24380,
+      "icon": "003000-003608.png",
+      "name": "Soul Slice",
+      "type": "128"
+    },
+    {
+      "gameID": 24405,
+      "icon": "003000-003633.png",
+      "name": "Arcane Circle",
+      "type": "1"
+    },
+    {
+      "gameID": 1002599,
+      "icon": "212000-212936.png",
+      "name": "Arcane Circle",
+      "type": "1"
+    },
+    {
+      "gameID": 1002972,
+      "icon": "212000-212938.png",
+      "name": "Bloodsown Circle",
+      "type": "1"
+    },
+    {
+      "gameID": 1002600,
+      "icon": "212000-212937.png",
+      "name": "Circle of Sacrifice",
+      "type": "1"
+    },
+    {
+      "gameID": 24393,
+      "icon": "003000-003621.png",
+      "name": "Gluttony",
+      "type": "1024"
+    },
+    {
+      "gameID": 1003858,
+      "icon": "217000-217198.png",
+      "name": "Executioner",
+      "type": "1"
+    },
+    {
+      "gameID": 1002592,
+      "icon": "217000-217287.png",
+      "name": "Immortal Sacrifice",
+      "type": "1"
+    },
+    {
+      "gameID": 36971,
+      "icon": "003000-003636.png",
+      "name": "Executioner's Gallows",
+      "type": "128"
+    },
+    {
+      "gameID": 1002588,
+      "icon": "212000-212927.png",
+      "name": "Enhanced Gibbet",
+      "type": "1"
+    },
+    {
+      "gameID": 36970,
+      "icon": "003000-003635.png",
+      "name": "Executioner's Gibbet",
+      "type": "128"
+    },
+    {
+      "gameID": 1002589,
+      "icon": "212000-212928.png",
+      "name": "Enhanced Gallows",
+      "type": "1"
+    },
+    {
+      "gameID": 24404,
+      "icon": "003000-003632.png",
+      "name": "Arcane Crest",
+      "type": "1"
+    },
+    {
+      "gameID": 1002597,
+      "icon": "212000-212934.png",
+      "name": "Crest of Time Borrowed",
+      "type": "8"
+    },
+    {
+      "gameID": 24391,
+      "icon": "003000-003619.png",
+      "name": "Unveiled Gallows",
+      "type": "128"
+    },
+    {
+      "gameID": 1002587,
+      "icon": "217000-217097.png",
+      "name": "Soul Reaver",
+      "type": "1"
+    },
+    {
+      "gameID": 1002598,
+      "icon": "212000-212935.png",
+      "name": "Crest of Time Returned",
+      "type": "8"
+    },
+    {
+      "gameID": 24385,
+      "icon": "003000-003613.png",
+      "name": "Plentiful Harvest",
+      "type": "128"
+    },
+    {
+      "gameID": 1003905,
+      "icon": "212000-212944.png",
+      "name": "Ideal Host",
+      "type": "1"
+    },
+    {
+      "gameID": 1003859,
+      "icon": "212000-212942.png",
+      "name": "Perfectio Occulta",
+      "type": "1"
+    },
+    {
+      "gameID": 1002593,
+      "icon": "212000-212931.png",
+      "name": "Enshrouded",
+      "type": "1"
+    },
+    {
+      "gameID": 24394,
+      "icon": "003000-003622.png",
+      "name": "Enshroud",
+      "type": "1"
+    },
+    {
+      "gameID": 1003857,
+      "icon": "212000-212941.png",
+      "name": "Oblatio",
+      "type": "1"
+    },
+    {
+      "gameID": 36969,
+      "icon": "003000-003634.png",
+      "name": "Sacrificium",
+      "type": "1024"
+    },
+    {
+      "gameID": 24395,
+      "icon": "003000-003623.png",
+      "name": "Void Reaping",
+      "type": "128"
+    },
+    {
+      "gameID": 1002591,
+      "icon": "212000-212930.png",
+      "name": "Enhanced Cross Reaping",
+      "type": "1"
+    },
+    {
+      "gameID": 24396,
+      "icon": "003000-003624.png",
+      "name": "Cross Reaping",
+      "type": "128"
+    },
+    {
+      "gameID": 1002590,
+      "icon": "212000-212929.png",
+      "name": "Enhanced Void Reaping",
+      "type": "1"
+    },
+    {
+      "gameID": 24399,
+      "icon": "003000-003627.png",
+      "name": "Lemure's Slice",
+      "type": "128"
+    },
+    {
+      "gameID": 24398,
+      "icon": "003000-003626.png",
+      "name": "Communio",
+      "type": "1024"
+    },
+    {
+      "gameID": 1003860,
+      "icon": "212000-212943.png",
+      "name": "Perfectio Parata",
+      "type": "1"
+    },
+    {
+      "gameID": 36973,
+      "icon": "003000-003638.png",
+      "name": "Perfectio",
+      "type": "128"
+    },
+    {
+      "gameID": 24373,
+      "icon": "003000-003601.png",
+      "name": "Slice",
+      "type": "128"
+    },
+    {
+      "gameID": 24374,
+      "icon": "003000-003602.png",
+      "name": "Waxing Slice",
+      "type": "128"
+    },
+    {
+      "gameID": 24386,
+      "icon": "003000-003614.png",
+      "name": "Harpe",
+      "type": "1024"
+    },
+    {
+      "gameID": 24383,
+      "icon": "003000-003611.png",
+      "name": "Gallows",
+      "type": "128"
+    },
+    {
+      "gameID": 24375,
+      "icon": "003000-003603.png",
+      "name": "Infernal Slice",
+      "type": "128"
+    },
+    {
+      "gameID": 24401,
+      "icon": "003000-003629.png",
+      "name": "Hell's Ingress",
+      "type": "1"
+    },
+    {
+      "gameID": 1002595,
+      "icon": "212000-212933.png",
+      "name": "Threshold",
+      "type": "1"
+    },
+    {
+      "gameID": 1002845,
+      "icon": "212000-212939.png",
+      "name": "Enhanced Harpe",
+      "type": "1"
+    },
+    {
+      "gameID": 24390,
+      "icon": "003000-003618.png",
+      "name": "Unveiled Gibbet",
+      "type": "128"
+    },
+    {
+      "gameID": 24382,
+      "icon": "003000-003610.png",
+      "name": "Gibbet",
+      "type": "128"
+    },
+    {
+      "gameID": 24388,
+      "icon": "003000-003616.png",
+      "name": "Harvest Moon",
+      "type": "1024"
+    },
+    {
+      "gameID": 7538,
+      "icon": "000000-000808.png",
+      "name": "Interject",
+      "type": "32"
+    },
+    {
+      "gameID": 24376,
+      "icon": "003000-003604.png",
+      "name": "Spinning Scythe",
+      "type": "128"
+    },
+    {
+      "gameID": 4247,
+      "icon": "000000-000103.png",
+      "name": "Angel Feathers",
+      "type": "256"
+    },
+    {
+      "gameID": 24403,
+      "icon": "003000-003631.png",
+      "name": "Regress",
+      "type": "1"
+    },
+    {
+      "gameID": 7437,
+      "icon": "002000-002816.png",
+      "name": "Aetherpact",
+      "type": "1"
+    },
+    {
+      "gameID": 7438,
+      "icon": "002000-002818.png",
+      "name": "Fey Union",
+      "type": "1"
+    },
+    {
+      "gameID": 1001223,
+      "icon": "212000-212811.png",
+      "name": "Fey Union",
+      "type": "8"
+    },
+    {
+      "gameID": 1001222,
+      "icon": "212000-212810.png",
+      "name": "Fey Union",
+      "type": "1"
+    },
+    {
+      "gameID": 7869,
+      "icon": "002000-002817.png",
+      "name": "Dissolve Union",
+      "type": "1"
+    },
+    {
+      "gameID": 24402,
+      "icon": "003000-003630.png",
+      "name": "Hell's Egress",
+      "type": "1"
+    },
+    {
+      "gameID": 3541,
+      "icon": "002000-002509.png",
+      "name": "Clemency",
+      "type": "8"
+    },
+    {
+      "gameID": 34594303,
+      "icon": "216000-216203.png",
+      "name": "Medicated",
+      "type": "1"
+    },
+    {
+      "gameID": 37898,
+      "icon": "000000-000405.png",
+      "name": "Quadroboom Bombarian Special",
+      "type": "1"
+    },
+    {
+      "gameID": 38740,
+      "icon": "000000-000405.png",
+      "name": "Bombariboom",
+      "type": "128"
+    },
+    {
+      "gameID": 24389,
+      "icon": "003000-003617.png",
+      "name": "Blood Stalk",
+      "type": "128"
+    },
+    {
+      "gameID": 37891,
+      "icon": "000000-000405.png",
+      "name": "Fuse or Foe",
+      "type": "1"
+    },
+    {
+      "gameID": 37916,
+      "icon": "000000-000405.png",
+      "name": "Infernal Spin",
+      "type": "1"
+    },
+    {
+      "gameID": 37912,
+      "icon": "000000-000405.png",
+      "name": "Explosive Rain",
+      "type": "1024"
+    },
+    {
+      "gameID": 37911,
+      "icon": "000000-000405.png",
+      "name": "Explosive Rain",
+      "type": "1"
+    },
+    {
+      "gameID": 37910,
+      "icon": "000000-000405.png",
+      "name": "Explosive Rain",
+      "type": "1024"
+    },
+    {
+      "gameID": 39855,
+      "icon": "000000-000405.png",
+      "name": "Infernal Spin",
+      "type": "1"
+    },
+    {
+      "gameID": 37918,
+      "icon": "000000-000405.png",
+      "name": "Infernal Spin",
+      "type": "1"
+    },
+    {
+      "gameID": 39856,
+      "icon": "000000-000405.png",
+      "name": "Infernal Spin",
+      "type": "1024"
+    },
+    {
+      "gameID": 37915,
+      "icon": "000000-000405.png",
+      "name": "Explosive Rain",
+      "type": "1"
+    },
+    {
+      "gameID": 37914,
+      "icon": "000000-000405.png",
+      "name": "Explosive Rain",
+      "type": "1"
+    },
+    {
+      "gameID": 37913,
+      "icon": "000000-000405.png",
+      "name": "Explosive Rain",
+      "type": "1024"
+    },
+    {
+      "gameID": 16457,
+      "icon": "002000-002516.png",
+      "name": "Prominence",
+      "type": "1"
+    },
+    {
+      "gameID": 199,
+      "icon": "000000-000103.png",
+      "name": "Last Bastion",
+      "type": "256"
+    },
+    {
+      "gameID": 1000196,
+      "icon": "216000-216306.png",
+      "name": "Last Bastion",
+      "type": "256"
+    },
+    {
+      "gameID": 39658,
+      "icon": "000000-000405.png",
+      "name": "Lariat Combo",
+      "type": "1"
+    },
+    {
+      "gameID": 39665,
+      "icon": "000000-000405.png",
+      "name": "Lariat Combo",
+      "type": "1"
+    },
+    {
+      "gameID": 2469,
+      "icon": "000000-000405.png",
+      "name": "unknown_9a5",
+      "type": "1"
+    }
+  ]
+}

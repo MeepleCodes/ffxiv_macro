@@ -1,0 +1,26 @@
+[
+  {
+    "actorID": 25,
+    "locations": [
+      {
+        "timestamp": 248679,
+        "x": 3717,
+        "y": 7141,
+        "facing": -582,
+        "alive": true
+      }
+    ]
+  },
+  {
+    "actorID": 32,
+    "locations": [
+      {
+        "timestamp": 248679,
+        "x": 4459,
+        "y": 7517,
+        "facing": -420,
+        "alive": true
+      }
+    ]
+  }
+]

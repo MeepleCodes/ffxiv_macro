@@ -1,0 +1,444 @@
+[
+  {
+    "timestamp": 7237145,
+    "type": "begincast",
+    "sourceID": 325,
+    "targetID": 325,
+    "abilityGameID": 37251,
+    "fight": 11,
+    "duration": 4700
+  },
+  {
+    "timestamp": 7242135,
+    "type": "cast",
+    "sourceID": 325,
+    "targetID": -1,
+    "abilityGameID": 37251,
+    "fight": 11,
+    "sourceResources": {
+      "hitPoints": 83966736,
+      "maxHitPoints": 83966736,
+      "mp": 10000,
+      "maxMP": 10000,
+      "tp": 0,
+      "maxTP": 0,
+      "x": 9941,
+      "y": 9636,
+      "facing": -464
+    }
+  },
+  {
+    "timestamp": 7244271,
+    "type": "begincast",
+    "sourceID": 325,
+    "targetID": 325,
+    "abilityGameID": 37252,
+    "fight": 11,
+    "duration": 4700
+  },
+  {
+    "timestamp": 7249260,
+    "type": "cast",
+    "sourceID": 325,
+    "targetID": 325,
+    "abilityGameID": 37252,
+    "fight": 11,
+    "sourceResources": {
+      "hitPoints": 83966736,
+      "maxHitPoints": 83966736,
+      "mp": 10000,
+      "maxMP": 10000,
+      "tp": 0,
+      "maxTP": 0,
+      "x": 9941,
+      "y": 9636,
+      "facing": -464
+    },
+    "targetResources": {
+      "hitPoints": 83966736,
+      "maxHitPoints": 83966736,
+      "mp": 10000,
+      "maxMP": 10000,
+      "tp": 0,
+      "maxTP": 0,
+      "x": 9941,
+      "y": 9636,
+      "facing": -464
+    }
+  },
+  {
+    "timestamp": 7251400,
+    "type": "cast",
+    "sourceID": 325,
+    "targetID": -1,
+    "abilityGameID": 37219,
+    "fight": 11,
+    "sourceResources": {
+      "hitPoints": 83966736,
+      "maxHitPoints": 83966736,
+      "mp": 10000,
+      "maxMP": 10000,
+      "tp": 0,
+      "maxTP": 0,
+      "x": 9941,
+      "y": 9636,
+      "facing": -464,
+      "absorb": 0
+    }
+  },
+  {
+    "timestamp": 7254831,
+    "type": "begincast",
+    "sourceID": 325,
+    "targetID": 325,
+    "abilityGameID": 37254,
+    "fight": 11,
+    "duration": 5200
+  },
+  {
+    "timestamp": 7254831,
+    "type": "begincast",
+    "sourceID": 326,
+    "sourceInstance": 1,
+    "targetID": 326,
+    "targetInstance": 1,
+    "abilityGameID": 39625,
+    "fight": 11,
+    "duration": 5900
+  },
+  {
+    "timestamp": 7260315,
+    "type": "cast",
+    "sourceID": 325,
+    "targetID": 325,
+    "abilityGameID": 37254,
+    "fight": 11,
+    "sourceResources": {
+      "hitPoints": 83966736,
+      "maxHitPoints": 83966736,
+      "mp": 10000,
+      "maxMP": 10000,
+      "tp": 0,
+      "maxTP": 0,
+      "x": 9999,
+      "y": 9999,
+      "facing": -786,
+      "absorb": 0
+    },
+    "targetResources": {
+      "hitPoints": 83966736,
+      "maxHitPoints": 83966736,
+      "mp": 10000,
+      "maxMP": 10000,
+      "tp": 0,
+      "maxTP": 0,
+      "x": 9999,
+      "y": 9999,
+      "facing": -786,
+      "absorb": 0
+    }
+  },
+  {
+    "timestamp": 7261029,
+    "type": "cast",
+    "sourceID": 326,
+    "sourceInstance": 1,
+    "targetID": -1,
+    "abilityGameID": 39625,
+    "fight": 11,
+    "sourceResources": {
+      "hitPoints": 44,
+      "maxHitPoints": 44,
+      "mp": 0,
+      "maxMP": 10000,
+      "tp": 0,
+      "maxTP": 0,
+      "x": 10000,
+      "y": 10000,
+      "facing": -786
+    }
+  },
+  {
+    "timestamp": 7261251,
+    "type": "applydebuff",
+    "sourceID": 326,
+    "sourceInstance": 1,
+    "targetID": 211,
+    "abilityGameID": 1002911,
+    "fight": 11,
+    "extraAbilityGameID": 39625,
+    "duration": 30000
+  },
+  {
+    "timestamp": 7261296,
+    "type": "applydebuff",
+    "sourceID": 326,
+    "sourceInstance": 1,
+    "targetID": 210,
+    "abilityGameID": 1002911,
+    "fight": 11,
+    "extraAbilityGameID": 39625,
+    "duration": 30000
+  },
+  {
+    "timestamp": 7261340,
+    "type": "applydebuff",
+    "sourceID": 326,
+    "sourceInstance": 1,
+    "targetID": 206,
+    "abilityGameID": 1002911,
+    "fight": 11,
+    "extraAbilityGameID": 39625,
+    "duration": 30000
+  },
+  {
+    "timestamp": 7265482,
+    "type": "cast",
+    "sourceID": 326,
+    "sourceInstance": 2,
+    "targetID": -1,
+    "abilityGameID": 37257,
+    "fight": 11,
+    "sourceResources": {
+      "hitPoints": 44,
+      "maxHitPoints": 44,
+      "mp": 0,
+      "maxMP": 10000,
+      "tp": 0,
+      "maxTP": 0,
+      "x": 10000,
+      "y": 9000,
+      "facing": -472
+    }
+  },
+  {
+    "timestamp": 7265482,
+    "type": "cast",
+    "sourceID": 326,
+    "sourceInstance": 3,
+    "targetID": -1,
+    "abilityGameID": 37257,
+    "fight": 11,
+    "sourceResources": {
+      "hitPoints": 44,
+      "maxHitPoints": 44,
+      "mp": 0,
+      "maxMP": 10000,
+      "tp": 0,
+      "maxTP": 0,
+      "x": 10000,
+      "y": 9000,
+      "facing": -472
+    }
+  },
+  {
+    "timestamp": 7265482,
+    "type": "cast",
+    "sourceID": 326,
+    "sourceInstance": 4,
+    "targetID": -1,
+    "abilityGameID": 37257,
+    "fight": 11,
+    "sourceResources": {
+      "hitPoints": 44,
+      "maxHitPoints": 44,
+      "mp": 0,
+      "maxMP": 10000,
+      "tp": 0,
+      "maxTP": 0,
+      "x": 10000,
+      "y": 9000,
+      "facing": -472
+    }
+  },
+  {
+    "timestamp": 7265482,
+    "type": "cast",
+    "sourceID": 326,
+    "sourceInstance": 5,
+    "targetID": -1,
+    "abilityGameID": 37257,
+    "fight": 11,
+    "sourceResources": {
+      "hitPoints": 44,
+      "maxHitPoints": 44,
+      "mp": 0,
+      "maxMP": 10000,
+      "tp": 0,
+      "maxTP": 0,
+      "x": 10000,
+      "y": 9000,
+      "facing": -472
+    }
+  },
+  {
+    "timestamp": 7265482,
+    "type": "cast",
+    "sourceID": 326,
+    "sourceInstance": 1,
+    "targetID": 193,
+    "abilityGameID": 37257,
+    "fight": 11,
+    "sourceResources": {
+      "hitPoints": 44,
+      "maxHitPoints": 44,
+      "mp": 0,
+      "maxMP": 10000,
+      "tp": 0,
+      "maxTP": 0,
+      "x": 10000,
+      "y": 10000,
+      "facing": -786
+    },
+    "targetResources": {
+      "hitPoints": 60674,
+      "maxHitPoints": 130800,
+      "mp": 10000,
+      "maxMP": 10000,
+      "tp": 0,
+      "maxTP": 0,
+      "x": 10027,
+      "y": 9987,
+      "facing": -461,
+      "absorb": 0
+    }
+  },
+  {
+    "timestamp": 7265482,
+    "type": "applydebuff",
+    "sourceID": 326,
+    "sourceInstance": 1,
+    "targetID": 193,
+    "abilityGameID": 1003935,
+    "fight": 11,
+    "extraAbilityGameID": 37257,
+    "duration": 9960
+  },
+  {
+    "timestamp": 7265482,
+    "type": "applydebuff",
+    "sourceID": 326,
+    "sourceInstance": 2,
+    "targetID": 210,
+    "abilityGameID": 1003935,
+    "fight": 11,
+    "extraAbilityGameID": 37257,
+    "duration": 9960
+  },
+  {
+    "timestamp": 7265482,
+    "type": "applydebuff",
+    "sourceID": 326,
+    "sourceInstance": 2,
+    "targetID": 207,
+    "abilityGameID": 1003935,
+    "fight": 11,
+    "extraAbilityGameID": 37257,
+    "duration": 9960,
+    "targetMarker": 2
+  },
+  {
+    "timestamp": 7265482,
+    "type": "applydebuff",
+    "sourceID": 326,
+    "sourceInstance": 2,
+    "targetID": 206,
+    "abilityGameID": 1003935,
+    "fight": 11,
+    "extraAbilityGameID": 37257,
+    "duration": 9960
+  },
+  {
+    "timestamp": 7265482,
+    "type": "applydebuff",
+    "sourceID": 326,
+    "sourceInstance": 2,
+    "targetID": 211,
+    "abilityGameID": 1003935,
+    "fight": 11,
+    "extraAbilityGameID": 37257,
+    "duration": 9960
+  },
+  {
+    "timestamp": 7266107,
+    "type": "removedebuff",
+    "sourceID": 326,
+    "sourceInstance": 1,
+    "targetID": 193,
+    "abilityGameID": 1003935,
+    "fight": 11
+  },
+  {
+    "timestamp": 7266107,
+    "type": "removedebuff",
+    "sourceID": 326,
+    "sourceInstance": 1,
+    "targetID": 210,
+    "abilityGameID": 1002911,
+    "fight": 11
+  },
+  {
+    "timestamp": 7266107,
+    "type": "removedebuff",
+    "sourceID": 326,
+    "sourceInstance": 2,
+    "targetID": 210,
+    "abilityGameID": 1003935,
+    "fight": 11
+  },
+  {
+    "timestamp": 7266107,
+    "type": "removedebuff",
+    "sourceID": 326,
+    "sourceInstance": 2,
+    "targetID": 207,
+    "abilityGameID": 1003935,
+    "fight": 11,
+    "targetMarker": 2
+  },
+  {
+    "timestamp": 7266107,
+    "type": "removedebuff",
+    "sourceID": 326,
+    "sourceInstance": 1,
+    "targetID": 206,
+    "abilityGameID": 1002911,
+    "fight": 11
+  },
+  {
+    "timestamp": 7266107,
+    "type": "removedebuff",
+    "sourceID": 326,
+    "sourceInstance": 2,
+    "targetID": 206,
+    "abilityGameID": 1003935,
+    "fight": 11
+  },
+  {
+    "timestamp": 7266194,
+    "type": "removedebuff",
+    "sourceID": 326,
+    "sourceInstance": 1,
+    "targetID": 211,
+    "abilityGameID": 1002911,
+    "fight": 11
+  },
+  {
+    "timestamp": 7266194,
+    "type": "removedebuff",
+    "sourceID": 326,
+    "sourceInstance": 2,
+    "targetID": 211,
+    "abilityGameID": 1003935,
+    "fight": 11
+  },
+  {
+    "timestamp": 7266506,
+    "type": "begincast",
+    "sourceID": 325,
+    "targetID": 325,
+    "abilityGameID": 37253,
+    "fight": 11,
+    "duration": 4700
+  }
+]

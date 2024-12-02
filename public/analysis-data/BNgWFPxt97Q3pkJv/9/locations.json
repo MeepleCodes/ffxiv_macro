@@ -1,0 +1,108 @@
+[
+  {
+    "actorID": 3,
+    "locations": [
+      {
+        "timestamp": 3398606,
+        "x": 9677,
+        "y": 10477,
+        "facing": -781,
+        "alive": false
+      }
+    ]
+  },
+  {
+    "actorID": 8,
+    "locations": [
+      {
+        "timestamp": 3394934,
+        "x": 9953,
+        "y": 11289,
+        "facing": -786,
+        "alive": false
+      },
+      {
+        "timestamp": 3396993,
+        "x": 10000,
+        "y": 10168,
+        "facing": -784,
+        "alive": false
+      },
+      {
+        "timestamp": 3397396,
+        "x": 10016,
+        "y": 9891,
+        "facing": -784,
+        "alive": false
+      }
+    ]
+  },
+  {
+    "actorID": 10,
+    "locations": [
+      {
+        "timestamp": 3394934,
+        "x": 10000,
+        "y": 9000,
+        "facing": -472,
+        "alive": true
+      },
+      {
+        "timestamp": 3395830,
+        "x": 10000,
+        "y": 9000,
+        "facing": -472,
+        "alive": true
+      },
+      {
+        "timestamp": 3396993,
+        "x": 9986,
+        "y": 9496,
+        "facing": -474,
+        "alive": true
+      },
+      {
+        "timestamp": 3397396,
+        "x": 9984,
+        "y": 9585,
+        "facing": -482,
+        "alive": true
+      },
+      {
+        "timestamp": 3397529,
+        "x": 9984,
+        "y": 9585,
+        "facing": -482,
+        "alive": true
+      },
+      {
+        "timestamp": 3398022,
+        "x": 9984,
+        "y": 9598,
+        "facing": -533,
+        "alive": true
+      },
+      {
+        "timestamp": 3398606,
+        "x": 9984,
+        "y": 9599,
+        "facing": -733,
+        "alive": true
+      },
+      {
+        "timestamp": 3399141,
+        "x": 9984,
+        "y": 9599,
+        "facing": -772,
+        "alive": true
+      },
+      {
+        "timestamp": 3399767,
+        "x": 9984,
+        "y": 9599,
+        "facing": -775,
+        "alive": true
+      }
+    ]
+  }
+]

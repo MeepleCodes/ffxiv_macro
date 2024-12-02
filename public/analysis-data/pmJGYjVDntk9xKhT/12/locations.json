@@ -1,0 +1,26 @@
+[
+  {
+    "actorID": 180,
+    "locations": [
+      {
+        "timestamp": 5939178,
+        "x": 9941,
+        "y": 10918,
+        "facing": -472,
+        "alive": true
+      }
+    ]
+  },
+  {
+    "actorID": 183,
+    "locations": [
+      {
+        "timestamp": 5939178,
+        "x": 10003,
+        "y": 9300,
+        "facing": -472,
+        "alive": true
+      }
+    ]
+  }
+]

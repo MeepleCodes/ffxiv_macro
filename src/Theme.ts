@@ -29,6 +29,15 @@ appTheme = createTheme(appTheme, {
                     padding: theme.spacing(1)
                 })
             }
+        },
+        MuiTable: {
+            styleOverrides: {
+                stickyHeader: ({theme}: {theme: Theme}) => ({
+                    ["& .MuiTableCell-head"]: {
+                        background: theme.palette.background.paper
+                    }
+                })
+            }
         }
     }
 });

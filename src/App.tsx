@@ -9,7 +9,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 
 import { NavDrawer, NavMain } from './Nav';
-import { appTheme } from './Theme';
+
 
 import log, {RootLogger} from 'loglevel';
 import AuthMenu from './firebase/auth/AuthControls';
@@ -34,6 +34,8 @@ import {
 	Divider
 } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
+import { appTheme } from './Theme';
+
 
 declare global {
 	interface Window { log: RootLogger }
@@ -124,9 +126,7 @@ function App() {
 
 	return (
 		<StoreContextProvider editor={ref}>
-			<ThemeProvider theme={appTheme}>
-				<CssBaseline/>
-				<div id="bg"/>
+			
 				<IconButton
 					color="inherit"
 					aria-label="open drawer"
@@ -159,16 +159,14 @@ function App() {
 					<Stack direction="column" alignItems="stretch" spacing={1}>
 						<Typography variant="subtitle1" flex={1} sx={{lineHeight: 2}}>Settings</Typography>
 					<FormGroup>
-					<FormControlLabel 
-						labelPlacement="start" 
-						checked={showWhitespace}  
-						onChange={() => setShowWhitespace(!showWhitespace)} 
-						control={<Switch/>} 
-						// sx={{justifyContent: "flex-end"}}
-						slotProps={{typography: {flex: 1}}}
-						sx={{ml: 1}}
-						label="Show whitespace" 
-						// label={<><SpaceBarIcon /> Show whitespace</>}
+						<FormControlLabel 
+							labelPlacement="start" 
+							checked={showWhitespace}  
+							onChange={() => setShowWhitespace(!showWhitespace)} 
+							control={<Switch/>} 
+							slotProps={{typography: {flex: 1}}}
+							sx={{ml: 1}}
+							label="Show whitespace" 
 						/>
 					</FormGroup>
 					<FormControl size="small" color="inverted">
@@ -214,7 +212,6 @@ function App() {
 					<GlyphPicker editorRef={ref} fontsrc={fontSources[font].src}/>
 				</Stack>
 			</NavMain>
-			</ThemeProvider>
 		 </StoreContextProvider>
 		
 	);

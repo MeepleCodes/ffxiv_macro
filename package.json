@@ -6,35 +6,53 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "test": "vitest"
   },
   "workspaces": [
     "packages/*"
   ],
   "dependencies": {
+    "@badgateway/oauth2-client": "^2.4.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@firebase/app": "^0.10.7",
     "@fontsource/roboto": "^5.0.13",
     "@mui/icons-material": "^5.15.15",
     "@mui/material": "^5.15.15",
+    "@mui/utils": "^5.16.6",
+    "@mui/x-data-grid": "^7.13.0",
     "@react-hook/resize-observer": "^2.0.1",
+    "@tanstack/react-router": "^1.45.14",
+    "csv-parse": "^5.5.6",
     "date-fns": "^3.6.0",
+    "dayjs": "^1.11.12",
+    "delaunator": "^5.0.1",
     "ffxiv-client-data": "workspace:^",
     "firebase": "^10.12.4",
     "firebaseui": "^6.1.0",
     "firestore": "^1.1.6",
+    "graphql": "^16.9.0",
+    "graphql-request": "^7.1.0",
+    "konva": "^9.3.14",
     "loglevel": "^1.9.1",
+    "material-ui-popup-state": "^5.3.1",
     "mdi-material-ui": "^7.9.1",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-konva": "^18.2.10",
+    "use-image": "^1.1.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.8.0",
     "@jest/globals": "^29.7.0",
     "@swc/core": "^1.7.0",
+    "@tanstack/router-devtools": "^1.45.14",
+    "@tanstack/router-plugin": "^1.45.13",
     "@testing-library/jest-dom": "^6.4.8",
+    "@types/argparse": "^2",
+    "@types/delaunator": "^5",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.14.11",
     "@types/react": "^18.3.3",
@@ -43,6 +61,7 @@
     "@typescript-eslint/parser": "^7.15.0",
     "@vitejs/plugin-react": "^4.3.1",
     "@vitejs/plugin-react-swc": "^3.7.0",
+    "argparse": "^2.0.1",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.35.0",
     "eslint-plugin-react-hooks": "^4.6.2",
@@ -56,7 +75,8 @@
     "typescript-eslint": "^7.17.0",
     "unplugin-swc": "^1.5.1",
     "vite": "^5.3.4",
-    "vite-node": "^2.0.4"
+    "vite-node": "^2.0.4",
+    "vitest": "^2.0.5"
   },
   "packageManager": "yarn@4.3.1"
 }
