@@ -26,6 +26,7 @@ export type ReplayActorSnapshot = ReportActor & ReplayLocation & {
 
 interface ReplayEventBase {
   id: number;
+  /** Timestamp of the event, as ms since epoch */
   timestamp: number;
   type: EventType;
   action: Action;

@@ -18,12 +18,14 @@ import { Route as FusedownImport } from "./routes/fusedown";
 import { Route as ClipboardImport } from "./routes/clipboard";
 import { Route as AnalysisImport } from "./routes/analysis";
 import { Route as AnalysisIndexImport } from "./routes/analysis/index";
+import { Route as PlanPlanIDImport } from "./routes/plan/$planID";
 import { Route as AnalysisTimelineImport } from "./routes/analysis/timeline";
 import { Route as AnalysisReportIDImport } from "./routes/analysis/$reportID";
 import { Route as AnalysisReportIDIndexImport } from "./routes/analysis/$reportID/index";
 import { Route as AnalysisTimelineReportIDImport } from "./routes/analysis/timeline/$reportID";
 import { Route as AnalysisAacm2sHeartsImport } from "./routes/analysis/aacm2s/hearts";
 import { Route as AnalysisAacm2sBeesImport } from "./routes/analysis/aacm2s/bees";
+import { Route as AnalysisReportIDTimelineImport } from "./routes/analysis/$reportID/timeline";
 import { Route as AnalysisReportIDActionsImport } from "./routes/analysis/$reportID/actions";
 import { Route as AnalysisReportIDFightIDImport } from "./routes/analysis/$reportID/$fightID";
 import { Route as AnalysisAacm2sBeesReportIDImport } from "./routes/analysis/aacm2s/bees/$reportID";
@@ -67,6 +69,11 @@ const AnalysisIndexRoute = AnalysisIndexImport.update({
   getParentRoute: () => AnalysisRoute,
 } as any);
 
+const PlanPlanIDRoute = PlanPlanIDImport.update({
+  path: "/plan/$planID",
+  getParentRoute: () => rootRoute,
+} as any);
+
 const AnalysisTimelineRoute = AnalysisTimelineImport.update({
   path: "/timeline",
   getParentRoute: () => AnalysisRoute,
@@ -95,6 +102,11 @@ const AnalysisAacm2sHeartsRoute = AnalysisAacm2sHeartsImport.update({
 const AnalysisAacm2sBeesRoute = AnalysisAacm2sBeesImport.update({
   path: "/aacm2s/bees",
   getParentRoute: () => AnalysisRoute,
+} as any);
+
+const AnalysisReportIDTimelineRoute = AnalysisReportIDTimelineImport.update({
+  path: "/timeline",
+  getParentRoute: () => AnalysisReportIDRoute,
 } as any);
 
 const AnalysisReportIDActionsRoute = AnalysisReportIDActionsImport.update({
@@ -185,6 +197,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AnalysisTimelineImport;
       parentRoute: typeof AnalysisImport;
     };
+    "/plan/$planID": {
+      id: "/plan/$planID";
+      path: "/plan/$planID";
+      fullPath: "/plan/$planID";
+      preLoaderRoute: typeof PlanPlanIDImport;
+      parentRoute: typeof rootRoute;
+    };
     "/analysis/": {
       id: "/analysis/";
       path: "/";
@@ -204,6 +223,13 @@ declare module "@tanstack/react-router" {
       path: "/actions";
       fullPath: "/analysis/$reportID/actions";
       preLoaderRoute: typeof AnalysisReportIDActionsImport;
+      parentRoute: typeof AnalysisReportIDImport;
+    };
+    "/analysis/$reportID/timeline": {
+      id: "/analysis/$reportID/timeline";
+      path: "/timeline";
+      fullPath: "/analysis/$reportID/timeline";
+      preLoaderRoute: typeof AnalysisReportIDTimelineImport;
       parentRoute: typeof AnalysisReportIDImport;
     };
     "/analysis/aacm2s/bees": {
@@ -275,6 +301,7 @@ export const routeTree = rootRoute.addChildren({
         AnalysisReportIDFightIDEventsRoute,
       }),
       AnalysisReportIDActionsRoute,
+      AnalysisReportIDTimelineRoute,
       AnalysisReportIDIndexRoute,
     }),
     AnalysisTimelineRoute: AnalysisTimelineRoute.addChildren({
@@ -293,6 +320,7 @@ export const routeTree = rootRoute.addChildren({
   ClipboardRoute,
   FusedownRoute,
   NonsenseRoute,
+  PlanPlanIDRoute,
 });
 
 /* prettier-ignore-end */
@@ -307,7 +335,8 @@ export const routeTree = rootRoute.addChildren({
         "/analysis",
         "/clipboard",
         "/fusedown",
-        "/nonsense"
+        "/nonsense",
+        "/plan/$planID"
       ]
     },
     "/": {
@@ -338,6 +367,7 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/analysis/$reportID/$fightID",
         "/analysis/$reportID/actions",
+        "/analysis/$reportID/timeline",
         "/analysis/$reportID/"
       ]
     },
@@ -347,6 +377,9 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/analysis/timeline/$reportID"
       ]
+    },
+    "/plan/$planID": {
+      "filePath": "plan/$planID.tsx"
     },
     "/analysis/": {
       "filePath": "analysis/index.tsx",
@@ -361,6 +394,10 @@ export const routeTree = rootRoute.addChildren({
     },
     "/analysis/$reportID/actions": {
       "filePath": "analysis/$reportID/actions.tsx",
+      "parent": "/analysis/$reportID"
+    },
+    "/analysis/$reportID/timeline": {
+      "filePath": "analysis/$reportID/timeline.tsx",
       "parent": "/analysis/$reportID"
     },
     "/analysis/aacm2s/bees": {

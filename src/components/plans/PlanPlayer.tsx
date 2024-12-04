@@ -9,7 +9,9 @@ import useImage from "use-image";
 
 export type PlanPlayerProps = PlayerMarkerProps & {
   extraIcon?: Omit<ImageConfig, "image"> & {image: string},
-  aeMarker?: CircleConfig
+  aeMarker?: CircleConfig,
+  showHealRange?: boolean,
+  showMeleeRange?: boolean
 }
 
 /**
@@ -20,6 +22,8 @@ export default function PlanPlayer(props: PlanPlayerProps) {
   const {
     extraIcon,
     aeMarker,
+    showHealRange=false,
+    showMeleeRange=false,
     ...rest
   } = props;
   const [iconImage] = useImage(`${import.meta.env.BASE_URL}${extraIcon?.image}`);
@@ -31,7 +35,7 @@ export default function PlanPlayer(props: PlanPlayerProps) {
     stroke: "red",
     strokeWidth: 2,
     opacity: 0.8,
-    dash: [10, 10],
+    dash: [2, 2],
     ...aeMarker,
     radius: gameToCanvasDist(aeMarker.radius ?? 0),
   };
@@ -48,6 +52,24 @@ export default function PlanPlayer(props: PlanPlayerProps) {
       <Circle
         {...aeProps}
       />
+      }
+      {showHealRange &&
+      <Circle
+        stroke = "green"
+        strokeWidth = {2}
+        opacity = {0.8}
+        dash = {[2,2]}
+        radius={gameToCanvasDist(30)}
+      />      
+      }
+      {showMeleeRange &&
+      <Circle
+        stroke = "darkred"
+        strokeWidth = {2}
+        opacity = {0.8}
+        dash = {[2,2]}
+        radius={gameToCanvasDist(3)}
+      />      
       }
   <Circle
   />

@@ -3,6 +3,8 @@ import { Layer, LayerTypes, Part, Plan, Zones } from "./plans"
 import Arena from "../analysis/Arena"
 import LayerWrapper from "./LayerWrapper"
 import { UpdateContext } from "./UpdateContext"
+import { Layer as KonvaLayer } from "react-konva"
+import HitBox from "./HitBox"
 
 export type PlanProps = {
   plan: Plan

@@ -9,8 +9,8 @@ import { Layer } from "react-konva"
 export type LayerWrapperProps = {
   children: Part[]
 } & LayerConfig;
-export default function LayerWrapper({children}: LayerWrapperProps) {
-  return <Layer>
+export default function LayerWrapper({children, ...rest}: LayerWrapperProps) {
+  return <Layer {...rest}>
       {children.map(part => 
         // isDraggable(part) ?
         <DraggableWrapper key={part.id} part={part}/>

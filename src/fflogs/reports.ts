@@ -138,7 +138,7 @@ export type ReportFight = {
     name: string;
   }
 };
-type ReportAbility = {
+export type ReportAbility = {
   // The game ID of the ability.
   gameID: number;
   // An icon to use for the ability.

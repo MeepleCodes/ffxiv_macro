@@ -1,0 +1,170 @@
+
+{
+    "zone": "aacm3",
+    "layers": [
+      {
+        "id": "1",
+        "type": "safespot",
+        "walkable": {
+          "type": "rect",
+          "width": 30,
+          "height": 30
+        },
+        "children": [
+          {
+            "type": "cast",
+            "id": "bombone-0",
+            "radius": 8,
+            "x": 90.6,
+            "y": 90.6
+          },
+          {
+            "type": "cast",
+            "id": "bombone-1",
+            "radius": 8,
+            "x": 109.4,
+            "y": 109.4
+          },
+          {
+            "type": "cast",
+            "id": "bombone-2",
+            "radius": 8,
+            "x": 107.95,
+            "y": 100
+          },
+          {
+            "type": "cast",
+            "id": "bombone-3",
+            "radius": 8,
+            "x": 100,
+            "y": 92.05
+          }
+        ],
+        "fill": "cyan",
+        "opacity": 0.2
+      },
+      {
+        "id": "2",
+        "type": "safespot",
+        "walkable": {
+          "type": "rect",
+          "width": 30,
+          "height": 30
+        },
+        "children": [
+          {
+            "type": "cast",
+            "id": "bombone-0",
+            "radius": 8,
+            "x": 92.05,
+            "y": 100
+          },
+          {
+            "type": "cast",
+            "id": "bombone-1",
+            "radius": 8,
+            "x": 90.6,
+            "y": 109.4
+          },
+          {
+            "type": "cast",
+            "id": "bombone-2",
+            "radius": 8,
+            "x": 100,
+            "y": 107.95
+          },
+          {
+            "type": "cast",
+            "id": "bombone-3",
+            "radius": 8,
+            "x": 109.4,
+            "y": 90.6
+          }
+        ],
+        "fill": "yellow",
+        "opacity": 0.2
+      },
+      {
+        "id": "L1",
+        "type": "layer",
+        "children": [
+          {
+            "type": "player",
+            "id": "support-0",
+            "icon": "TankRole",
+            "label": "MT",
+            "aeMarker": {
+              "radius": 6
+            },
+            "extraIcon": {
+              "image": "misc/fuse-short.png",
+              "shadowOpacity": 1,
+              "shadowBlur": 3,
+              "shadowColor": "black",
+              "x": -2,
+              "y": -52
+            },
+            "x": -161.66666666666674,
+            "y": -1.6666666666666288
+          },
+          {
+            "type": "player",
+            "id": "support-1",
+            "icon": "TankRole",
+            "label": "OT",
+            "aeMarker": {
+              "radius": 6
+            },
+            "extraIcon": {
+              "image": "misc/fuse-short.png",
+              "shadowOpacity": 1,
+              "shadowBlur": 3,
+              "shadowColor": "black",
+              "x": -2,
+              "y": -52
+            },
+            "x": -160,
+            "y": 311.66666666666674
+          },
+          {
+            "type": "player",
+            "id": "support-2",
+            "icon": "HealerRole",
+            "label": "H1",
+            "aeMarker": {
+              "radius": 6
+            },
+            "extraIcon": {
+              "image": "misc/fuse-short.png",
+              "shadowOpacity": 1,
+              "shadowBlur": 3,
+              "shadowColor": "black",
+              "x": -2,
+              "y": -52
+            },
+            "x": -300,
+            "y": 165
+          },
+          {
+            "type": "player",
+            "id": "support-3",
+            "icon": "HealerRole",
+            "label": "H2",
+            "aeMarker": {
+              "radius": 6
+            },
+            "extraIcon": {
+              "image": "misc/fuse-short.png",
+              "shadowOpacity": 1,
+              "shadowBlur": 3,
+              "shadowColor": "black",
+              "x": -2,
+              "y": -52
+            },
+            "x": 0,
+            "y": 175
+          }
+        ]
+      }
+    ]
+  }

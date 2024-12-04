@@ -5,6 +5,8 @@ import PlanPlayer from "./PlanPlayer";
 import SafeSpot from "./SafeSpot";
 import PlanCast from "./PlanCast";
 import LayerWrapper from "./LayerWrapper";
+import AoEDonut from "./AoEDonut";
+import HitBox from "./HitBox";
 
 // type Renderer<P> = {
 //   fn: (props: P) => React.ReactNode,
@@ -26,7 +28,9 @@ export type Layer = {
 
 export const PartTypes = {
   "player": {fn: PlanPlayer},
-  "cast": {fn: PlanCast}
+  "cast": {fn: PlanCast},
+  "AoEDonut": {fn: AoEDonut},
+  "hitbox": {fn: HitBox},
 } as const;
 
 // The useless conditional forces this to be distribute over the union so we get

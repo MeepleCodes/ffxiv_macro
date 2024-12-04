@@ -14,6 +14,7 @@ type EventsTableRowEvents = {
 export type EventsTableProps = {
   fight: ReportFight;
   events: ReplayEvent[];
+  showStartCasts?: boolean;
   isChecked?: (event: ReplayEvent) => boolean;
 } & EventsTableRowEvents & Omit<TableContainerProps, "children">;
 
@@ -21,6 +22,7 @@ type EventsTableRowProps = {
   fight: ReportFight;
   event: ReplayEvent;
   checked: boolean;
+  combinedTime: boolean;
 } & EventsTableRowEvents;
 
 const TableContainer = styled(MuiTableContainer)(({theme}) => ({
@@ -34,10 +36,13 @@ const TableContainer = styled(MuiTableContainer)(({theme}) => ({
 }));
 
 
-const EventsTableRow = React.memo(({event, fight, checked, onRowClicked}: EventsTableRowProps) => {
+const EventsTableRow = React.memo(({event, fight, checked, combinedTime, onRowClicked}: EventsTableRowProps) => {
+  const time = event.type === "cast" && combinedTime && event.action["Cast<100ms>"] > 0 ?
+    `${fightTs(event.timestamp - (event.action["Cast<100ms>"] * 100.0), fight)} - ${fightTs(event.timestamp, fight)}` :
+    fightTs(event.timestamp, fight);
   return (
     <TableRow key={event.id} selected={checked} onClick={() => {onRowClicked?.(event)}}>
-      <TableCell>{fightTs(event.timestamp, fight)}</TableCell>
+      <TableCell>{time}</TableCell>
       <TableCell>
         <Actor actor={event.source}/>
       </TableCell>
@@ -52,7 +57,7 @@ const EventsTableRow = React.memo(({event, fight, checked, onRowClicked}: Events
     )
 })
 export default function EventsTable(props: EventsTableProps) {
-  const {fight, events, isChecked, onRowClicked, onRowMouseOver: setHover, ...rest} = props;
+  const {fight, events, isChecked, showStartCasts, onRowClicked, onRowMouseOver: setHover, ...rest} = props;
   return (
     <TableContainer {...rest}>
       <Table stickyHeader size="small">
@@ -68,10 +73,11 @@ export default function EventsTable(props: EventsTableProps) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {events.map(event => <EventsTableRow
+          {events.filter(event => event.type !== "begincast" || showStartCasts === true).map(event => <EventsTableRow
             checked={isChecked?.(event)==true}
             event={event}
             fight={fight}
+            combinedTime={showStartCasts !== true}
             onRowClicked={onRowClicked}
             />            
           )}

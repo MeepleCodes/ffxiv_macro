@@ -1,4 +1,4 @@
-import { Box, Drawer, IconButton, Menu, MenuItem, Toolbar } from "@mui/material";
+import { Box, Checkbox, Drawer, FormControlLabel, IconButton, Menu, MenuItem, Toolbar } from "@mui/material";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Action } from "../../excel/Action";
@@ -42,6 +42,7 @@ type EventCopy = ReplayEvent & {
 
 export default function Replay(props: ReplayProps) {
   const [open, setOpen] = React.useState(false);
+  const [showStarts, setShowStarts] = React.useState(false);
   const [selected, setSelected] = React.useState<Set<number>>(new Set());
   const [hovered, setHovered] = React.useState<ReplayEvent|null>(null);
   const [waymarkPreset, setWaymarkPreset] = React.useState<Preset|null>(null);
@@ -139,10 +140,24 @@ export default function Replay(props: ReplayProps) {
         <IconButton onClick={() => {setOpen(!open)}} color="primary">
           {open ? <ChevronRightIcon /> : <ChevronLeftIcon />}
         </IconButton>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={showStarts}
+              onChange={
+                (event: React.ChangeEvent<HTMLInputElement>) => {
+                  setShowStarts(event.target.checked)
+                }
+              }
+            />
+          }
+          label="Show startcasts"
+        />
       </Toolbar>
       <EventsTable
         events={events}
         fight={fight}
+        showStartCasts={showStarts}
         onRowMouseOver={setHovered}
         onRowClicked={handleRowClicked}
         isChecked={isChecked}

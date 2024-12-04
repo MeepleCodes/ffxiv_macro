@@ -1,0 +1,172 @@
+{
+  "zone": "aacm3",
+  "layers": [
+    {
+      "id": "1",
+      "type": "layer",
+      "fill": "cyan",
+      "opacity": 0,
+      "walkable": {
+        "type": "rect",
+        "width": 30,
+        "height": 30
+      },
+      "children": [
+        {
+          "type": "AoEDonut",
+          "id": "donut1",
+          "innerRadius": 8,
+          "outerRadius": 16,
+          "x": 107,
+          "y": 107
+        },
+        {
+          "type": "AoEDonut",
+          "id": "donut2",
+          "innerRadius": 8,
+          "outerRadius": 16,
+          "x": 93,
+          "y": 93
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "type": "layer",
+      "opacity": 1,
+      "fill": "yellow",
+      "walkable": {
+        "type": "rect",
+        "width": 30,
+        "height": 30
+      },
+      "children": [
+        {
+          "type": "AoEDonut",
+          "id": "donut3",
+          "innerRadius": 16,
+          "outerRadius": 24,
+          "x": 93,
+          "y": 93
+        },
+        {
+          "type": "AoEDonut",
+          "id": "donut4",
+          "innerRadius": 16,
+          "outerRadius": 24,
+          "x": 107,
+          "y": 107
+        }
+      ]
+    },
+    {
+      "id": "bosslayer",
+      "type": "layer",
+      "children": [
+        {
+          "type": "hitbox",
+          "x": 100,
+          "y": 100,
+          "radius": 6,
+          "stroke": "red"
+        }
+      ]
+    },
+    {
+      "id": "L1",
+      "type": "layer",
+      "children": [
+        {
+          "type": "player",
+          "id": "support-0",
+          "icon": "TankRole",
+          "label": "MT",
+          "aeMarker": {
+            "radius": 6
+          },
+          "x": 0.47833263337929566,
+          "y": -141.35448744870035
+        },
+        {
+          "type": "player",
+          "id": "support-1",
+          "icon": "TankRole",
+          "label": "OT",
+          "aeMarker": {
+            "radius": 6
+          },
+          "x": 1.0322444243038262,
+          "y": 138.1671799179204
+        },
+        {
+          "type": "player",
+          "id": "support-2",
+          "icon": "HealerRole",
+          "label": "H1",
+          "showHealRange": false,
+          "aeMarker": {
+            "radius": 6
+          },
+          "x": -172.78455405494628,
+          "y": 178.02115411536738
+        },
+        {
+          "type": "player",
+          "id": "support-3",
+          "icon": "HealerRole",
+          "showHealRange": false,
+          "label": "H2",
+          "aeMarker": {
+            "radius": 6
+          },
+          "x": 249.95974477428172,
+          "y": 271.2183242339298
+        },
+        {
+          "type": "player",
+          "id": "melee-1",
+          "icon": "Pugilist",
+          "label": "M1",
+          "aeMarker": {
+            "radius": 6
+          },
+          "x": -140.13596199612402,
+          "y": -2.2507698768806677
+        },
+        {
+          "type": "player",
+          "id": "melee-2",
+          "icon": "Pugilist",
+          "label": "M2",
+          "aeMarker": {
+            "radius": 6
+          },
+          "x": 135.7401928191971,
+          "y": 2.708974897400708
+        },
+        {
+          "type": "player",
+          "id": "ranged-1",
+          "icon": "Archer",
+          "label": "R1",
+          "aeMarker": {
+            "radius": 6
+          },
+          "x": -246.55083228340231,
+          "y": -254.9242196238074
+        },
+        {
+          "type": "player",
+          "id": "ranged-2",
+          "icon": "Archer",
+          "label": "R2",
+          "aeMarker": {
+            "radius": 6
+          },
+          "x": 177.4169232922934,
+          "y": -180.9718615857263
+        }
+      ]
+    }
+  ]
+}

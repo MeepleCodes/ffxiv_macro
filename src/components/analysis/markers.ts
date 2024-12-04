@@ -19,6 +19,7 @@ export function guessConeAngle(actionID: number): number {
 export const DonutRadii = {
   37300: 7, // Donut in xstage Combo in AAC M2S
    // Explosive Rain donuts in AAC M3S
+  37911: 8,
   37912: 15,
   37914: 8,
   37915: 16,
