@@ -6,7 +6,8 @@ export type HitBoxProps = {
   x: number,
   y: number,
   rotation?: number,
-  radius: number
+  radius: number,
+  stroke: string
 } & CircleConfig;
 
 export default function HitBox(props: HitBoxProps) {

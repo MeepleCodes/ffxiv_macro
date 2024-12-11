@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useSearch } from '@tanstack/react-router'
+import { createFileRoute, useSearch } from '@tanstack/react-router'
 import { Box, Button, Checkbox, FormControlLabel, IconButton, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableRowProps } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -8,6 +8,7 @@ import { fetchFightData, fetchMeta } from '../../../fflogs/fetch';
 import React from 'react';
 import { CastEvent } from '../../../fflogs/types';
 import { Report, ReportAbility } from '../../../fflogs/reports';
+import { RouteLink } from '../../../components/Links';
 
 async function fetchFights(reportID: string) {
   const report = await fetchMeta(reportID);
@@ -23,13 +24,13 @@ async function fetchFights(reportID: string) {
   );
 }
 type TimelineSearch = {
-  excludeFights: number[],
-  dontMerge: number[],
-  ignore: number[]
+  excludeFights?: number[],
+  dontMerge?: number[],
+  ignore?: number[]
 };
 
-function toggle(prev: number[], value: number): number[] {
-  return [...new Set<number>(prev).symmetricDifference(new Set<number>([value]))]
+function toggle(prev: number[]|undefined, value: number): number[] {
+  return [...new Set<number>(prev ?? []).symmetricDifference(new Set<number>([value]))]
 }
 
 export const Route = createFileRoute('/analysis/$reportID/timeline')({
@@ -63,14 +64,14 @@ function Timeline() {
   const casts = React.useMemo(() => 
     fights.map(
       (fight, i) => {
-        if(excludeFights.includes(i)) {
+        if(excludeFights?.includes(i) === true) {
           return [];
         }
         const out: MultiCast[] = [];
         for(const event of fight.events) {
-          if(event.type === "cast" && !ignore.includes(event.abilityGameID)) {
+          if(event.type === "cast" && ignore?.includes(event.abilityGameID) !== true) {
             const last = out.at(-1);
-            if(!dontMerge.includes(event.abilityGameID) && last?.abilityGameID === event.abilityGameID && last.sourceID === event.sourceID && Math.abs(last.timestamp-event.timestamp) < 10) {
+            if(dontMerge?.includes(event.abilityGameID) !== true && last?.abilityGameID === event.abilityGameID && last.sourceID === event.sourceID && Math.abs(last.timestamp-event.timestamp) < 10) {
               last.hitCount++;
             } else {
               out.push({
@@ -221,7 +222,7 @@ function Timeline() {
             </TableCell>
             {meta.fights.map((fight, i) => 
               <TableCell key={fight.id}>
-                <Link search={(prev) => ({...prev, excludeFights: toggle(prev.excludeFights, i)})} from={Route.fullPath}>{fight.id}</Link>
+                <RouteLink search={(prev) => ({...prev, excludeFights: toggle(prev.excludeFights, i)})} from={Route.fullPath}>{fight.id}</RouteLink>
               </TableCell>
             )}
             </TableRow>
@@ -272,10 +273,10 @@ const TimelineRow = React.memo(function TimelineRow(props: {row: RowData, meta: 
       {cast !== undefined && <>
       
         {formatTimestamp(cast)}: {meta.abilities.find(a => a.gameID === cast.abilityGameID)?.name} {cast.hitCount > 1 && ` x${cast.hitCount}`}
-        (<Link from={Route.fullPath} search={(prev) => ({...prev, dontMerge: toggle(prev.dontMerge, cast.abilityGameID)})}>don't merge
-        </Link>)
-        (<Link from={Route.fullPath} search={(prev) => ({...prev, ignore: toggle(prev.ignore, cast.abilityGameID)})}>ignore
-        </Link>)
+        (<RouteLink from={Route.fullPath} search={(prev) => ({...prev, dontMerge: toggle(prev.dontMerge, cast.abilityGameID)})}>don't merge
+        </RouteLink>)
+        (<RouteLink from={Route.fullPath} search={(prev) => ({...prev, ignore: toggle(prev.ignore, cast.abilityGameID)})}>ignore
+        </RouteLink>)
         </>
       }
     </TableCell>

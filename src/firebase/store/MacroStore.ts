@@ -16,7 +16,7 @@ export interface MacroDoc {
     deleted: boolean;
 };
 const MacroConverter: FirestoreDataConverter<MacroDoc>  = {
-    fromFirestore(snapshot: QueryDocumentSnapshot<DocumentData>, options?: SnapshotOptions): MacroDoc {
+    fromFirestore(snapshot: QueryDocumentSnapshot, _options?: SnapshotOptions): MacroDoc {
         const d = snapshot.data();
         return {
             id: snapshot.id,
@@ -55,7 +55,10 @@ export const Store = {
     watchAll(callback: (docs: MacroDoc[])=> void, sort?: Sort, filterText?: string): Unsubscribe {
         // TODO: At the moment we filter the macro list client-side because we assume it'll be relatively short
         // If we want to filter server-side we need to enable one of Firebase's text-indexing extensions
-        let filters = [where("owner", "==", auth.currentUser?.uid), where("deleted", "==", false)];
+        const filters = [
+            where("owner", "==", auth.currentUser?.uid),
+            where("deleted", "==", false)
+        ];
         // const filters = [where("owner", "==", auth.currentUser?.uid)];
         let q;
         if(sort !== undefined) {

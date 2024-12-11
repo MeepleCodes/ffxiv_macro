@@ -19,7 +19,7 @@ import { FunctionComponent, useContext, useEffect, useState } from 'react';
 import { StoreContext } from './StoreControls';
 import { Unsubscribe } from 'firebase/firestore';
 import { auth } from '../auth/FirebaseAuth';
-import { MacroDoc, Sort, SortKeys, Store } from './Firestore';
+import { MacroDoc, Sort, SortKeys, Store } from './MacroStore';
 
 import {
     ImageList,

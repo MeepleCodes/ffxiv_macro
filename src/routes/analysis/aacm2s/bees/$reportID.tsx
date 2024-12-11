@@ -3,6 +3,7 @@ import { List, ListItemButton, ListItemText, Stack } from '@mui/material';
 import { BeeEvent } from './bees.types';
 import { Report } from '../../../../fflogs/reports';
 import { LocationSaveData, Locator } from '../../../../fflogs/locator';
+import { ListItemButtonLink } from '../../../../components/Links';
 
 export const Route = createFileRoute('/analysis/aacm2s/bees/$reportID')({
   component: Bees,
@@ -20,7 +21,6 @@ type AllBeeEvents = {
   secondWave: BeeEvent[];
 }[];
 
-const ListItemButtonLink = createLink(ListItemButton);
 
 function Bees() {
   const {reportID} = Route.useParams();

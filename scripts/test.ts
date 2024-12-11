@@ -1,9 +1,41 @@
-import { readFileSync } from "fs";
-import { parseActionsCSV } from "../src/excel/Action";
+import { z } from 'zod';
 
-const csvPath = "./dat/Action.csv";
-const actions = parseActionsCSV(readFileSync(csvPath));
+import { AnyPart, PartSchema } from '../src/components/plans/schemas'
 
-for(const actionID of [1, 10000, 36754]) {
-  console.log(`actions[${actionID}].# = ${actions.at(actionID)?.["#"]}`);
+
+const data = PartSchema.parse(
+  {
+    id: "g1",
+    type: "group",
+    elements: [
+      {
+        id: "one",
+        type: "aoecone",
+        location: {
+          x: 10,
+          y: 10
+        },
+        angle: 60,
+        range: 10
+      },
+      {
+        id: "two",
+        type: "aoedonut",
+        location: {
+          x: 10,
+          y: 10
+        },
+        innerRadius: 10,
+        outerRadius: 20
+      }
+    ]
+  }
+
+);
+console.log(data);
+
+function f(p: AnyPart) {
+  if(p.type === "group") {
+    const e = p.elements;
+  }
 }

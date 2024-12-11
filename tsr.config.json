@@ -5,6 +5,7 @@
     "routeFileIgnorePrefix": "-",
     "quoteStyle": "double",
     "semicolons": true,
+    "autoCodeSplitting": true,
     "experimental": {
       "enableCodeSplitting": true
     }

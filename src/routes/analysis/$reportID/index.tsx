@@ -14,7 +14,7 @@ function ReportIndex() {
   const labels = Object.fromEntries(properties.map(property => [property, property[0].toUpperCase() + property.slice(1)])) as Record<keyof Report, string>;
   const [section, setSection] = React.useState<typeof properties[number] | null>(null);
   return (
-    <Paper sx={{m: 2, flex: 1, alignSelf: "stretch", marginLeft: 16, display: "flex", flexDirection: "row", overflow: "hidden"}}>
+    <Paper sx={{m: 2, flex: 1, alignSelf: "stretch", display: "flex", overflow: "hidden"}}>
       <List subheader="Report properties">
         {properties.map(property => 
           <ListItemButton

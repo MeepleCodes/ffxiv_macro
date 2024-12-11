@@ -5,7 +5,6 @@ export const Route = createFileRoute('/analysis/aacm2s/bees')({
   component: BeesParent,
 });
 
-const TabLink = createLink(Tab);
 
 function BeesParent() {
   const reportIDs = ["Yc98LCA3vQdPnBFw", "BNgWFPxt97Q3pkJv"];

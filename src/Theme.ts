@@ -1,26 +1,41 @@
 import { createTheme, Theme } from '@mui/material/styles';
-export let appTheme = createTheme();
-appTheme = createTheme(appTheme, {
+import type {} from '@mui/material/themeCssVarsAugmentation';
+export let appTheme = createTheme({
+    cssVariables: true,
+});
+appTheme = createTheme({
+    cssVariables: true,
     palette: {
-        inverted: {
-            main: appTheme.palette.primary.contrastText,
-            contrastText: '#fff',
-        },
+        inverted: appTheme.palette.augmentColor({
+            color: {
+                main: appTheme.palette.primary.contrastText
+            },
+            name: "inverted"
+        }),
+        //     main: appTheme.palette.primary.contrastText,
+        //     // main: "",
+        //     contrastText: '#fff',
+        // },
         mode: 'dark',
         text: {
             primary: 'rgba(255,255,255,0.9)',
             secondary: 'rgba(255,255,255,0.7)',
             disabled: 'rgba(255,255,255,0.5)'
-          },
-        primary: {
-            main: '#2297a6',
         },
+        primary: appTheme.palette.augmentColor({
+            color: {
+                main: '#2297a6',
+            }
+        }),
+        // primary: {
+        //     main: '#2297a6',
+        // },
         secondary: {
-          main: '#f50057',
+            main: '#f50057',
         },
         background: {
-          paper: 'rgba(66,66,66,0.74)',
-        },        
+            paper: 'rgba(66,66,66,0.74)',
+        }
     },
     components: {
         MuiCardHeader: {

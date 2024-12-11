@@ -1,11 +1,11 @@
 import { createFileRoute, createLink, Outlet, useMatchRoute } from '@tanstack/react-router'
 import { Box, Paper, Tab, Tabs } from '@mui/material';
+import { TabLink } from '../../components/Links';
 
 export const Route = createFileRoute('/analysis/timeline')({
   component: BeesParent,
 });
 
-const TabLink = createLink(Tab);
 
 function BeesParent() {
   const reportIDs = ["Yc98LCA3vQdPnBFw"];

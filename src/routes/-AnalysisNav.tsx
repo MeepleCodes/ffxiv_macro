@@ -1,6 +1,6 @@
 import React from "react";
 import { Drawer, DrawerProps, Stack, tabClasses, Tabs, tabsClasses } from '@mui/material'
-import { TabLink } from '../components/TabLink'
+import { TabLink } from '../components/Links'
 import { useMatchRoute } from "@tanstack/react-router";
 import { ReportIndex } from "../fflogs/reports";
 import dayjs from "dayjs";

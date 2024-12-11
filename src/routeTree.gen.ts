@@ -13,12 +13,19 @@ import { createFileRoute } from "@tanstack/react-router";
 // Import Routes
 
 import { Route as rootRoute } from "./routes/__root";
+import { Route as WorkertestImport } from "./routes/workertest";
+import { Route as PlantestImport } from "./routes/plantest";
+import { Route as PlansImport } from "./routes/plans";
+import { Route as NotesImport } from "./routes/notes";
 import { Route as NonsenseImport } from "./routes/nonsense";
+import { Route as ImporttestImport } from "./routes/importtest";
 import { Route as FusedownImport } from "./routes/fusedown";
 import { Route as ClipboardImport } from "./routes/clipboard";
 import { Route as AnalysisImport } from "./routes/analysis";
+import { Route as NotesIndexImport } from "./routes/notes/index";
 import { Route as AnalysisIndexImport } from "./routes/analysis/index";
 import { Route as PlanPlanIDImport } from "./routes/plan/$planID";
+import { Route as NotesNoteIDImport } from "./routes/notes/$noteID";
 import { Route as AnalysisTimelineImport } from "./routes/analysis/timeline";
 import { Route as AnalysisReportIDImport } from "./routes/analysis/$reportID";
 import { Route as AnalysisReportIDIndexImport } from "./routes/analysis/$reportID/index";
@@ -39,8 +46,33 @@ const IndexLazyImport = createFileRoute("/")();
 
 // Create/Update Routes
 
+const WorkertestRoute = WorkertestImport.update({
+  path: "/workertest",
+  getParentRoute: () => rootRoute,
+} as any);
+
+const PlantestRoute = PlantestImport.update({
+  path: "/plantest",
+  getParentRoute: () => rootRoute,
+} as any);
+
+const PlansRoute = PlansImport.update({
+  path: "/plans",
+  getParentRoute: () => rootRoute,
+} as any);
+
+const NotesRoute = NotesImport.update({
+  path: "/notes",
+  getParentRoute: () => rootRoute,
+} as any);
+
 const NonsenseRoute = NonsenseImport.update({
   path: "/nonsense",
+  getParentRoute: () => rootRoute,
+} as any);
+
+const ImporttestRoute = ImporttestImport.update({
+  path: "/importtest",
   getParentRoute: () => rootRoute,
 } as any);
 
@@ -64,6 +96,11 @@ const IndexLazyRoute = IndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import("./routes/index.lazy").then((d) => d.Route));
 
+const NotesIndexRoute = NotesIndexImport.update({
+  path: "/",
+  getParentRoute: () => NotesRoute,
+} as any);
+
 const AnalysisIndexRoute = AnalysisIndexImport.update({
   path: "/",
   getParentRoute: () => AnalysisRoute,
@@ -72,6 +109,11 @@ const AnalysisIndexRoute = AnalysisIndexImport.update({
 const PlanPlanIDRoute = PlanPlanIDImport.update({
   path: "/plan/$planID",
   getParentRoute: () => rootRoute,
+} as any);
+
+const NotesNoteIDRoute = NotesNoteIDImport.update({
+  path: "/$noteID",
+  getParentRoute: () => NotesRoute,
 } as any);
 
 const AnalysisTimelineRoute = AnalysisTimelineImport.update({
@@ -176,11 +218,46 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof FusedownImport;
       parentRoute: typeof rootRoute;
     };
+    "/importtest": {
+      id: "/importtest";
+      path: "/importtest";
+      fullPath: "/importtest";
+      preLoaderRoute: typeof ImporttestImport;
+      parentRoute: typeof rootRoute;
+    };
     "/nonsense": {
       id: "/nonsense";
       path: "/nonsense";
       fullPath: "/nonsense";
       preLoaderRoute: typeof NonsenseImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/notes": {
+      id: "/notes";
+      path: "/notes";
+      fullPath: "/notes";
+      preLoaderRoute: typeof NotesImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/plans": {
+      id: "/plans";
+      path: "/plans";
+      fullPath: "/plans";
+      preLoaderRoute: typeof PlansImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/plantest": {
+      id: "/plantest";
+      path: "/plantest";
+      fullPath: "/plantest";
+      preLoaderRoute: typeof PlantestImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/workertest": {
+      id: "/workertest";
+      path: "/workertest";
+      fullPath: "/workertest";
+      preLoaderRoute: typeof WorkertestImport;
       parentRoute: typeof rootRoute;
     };
     "/analysis/$reportID": {
@@ -197,6 +274,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AnalysisTimelineImport;
       parentRoute: typeof AnalysisImport;
     };
+    "/notes/$noteID": {
+      id: "/notes/$noteID";
+      path: "/$noteID";
+      fullPath: "/notes/$noteID";
+      preLoaderRoute: typeof NotesNoteIDImport;
+      parentRoute: typeof NotesImport;
+    };
     "/plan/$planID": {
       id: "/plan/$planID";
       path: "/plan/$planID";
@@ -210,6 +294,13 @@ declare module "@tanstack/react-router" {
       fullPath: "/analysis/";
       preLoaderRoute: typeof AnalysisIndexImport;
       parentRoute: typeof AnalysisImport;
+    };
+    "/notes/": {
+      id: "/notes/";
+      path: "/";
+      fullPath: "/notes/";
+      preLoaderRoute: typeof NotesIndexImport;
+      parentRoute: typeof NotesImport;
     };
     "/analysis/$reportID/$fightID": {
       id: "/analysis/$reportID/$fightID";
@@ -319,7 +410,12 @@ export const routeTree = rootRoute.addChildren({
   }),
   ClipboardRoute,
   FusedownRoute,
+  ImporttestRoute,
   NonsenseRoute,
+  NotesRoute: NotesRoute.addChildren({ NotesNoteIDRoute, NotesIndexRoute }),
+  PlansRoute,
+  PlantestRoute,
+  WorkertestRoute,
   PlanPlanIDRoute,
 });
 
@@ -335,7 +431,12 @@ export const routeTree = rootRoute.addChildren({
         "/analysis",
         "/clipboard",
         "/fusedown",
+        "/importtest",
         "/nonsense",
+        "/notes",
+        "/plans",
+        "/plantest",
+        "/workertest",
         "/plan/$planID"
       ]
     },
@@ -358,8 +459,27 @@ export const routeTree = rootRoute.addChildren({
     "/fusedown": {
       "filePath": "fusedown.tsx"
     },
+    "/importtest": {
+      "filePath": "importtest.tsx"
+    },
     "/nonsense": {
       "filePath": "nonsense.tsx"
+    },
+    "/notes": {
+      "filePath": "notes.tsx",
+      "children": [
+        "/notes/$noteID",
+        "/notes/"
+      ]
+    },
+    "/plans": {
+      "filePath": "plans.tsx"
+    },
+    "/plantest": {
+      "filePath": "plantest.tsx"
+    },
+    "/workertest": {
+      "filePath": "workertest.tsx"
     },
     "/analysis/$reportID": {
       "filePath": "analysis/$reportID.tsx",
@@ -378,12 +498,20 @@ export const routeTree = rootRoute.addChildren({
         "/analysis/timeline/$reportID"
       ]
     },
+    "/notes/$noteID": {
+      "filePath": "notes/$noteID.tsx",
+      "parent": "/notes"
+    },
     "/plan/$planID": {
       "filePath": "plan/$planID.tsx"
     },
     "/analysis/": {
       "filePath": "analysis/index.tsx",
       "parent": "/analysis"
+    },
+    "/notes/": {
+      "filePath": "notes/index.tsx",
+      "parent": "/notes"
     },
     "/analysis/$reportID/$fightID": {
       "filePath": "analysis/$reportID/$fightID.tsx",

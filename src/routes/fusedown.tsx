@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import useImage from 'use-image';
-import { Plan } from '../components/plans/plans';
-import PlanView from '../components/plans/PlanView';
+import { Plan } from '../components/oldplans/plans';
+import PlanView from '../components/oldplans/PlanView';
 import React from 'react';
 import { Paper } from '@mui/material';
 

@@ -5,8 +5,8 @@ import PlanPlayer from "./PlanPlayer";
 import SafeSpot from "./SafeSpot";
 import PlanCast from "./PlanCast";
 import LayerWrapper from "./LayerWrapper";
-import AoEDonut from "./AoEDonut";
-import HitBox from "./HitBox";
+import AoEDonut from "../drawing/AoEDonut";
+import HitBox from "../drawing/HitBox";
 
 // type Renderer<P> = {
 //   fn: (props: P) => React.ReactNode,

@@ -33,8 +33,6 @@ import {
 	CssBaseline,
 	Divider
 } from '@mui/material';
-import { ThemeProvider } from '@mui/material/styles';
-import { appTheme } from './Theme';
 
 
 declare global {

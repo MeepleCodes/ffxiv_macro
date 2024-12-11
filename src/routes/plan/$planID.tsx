@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { Plan } from '../../components/plans/plans';
-import PlanView from '../../components/plans/PlanView';
+import { Plan } from '../../components/oldplans/plans';
+import PlanView from '../../components/oldplans/PlanView';
 import React from 'react';
 import { Button, Paper } from '@mui/material';
 

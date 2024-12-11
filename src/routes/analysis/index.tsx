@@ -6,10 +6,11 @@ export const Route = createFileRoute('/analysis/')({
 });
 
 function AnalysisIndex() {
-  const reports = Route.parentRoute.useLoaderData();
-  return (<>
-      <AnalysisNav
-        reports={reports}>
-      </AnalysisNav>
-    </>)
+  return <></>
+  // const reports = Route.parentRoute.useLoaderData();
+  // return (<>
+  //     <AnalysisNav
+  //       reports={reports}>
+  //     </AnalysisNav>
+  //   </>)
 }

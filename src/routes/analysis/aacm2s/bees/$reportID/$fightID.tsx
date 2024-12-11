@@ -7,10 +7,10 @@ import { Box, Checkbox, FormControlLabel, List, ListItemAvatar, ListItemButton, 
 import { ReportActor } from '../../../../../fflogs/reports';
 import { LocationMatch } from '../../../../../fflogs/locator';
 import { GroupBeeMarker } from './-GroupBeeMarker';
-import { logToCanvasCoord, logToCanvasRotation } from '../-utils';
 import dayjs from 'dayjs';
 import { CircleConfig } from 'konva/lib/shapes/Circle';
 import { Grayscale } from 'konva/lib/filters/Grayscale';
+import { logToCanvasCoord, logToCanvasRotation } from '../../../../../components/analysis/position';
 
 
 export const Route = createFileRoute('/analysis/aacm2s/bees/$reportID/$fightID')({

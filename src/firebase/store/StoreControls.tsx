@@ -1,5 +1,5 @@
 import React, { createContext, createRef, RefObject, useContext, useEffect, useState } from "react";
-import { MacroDoc, Store } from './Firestore';
+import { MacroDoc, Store } from './MacroStore';
 import { HTMLTextEditorElement } from '../../texteditor/TextEditorReact'
 import { Bytes, Unsubscribe } from "firebase/firestore";
 
