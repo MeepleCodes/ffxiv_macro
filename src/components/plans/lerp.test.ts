@@ -3,7 +3,7 @@
  */
 
 import { suite, expect, test } from "vitest";
-import { canLerp as canLerp, lerp } from "./animations";
+import { canLerp as canLerp, lerp } from "./lerp";
 import { z } from "zod";
 
 suite("canLerp tests", () => {

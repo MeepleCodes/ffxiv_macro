@@ -3,8 +3,8 @@ import aacm2 from "../analysis/aac/aacm2.jpg";
 import aacm3 from "../analysis/aac/aacm3.jpg";
 
 export type ZoneProps = {
-  readonly image: string,
-  readonly scale?: number
+  image: string,
+  scale?: number
 }
 
 export type Zone = ZoneProps | keyof typeof Zones;

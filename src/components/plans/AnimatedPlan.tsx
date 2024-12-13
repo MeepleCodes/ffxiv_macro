@@ -1,20 +1,16 @@
 import React from "react";
-import { Zone } from "../drawing/zones"
-import { CastAnimation, castTimeline, MarkerPart, Timeline, timelineAt } from "./animations";
-import { Box, Button, Card, CardActionArea, CardContent, CardProps, Paper, PaperProps, Slider } from "@mui/material";
+import { castTimeline, timelineAt } from "./animations";
+import { Box, Button, Paper, PaperProps, Slider } from "@mui/material";
 import Arena from "../drawing/Arena";
 import PlanPart from "./PlanPart";
 import { Layer } from "react-konva";
 import { mergeSx } from "../../utils";
-export type AnimatedPlanConfig = {
-  zone: Zone,
-  frames: number,
-  parts: (Timeline|CastAnimation)[]
-}
+import { AnimatedPlanConfig, Part } from "./schemas";
+
 
 export type AnimatedPlanProps = {
   config: AnimatedPlanConfig,
-  onShowFrame?: (frame: number, parts: MarkerPart[]) => void
+  onShowFrame?: (frame: number, parts: Part[]) => void
 } & PaperProps;
 
 
