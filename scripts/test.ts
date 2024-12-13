@@ -1,41 +1,11 @@
 import { z } from 'zod';
 
-import { AnyPart, PartSchema } from '../src/components/plans/schemas'
+import { canLerp } from '../src/components/plans/animations';
 
-
-const data = PartSchema.parse(
-  {
-    id: "g1",
-    type: "group",
-    elements: [
-      {
-        id: "one",
-        type: "aoecone",
-        location: {
-          x: 10,
-          y: 10
-        },
-        angle: 60,
-        range: 10
-      },
-      {
-        id: "two",
-        type: "aoedonut",
-        location: {
-          x: 10,
-          y: 10
-        },
-        innerRadius: 10,
-        outerRadius: 20
-      }
-    ]
-  }
-
-);
-console.log(data);
-
-function f(p: AnyPart) {
-  if(p.type === "group") {
-    const e = p.elements;
-  }
-}
+console.log(canLerp(z.number()));
+console.log(canLerp(z.number().optional()));
+console.log(canLerp(z.number().default(10)));
+console.log(canLerp(z.number().describe("an number")));
+console.log(canLerp(z.object({
+  foo: z.number()
+})))
