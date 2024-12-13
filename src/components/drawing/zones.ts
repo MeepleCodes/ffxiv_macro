@@ -9,7 +9,7 @@ export type ZoneProps = {
 
 export type Zone = ZoneProps | keyof typeof Zones;
 
-export const Zones: Record<string, ZoneProps> = {
+export const Zones = {
   "aacm1": { image: aacm1 },
   "aacm2": { image: aacm2 },
   "aacm3": {
