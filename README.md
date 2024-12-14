@@ -35,7 +35,7 @@ green donut at 100, 100") but then we also want:
   * Players with range circles
   * Tethers have *two* attach targets
 * Update self: drag/drop, but also context menus
-* Editor rendering
+* Editor pane needs to update the state of the referenced object at a distance
 
 Do we need runtime property typing? I'm leaning yes:
 
@@ -49,12 +49,33 @@ I think we can achieve most of this by having:
   * Or a component with a switch() block in the render
 * Context that gives access to the top-level plan object
 * Make canEdit a context, nice and easy way to have the inactive layer/groups turn off editing for their children
-* onChange and onChildChange events for every element
+* onChange and onChildChange events for every element (?)
 * The Plan can have an index of id -> part to update its master tree structure, but that won't trigger prop redraws because the root object won't change (so the props on every leaf node may get stale, but that's okay because they're throwing them straight into a useEditable())
 * A usePartRef hook that tells the plan 'register/unregister for changes to `ref`'
   * useState, pass the setX back to plan, return the X to caller
-  * typing this might be hard...
-* 
+  * This works fine, but the context holder has to be the authority on the 'current' state of a given ID. What happens if all consumers of that ID remove themselves - should we also stop remembering the 'current' state of that part? It's also storing everything in a ref so it won't get reset under most circumstances - want to make sure that things like loading a different document (that might shared IDs) resets the state.
+  * I think that means "all consumers removed => remove state from ref" is probably sensible, but also we might want to make sure IDs are truly unique otherwise React might do weird things.
+  * Maybe 'current state of item' is set by the *last* consumer, not the first, so it doesn't matter? It does mean the 'master document' needs to make sure it's updated/is a consumer otherwise changes would get overwritten, but that may make more sense.
+    * This can't call all the setters, though, because that would be updating state during render. Hmm...
+  * OR: the context version has to pre-populate the ref'd map with the 'current state', and everything gets whatever was already in the map (ignoring whatever they pass in for `initial`) - this might be the best answer
+
+Who needs to know what...
+
+* Part rendering components need to know when the part state changes, and may also change it (e.g. for drag/drop)
+* Part editing sidebar components likewise
+* Referencing components need to know when their reference target changes or is deleted
+* Groups need to know when their children are deleted (this is what triggers the tree update by removing a node from the children array)
+* Components may need to know when they're deleted, so they can cascade to children and fire their onDeleted just in case there's a remote reference to one of them
+
+## Selections and transforming/grouping
+Konva has a Transformer tool (needs a bit of imperative code) which works by tweaking scaleX/Y, so hopefully we could use that.
+
+Grouping is:
+
+* Remove all objects in selection from their current parent (will it be the same parent? I think it has to be...)
+* Create a new group under that parent
+* Put the objects back in the new group
+* Select the group
 
 ## Animated plans
 Are multi-screen plans *with shared parts* a subset of an animated plan? Kindof...

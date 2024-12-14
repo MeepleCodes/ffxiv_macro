@@ -14,6 +14,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { Route as rootRoute } from "./routes/__root";
 import { Route as WorkertestImport } from "./routes/workertest";
+import { Route as TestImport } from "./routes/test";
 import { Route as PlantestImport } from "./routes/plantest";
 import { Route as PlansImport } from "./routes/plans";
 import { Route as NotesImport } from "./routes/notes";
@@ -48,6 +49,11 @@ const IndexLazyImport = createFileRoute("/")();
 
 const WorkertestRoute = WorkertestImport.update({
   path: "/workertest",
+  getParentRoute: () => rootRoute,
+} as any);
+
+const TestRoute = TestImport.update({
+  path: "/test",
   getParentRoute: () => rootRoute,
 } as any);
 
@@ -253,6 +259,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof PlantestImport;
       parentRoute: typeof rootRoute;
     };
+    "/test": {
+      id: "/test";
+      path: "/test";
+      fullPath: "/test";
+      preLoaderRoute: typeof TestImport;
+      parentRoute: typeof rootRoute;
+    };
     "/workertest": {
       id: "/workertest";
       path: "/workertest";
@@ -415,6 +428,7 @@ export const routeTree = rootRoute.addChildren({
   NotesRoute: NotesRoute.addChildren({ NotesNoteIDRoute, NotesIndexRoute }),
   PlansRoute,
   PlantestRoute,
+  TestRoute,
   WorkertestRoute,
   PlanPlanIDRoute,
 });
@@ -436,6 +450,7 @@ export const routeTree = rootRoute.addChildren({
         "/notes",
         "/plans",
         "/plantest",
+        "/test",
         "/workertest",
         "/plan/$planID"
       ]
@@ -477,6 +492,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/plantest": {
       "filePath": "plantest.tsx"
+    },
+    "/test": {
+      "filePath": "test.tsx"
     },
     "/workertest": {
       "filePath": "workertest.tsx"

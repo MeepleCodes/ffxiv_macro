@@ -45,32 +45,8 @@ export const OmenColour = {
  * @returns The cast as manual timeline keyframes
  */
 export function castTimeline(cast: CastAnimation): Timeline {
-  const omenFrames = [
-    {
-      frame: cast.castFrame - cast.omenFrames,
-      changes: {
-        colour: {
-          newValue: OmenColour,
-          lerp: false
-        },
-        opacity: {
-          newValue: 0,
-          lerp: false
-        },
-      },
-    },
-    {
-      frame: cast.castFrame-1,
-      changes: {
-        opacity: {
-          newValue: 0.7,
-          lerp: true
-        }
-      }
-    }
-  ];
-  const keyframes = [
-    ...(cast.omenFrames > 0 ? omenFrames : []),
+
+  const keyframes: Keyframe[] = [
     {
       frame: cast.castFrame,
       changes: {
@@ -94,6 +70,83 @@ export function castTimeline(cast: CastAnimation): Timeline {
       }
     }
   ];
+  if(cast.omenFrames > 0) {
+    keyframes.unshift({
+      frame: cast.castFrame-1,
+      changes: {
+        opacity: {
+          newValue: 0.7,
+          lerp: true
+        }
+      }
+    });
+    keyframes.unshift({
+      frame: cast.castFrame - cast.omenFrames,
+      changes: {
+        colour: {
+          newValue: OmenColour,
+          lerp: false
+        },
+        opacity: {
+          newValue: 0,
+          lerp: false
+        },
+      },
+    });
+    if(cast.omenFrames > 1) {
+      const omenInLen = Math.min(cast.omenFrames, 10);
+      switch(cast.part.type) {
+        case "aoecircle": {
+          keyframes.unshift({
+            frame: cast.castFrame - cast.omenFrames,
+            changes: {
+              radius: {
+                newValue: 0,
+                lerp: false
+              }
+            }
+          },{
+            frame: cast.castFrame - cast.omenFrames + omenInLen,
+            changes: {
+              radius: {
+                newValue: cast.part.radius,
+                lerp: true
+              }
+            }
+          });
+          break;
+        }
+        case "aoedonut": {
+          keyframes.unshift({
+            frame: cast.castFrame - cast.omenFrames,
+            changes: {
+              innerRadius: {
+                newValue: 0,
+                lerp: false
+              },
+              outerRadius: {
+                newValue: cast.part.outerRadius - cast.part.innerRadius,
+                lerp: false
+              }
+            }
+          },{
+            frame: cast.castFrame - cast.omenFrames + omenInLen,
+            changes: {
+              innerRadius: {
+                newValue: cast.part.innerRadius,
+                lerp: true
+              },
+              outerRadius: {
+                newValue: cast.part.outerRadius,
+                lerp: true
+              },
+            }
+          });
+          break;          
+        }
+      }
+    }
+  }
   
   const part: Part = {
     ...cast.part,
