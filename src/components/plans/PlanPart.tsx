@@ -1,18 +1,17 @@
 import { Group } from "react-konva";
 import AoEDonut from "../drawing/AoEDonut";
 import Draggable from "./Draggable";
-import { AnyPart, PartSchema } from "./schemas"
+import { Part, PartSchema } from "./schemas"
 import AoECircle from "../drawing/AoECircle";
 import AoECone from "../drawing/AoECone";
 
 export type PlanPartProps = {
-  config: AnyPart,
-  onChange?: (newConfig: AnyPart) => void,
-  onChildChange?: (newConfig: AnyPart) => void,
+  config: Part,
+  onChange?: (newConfig: Part) => void,
+  onChildChange?: (newConfig: Part) => void,
 }
 export default function PlanPart(props: PlanPartProps) {
   const {config, onChange, onChildChange} = props;
-  console.log("Creating", config.type, "part with onChange", onChange)
   switch(config.type) {
     case "aoedonut": {
       return <Draggable type={config.type} component={AoEDonut} config={config} onChange={onChange}/>

@@ -1,19 +1,23 @@
-import { addDoc, collection, CollectionReference, doc, Firestore, FirestoreDataConverter, getDoc, getFirestore, onSnapshot, orderBy, OrderByDirection, query, QueryConstraint, serverTimestamp, Timestamp, updateDoc, where, WithFieldValue } from "firebase/firestore";
+import { addDoc, collection, CollectionReference, doc, DocumentData, Firestore, FirestoreDataConverter, getDoc, getFirestore, onSnapshot, orderBy, OrderByDirection, PartialWithFieldValue, query, QueryConstraint, QueryDocumentSnapshot, serverTimestamp, SetOptions, SnapshotOptions, Timestamp, Unsubscribe, updateDoc, where, WithFieldValue } from "firebase/firestore";
 import React from "react";
 import { app } from "../Firebase";
 import { auth, useCurrentUser } from "../auth/FirebaseAuth";
 import { format } from "date-fns/format";
+import { T } from "vitest/dist/chunks/environment.0M5R1SX_.js";
 
 export type UserDoc = {
   id: string;
   owner?: string;
+  name: string;
   created: Timestamp|null;
   updated: Timestamp|null;
   deleted: boolean;  
 }
-export type Update<T extends UserDoc> = Omit<T, keyof UserDoc>// & Partial<UserDoc>;
-export type Unsaved<T extends UserDoc> = Omit<T, keyof UserDoc> & {id?: string};
+export type OwnFields<T extends UserDoc> = Omit<T, keyof UserDoc>;
+export type Update<T extends UserDoc> = Omit<T, keyof UserDoc> & {name: string};
+export type Unsaved<T extends UserDoc> = Omit<T, keyof UserDoc> & {id?: string, name: string};
 export type MaybeSaved<T extends UserDoc> = T | Unsaved<T>;
+
 export type Sort<T extends UserDoc> = {
   key: keyof T & string,
   direction?: OrderByDirection
@@ -28,25 +32,42 @@ export function updated(doc: UserDoc) {
 /**
  * Store for arbitrary document types with some common fields.
  */
-export class Store<T extends UserDoc> {
+export abstract class Store<T extends UserDoc> implements FirestoreDataConverter<T> {
   private db: Firestore;
   private collection: CollectionReference<T>;
   constructor(
-    collectionName: string,
-    converter: FirestoreDataConverter<T>,
-    private creator: () => Update<T>
+    collectionName: string
   ) {
     this.db = getFirestore(app);
-    this.collection = collection(this.db, collectionName).withConverter(converter);
+    this.collection = collection(this.db, collectionName).withConverter(this);
   }
+  
+  protected abstract constructOwnFields(): OwnFields<T>;
+  protected abstract hasChangedOwnFields(a: OwnFields<T>, b: OwnFields<T>): boolean;
+  abstract toFirestore(modelObject: WithFieldValue<T>): WithFieldValue<DocumentData>;
+  abstract toFirestore(modelObject: PartialWithFieldValue<T>, options: SetOptions): PartialWithFieldValue<DocumentData>;
+  abstract toFirestore(modelObject: unknown, options?: unknown): WithFieldValue<DocumentData> | PartialWithFieldValue<DocumentData>;
+  abstract fromFirestore(snapshot: QueryDocumentSnapshot, options?: SnapshotOptions): T;
 
   /**
    * Create a new, unsaved document
    * @returns A new, blank document
    */
   public new(): Unsaved<T> {
-    return {...this.creator(), id: undefined};
+    return {...this.constructOwnFields(), id: undefined, name: ""};
   }
+  
+  /**
+   * Compare if two documents have changed, ignoring meta-data fields (id,
+   * creation/update time etc). Name is not ignored, but ID is.
+   * @param a 
+   * @param b 
+   * @returns 
+   */
+  public hasChanged(a: MaybeSaved<T>, b: MaybeSaved<T>) {
+    return a.name !== b.name || this.hasChangedOwnFields(a, b);
+  }
+  
 
   /**
    * Save a document. If ID is known, it will be saved under that ID; otherwise
@@ -77,13 +98,17 @@ export class Store<T extends UserDoc> {
    * @returns The ID of the new document
    */
   public async saveAs(document: Update<T>): Promise<string> {
-    const docRef = await addDoc(this.collection, {
-      ...document,
-      owner: auth.currentUser?.uid,
-      updated: serverTimestamp(),
-      created: serverTimestamp(),
-      deleted: false
-    } as WithFieldValue<T>);
+    const docRef = await addDoc(
+      this.collection,
+      Object.assign(
+        document,
+        {
+          owner: auth.currentUser?.uid,
+          updated: serverTimestamp(),
+          created: serverTimestamp(),
+          deleted: false
+        }
+      ) as WithFieldValue<T>);
     // Setting the optional values of Update<T> doesn't produce a T, typescript
     // still thinks "'Update<T> & { owner: string; created: Timestamp; updated:
     // Timestamp; deleted: false; }' is assignable to the constraint of type
@@ -119,7 +144,17 @@ export class Store<T extends UserDoc> {
     await updateDoc(ref, {deleted: true});
   }
 
-  public watchOwn(uid: string|undefined, callback: (docs: T[]) => void, sortBy: Sort<T>[], includeDeleted = false) {
+  /**
+   * Watch function used by the useWatchOwnDocs() hook. Listens for changes to
+   * the list of documents of this type owned by a given user.
+   * 
+   * @param uid User to watch for
+   * @param callback Update function, will be called whenever the list of docs changes
+   * @param sortBy Sort criteria (if any)
+   * @param includeDeleted Include documents marked as deleted (default: false)
+   * @returns Unsubscribe function, call when updates are no longer required
+   */
+  public watchOwn(uid: string|undefined, callback: (docs: T[]) => void, sortBy: Sort<T>[], includeDeleted = false): Unsubscribe {
     // If there's no current user, the result will always be the empty list and
     // there's no subscription so just set that now and return a dummy
     // unsubscribe.

@@ -19,6 +19,7 @@ import { Route as PlantestImport } from "./routes/plantest";
 import { Route as PlansImport } from "./routes/plans";
 import { Route as NotesImport } from "./routes/notes";
 import { Route as NonsenseImport } from "./routes/nonsense";
+import { Route as MacroImport } from "./routes/macro";
 import { Route as ImporttestImport } from "./routes/importtest";
 import { Route as FusedownImport } from "./routes/fusedown";
 import { Route as ClipboardImport } from "./routes/clipboard";
@@ -27,6 +28,7 @@ import { Route as NotesIndexImport } from "./routes/notes/index";
 import { Route as AnalysisIndexImport } from "./routes/analysis/index";
 import { Route as PlanPlanIDImport } from "./routes/plan/$planID";
 import { Route as NotesNoteIDImport } from "./routes/notes/$noteID";
+import { Route as MacroMacroIDImport } from "./routes/macro/$macroID";
 import { Route as AnalysisTimelineImport } from "./routes/analysis/timeline";
 import { Route as AnalysisReportIDImport } from "./routes/analysis/$reportID";
 import { Route as AnalysisReportIDIndexImport } from "./routes/analysis/$reportID/index";
@@ -77,6 +79,11 @@ const NonsenseRoute = NonsenseImport.update({
   getParentRoute: () => rootRoute,
 } as any);
 
+const MacroRoute = MacroImport.update({
+  path: "/macro",
+  getParentRoute: () => rootRoute,
+} as any);
+
 const ImporttestRoute = ImporttestImport.update({
   path: "/importtest",
   getParentRoute: () => rootRoute,
@@ -120,6 +127,11 @@ const PlanPlanIDRoute = PlanPlanIDImport.update({
 const NotesNoteIDRoute = NotesNoteIDImport.update({
   path: "/$noteID",
   getParentRoute: () => NotesRoute,
+} as any);
+
+const MacroMacroIDRoute = MacroMacroIDImport.update({
+  path: "/$macroID",
+  getParentRoute: () => MacroRoute,
 } as any);
 
 const AnalysisTimelineRoute = AnalysisTimelineImport.update({
@@ -231,6 +243,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof ImporttestImport;
       parentRoute: typeof rootRoute;
     };
+    "/macro": {
+      id: "/macro";
+      path: "/macro";
+      fullPath: "/macro";
+      preLoaderRoute: typeof MacroImport;
+      parentRoute: typeof rootRoute;
+    };
     "/nonsense": {
       id: "/nonsense";
       path: "/nonsense";
@@ -286,6 +305,13 @@ declare module "@tanstack/react-router" {
       fullPath: "/analysis/timeline";
       preLoaderRoute: typeof AnalysisTimelineImport;
       parentRoute: typeof AnalysisImport;
+    };
+    "/macro/$macroID": {
+      id: "/macro/$macroID";
+      path: "/$macroID";
+      fullPath: "/macro/$macroID";
+      preLoaderRoute: typeof MacroMacroIDImport;
+      parentRoute: typeof MacroImport;
     };
     "/notes/$noteID": {
       id: "/notes/$noteID";
@@ -424,6 +450,7 @@ export const routeTree = rootRoute.addChildren({
   ClipboardRoute,
   FusedownRoute,
   ImporttestRoute,
+  MacroRoute: MacroRoute.addChildren({ MacroMacroIDRoute }),
   NonsenseRoute,
   NotesRoute: NotesRoute.addChildren({ NotesNoteIDRoute, NotesIndexRoute }),
   PlansRoute,
@@ -446,6 +473,7 @@ export const routeTree = rootRoute.addChildren({
         "/clipboard",
         "/fusedown",
         "/importtest",
+        "/macro",
         "/nonsense",
         "/notes",
         "/plans",
@@ -476,6 +504,12 @@ export const routeTree = rootRoute.addChildren({
     },
     "/importtest": {
       "filePath": "importtest.tsx"
+    },
+    "/macro": {
+      "filePath": "macro.tsx",
+      "children": [
+        "/macro/$macroID"
+      ]
     },
     "/nonsense": {
       "filePath": "nonsense.tsx"
@@ -515,6 +549,10 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/analysis/timeline/$reportID"
       ]
+    },
+    "/macro/$macroID": {
+      "filePath": "macro/$macroID.tsx",
+      "parent": "/macro"
     },
     "/notes/$noteID": {
       "filePath": "notes/$noteID.tsx",
