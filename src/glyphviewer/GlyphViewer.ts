@@ -119,7 +119,7 @@ class GlyphModel extends TextModel {
         // which means the setText call made during the super constructor ran
         // with an undefined 'cols' value. So, run it again, only this time lay
         // out properly. This feels...ugly
-        this.reset(value);
+        this.resetTo(value);
     }
     protected setText(newValue: string) {
         // Fix up any newline mess

@@ -34,7 +34,7 @@ describe("text editing", () => {
     //     model = new TextModel(font, "");
     // })
     modelTest("simple insert", ({model}) => {
-        model.reset("123");
+        model.resetTo("123");
         model.setCaretToC(1);
         model.insert("a");
         expect(model.text).toBe("1a23");
@@ -42,7 +42,7 @@ describe("text editing", () => {
         expect(model.cursor).toBeSane(model);
     });
     modelTest("insert replacing selection", ({model}) => {
-        model.reset("123");
+        model.resetTo("123");
         model.setCaretToC(1, true);
         model.insert("a");
         expect(model.text).toBe("a23");
@@ -50,7 +50,7 @@ describe("text editing", () => {
         expect(model.cursor).toBeSane(model);
     });
     modelTest("simple backspace", ({model}) => {
-        model.reset("123");
+        model.resetTo("123");
         model.setCaretToC(2);
         const selchange = vi.fn();
         model.addEventListener("selectionchange", selchange);

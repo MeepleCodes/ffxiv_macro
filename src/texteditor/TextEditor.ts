@@ -192,7 +192,7 @@ export class BaseTextElement extends HTMLElement {
     }
     public set value(newValue: string) {
         this._initialValue = newValue;
-        if(this.model) this.model.reset(newValue);
+        if(this.model) this.model.resetTo(newValue);
     }
 
     public set scale(newValue: number) {

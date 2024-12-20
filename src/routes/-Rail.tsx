@@ -16,7 +16,7 @@ export default function Rail() {
   return <>
     <NavRail>
       <NavRailButton
-          to="/"
+          to="/macro"
         >
         <LooksOneIcon/>
         Macros

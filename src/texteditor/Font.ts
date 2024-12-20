@@ -94,3 +94,32 @@ export interface CodeBlock {
     start: number;
     end: number;
 }
+
+/**
+ * 
+ * @param src URL of the font definition (json) file
+ * @returns The font and its texture image
+ */
+export async function loadFont(src: string): Promise<{font: Font, fontTexture: ImageBitmap}> {
+    const fontResp = await fetch(src);
+    if(!fontResp.ok) {
+        throw new Error(`Couldn't fetch font JSON data: ${fontResp.status} ${fontResp.statusText}`);
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const json = await fontResp.json();
+    if(!isRawFont(json)) {
+        console.error("Font JSON wasn't RawFont", json);
+        throw new Error("Got invalid font JSON data");
+    }
+    const font: Font = new Font(json);
+
+    const texURL = new URL(font.src, new URL(fontResp.url));
+    const texResp = await(fetch(texURL));
+
+    if(!texResp.ok) {
+        throw new Error(`Couldn't fetch font texture data: ${texResp.status} ${texResp.statusText}`);
+    }
+    const blob = await texResp.blob();
+    const fontTexture = await createImageBitmap(blob);    
+    return {font, fontTexture};
+}

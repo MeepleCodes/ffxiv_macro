@@ -1,8 +1,4 @@
-import { Box, Card, TextField } from "@mui/material";
-import LoadingButton from '@mui/lab/LoadingButton';
-import SaveIcon from '@mui/icons-material/Save';
-import ContentSavePlus from 'mdi-material-ui/ContentSavePlus';
-import FileOutline from 'mdi-material-ui/FileOutline';
+import { Card } from "@mui/material";
 
 import { NoteDoc, noteStore } from "../firebase/store/Notes"
 import React from "react";

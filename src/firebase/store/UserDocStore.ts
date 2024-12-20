@@ -3,7 +3,6 @@ import React from "react";
 import { app } from "../Firebase";
 import { auth, useCurrentUser } from "../auth/FirebaseAuth";
 import { format } from "date-fns/format";
-import { T } from "vitest/dist/chunks/environment.0M5R1SX_.js";
 
 export type UserDoc = {
   id: string;
@@ -68,6 +67,13 @@ export abstract class Store<T extends UserDoc> implements FirestoreDataConverter
     return a.name !== b.name || this.hasChangedOwnFields(a, b);
   }
   
+  /**
+   * Doing any pre-save processing, such as generating thumbnails.
+   * Default implementation does nothing.
+   */
+  public async presave(document: Update<T>): Promise<Update<T>> {
+    return Promise.resolve(document);
+  }
 
   /**
    * Save a document. If ID is known, it will be saved under that ID; otherwise

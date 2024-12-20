@@ -113,14 +113,14 @@ export class TextModel extends EventTarget {
 
     constructor(protected font: Font, initialValue: string = "") {
         super();
-        this.reset(initialValue);
+        this.resetTo(initialValue);
     }
 
     public setFont(newValue: Font) {
         this.font = newValue;
         this.layoutGlyphs();
     }
-    public reset(text: string) {
+    public resetTo(text: string) {
         this.setText(text);
         this.selectNone();
         this.history.reset(this.getState());
