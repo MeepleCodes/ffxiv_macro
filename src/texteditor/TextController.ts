@@ -15,9 +15,9 @@ type EventMap = {
 const EVENT_MAP: EventMap = {};
 
 function Handler(type: keyof HTMLElementEventMap, eventSource: (that: HTMLTextEditorElement) => EventTarget = (that: HTMLTextEditorElement) => that, requiresReady = true) {
-    return function(originalFunction: any, context: ClassMemberDecoratorContext) {
+    return function(owner: any, fname: string, descriptor: PropertyDescriptor) {
         EVENT_MAP[type] = {
-            handler: originalFunction,
+            handler: descriptor.value,
             source: eventSource,
             requiresReady
         }
