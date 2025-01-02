@@ -63,8 +63,8 @@ export default function UserMenu(props: UserMenuProps) {
       anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}      
       >
       {signedIn ? [
-      <MenuItem>{currentUser.displayName}</MenuItem>,
-      <MenuItem onClick={handleSignOut}>Sign out</MenuItem>
+      <MenuItem key="signedin-1">{currentUser.displayName}</MenuItem>,
+      <MenuItem key="signedin-2" onClick={handleSignOut}>Sign out</MenuItem>
       ]
       :
       <MenuItem onClick={handleSignIn}>

@@ -1,14 +1,16 @@
 import React from 'react';
 import HTMLGlyphViewerElement, { installWebComponent } from './GlyphViewer';
 export { default as HTMLGlyphViewerElement } from './GlyphViewer';
-interface TextEditorHTMLAttributes<T> extends Omit<React.HTMLAttributes<T>, "children"> {
+interface GlyphViewerHTMLAttributes<T> extends Omit<React.HTMLAttributes<T>, "children"> {
     fontsrc: string | object;
     value?: string;
     scale?: number;
-}
+};
+
 // React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>;
 // type TextEditorAttributes<T> = React.HTMLAttributes<T> & Omit<TextEditor, keyof HTMLCustomElement>;
-type GlyphViewerElementProps = React.DetailedHTMLProps<TextEditorHTMLAttributes<HTMLGlyphViewerElement>, HTMLGlyphViewerElement>;
+type GlyphViewerElementProps = React.DetailedHTMLProps<GlyphViewerHTMLAttributes<HTMLGlyphViewerElement>, HTMLGlyphViewerElement>;
+
 declare global {
   namespace JSX {
     interface IntrinsicElements {
