@@ -4,11 +4,12 @@
 import { Store, UserDoc } from "./UserDocStore";
 import { WithFieldValue, QueryDocumentSnapshot, SnapshotOptions, DocumentData } from "firebase/firestore";
 
-export interface NoteDoc extends UserDoc {
+export interface NoteFields {
   body: string;
 }
+export type NoteDoc = UserDoc<NoteFields>;
 
-class NoteStore extends Store<NoteDoc> {
+class NoteStore extends Store<NoteFields> {
   fromFirestore(snapshot: QueryDocumentSnapshot, _options?: SnapshotOptions): NoteDoc {
     const {owner, created, updated, deleted, name, body } = snapshot.data();
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -18,10 +19,10 @@ class NoteStore extends Store<NoteDoc> {
     const {owner, created, updated, deleted, name, body } = note;
       return {owner, created, updated, deleted, name, body};
   }
-  protected constructOwnFields(): Omit<NoteDoc, keyof UserDoc> {
+  protected constructOwnFields(): NoteFields {
       return {body: ""}
   }
-  protected hasChangedOwnFields(before: NoteDoc, after: NoteDoc): boolean {
+  protected hasChangedOwnFields(before: NoteFields, after: NoteFields): boolean {
       return before.body !== after.body;
   }
 

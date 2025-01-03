@@ -1,4 +1,4 @@
-import { MouseEvent, RefObject, useRef, useState } from "react";
+import React, { MouseEvent, RefObject, useRef, useState } from "react";
 
 import { BoxProps } from '@mui/material';
 
@@ -39,7 +39,7 @@ function GlyphTooltip({glyph, fontsrc}: {glyph?: Glyph, fontsrc: string}) {
         <Typography variant="caption">{glyph.w + glyph.right}x{glyph.h+glyph.top}px</Typography>
     </Stack>
 }
-export default function GlyphPicker(props: GlyphPickerProps) {
+export default React.memo(function GlyphPicker(props: GlyphPickerProps) {
     const {editorRef, fontsrc, ...rest} = props;
     const ref = useRef<HTMLGlyphViewerElement>(null);
     const [pinned, setPinned] = useState(false);
@@ -107,4 +107,4 @@ export default function GlyphPicker(props: GlyphPickerProps) {
             </Stack>
         </Box>
     )
-}
+});

@@ -34,8 +34,8 @@ export default class TextView {
         protected font: Font,
         protected fontTexture: ImageBitmap,
         protected dest: ImageBitmapRenderingContext,
-        protected textStyle: CSSStyleDeclaration,
-        protected selectionStyle: CSSStyleDeclaration,
+        protected textStyle?: CSSStyleDeclaration,
+        protected selectionStyle?: CSSStyleDeclaration,
         protected _showWhitespace = false,
         protected _scale = 1) {
         // TODO: These *could* redraw subsets
@@ -112,9 +112,7 @@ export default class TextView {
         }
         if(this.showWhitespace) {
             // Recolour the black/alpha whitespace buffer in place
-            // TODO: Use a CSS --custom-property for this style
-            this.whitespaceContext.fillStyle = this.textStyle.getPropertyValue("--whitespace-color");
-            console.log("Using whitespace-color of", this.textStyle.getPropertyValue("--whitespace-color"));
+            this.whitespaceContext.fillStyle = this.textStyle?.getPropertyValue("--whitespace-color") ?? "rgb(127, 127, 127)";
 
             this.whitespaceContext.globalCompositeOperation = "source-in";
             this.whitespaceContext.fillRect(0, 0, this.whitespaceBuffer.width, this.whitespaceBuffer.height);        
@@ -135,11 +133,11 @@ export default class TextView {
             this.selectContext.clearRect(0, 0, this.selectBuffer.width, this.selectBuffer.height);
         }
         this.textColourContext.globalCompositeOperation="source-over";
-        this.textColourContext.fillStyle = this.textStyle.color;
+        this.textColourContext.fillStyle = this.textStyle?.color ?? "black";
         this.textColourContext.fillRect(0, 0, this.textColourBuffer.width, this.textColourBuffer.height);
-        this.textColourContext.fillStyle = this.selectionStyle.color;
+        this.textColourContext.fillStyle = this.selectionStyle?.color ?? "white";
         // TODO: Would using .background work instead? Maybe
-        this.selectContext.fillStyle = this.selectionStyle.backgroundColor;
+        this.selectContext.fillStyle = this.selectionStyle?.backgroundColor ?? "black";
         for(const sel of this.model.selections) {
             this.textColourContext.fillRect(sel.x, sel.y, sel.w, sel.h);
             this.selectContext.fillRect(sel.x, sel.y, sel.w, sel.h);
@@ -159,7 +157,7 @@ export default class TextView {
             this.cursorContext.clearRect(0, 0, this.cursorBuffer.width, this.cursorBuffer.height);
         }
         // Cursor is drawn in CSS caret-color
-        this.cursorContext.strokeStyle = this.textStyle.caretColor;
+        this.cursorContext.strokeStyle = this.textStyle?.caretColor ?? "black";
         this.cursorContext.lineWidth = 1;
         if(this._caretVisible) {
             

@@ -6,7 +6,7 @@ import ContentSavePlus from 'mdi-material-ui/ContentSavePlus';
 import FileOutline from 'mdi-material-ui/FileOutline';
 import { Box, BoxProps, Stack, TextField } from "@mui/material";
 
-export type DocToolbarProps<T extends UserDoc> = {
+export type DocToolbarProps<T> = {
   store: Store<T>,
   liveDoc: MaybeSaved<T>,
   setLiveDoc: React.Dispatch<React.SetStateAction<MaybeSaved<T>>>,
@@ -14,7 +14,7 @@ export type DocToolbarProps<T extends UserDoc> = {
   namePlaceholder?: string
 } & BoxProps;
 
-export default function DocToolbar<T extends UserDoc>(props: DocToolbarProps<T>) {
+export default function DocToolbar<OwnFields>(props: DocToolbarProps<OwnFields>) {
   const {
     store, liveDoc, setLiveDoc, onIdChange, namePlaceholder,
     ...boxProps
@@ -24,7 +24,7 @@ export default function DocToolbar<T extends UserDoc>(props: DocToolbarProps<T>)
   const [busy, setBusy] = React.useState(false);
   
   // The last saved document (so we know if we have unsaved changes)
-  const [savedDoc, setSavedDoc] = React.useState<MaybeSaved<T>>(liveDoc);
+  const [savedDoc, setSavedDoc] = React.useState<MaybeSaved<OwnFields>>(liveDoc);
   // The live edited version of the document, updated whenever inputs change
   // Whether doc and savedDoc are the same
   const dirty = store.hasChanged(liveDoc, savedDoc);

@@ -1,13 +1,17 @@
 import { createFileRoute } from '@tanstack/react-router'
 import MacroTest from '../-macrotest'
 import MacroTest2 from '../-macrotest2';
+import { macroStore } from '../../firebase/store/Macro';
+import MacroScreen from '../../components/macro/MacroScreen';
 
 export const Route = createFileRoute('/macro/$macroID')({
-  // component: MacroTest
+  loader: async ({params: {macroID}}) => macroStore.load(macroID),
   component: MacroID
 });
 
 function MacroID() {
-  const {macroID} = Route.useParams();
-  return <MacroTest2 macroID={macroID}/>
+  const macro = Route.useLoaderData();
+  return <MacroScreen
+    doc={macro ?? undefined}
+  />
 }

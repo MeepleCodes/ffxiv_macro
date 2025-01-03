@@ -2,15 +2,15 @@
  * Doc information for macro documents
  */
 import { Bytes, DocumentData, FirestoreDataConverter, QueryDocumentSnapshot, SetOptions, SnapshotOptions, WithFieldValue } from "firebase/firestore";
-import { OwnFields, Store, Update, UserDoc } from './UserDocStore';
+import { Store, Update, UserDoc } from './UserDocStore';
 import TextView from "../../texteditor/TextView";
 import { TextModel } from "../../texteditor/TextModel";
 
 import axis12 from "../../res/axis-12-lobby-combined.json?url";
 import { loadFont } from "../../texteditor/Font";
 
-export interface MacroDoc extends UserDoc {
-    name: string;
+export type MacroDoc = UserDoc<MacroFields>;
+export interface MacroFields {
     text: string;
     thumbnail: Bytes;
 };
@@ -19,7 +19,7 @@ export enum MacroSortKeys {
     updated = "updated",
     name = "name"
 }
-export class MacroStore extends Store<MacroDoc> {
+export class MacroStore extends Store<MacroFields> {
 
     private canvas: HTMLCanvasElement;
     private context: ImageBitmapRenderingContext;
@@ -34,19 +34,19 @@ export class MacroStore extends Store<MacroDoc> {
         this.context = ctx;
         loadFont(axis12).then(({font, fontTexture}) => {
             this.model = new TextModel(font, "");
-            this.view = new TextView(this.model, font, fontTexture, this.context, {}, {});
+            this.view = new TextView(this.model, font, fontTexture, this.context);
             
         }).catch((reason: unknown) => {
             console.error("Unable to load font", reason);
         })
     }
-    protected constructOwnFields(): OwnFields<MacroDoc> {
+    protected constructOwnFields(): MacroFields {
         return {
             text: "",
             thumbnail: Bytes.fromBase64String("")
         }
     }
-    protected hasChangedOwnFields(a: OwnFields<MacroDoc>, b: OwnFields<MacroDoc>): boolean {
+    protected hasChangedOwnFields(a: MacroFields, b: MacroFields): boolean {
         return a.text !== b.text;
     }
     fromFirestore(snapshot: QueryDocumentSnapshot, _options?: SnapshotOptions): MacroDoc {
@@ -59,7 +59,7 @@ export class MacroStore extends Store<MacroDoc> {
         return {owner, name, text, created, updated, thumbnail, deleted};
     }
 
-    public async presave(document: Update<MacroDoc>): Promise<Update<MacroDoc>> {
+    public async presave(document: Update<MacroFields>): Promise<Update<MacroFields>> {
         if(this.model !== null && this.view !== null) {
             this.model.resetTo(document.text);
             const blob = await this.view.getThumbnail();

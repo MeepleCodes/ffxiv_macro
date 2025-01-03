@@ -4,7 +4,7 @@ import { app } from "../Firebase";
 import { auth, useCurrentUser } from "../auth/FirebaseAuth";
 import { format } from "date-fns/format";
 
-export type UserDoc = {
+export type UserDoc<OwnFields> = OwnFields & {
   id: string;
   owner?: string;
   name: string;
@@ -12,17 +12,19 @@ export type UserDoc = {
   updated: Timestamp|null;
   deleted: boolean;  
 }
-export type OwnFields<T extends UserDoc> = Omit<T, keyof UserDoc>;
-export type Update<T extends UserDoc> = Omit<T, keyof UserDoc> & {name: string};
-export type Unsaved<T extends UserDoc> = Omit<T, keyof UserDoc> & {id?: string, name: string};
-export type MaybeSaved<T extends UserDoc> = T | Unsaved<T>;
+/** An update to a user document, which may change the name but no other UserDoc fields */
+export type Update<OwnFields> = OwnFields & { name: string };
+/** An unsaved UserDoc which has a name and may have an ID */
+export type Unsaved<OwnFields> = OwnFields & {id?: string, name: string};
+/** A document that may or may not have been saved yet */
+export type MaybeSaved<OwnFields> = Unsaved<OwnFields> | UserDoc<OwnFields>;
 
-export type Sort<T extends UserDoc> = {
-  key: keyof T & string,
+export type Sort<OwnFields> = {
+  key: keyof UserDoc<OwnFields> & string,
   direction?: OrderByDirection
 }
 
-export function updated(doc: UserDoc) {
+export function updated(doc: UserDoc<unknown>) {
   return doc.updated ? 
       format(doc.updated.toDate(), "PPpp") :
       "No modified date/time"
@@ -31,28 +33,28 @@ export function updated(doc: UserDoc) {
 /**
  * Store for arbitrary document types with some common fields.
  */
-export abstract class Store<T extends UserDoc> implements FirestoreDataConverter<T> {
+export abstract class Store<OwnFields> implements FirestoreDataConverter<UserDoc<OwnFields>> {
   private db: Firestore;
-  private collection: CollectionReference<T>;
+  private collection: CollectionReference<UserDoc<OwnFields>>;
   constructor(
     collectionName: string
   ) {
     this.db = getFirestore(app);
-    this.collection = collection(this.db, collectionName).withConverter(this);
+    this.collection = collection(this.db, collectionName).withConverter<UserDoc<OwnFields>>(this);
   }
   
-  protected abstract constructOwnFields(): OwnFields<T>;
-  protected abstract hasChangedOwnFields(a: OwnFields<T>, b: OwnFields<T>): boolean;
-  abstract toFirestore(modelObject: WithFieldValue<T>): WithFieldValue<DocumentData>;
-  abstract toFirestore(modelObject: PartialWithFieldValue<T>, options: SetOptions): PartialWithFieldValue<DocumentData>;
+  protected abstract constructOwnFields(): OwnFields;
+  protected abstract hasChangedOwnFields(a: OwnFields, b: OwnFields): boolean;
+  abstract toFirestore(modelObject: WithFieldValue<UserDoc<OwnFields>>): WithFieldValue<DocumentData>;
+  abstract toFirestore(modelObject: PartialWithFieldValue<UserDoc<OwnFields>>, options: SetOptions): PartialWithFieldValue<DocumentData>;
   abstract toFirestore(modelObject: unknown, options?: unknown): WithFieldValue<DocumentData> | PartialWithFieldValue<DocumentData>;
-  abstract fromFirestore(snapshot: QueryDocumentSnapshot, options?: SnapshotOptions): T;
+  abstract fromFirestore(snapshot: QueryDocumentSnapshot, options?: SnapshotOptions): UserDoc<OwnFields>;
 
   /**
    * Create a new, unsaved document
    * @returns A new, blank document
    */
-  public new(): Unsaved<T> {
+  public new(): Unsaved<OwnFields> {
     return {...this.constructOwnFields(), id: undefined, name: ""};
   }
   
@@ -63,7 +65,7 @@ export abstract class Store<T extends UserDoc> implements FirestoreDataConverter
    * @param b 
    * @returns 
    */
-  public hasChanged(a: MaybeSaved<T>, b: MaybeSaved<T>) {
+  public hasChanged(a: MaybeSaved<OwnFields>, b: MaybeSaved<OwnFields>) {
     return a.name !== b.name || this.hasChangedOwnFields(a, b);
   }
   
@@ -71,7 +73,7 @@ export abstract class Store<T extends UserDoc> implements FirestoreDataConverter
    * Doing any pre-save processing, such as generating thumbnails.
    * Default implementation does nothing.
    */
-  public async presave(document: Update<T>): Promise<Update<T>> {
+  public async presave(document: Update<OwnFields>): Promise<Update<OwnFields>> {
     return Promise.resolve(document);
   }
 
@@ -85,7 +87,7 @@ export abstract class Store<T extends UserDoc> implements FirestoreDataConverter
    * @param document Document body to save
    * @returns The ID of the saved document.
    */
-  public async save(id: string|undefined, document: Update<T>): Promise<string> {
+  public async save(id: string|undefined, document: Update<OwnFields>): Promise<string> {
     if(id === undefined) {
       return await this.saveAs(document);
     } else {
@@ -103,7 +105,7 @@ export abstract class Store<T extends UserDoc> implements FirestoreDataConverter
    * @param document Document body to save
    * @returns The ID of the new document
    */
-  public async saveAs(document: Update<T>): Promise<string> {
+  public async saveAs(document: Update<OwnFields>): Promise<string> {
     const docRef = await addDoc(
       this.collection,
       Object.assign(
@@ -114,7 +116,11 @@ export abstract class Store<T extends UserDoc> implements FirestoreDataConverter
           created: serverTimestamp(),
           deleted: false
         }
-      ) as WithFieldValue<T>);
+      ) as WithFieldValue<UserDoc<OwnFields>>
+    );
+    // Even fixing the typing, this still breaks because WithFieldValue doesn't accept serverTimestamp() as a WithFieldValue<Timestamp>?
+
+
     // Setting the optional values of Update<T> doesn't produce a T, typescript
     // still thinks "'Update<T> & { owner: string; created: Timestamp; updated:
     // Timestamp; deleted: false; }' is assignable to the constraint of type
@@ -132,7 +138,7 @@ export abstract class Store<T extends UserDoc> implements FirestoreDataConverter
    * @param includeDeleted Whether to allow loading of a document marked deleted 
    * @returns The document, if it was found, otherwise null
    */
-  public async load(id: string, includeDeleted = false): Promise<T|null> {
+  public async load(id: string, includeDeleted = false): Promise<UserDoc<OwnFields>|null> {
     const snapshot = await getDoc(doc(this.collection, id));
     if(!snapshot.exists()) return null;
     else if(snapshot.data().deleted && !includeDeleted) return null;
@@ -160,7 +166,7 @@ export abstract class Store<T extends UserDoc> implements FirestoreDataConverter
    * @param includeDeleted Include documents marked as deleted (default: false)
    * @returns Unsubscribe function, call when updates are no longer required
    */
-  public watchOwn(uid: string|undefined, callback: (docs: T[]) => void, sortBy: Sort<T>[], includeDeleted = false): Unsubscribe {
+  public watchOwn(uid: string|undefined, callback: (docs: UserDoc<OwnFields>[]) => void, sortBy: Sort<OwnFields>[], includeDeleted = false): Unsubscribe {
     // If there's no current user, the result will always be the empty list and
     // there's no subscription so just set that now and return a dummy
     // unsubscribe.
@@ -199,12 +205,12 @@ export abstract class Store<T extends UserDoc> implements FirestoreDataConverter
  * @param includeDeleted Whether to incldue deleted documents
  * @returns The latest list of documents
  */
-export function useWatchOwnDocs<T extends UserDoc>(store: Store<T>, sortBy: Sort<T>[] = [], includeDeleted = false): T[] {
+export function useWatchOwnDocs<OwnFields>(store: Store<OwnFields>, sortBy: Sort<OwnFields>[] = [], includeDeleted = false, filter?: string): UserDoc<OwnFields>[] {
   const uid = useCurrentUser()?.uid;
-  const [docs, setDocs] = React.useState<T[]>([]);
+  const [docs, setDocs] = React.useState<UserDoc<OwnFields>[]>([]);
   React.useEffect(() => {
     const unsubscribe = store.watchOwn(uid, 
-      (docs: T[]) => {
+      (docs) => {
         setDocs(docs);
       },
       sortBy,
@@ -214,5 +220,10 @@ export function useWatchOwnDocs<T extends UserDoc>(store: Store<T>, sortBy: Sort
         unsubscribe();
     }    
   }, [uid, store, sortBy, setDocs, includeDeleted]);
-  return docs;
+  if(filter !== undefined && filter !== "") {
+    const lCaseFilter = filter.toLowerCase();
+    return docs.filter(doc => doc.name.toLowerCase().includes(lCaseFilter));
+  } else {
+    return docs;
+  }
 }
