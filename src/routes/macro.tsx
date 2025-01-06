@@ -41,7 +41,7 @@ function MacroRoot() {
       sx={{
         display: "grid",
         height: "100%",
-        gridTemplateRows: "56px 1fr",
+        gridTemplateRows: "48px 1fr",
         gridTemplateColumns: `min-content 56px minmax(min-content, 1fr) min-content 56px`,
         gridTemplateAreas: `"leftdrawer leftmenu   toolbar     toolbar     rightmenu"
                             "leftdrawer main       main        rightdrawer rightdrawer"`        

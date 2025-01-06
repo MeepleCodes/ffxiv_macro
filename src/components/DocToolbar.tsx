@@ -70,7 +70,7 @@ export default function DocToolbar<OwnFields>(props: DocToolbarProps<OwnFields>)
   }
   return (
     <Box {...boxProps}>
-      <Stack gap={1} direction="row">
+      <Stack gap={1} direction="row" alignItems="center">
         <LoadingButton
           color="primary"
           size="small"
@@ -89,6 +89,11 @@ export default function DocToolbar<OwnFields>(props: DocToolbarProps<OwnFields>)
           variant="outlined"
           color="primary"
           size="small"
+          sx={{
+            "& .MuiInputBase-input": {
+              py: 0.5
+            }
+          }}
         />
         <LoadingButton
           color="primary"
@@ -98,6 +103,7 @@ export default function DocToolbar<OwnFields>(props: DocToolbarProps<OwnFields>)
           startIcon={<SaveIcon/>}
           loadingPosition="start"
           variant="outlined"
+          size="small"
         >
           Save
         </LoadingButton>
@@ -109,6 +115,7 @@ export default function DocToolbar<OwnFields>(props: DocToolbarProps<OwnFields>)
           startIcon={<ContentSavePlus/>}
           loadingPosition="start"
           variant="outlined"
+          size="small"
         >
           Save a copy
         </LoadingButton>

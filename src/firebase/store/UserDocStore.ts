@@ -1,4 +1,4 @@
-import { addDoc, collection, CollectionReference, doc, DocumentData, Firestore, FirestoreDataConverter, getDoc, getFirestore, onSnapshot, orderBy, OrderByDirection, PartialWithFieldValue, query, QueryConstraint, QueryDocumentSnapshot, serverTimestamp, SetOptions, SnapshotOptions, Timestamp, Unsubscribe, updateDoc, where, WithFieldValue } from "firebase/firestore";
+import { addDoc, collection, CollectionReference, connectFirestoreEmulator, doc, DocumentData, Firestore, FirestoreDataConverter, getDoc, getFirestore, onSnapshot, orderBy, OrderByDirection, PartialWithFieldValue, query, QueryConstraint, QueryDocumentSnapshot, serverTimestamp, SetOptions, SnapshotOptions, Timestamp, Unsubscribe, updateDoc, where, WithFieldValue } from "firebase/firestore";
 import React from "react";
 import { app } from "../Firebase";
 import { auth, useCurrentUser } from "../auth/FirebaseAuth";
@@ -40,6 +40,9 @@ export abstract class Store<OwnFields> implements FirestoreDataConverter<UserDoc
     collectionName: string
   ) {
     this.db = getFirestore(app);
+    if(import.meta.env.DEV) {
+      connectFirestoreEmulator(this.db, '127.0.0.1', 8080);
+    }
     this.collection = collection(this.db, collectionName).withConverter<UserDoc<OwnFields>>(this);
   }
   
@@ -92,10 +95,10 @@ export abstract class Store<OwnFields> implements FirestoreDataConverter<UserDoc
       return await this.saveAs(document);
     } else {
       const ref = doc(this.collection, id);
-      await updateDoc(ref, {
+      await updateDoc(ref, this.toFirestore({
         ...document,
         updated: serverTimestamp()
-      });
+      }));
       return ref.id;
       }
   }
@@ -205,7 +208,7 @@ export abstract class Store<OwnFields> implements FirestoreDataConverter<UserDoc
  * @param includeDeleted Whether to incldue deleted documents
  * @returns The latest list of documents
  */
-export function useWatchOwnDocs<OwnFields>(store: Store<OwnFields>, sortBy: Sort<OwnFields>[] = [], includeDeleted = false, filter?: string): UserDoc<OwnFields>[] {
+export function useWatchOwnDocs<OwnFields>(store: Store<OwnFields>, sortBy?: Sort<OwnFields>[], includeDeleted?: boolean, filter?: string): UserDoc<OwnFields>[] {
   const uid = useCurrentUser()?.uid;
   const [docs, setDocs] = React.useState<UserDoc<OwnFields>[]>([]);
   React.useEffect(() => {
@@ -213,8 +216,8 @@ export function useWatchOwnDocs<OwnFields>(store: Store<OwnFields>, sortBy: Sort
       (docs) => {
         setDocs(docs);
       },
-      sortBy,
-      includeDeleted
+      sortBy ?? [],
+      includeDeleted ?? false
     );
     return () => {
         unsubscribe();
