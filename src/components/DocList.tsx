@@ -21,15 +21,20 @@ export type SortMode<OwnFields> = Mode & {
 export type DocListProps<OwnFields> = StackProps & {
   store: Store<OwnFields>,
   displayModes: [DisplayMode<OwnFields>, ...DisplayMode<OwnFields>[]],
+  defaultDisplay?: DisplayMode<OwnFields>,
   sortModes: SortMode<OwnFields>[],
+  defaultSort?: SortMode<OwnFields>
 }
 
 export default function DocList<OwnFields>(props: DocListProps<OwnFields>) {
-  const { store, displayModes, sortModes, ...rest } = props;
-  const [displayMode, setDisplayMode] = React.useState(displayModes[0]);
-  const [sortMode, setSortMode] = React.useState<SortMode<OwnFields> | undefined>(sortModes[0]);
+  const { store, displayModes, defaultDisplay, sortModes, defaultSort, ...rest } = props;
+  const [displayMode, setDisplayMode] = React.useState(defaultDisplay ?? displayModes[0]);
+  const [sortMode, setSortMode] = React.useState<SortMode<OwnFields> | undefined>(defaultSort ?? sortModes[0]);
   const [filterText, setFilterText] = React.useState("");
-  const docs = useWatchOwnDocs(store, sortMode?.sortOrder === undefined ? [] : [sortMode.sortOrder], false, filterText);
+  const sortOrder = React.useMemo(() => {
+    return sortMode?.sortOrder === undefined ? [] : [sortMode.sortOrder]
+  }, [sortMode]);
+  const docs = useWatchOwnDocs(store, sortOrder, false, filterText);
   return (
     <Stack sx={{ height: "100%" }} spacing={0} {...rest}>
       <Paper

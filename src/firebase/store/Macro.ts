@@ -1,7 +1,7 @@
 /**
  * Doc information for macro documents
  */
-import { Bytes, DocumentData, FirestoreDataConverter, QueryDocumentSnapshot, SetOptions, SnapshotOptions, WithFieldValue } from "firebase/firestore";
+import { Bytes, DocumentData, QueryDocumentSnapshot, WithFieldValue } from "firebase/firestore";
 import { Store, Update, UserDoc } from './UserDocStore';
 import TextView from "../../texteditor/TextView";
 import { TextModel } from "../../texteditor/TextModel";
@@ -49,15 +49,17 @@ export class MacroStore extends Store<MacroFields> {
     protected hasChangedOwnFields(a: MacroFields, b: MacroFields): boolean {
         return a.text !== b.text;
     }
-    fromFirestore(snapshot: QueryDocumentSnapshot, _options?: SnapshotOptions): MacroDoc {
-        const {owner, name, text, created, updated, thumbnail, deleted} = snapshot.data();
+    protected getOwnFieldsFromFirestore(snapshot: QueryDocumentSnapshot): MacroFields {
+        const {text, thumbnail} = snapshot.data();
+        // TODO: This should use Zod really
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        return {id: snapshot.id, owner, name, text, created, updated, thumbnail, deleted};
+        return {text, thumbnail};
     }
-    toFirestore(macro: WithFieldValue<MacroDoc>): DocumentData {
-        const {owner, name, text, created, updated, thumbnail, deleted} = macro;
-        return {owner, name, text, created, updated, thumbnail, deleted};
+    protected setOwnFieldsToFirestore(doc: WithFieldValue<MacroFields>): DocumentData {
+        const {text, thumbnail} = doc;
+        return {text, thumbnail};
     }
+
 
     public async presave(document: Update<MacroFields>): Promise<Update<MacroFields>> {
         if(this.model !== null && this.view !== null) {

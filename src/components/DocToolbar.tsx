@@ -25,7 +25,6 @@ export default function DocToolbar<OwnFields>(props: DocToolbarProps<OwnFields>)
   
   // The last saved document (so we know if we have unsaved changes)
   const [savedDoc, setSavedDoc] = React.useState<MaybeSaved<OwnFields>>(liveDoc);
-  // The live edited version of the document, updated whenever inputs change
   // Whether doc and savedDoc are the same
   const dirty = store.hasChanged(liveDoc, savedDoc);
   // Trigger the onIdChange callback whenever savedDoc.id changes

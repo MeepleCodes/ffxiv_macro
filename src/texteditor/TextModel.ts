@@ -127,7 +127,12 @@ export class TextModel extends EventTarget {
     }
     protected setText(newValue: string) {
         // Fix up any newline mess
-        this._text = newValue.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+        const newText = newValue.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+        // Don't redo rendering if the text hasn't changed
+        if(newText === this._text) {
+            return;
+        }
+        this._text = newText;
         this.lines = this._text.split("\n");
         this.layoutGlyphs();
     }

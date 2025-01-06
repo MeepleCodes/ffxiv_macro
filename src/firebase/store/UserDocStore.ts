@@ -1,6 +1,6 @@
-import { addDoc, collection, CollectionReference, connectFirestoreEmulator, doc, DocumentData, Firestore, FirestoreDataConverter, getDoc, getFirestore, onSnapshot, orderBy, OrderByDirection, PartialWithFieldValue, query, QueryConstraint, QueryDocumentSnapshot, serverTimestamp, SetOptions, SnapshotOptions, Timestamp, Unsubscribe, updateDoc, where, WithFieldValue } from "firebase/firestore";
+import { addDoc, collection, CollectionReference, connectFirestoreEmulator, doc, DocumentData, Firestore, FirestoreDataConverter, getDoc, getDocFromServer, getFirestore, onSnapshot, orderBy, OrderByDirection, PartialWithFieldValue, query, QueryConstraint, QueryDocumentSnapshot, serverTimestamp, SetOptions, SnapshotOptions, Timestamp, Unsubscribe, updateDoc, where, WithFieldValue } from "firebase/firestore";
 import React from "react";
-import { app } from "../Firebase";
+import { app, db } from "../Firebase";
 import { auth, useCurrentUser } from "../auth/FirebaseAuth";
 import { format } from "date-fns/format";
 
@@ -34,25 +34,44 @@ export function updated(doc: UserDoc<unknown>) {
  * Store for arbitrary document types with some common fields.
  */
 export abstract class Store<OwnFields> implements FirestoreDataConverter<UserDoc<OwnFields>> {
-  private db: Firestore;
   private collection: CollectionReference<UserDoc<OwnFields>>;
   constructor(
     collectionName: string
   ) {
-    this.db = getFirestore(app);
-    if(import.meta.env.DEV) {
-      connectFirestoreEmulator(this.db, '127.0.0.1', 8080);
-    }
-    this.collection = collection(this.db, collectionName).withConverter<UserDoc<OwnFields>>(this);
+    this.collection = collection(db, collectionName).withConverter<UserDoc<OwnFields>>(this);
   }
   
   protected abstract constructOwnFields(): OwnFields;
   protected abstract hasChangedOwnFields(a: OwnFields, b: OwnFields): boolean;
-  abstract toFirestore(modelObject: WithFieldValue<UserDoc<OwnFields>>): WithFieldValue<DocumentData>;
-  abstract toFirestore(modelObject: PartialWithFieldValue<UserDoc<OwnFields>>, options: SetOptions): PartialWithFieldValue<DocumentData>;
-  abstract toFirestore(modelObject: unknown, options?: unknown): WithFieldValue<DocumentData> | PartialWithFieldValue<DocumentData>;
-  abstract fromFirestore(snapshot: QueryDocumentSnapshot, options?: SnapshotOptions): UserDoc<OwnFields>;
-
+  protected abstract getOwnFieldsFromFirestore(snapshot: QueryDocumentSnapshot): OwnFields;
+  protected abstract setOwnFieldsToFirestore(doc: PartialWithFieldValue<OwnFields>): DocumentData;
+  // abstract toFirestore(modelObject: WithFieldValue<UserDoc<OwnFields>>): WithFieldValue<DocumentData>;
+  // abstract toFirestore(modelObject: PartialWithFieldValue<UserDoc<OwnFields>>, options: SetOptions): PartialWithFieldValue<DocumentData>;
+  // abstract toFirestore(modelObject: unknown, options?: unknown): WithFieldValue<DocumentData> | PartialWithFieldValue<DocumentData>;
+  // abstract fromFirestore(snapshot: QueryDocumentSnapshot, options?: SnapshotOptions): UserDoc<OwnFields>;
+  fromFirestore(snapshot: QueryDocumentSnapshot, _options?: SnapshotOptions): UserDoc<OwnFields> {
+    const {owner, name, created, updated, deleted} = snapshot.data();
+    return Object.assign(
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      {id: snapshot.id, owner, name, created, updated, deleted},
+      this.getOwnFieldsFromFirestore(snapshot)
+    );
+  }
+  toFirestore(modelObject: WithFieldValue<UserDoc<OwnFields>>): DocumentData;
+  toFirestore(modelObject: PartialWithFieldValue<UserDoc<OwnFields>>, options: SetOptions): PartialWithFieldValue<DocumentData>;
+  toFirestore(modelObject: WithFieldValue<UserDoc<OwnFields>> | PartialWithFieldValue<UserDoc<OwnFields>>, _options?: unknown): WithFieldValue<DocumentData> | PartialWithFieldValue<DocumentData> {
+    const {owner, name, created, updated, deleted} = modelObject;
+    return Object.fromEntries(
+      Object.entries(
+        Object.assign(
+          {owner, name, created, updated, deleted},
+          this.setOwnFieldsToFirestore(modelObject)
+        )
+      ).filter(
+        ([_, value]) => value !== undefined
+      )
+    );
+  }
   /**
    * Create a new, unsaved document
    * @returns A new, blank document
@@ -95,12 +114,19 @@ export abstract class Store<OwnFields> implements FirestoreDataConverter<UserDoc
       return await this.saveAs(document);
     } else {
       const ref = doc(this.collection, id);
-      await updateDoc(ref, this.toFirestore({
-        ...document,
+      const preSaved = await this.presave(document);
+      const updates = {
+        ...this.setOwnFieldsToFirestore(preSaved),
+        name: preSaved.name,
         updated: serverTimestamp()
-      }));
+      };
+      console.log("Updating doc", id, "with changes", updates);
+      await updateDoc(
+        ref,
+        updates
+      );
       return ref.id;
-      }
+    }
   }
   /**
    * Save a document under a new ID
@@ -109,27 +135,24 @@ export abstract class Store<OwnFields> implements FirestoreDataConverter<UserDoc
    * @returns The ID of the new document
    */
   public async saveAs(document: Update<OwnFields>): Promise<string> {
+    
+    // Even fixing the typing, this still breaks because WithFieldValue doesn't
+    // accept serverTimestamp() as a WithFieldValue<Timestamp>?
+    const preSaved = await this.presave(document);
+    const newDoc = Object.assign(
+      preSaved,
+      {
+        owner: auth.currentUser?.uid,
+        updated: serverTimestamp(),
+        created: serverTimestamp(),
+        deleted: false
+      }
+    ) as WithFieldValue<UserDoc<OwnFields>>;
     const docRef = await addDoc(
       this.collection,
-      Object.assign(
-        document,
-        {
-          owner: auth.currentUser?.uid,
-          updated: serverTimestamp(),
-          created: serverTimestamp(),
-          deleted: false
-        }
-      ) as WithFieldValue<UserDoc<OwnFields>>
+      newDoc
     );
-    // Even fixing the typing, this still breaks because WithFieldValue doesn't accept serverTimestamp() as a WithFieldValue<Timestamp>?
 
-
-    // Setting the optional values of Update<T> doesn't produce a T, typescript
-    // still thinks "'Update<T> & { owner: string; created: Timestamp; updated:
-    // Timestamp; deleted: false; }' is assignable to the constraint of type
-    // 'T', but 'T' could be instantiated with a different subtype of constraint
-    // 'UserDoc'.ts(2322)"
-    // Until I work out the correct way to type that, just force it
     return docRef.id;
   }
 
@@ -142,10 +165,13 @@ export abstract class Store<OwnFields> implements FirestoreDataConverter<UserDoc
    * @returns The document, if it was found, otherwise null
    */
   public async load(id: string, includeDeleted = false): Promise<UserDoc<OwnFields>|null> {
-    const snapshot = await getDoc(doc(this.collection, id));
+    const snapshot = await getDocFromServer(doc(this.collection, id));
     if(!snapshot.exists()) return null;
     else if(snapshot.data().deleted && !includeDeleted) return null;
-    else return snapshot.data();
+    else {
+      console.log("Loaded", snapshot.data());
+      return snapshot.data();
+    }
   }
 
   /**

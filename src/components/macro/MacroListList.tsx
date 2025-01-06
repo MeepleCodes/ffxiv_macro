@@ -1,5 +1,5 @@
 import { Avatar, IconButton, List, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
-import { DisplayMode, DisplayModeComponentProps } from "../DocList";
+import { DisplayModeComponentProps } from "../DocList";
 import { MacroFields, macroStore } from "../../firebase/store/Macro";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Route as MacroRoute } from '../../routes/macro/$macroID';
@@ -7,13 +7,8 @@ import { ListItemButtonLink } from "../Links";
 import Preview from "./Preview";
 import { updated } from "../../firebase/store/UserDocStore";
 
-import ViewListIcon from '@mui/icons-material/ViewList';
 
-export const MacroDisplayList: DisplayMode<MacroFields> = {
-  component: ListList,
-  icon: <ViewListIcon/>,
-  name: "List"
-}
+
 export default function ListList({docs}: DisplayModeComponentProps<MacroFields>) {
   return (
     <List dense>
@@ -36,7 +31,7 @@ export default function ListList({docs}: DisplayModeComponentProps<MacroFields>)
             </IconButton>
       }>
           <ListItemButtonLink
-            to={MacroRoute.fullPath}
+            to={MacroRoute.to}
             params={{
               macroID: macro.id
             }}

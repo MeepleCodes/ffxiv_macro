@@ -10,8 +10,8 @@ export type NotesScreenProps = {
 };
 
 export default function NotesScreen(props: NotesScreenProps) {
-  const {doc: initialDoc = noteStore.new(), onIdChange} = props;
-  const [liveDoc, setLiveDoc] = React.useState(initialDoc);
+  const {doc = noteStore.new(), onIdChange} = props;
+  const [liveDoc, setLiveDoc] = React.useState(doc);
   return <>
     <DocToolbar
       liveDoc={liveDoc}

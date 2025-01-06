@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import firebase from "firebase/compat/app";
+import { connectFirestoreEmulator, getFirestore } from "firebase/firestore";
 
 // Far from perfect but at least we're not committing the keys to github
 // (they're still accessible from the packed javascript)
@@ -16,5 +17,10 @@ const firebaseConfig = {
 // Initialize Firebase
 console.log("Initialising Firebase with appId", firebaseConfig.appId);
 export const app = initializeApp(firebaseConfig);
+export const db =  getFirestore(app);
+if(import.meta.env.DEV) {
+    connectFirestoreEmulator(db, '127.0.0.1', 5001);
+}
+
 // Initialise a v8 compatability mode version for Firebase WebUI to use
 export const compatApp = firebase.initializeApp(firebaseConfig);

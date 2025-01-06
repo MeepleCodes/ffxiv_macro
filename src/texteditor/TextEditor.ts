@@ -66,6 +66,9 @@ const STYLESHEET = `
 `;
 
 export class BaseTextElement extends HTMLElement {
+
+    protected static fontCache: Record<string, {font: Font, fontTexture: ImageBitmap}> = {};
+
     protected _fontSrc: string = "";
 
     /** Starting text value, saved until the first time a font is loaded and we can instantiate a Model */
@@ -121,9 +124,11 @@ export class BaseTextElement extends HTMLElement {
         this.errorMessage = document.createElement("p");
         this.errorElement.appendChild(this.errorMessage);
 
+        
         this.textStyle = getComputedStyle(this);
         this.selectStyle = getComputedStyle(this, "::selection");        
 
+        console.log("Computed text style to", this.textStyle, "text color", this.textStyle.color);
     }
 
     public static get observedAttributes(): string[] {
@@ -132,11 +137,11 @@ export class BaseTextElement extends HTMLElement {
     public attributeChangedCallback(name: string, oldValue: string|null, newValue: string|null): void {
         switch(name) {
             case "fontsrc": {
-                this.fontSrc = newValue || "";
+                this.fontSrc = newValue ?? "";
                 break;
             }
             case "value": {
-                this.value = newValue || "";
+                this.value = newValue ?? "";
                 break;
             }
             case "scale": {
@@ -154,7 +159,7 @@ export class BaseTextElement extends HTMLElement {
             this.setAttribute("contenteditable", "");
             this.setAttribute("tab-index", "0");
             this.setAttribute("draggable", "true");
-            this.setAttribute("aria-role", "textarea");
+            this.setAttribute("role", "textbox");
             this.setAttribute("aria-multiline", "true");
 
             const container = this.container;
@@ -173,6 +178,10 @@ export class BaseTextElement extends HTMLElement {
             // TODO: Work out the possible orderings of font
             // load/disconnected/connected. Are there scenarios where we need to
             // call model.addEventListener and controller.listen here?
+            // The font might have loaded first, in which case we will have
+            // a viewer but it won't have had any CSS when it first rendered.
+            // In that case, force a redraw to catch the new CSS.
+            if(this.viewer !== undefined) this.viewer.redraw();
         }
     }
     public disconnectedCallback() {
@@ -183,8 +192,9 @@ export class BaseTextElement extends HTMLElement {
     }
     public set fontSrc(newValue: string) {
         if(this._fontSrc !== newValue) {
+            console.log("fontSrc changed to", newValue);
             this._fontSrc = newValue;
-            this.loadFont(newValue);
+            void this.loadFont(newValue);
         }
     }
     public get value() {
@@ -232,31 +242,41 @@ export class BaseTextElement extends HTMLElement {
     }
     
     private async loadFont(src: string) {
-        this.spinner.hidden = false;
-        this.errorElement.hidden = true;
-        try {
-            const fontResp = await fetch(src);
-            if(!fontResp.ok) throw new Error(`Couldn't fetch font JSON data: ${fontResp.status} ${fontResp.statusText}`);
-            const json = await fontResp.json();
-            if(!isRawFont(json)) {
-                console.error("Font JSON wasn't RawFont", json);
-                throw new Error("Got invalid font JSON data");
-            }
-            const font: Font = new Font(json);
-
-            const texURL = new URL(font.src, new URL(fontResp.url));
-            const texResp = await(fetch(texURL));
-
-            if(!texResp.ok) throw new Error(`Couldn't fetch font texture data: ${texResp.status} ${texResp.statusText}`);
-            const blob = await texResp.blob();
-            const fontTexture = await createImageBitmap(blob);
+        if(src in BaseTextElement.fontCache) {
+            const {font, fontTexture} = BaseTextElement.fontCache[src];
             this.font = font;
             this.fontTexture = fontTexture;
             this.postFontLoad();
-            this.spinner.hidden = true;
-        } catch(e) {
-            console.error(e);
-            this.showError("Error loading");
+        } else {
+            this.spinner.hidden = false;
+            this.errorElement.hidden = true;
+            try {
+                const fontResp = await fetch(src);
+                if(!fontResp.ok) throw new Error(`Couldn't fetch font JSON data: ${fontResp.status} ${fontResp.statusText}`);
+                // TODO: Could use Zod here too
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                const json = await fontResp.json();
+                if(!isRawFont(json)) {
+                    console.error("Font JSON wasn't RawFont", json);
+                    throw new Error("Got invalid font JSON data");
+                }
+                const font: Font = new Font(json);
+
+                const texURL = new URL(font.src, new URL(fontResp.url));
+                const texResp = await(fetch(texURL));
+
+                if(!texResp.ok) throw new Error(`Couldn't fetch font texture data: ${texResp.status} ${texResp.statusText}`);
+                const blob = await texResp.blob();
+                const fontTexture = await createImageBitmap(blob);
+                this.font = font;
+                this.fontTexture = fontTexture;
+                BaseTextElement.fontCache[src] = {font, fontTexture};
+                this.postFontLoad();
+                this.spinner.hidden = true;
+            } catch(e) {
+                console.error(e);
+                this.showError("Error loading");
+            }
         }
     }
     protected postFontLoad(): void {
@@ -280,7 +300,6 @@ export default class HTMLTextEditorElement extends BaseTextElement implements Ev
 
     
     protected postFontLoad(this: this & {font: Font, fontTexture: ImageBitmap}): void {
-
         this.scrollMargin = {
             left: this.font.maxWidth * 2,
             right: this.font.maxWidth,
@@ -292,7 +311,7 @@ export default class HTMLTextEditorElement extends BaseTextElement implements Ev
             this.viewer.setFont(this.font, this.fontTexture);
         } else {
             this.model = new TextModel(this.font, this._initialValue);
-            this.viewer = new TextView(this.model, this.font, this.fontTexture, this.context, this.textStyle!, this.selectStyle!, this.showWhitespace, this.scale);
+            this.viewer = new TextView(this.model, this.font, this.fontTexture, this.context, this.textStyle, this.selectStyle, this.showWhitespace, this.scale);
             this.controller = new TextController(this, this.model, this.viewer);
             this.controller.attach();
             this.model.addEventListener("selectionchange", this);
@@ -337,32 +356,32 @@ export default class HTMLTextEditorElement extends BaseTextElement implements Ev
         return this.model?.cursor;
     }
     public get cursorX(): number {
-        return this.model?.cursor.x || 0;
+        return this.model?.cursor.x ?? 0;
     }
     public get cursorY(): number {
-        return this.model?.cursor.y || 0;
+        return this.model?.cursor.y ?? 0;
     }
     public get cursorRow(): number {
-        return this.model?.cursor.row || 0;
+        return this.model?.cursor.row ?? 0;
     }
     public get cursorCol(): number {
-        return this.model?.cursor.col || 0;
+        return this.model?.cursor.col ?? 0;
     }
     public get selectionLength(): number {
-        return this.model?.getSelectionLength() || 0;
+        return this.model?.getSelectionLength() ?? 0;
     }
     public get selectionPixels(): number | undefined {
         return this.model?.getSelectionWidth();
     }
     public get columnMode(): boolean {
-        return this.model?.columnSelection() || false;
+        return this.model?.columnSelection() ?? false;
     }
     public insert(text: string) {
         if(this.model) this.model.insert(text, true);
     }
     public async getThumbnail(): Promise<Blob> {
         if(this.viewer) return this.viewer.getThumbnail();
-        else return Promise.reject();
+        else return Promise.reject(new Error("No viewer"));
     }
     private updateScroll() {
         if(!this.model) return;

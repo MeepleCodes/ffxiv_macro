@@ -25,6 +25,7 @@ import { Route as FusedownImport } from "./routes/fusedown";
 import { Route as ClipboardImport } from "./routes/clipboard";
 import { Route as AnalysisImport } from "./routes/analysis";
 import { Route as NotesIndexImport } from "./routes/notes/index";
+import { Route as MacroIndexImport } from "./routes/macro/index";
 import { Route as AnalysisIndexImport } from "./routes/analysis/index";
 import { Route as PlanPlanIDImport } from "./routes/plan/$planID";
 import { Route as NotesNoteIDImport } from "./routes/notes/$noteID";
@@ -112,6 +113,11 @@ const IndexLazyRoute = IndexLazyImport.update({
 const NotesIndexRoute = NotesIndexImport.update({
   path: "/",
   getParentRoute: () => NotesRoute,
+} as any);
+
+const MacroIndexRoute = MacroIndexImport.update({
+  path: "/",
+  getParentRoute: () => MacroRoute,
 } as any);
 
 const AnalysisIndexRoute = AnalysisIndexImport.update({
@@ -334,6 +340,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AnalysisIndexImport;
       parentRoute: typeof AnalysisImport;
     };
+    "/macro/": {
+      id: "/macro/";
+      path: "/";
+      fullPath: "/macro/";
+      preLoaderRoute: typeof MacroIndexImport;
+      parentRoute: typeof MacroImport;
+    };
     "/notes/": {
       id: "/notes/";
       path: "/";
@@ -450,7 +463,7 @@ export const routeTree = rootRoute.addChildren({
   ClipboardRoute,
   FusedownRoute,
   ImporttestRoute,
-  MacroRoute: MacroRoute.addChildren({ MacroMacroIDRoute }),
+  MacroRoute: MacroRoute.addChildren({ MacroMacroIDRoute, MacroIndexRoute }),
   NonsenseRoute,
   NotesRoute: NotesRoute.addChildren({ NotesNoteIDRoute, NotesIndexRoute }),
   PlansRoute,
@@ -508,7 +521,8 @@ export const routeTree = rootRoute.addChildren({
     "/macro": {
       "filePath": "macro.tsx",
       "children": [
-        "/macro/$macroID"
+        "/macro/$macroID",
+        "/macro/"
       ]
     },
     "/nonsense": {
@@ -564,6 +578,10 @@ export const routeTree = rootRoute.addChildren({
     "/analysis/": {
       "filePath": "analysis/index.tsx",
       "parent": "/analysis"
+    },
+    "/macro/": {
+      "filePath": "macro/index.tsx",
+      "parent": "/macro"
     },
     "/notes/": {
       "filePath": "notes/index.tsx",

@@ -1,19 +1,15 @@
 import { IconButton, ImageList, ImageListItem, ImageListItemBar, ImageListItemProps, styled } from "@mui/material";
 import { MacroFields, macroStore } from "../../firebase/store/Macro";
-import { DisplayMode, DisplayModeComponentProps } from "../DocList";
+import { DisplayModeComponentProps } from "../DocList";
 import { Route as MacroRoute } from '../../routes/macro/$macroID';
 import { createLink } from "@tanstack/react-router";
 import React from "react";
 import Preview from "./Preview";
 import { updated } from "../../firebase/store/UserDocStore";
 import DeleteIcon from '@mui/icons-material/Delete';
-import ViewAgendaIcon from '@mui/icons-material/ViewAgenda';
 
-export const MacroDisplayPreviews: DisplayMode<MacroFields> = {
-  name: "Previews",
-  icon: <ViewAgendaIcon/>,
-  component:  PreviewList
-}
+
+
 
 const RoundedImageListItem = styled(
   createLink(
@@ -46,7 +42,7 @@ export default function PreviewList({ docs }: DisplayModeComponentProps<MacroFie
       {docs.map((doc) => (
         <RoundedImageListItem
           key={doc.id}
-          to={MacroRoute.fullPath}
+          to={MacroRoute.to}
           params={{
             macroID: doc.id
           }}
@@ -64,7 +60,7 @@ export default function PreviewList({ docs }: DisplayModeComponentProps<MacroFie
                 aria-label="Delete"
                 onClick={(e) => {
                   e.stopPropagation();
-                  if (doc.id !== undefined) macroStore.markDeleted(doc.id);
+                  macroStore.markDeleted(doc.id);
                 }}
               >
                 <DeleteIcon />

@@ -19,6 +19,8 @@ interface TextEditorHTMLAttributes<T> extends Omit<React.HTMLAttributes<T>, "chi
  */
 type TextEditorElementProps = React.DetailedHTMLProps<TextEditorHTMLAttributes<HTMLTextEditorElement>, HTMLTextEditorElement>;
 declare global {
+  // Can't find the way to do this with ES2015 modules so fuck it
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
         //DetailedHTMLProps<CanvasHTMLAttributes<HTMLCanvasElement>, HTMLCanvasElement> 
@@ -27,20 +29,22 @@ declare global {
   }
 }
 
+
 // Install/register the <text-editor/> web component
 installWebComponent();
 
 
 /**
- * Props for our wrapper <TextEditor/> component, which adds an event handler property.
+ * Props for our wrapper <TextEditor/> component, which adds event handler properties.
  */
 type TextEditorProps = TextEditorElementProps & {
-    onSelectionChange?: (ev: Event) => any;
+    onSelectionChange?: (ev: Event) => unknown;
+    onChange?: (ev: Event) => unknown;
     
 }
 
-export default React.forwardRef<HTMLTextEditorElement, TextEditorProps>(function TextEditor(props: TextEditorProps, fwdRef: React.ForwardedRef<HTMLTextEditorElement|null>) {
-    const {onSelectionChange, showWhitespace, className, ...rest} = props;
+const TextEditor = React.forwardRef<HTMLTextEditorElement, TextEditorProps>((props: TextEditorProps, fwdRef: React.ForwardedRef<HTMLTextEditorElement|null>) => {
+    const {onSelectionChange, onChange, showWhitespace, className, ...rest} = props;
     const myRef = React.useRef<HTMLTextEditorElement>(null);
     React.useImperativeHandle<HTMLTextEditorElement|null, HTMLTextEditorElement|null>(fwdRef, () => myRef.current);
     React.useEffect(() => {
@@ -48,11 +52,18 @@ export default React.forwardRef<HTMLTextEditorElement, TextEditorProps>(function
         if(onSelectionChange) {
             tgt?.addEventListener("selectionchange", onSelectionChange);
         }
+        if(onChange) {
+            tgt?.addEventListener("change", onChange);
+        }
         return () => {
             if(onSelectionChange) {
                 tgt?.removeEventListener("selectionchange", onSelectionChange);
             }
+            if(onChange) {
+                tgt?.removeEventListener("change", onChange);
+            }
         }
-    }, [myRef, onSelectionChange]);
-    return <text-editor class={className} ref={myRef} show-whitespace={showWhitespace ? "" : null} {...rest}/>
+    }, [myRef, onSelectionChange, onChange]);
+    return <text-editor class={className} ref={myRef} show-whitespace={showWhitespace == true ? "" : null} {...rest}/>
 });
+export default TextEditor;

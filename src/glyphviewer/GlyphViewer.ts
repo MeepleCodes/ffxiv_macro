@@ -95,7 +95,7 @@ class GlyphController implements Controller, EventListenerObject {
     }
     protected dragStarted(ev: DragEvent) {
         const selectedText = this.model.getSelectedText();
-        console.log("Glyph viewer drag start with", selectedText, this.model.getSelectedGlyph());
+        // console.log("Glyph viewer drag start with", selectedText, this.model.getSelectedGlyph());
         if(selectedText !== null) {
             const dt = ev.dataTransfer;
             if(dt) {
@@ -169,9 +169,9 @@ class GlyphModel extends TextModel {
         if(this.anchor === gp && this.cursor.c === gp.c + 1) return;
         this.anchor = gp;
         this.cursor = this.cursorFromC(gp.c + 1);
-        console.log("Selecting glyph. Anchor", this.anchor,"caret", this.cursor);
+        // console.log("Selecting glyph. Anchor", this.anchor,"caret", this.cursor);
         this.updateSelections();
-        console.log("Selections now", this.selections);
+        // console.log("Selections now", this.selections);
 
     }
     public getSelectedText(): string | null {

@@ -3,7 +3,7 @@ import { noteStore } from '../../firebase/store/Notes'
 import NotesScreen from '../../components/NotesScreen';
 
 export const Route = createFileRoute('/notes/$noteID')({
-  loader: async ({params: {noteID}}) => noteStore.load(noteID),
+  loader: async ({params: {noteID}}) => {console.log("Loading note", noteID); return noteStore.load(noteID).catch(() => null);},
   component: NoteID
     
 })

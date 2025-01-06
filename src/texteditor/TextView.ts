@@ -132,6 +132,7 @@ export default class TextView {
             this.textColourContext.clearRect(0, 0, this.textColourBuffer.width, this.textColourBuffer.height);
             this.selectContext.clearRect(0, 0, this.selectBuffer.width, this.selectBuffer.height);
         }
+        console.log("Rendering text in", this.textStyle?.color ?? "<default>");
         this.textColourContext.globalCompositeOperation="source-over";
         this.textColourContext.fillStyle = this.textStyle?.color ?? "black";
         this.textColourContext.fillRect(0, 0, this.textColourBuffer.width, this.textColourBuffer.height);
@@ -199,7 +200,7 @@ export default class TextView {
         this.outputBuffer.width = width * this.scale;
         this.outputBuffer.height = height * this.scale;
     }
-    protected redraw(text = true, selection = true, cursor = true) {
+    public redraw(text = true, selection = true, cursor = true) {
         // Redrawing the text will *always* redraw everything else because a)
         // the position of things might change and b) the canvas is getting
         // resized
