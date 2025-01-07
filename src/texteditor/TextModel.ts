@@ -119,6 +119,8 @@ export class TextModel extends EventTarget {
     public setFont(newValue: Font) {
         this.font = newValue;
         this.layoutGlyphs();
+        // Dispatch a selection change because the pixel coordinates might have changed
+        this.updateSelections(this.columnSelection());
     }
     public resetTo(text: string) {
         this.setText(text);
@@ -482,7 +484,6 @@ export class TextModel extends EventTarget {
         );
     }
     protected updateSelections(columnMode = false) {
-        console.debug("Updating selections - calculating from anchor", this.anchor, "to cursor", this.cursor);
         this.selectionParts = [];
         if(!columnMode) {
             // In normal select mode there's a single caret

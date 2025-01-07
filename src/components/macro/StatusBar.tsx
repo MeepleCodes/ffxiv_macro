@@ -1,4 +1,4 @@
-import { Box, BoxProps } from "@mui/material";
+import { Box, BoxProps, Stack, Typography } from "@mui/material";
 import React from "react";
 
 export type TEInfo = {
@@ -22,12 +22,18 @@ export default function StatusBar(props: StatusBarProps) {
       const px = info.selectionPixels == undefined ? "" : `, ${info.selectionPixels}px`;
       return `(${info.selectionLength} selected${px})`
     }
+    Ln {info.cursorRow}, Col {info.cursorCol} [{info.cursorX}, {info.cursorY}] {selectionText} {info.columnMode && "COL"}
   }, [info]);
   return (
     <Box {...rest}>
-      {info &&
-        <>Ln {info.cursorRow}, Col {info.cursorCol} [{info.cursorX}, {info.cursorY}] {selectionText} {info.columnMode && "COL"}</>
-      }
+      <Stack direction="row">
+        <Box sx={{flex: 1}}/>
+        <Typography variant="caption">
+          {info &&
+            <>Ln {info.cursorRow}, Col {info.cursorCol} [{info.cursorX}, {info.cursorY}] {selectionText} {info.columnMode && "COL"}</>
+          }
+      </Typography>
+      </Stack>
     </Box>
   )
 }

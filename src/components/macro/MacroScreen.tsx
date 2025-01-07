@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardActionArea, CardActions, CardMedia, Divider, FormControl, FormControlLabel, FormGroup, IconButton, InputLabel, MenuItem, Paper, Select, Stack, styled, Switch, Typography } from "@mui/material";
+import { Box, Card, CardActions, CardMedia, IconButton, InputAdornment, MenuItem, Select, Stack, styled, ToggleButton, Tooltip, Typography } from "@mui/material";
 
 import { MacroFields, macroStore } from "../../firebase/store/Macro"
 import React from "react";
@@ -10,8 +10,7 @@ import { FontSource, fontSources } from "./fonts";
 
 import { UserDoc } from "../../firebase/store/UserDocStore";
 import MenuIcon from '@mui/icons-material/Menu';
-import StatusBar, { TEInfo } from "./StatusBar";
-import { ThemeContext } from "@emotion/react";
+import FormatSizeIcon from '@mui/icons-material/FormatSize';
 
 export type MacroScreenProps = {
   doc?: UserDoc<MacroFields>,
@@ -31,6 +30,16 @@ const StyledTextEditor = styled(TextEditorReact)(({ theme }) => ({
   overflow: "auto"
 }));
 
+export type TEInfo = {
+	cursorX: number,
+	cursorY: number,
+	cursorRow: number,
+	cursorCol: number,
+	selectionLength: number,
+	selectionPixels: number | undefined,
+	columnMode: boolean,
+};
+
 
 export default function MacroScreen(props: MacroScreenProps) {
   const { doc = macroStore.new(), onIdChange } = props;
@@ -41,16 +50,30 @@ export default function MacroScreen(props: MacroScreenProps) {
   const [font, setFont] = React.useState(0);
   const [showWhitespace, setShowWhitespace] = React.useState(true);
   const ref = React.useRef<HTMLTextEditorElement | null>(null);
-  const [cur, setCur] = React.useState<TEInfo | undefined>();
+  const [cursorInfo, setCursorInfo] = React.useState<TEInfo | undefined>();
   const updateCursor = React.useCallback(() => {
     if (ref.current !== null) {
       const { cursorX, cursorY, cursorRow, cursorCol, selectionLength, selectionPixels, columnMode } = ref.current;
-      setCur({ cursorX, cursorY, cursorRow, cursorCol, selectionLength, selectionPixels, columnMode });
+      setCursorInfo({ cursorX, cursorY, cursorRow, cursorCol, selectionLength, selectionPixels, columnMode });
     }
-  }, [setCur, ref]);
+  }, [setCursorInfo, ref]);
   React.useEffect(() => {
     updateCursor();
   }, [updateCursor]);
+  const cursorText = React.useMemo(() => {
+    if(cursorInfo !== undefined) {
+      let selectionText = "";
+      if(cursorInfo.selectionLength > 0) {
+        const px = cursorInfo.selectionPixels == undefined ? "" : `, ${cursorInfo.selectionPixels}px`;
+        selectionText = `(${cursorInfo.selectionLength} selected${px})`
+      }
+      return `Ln ${cursorInfo.cursorRow}, Col ${cursorInfo.cursorCol}, [${cursorInfo.cursorX}, ${cursorInfo.cursorY}] px ${selectionText}${cursorInfo.columnMode ? " COL" : ""}`;
+    } else {
+      return "";
+    }
+    
+  }, [cursorInfo]);
+
   return <>
     <Stack direction="column" flex={1} overflow="hidden">
       <Stack direction="row" flex={0}>
@@ -104,8 +127,62 @@ export default function MacroScreen(props: MacroScreenProps) {
               onSelectionChange={updateCursor}
             />
           </CardMedia>
-          <CardActions sx={{ borderTopColor: (theme) => theme.vars.palette.divider, borderTopWidth: 1, borderTopStyle: "solid" }}>
-            <StatusBar info={cur} />
+          <CardActions
+            sx={{
+              borderTopColor: (theme) => theme.vars.palette.divider,
+              borderTopWidth: 1,
+              borderTopStyle: "solid",
+              px: 0,
+              py: 0,
+              height: "30px",
+              display: "flex",
+              flexDirection: "row",
+              overflow: "hidden",
+            }}
+            // disableSpacing
+          >
+              <Tooltip title="Font size">
+                <Select
+                  id="font-size"
+                  value={font.toString()}
+                  variant="standard"
+                  onChange={e => { setFont(parseInt(e.target.value)) }}
+                  startAdornment={
+                    <InputAdornment position="start" sx={{pointerEvents: "none", position: "absolute", left: "4px"}}><FormatSizeIcon fontSize="small"/></InputAdornment>
+                  }
+                  sx={{
+                    font: (theme) => theme.vars.font.caption,
+                    alignSelf: "stretch",
+                    "&:hover": {
+                      background: (theme) => theme.vars.palette.FilledInput.hoverBg
+                    },
+                    "&:hover:not(.Mui-disabled, .Mui-error):before": {
+                      borderBottom: 0
+                    },
+                    "&:before": {
+                      borderBottom: 0
+                    },
+                    "&:after": {
+                      borderBottom: 0
+                    },
+                    "& .MuiInputBase-input": {
+                      py: 0,
+                      px: 3.5,
+                      m: 0,
+                      border: 0
+                    }
+                  }}
+                >
+                  {fontSources.map((fontSource: FontSource, i: number) => <MenuItem key={fontSource.request} value={i}>{fontSource.size}pt</MenuItem>)}
+                </Select>
+              </Tooltip>
+              <Tooltip title="Show/hide visible whitespace characters">
+                <ToggleButton value="true" selected={showWhitespace} onChange={() => {setShowWhitespace(!showWhitespace)}} sx={{fontFamily: "Arial, Helvetica, Sans-serif"}}>
+                  ¶
+                </ToggleButton>
+              </Tooltip>
+            <Box flex={1}/>
+            <Typography sx={{mx: 1}} variant="caption">{cursorText}</Typography>
           </CardActions>
         </Card>
 
@@ -121,34 +198,6 @@ export default function MacroScreen(props: MacroScreenProps) {
           }}
           open={rightOpen}
         >
-          <Stack direction="column" sx={{ px: 1, width: "418px" }} spacing={1} overflow="hidden" flexShrink={0}>
-            <Typography variant="subtitle1" flex={1} sx={{ lineHeight: 2 }}>Settings</Typography>
-            <FormGroup>
-              <FormControlLabel
-                labelPlacement="start"
-                checked={showWhitespace}
-                onChange={() => { setShowWhitespace(!showWhitespace) }}
-                control={<Switch />}
-                slotProps={{ typography: { flex: 1 } }}
-                sx={{ ml: 1 }}
-                label="Show whitespace"
-              />
-            </FormGroup>
-            <FormControl size="small" color="inverted">
-              <InputLabel sx={{ color: "inherit", borderColor: "currentcolor" }} id="font-size">Font size</InputLabel>
-              <InputLabel id="font-size">Font size</InputLabel>
-              <Select
-                labelId="font-size"
-                id="font-size"
-                value={font.toString()}
-                label="Font size"
-                onChange={e => { setFont(parseInt(e.target.value)) }}
-              >
-                {fontSources.map((fontSource: FontSource, i: number) => <MenuItem key={fontSource.request} value={i}>{fontSource.name}</MenuItem>)}
-              </Select>
-            </FormControl>
-          </Stack>
-          <Divider orientation="horizontal" sx={{ my: 1 }} />
           <GlyphPicker
             editorRef={ref}
             fontsrc={fontSources[font].src}
