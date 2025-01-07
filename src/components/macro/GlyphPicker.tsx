@@ -78,7 +78,7 @@ export default React.memo(function GlyphPicker(props: GlyphPickerProps) {
     }
     return (
         <Box {...rest}>
-            <Stack direction="column">
+            <Stack direction="column" overflow="hidden" height="100%">
                 <Tabs value={tab} onChange={(e, v) => setTab(v)}>
                 {glyphPages.map((p, i) => (
                     <Tab 

@@ -20,21 +20,21 @@ import ViewListIcon from '@mui/icons-material/ViewList';
 
 
 const sortModes: SortMode<MacroFields>[] = [
-  {name: "Unsorted", icon: <SortVariantOff/>, sortOrder: undefined},
-  {name: "Name", icon: <SortAlphabeticalAscending/>, sortOrder: {key: "name", direction: "asc"}},
-  {name: "Name (reversed)", icon: <SortAlphabeticalDescending/>, sortOrder: {key: "name", direction: "desc"}},
-  {name: "Newest first", icon: <SortClockAscendingOutline/>, sortOrder: {key: "updated", direction: "desc"}},
-  {name: "Oldest first", icon: <SortClockDescendingOutline/>, sortOrder: {key: "updated", direction: "asc"}},
+  { name: "Unsorted", icon: <SortVariantOff />, sortOrder: undefined },
+  { name: "Name", icon: <SortAlphabeticalAscending />, sortOrder: { key: "name", direction: "asc" } },
+  { name: "Name (reversed)", icon: <SortAlphabeticalDescending />, sortOrder: { key: "name", direction: "desc" } },
+  { name: "Newest first", icon: <SortClockAscendingOutline />, sortOrder: { key: "updated", direction: "desc" } },
+  { name: "Oldest first", icon: <SortClockDescendingOutline />, sortOrder: { key: "updated", direction: "asc" } },
 ] as const;
 
 const MacroDisplayPreviews: DisplayMode<MacroFields> = {
   name: "Previews",
-  icon: <ViewAgendaIcon/>,
-  component:  PreviewList
+  icon: <ViewAgendaIcon />,
+  component: PreviewList
 }
 const MacroDisplayList: DisplayMode<MacroFields> = {
   component: ListList,
-  icon: <ViewListIcon/>,
+  icon: <ViewListIcon />,
   name: "List"
 }
 
@@ -48,6 +48,7 @@ export default function MacroFrame() {
         flexDireciton: "row",
         height: "100%",
         width: "100%",
+        overflow: "hidden"
       }}
     >
       <Sidebar
@@ -72,32 +73,31 @@ export default function MacroFrame() {
       </Sidebar>
       <Box
         sx={{
-          gridArea: "leftmenu",
           display: "flex",
           alignItems: "center",
-          flexDirection: "row"
-        }}
-        >
-
-      <IconButton
-        size="small"
-        onClick={() => {setLeftOpen(!leftOpen)}}
-        sx={{
-          alignSelf: "start",
-          mt: 1,
-          mr: -8,
-          borderTopLeftRadius: 0,
-          borderBottomLeftRadius: 0,
-          backgroundColor: (theme) => theme.vars.palette.background.paper,
-          ["&:hover"]: {
-            backgroundColor: (theme) => `rgba(${theme.vars.palette.dividerChannel} / 0.48)`
-          }
+          flexDirection: "row",
         }}
       >
-        <MenuIcon />
-      </IconButton>
+
+        <IconButton
+          size="small"
+          onClick={() => { setLeftOpen(!leftOpen) }}
+          sx={{
+            alignSelf: "start",
+            mt: 1,
+            mr: -8,
+            borderTopLeftRadius: 0,
+            borderBottomLeftRadius: 0,
+            backgroundColor: (theme) => theme.vars.palette.background.paper,
+            ["&:hover"]: {
+              backgroundColor: (theme) => `rgba(${theme.vars.palette.dividerChannel} / 0.48)`
+            }
+          }}
+        >
+          <MenuIcon />
+        </IconButton>
       </Box>
-      <Outlet/>
+      <Outlet />
     </Box>
   )
 }

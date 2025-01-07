@@ -34,7 +34,8 @@ export const Route = createRootRoute({
             <Box
               sx={{
                 flex: 1,
-                alignSelf: "stretch"
+                alignSelf: "stretch",
+                overflow: "hidden"
               }}
             >
               <Outlet />
