@@ -1,5 +1,5 @@
 import { createFileRoute, Outlet } from '@tanstack/react-router'
-import { fetchMeta } from '../../fflogs/fetch';
+import { fetchMeta } from '../../analysis/fetch';
 import ReportNav from './-ReportNav';
 
 export const Route = createFileRoute('/analysis/$reportID')({

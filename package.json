@@ -26,6 +26,7 @@
     "@mui/utils": "^6.1.10",
     "@mui/x-data-grid": "^7.23.1",
     "@react-hook/resize-observer": "^2.0.1",
+    "@supabase/supabase-js": "^2.47.12",
     "@tanstack/react-router": "^1.45.14",
     "@tanstack/router": "0.0.1-beta.53",
     "@xivapi/js": "^0.4.5",

@@ -8,7 +8,7 @@ async function loadPlan(planID: string): Promise<Plan> {
   const {default: imported} = await import(`./plan-${planID}.json`) as {default: Plan};
   return imported;
 }
-export const Route = createFileRoute('/plan/$planID')({
+export const Route = createFileRoute('/plans/$planID')({
   loader: async ({params: {planID}}) => loadPlan(planID),
   // staleTime: 300_000,
   component: PlanRoot,

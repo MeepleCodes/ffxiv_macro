@@ -3,7 +3,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import aacm1s from "../aacm1s/aacm1.jpg";
 import aacm2s from "../aacm2s/aacm2.jpg";
 import Replay from '../../../components/analysis/Replay'
-import { fetchFightData } from '../../../fflogs/fetch'
+import { fetchFightData } from '../../../analysis/fetch'
 import React from 'react';
 import { fightTs } from '../aacm2s/bees/-utils';
 

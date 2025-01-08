@@ -2,7 +2,7 @@ import { Box, Checkbox, Drawer, FormControlLabel, IconButton, Menu, MenuItem, To
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Action } from "../../excel/Action";
-import { Locator } from "../../fflogs/locator";
+import { Locator } from "../../analysis/locator";
 import { Report, ReportFight } from "../../fflogs/reports";
 import { Event } from "../../fflogs/types";
 import { fromReport, ReplayEvent } from "./events";

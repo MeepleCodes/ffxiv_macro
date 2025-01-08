@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Action } from '../../../excel/Action';
 import ReportActionSummary from '../../../components/analysis/ReportActionSummary';
-import { fetchActions, fetchMeta, fetchReportActionSummary } from '../../../fflogs/fetch';
+import { fetchActions, fetchMeta, fetchReportActionSummary } from '../../../analysis/fetch';
 import React from 'react';
 import { getObjectId } from '../../../utils';
 

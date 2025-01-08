@@ -27,7 +27,7 @@ import { Route as AnalysisImport } from "./routes/analysis";
 import { Route as NotesIndexImport } from "./routes/notes/index";
 import { Route as MacroIndexImport } from "./routes/macro/index";
 import { Route as AnalysisIndexImport } from "./routes/analysis/index";
-import { Route as PlanPlanIDImport } from "./routes/plan/$planID";
+import { Route as PlansPlanIDImport } from "./routes/plans/$planID";
 import { Route as NotesNoteIDImport } from "./routes/notes/$noteID";
 import { Route as MacroMacroIDImport } from "./routes/macro/$macroID";
 import { Route as AnalysisTimelineImport } from "./routes/analysis/timeline";
@@ -125,9 +125,9 @@ const AnalysisIndexRoute = AnalysisIndexImport.update({
   getParentRoute: () => AnalysisRoute,
 } as any);
 
-const PlanPlanIDRoute = PlanPlanIDImport.update({
-  path: "/plan/$planID",
-  getParentRoute: () => rootRoute,
+const PlansPlanIDRoute = PlansPlanIDImport.update({
+  path: "/$planID",
+  getParentRoute: () => PlansRoute,
 } as any);
 
 const NotesNoteIDRoute = NotesNoteIDImport.update({
@@ -326,12 +326,12 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof NotesNoteIDImport;
       parentRoute: typeof NotesImport;
     };
-    "/plan/$planID": {
-      id: "/plan/$planID";
-      path: "/plan/$planID";
-      fullPath: "/plan/$planID";
-      preLoaderRoute: typeof PlanPlanIDImport;
-      parentRoute: typeof rootRoute;
+    "/plans/$planID": {
+      id: "/plans/$planID";
+      path: "/$planID";
+      fullPath: "/plans/$planID";
+      preLoaderRoute: typeof PlansPlanIDImport;
+      parentRoute: typeof PlansImport;
     };
     "/analysis/": {
       id: "/analysis/";
@@ -466,11 +466,10 @@ export const routeTree = rootRoute.addChildren({
   MacroRoute: MacroRoute.addChildren({ MacroMacroIDRoute, MacroIndexRoute }),
   NonsenseRoute,
   NotesRoute: NotesRoute.addChildren({ NotesNoteIDRoute, NotesIndexRoute }),
-  PlansRoute,
+  PlansRoute: PlansRoute.addChildren({ PlansPlanIDRoute }),
   PlantestRoute,
   TestRoute,
   WorkertestRoute,
-  PlanPlanIDRoute,
 });
 
 /* prettier-ignore-end */
@@ -492,8 +491,7 @@ export const routeTree = rootRoute.addChildren({
         "/plans",
         "/plantest",
         "/test",
-        "/workertest",
-        "/plan/$planID"
+        "/workertest"
       ]
     },
     "/": {
@@ -536,7 +534,10 @@ export const routeTree = rootRoute.addChildren({
       ]
     },
     "/plans": {
-      "filePath": "plans.tsx"
+      "filePath": "plans.tsx",
+      "children": [
+        "/plans/$planID"
+      ]
     },
     "/plantest": {
       "filePath": "plantest.tsx"
@@ -572,8 +573,9 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "notes/$noteID.tsx",
       "parent": "/notes"
     },
-    "/plan/$planID": {
-      "filePath": "plan/$planID.tsx"
+    "/plans/$planID": {
+      "filePath": "plans/$planID.tsx",
+      "parent": "/plans"
     },
     "/analysis/": {
       "filePath": "analysis/index.tsx",

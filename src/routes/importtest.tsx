@@ -3,7 +3,7 @@ import React from 'react'
 import AnalysisWorker from "../workers/Analysis.Worker?worker"
 import { Button, LinearProgress, Link, List, ListItem, ListItemText, Paper, TextField, Typography } from '@mui/material';
 import { Link as RouterLink } from '@tanstack/react-router';
-import { fetchFightData } from '../fflogs/fetch';
+import { fetchFightData } from '../analysis/fetch';
 import { useWorker } from '../workers/useWorker';
 import { AnalysisResult } from '../workers/Analysis';
 

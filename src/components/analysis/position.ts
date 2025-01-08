@@ -19,8 +19,7 @@
  *
  * ## Canvas Space
  * Units are pixels, the arena centre is 0,0. 22.5 pixels is one yalm. Angles
- * are measured clockwise from south (which means you need to draw a line from
- * x,y to x,y+n to have it face along a given angle after applying a rotation).
+ * are in degrees measured clockwise from the X axis (east).
  */
 
 export type Position = {
@@ -60,17 +59,45 @@ export function logToGame(position: Position): Position {
   }
 }
 
+/**
+ * Convert a facing from FFLogs Space (centirads cw from east, range -3 to -1
+ * PI) to game space (rads cw from east, range 0 to 2 PI).
+ * @param facing 
+ * @returns 
+ */
+export function logToGameRotation(facing: number): number {
+  return (
+    (facing / 100.0) // Centirads -> rads
+     + (Math.PI * 4) // Force positive
+  ) % (Math.PI * 2); // Clamp to [0, 2PI)
+}
+
+/**
+ * Convert a log facing to what humans expect, ie degrees cw from north.
+ * @param facing 
+ * @returns 
+ */
 export function logToHumanRotation(facing: number): number {
   return (logToCanvasRotation(facing) + 180) % 360;
 }
 
 /**
- * Convert a facing from FFLogs Space to Canvas Space
+ * Convert a facing from FFLogs Space (centirads cw from east, range -3 to -1
+ * PI) to Canvas Space (degrees cw from east).
  * @param facing fflogs facing
  * @returns Canvas rotation
  */
 export function logToCanvasRotation(facing: number): number {
-  return ((((facing/100.0) * 180 / Math.PI) - 90 + 360) % 360);
+  return (
+    (
+      (
+        (facing/100.0)  // Centirads -> rads
+         * 180 / Math.PI // rads -> degrees
+      )
+      + 720 // Force positive
+    )
+    % 360 // Clamp to [0, 360)
+  );
 }
 
 /**
@@ -80,6 +107,20 @@ export function logToCanvasRotation(facing: number): number {
  */
 export function gameToCanvasDist(dist: number): number {
   return dist * 22.5;
+}
+
+/**
+ * Convert a facing from Game Space (radians cw from east)
+ * to canvas space (degrees cw from east).
+ * @param facing 
+ * @returns 
+ */
+export function gameToCanvasRotation(facing: number): number {
+  return (
+    (
+      (facing * 180 / Math.PI) // Radians -> degrees
+    )
+  );
 }
 
 /**

@@ -1,18 +1,14 @@
 import { Action } from "../excel/Action";
 import { LocationSaveData, Locator } from "./locator";
-import { Report, ReportIndex } from "./reports";
-import { Event } from "./types";
+import { Report, ReportIndex } from "../fflogs/reports";
+import { Event } from "../fflogs/types";
+import { Encounter, FightData, ReportActions } from "./types";
 
 export async function fetchMeta(reportID: string): Promise<Report> {
   return fetch(`${import.meta.env.BASE_URL}/analysis-data/${reportID}/meta.json`).then(resp => resp.json()) as Promise<Report>;
 }
 export async function fetchIndex(): Promise<ReportIndex[]> {
   return fetch(`${import.meta.env.BASE_URL}/analysis-data/reports.json`).then(resp => resp.json()) as Promise<ReportIndex[]>;
-}
-export interface FightData {
-  events: Event[];
-  locator: Locator;
-  actions: Action[];
 }
 export async function fetchFightData(reportID: string, fightID: string): Promise<FightData> {
   return Promise.all(["events.json", "locations.json", "actions.json"].map(file =>
@@ -33,13 +29,6 @@ export async function fetchActions(reportID: string, fightID: string): Promise<A
   );
 }
 
-export interface Encounter {
-  name: string;
-  actions: Action[];
-}
-export interface ReportActions {
-  encounters: Encounter[];
-}
 export async function fetchReportActionSummary(reportID: string): Promise<ReportActions> {
   console.time("fetchReportActionSummary");
   const meta = await fetchMeta(reportID);

@@ -2,7 +2,7 @@ import { createFileRoute, createLink, Outlet, useMatchRoute } from '@tanstack/re
 import { List, ListItemButton, ListItemText, Stack } from '@mui/material';
 import { BeeEvent } from './bees.types';
 import { Report } from '../../../../fflogs/reports';
-import { LocationSaveData, Locator } from '../../../../fflogs/locator';
+import { LocationSaveData, Locator } from '../../../../analysis/locator';
 import { ListItemButtonLink } from '../../../../components/Links';
 
 export const Route = createFileRoute('/analysis/aacm2s/bees/$reportID')({

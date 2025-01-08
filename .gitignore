@@ -32,3 +32,4 @@ build
 # Extra data
 dat/
 backups/
+.yarn/install-state.gz

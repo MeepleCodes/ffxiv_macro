@@ -1,18 +1,219 @@
-# Analysis
-Notes on various analysis tools and data sources.
+# FFLogs and other data sources
+Notes on extracting data about a fight, mostly from FFLogs but with reference to XIV client data and/or XIVAPI.
 
-# Getting data
-Main source is FFLog's V2 API, augmented with data from XIVApi and Garlond.
-
-## Background images
+# Background images
 https://cf.raidplan.io/raid/ff.aac1/map/01.r1-main.jpg
 
-## FFLogs
+# FFLogs
 FFLogs's own UI uses a "cast-events" data source to get a list of events with "childEvent" arrays (the damage done by a cast when it lands); this doesn't seem to be available through the GraphQL API which sucks.
 
-You also don't get worldMakers in the ReportData > report > fights array, and I don't see any place to get those via the API.
+You also don't get worldMarkers in the ReportData > report > fights array, and I don't see any place to get those via the API.
+
+As of 08/01/2025 there seems to be a bug in the fflogs V2 API, as it's returning `_rsv_13059_-1_1_0_0_S64755250_E64755250` as the name for the turrents in M4S, which is unhelpful. The V1 API correctly names them as `Gun Battery` so maybe we need to try the V1 API out for a bit...
+
+## V1
+The documented schema seems incomplete or just wrong, so...
+
+### report/fights/{{reportID}}
+```typescript
+{
+    "lang": string,
+    "fights": [
+        {
+            "id": 1,
+            "boss": 95, // 'encounterID' in V2
+            "start_time": 3909655,
+            "end_time": 4453162,
+            "name": "Brute Bomber",
+            // gameZone.id in V2
+            "zoneID": 1230,
+            // Not included in V2 (you only get the map name)
+            "zoneName": "AAC Light-heavyweight M3 (Savage)",
+            // No idea what this maps to
+            "zoneCounter": 3,
+            "size": 8,
+            "difficulty": 101,
+            "kill": false,
+            "partial": 0,
+            "inProgress": false,
+            "standardComposition": true,
+            "hasEcho": false,
+            "hasTrustNPCs": false,
+            "combatTime": 542486,
+            "bossPercentage": 2448,
+            "fightPercentage": 2448,
+            "lastPhaseAsAbsoluteIndex": 0,
+            "lastPhaseForPercentageDisplay": 0,
+            "maps": [
+                {
+                    // Not present in V2
+                    "mapID": 926,
+                    // gameZone.name in V2
+                    "mapName": "Blasting Ring",
+                    // Not present in V2
+                    "mapFile": "m-x6r3-x6r3.00.jpg"
+                }
+            ]
+        },
+        //... etc
+    ],
+    "friendlies": [
+        {
+            "name": "Player Name",
+            "id": 80,
+            "guid": 1000080,
+            // This is the subType of a v2 actor
+            "type": "Monk",
+            "server": "Cerberus",
+            "icon": "Monk",
+            "fights": [
+                {
+                    "id": 1
+                },
+                {
+                    "id": 2
+                },
+                // ... etc
+            ]
+        },
+        // ... etc
+    ],
+    "enemies": [
+        {
+            "name": "Brute Bomber",
+            "id": 93,
+            "guid": 2000093,
+            // This is the subType of a v2 actor
+            "type": "NPC",
+            "icon": "NPC",
+            "fights": [
+                {
+                    "id": 1,
+                    "instances": 12,
+                    "groups": 8
+                },
+                {
+                    "id": 2,
+                    "instances": 12,
+                    "groups": 10
+                },
+                // ... etc
+            ]
+        },
+        // ...etc
+    ],
+    "friendlyPets": [
+        {
+            "name": "Demi-Phoenix",
+            "id": 98,
+            "guid": 10488,
+            "type": "Pet",
+            "icon": "abilities/002000-002765.png",
+            "petOwner": 82,
+            "fights": [
+                {
+                    "id": 1,
+                    "instances": 2
+                },
+                //...etc
+            ]
+        },
+        //...etc
+    ],
+    "enemyPets": [],
+    "logVersion": 67,
+    "gameVersion": 1,
+    "phases": [],
+    "title": "AAC Light-Heavyweight",
+    "owner": "<their display name in fflogs>",
+    "start": 1736277103560,
+    "end": 1736286057986,
+    "zone": 62,
+    "exportedCharacters": [
+        {
+            "id": `<global id? a number>`,
+            "name": "Player Name",
+            "server": "Cerberus",
+            "region": "EU"
+        },
+        //...etc
+    ]
+}
+```
+
+### report/events/casts/{{reportID}}
+Relevant querystring params: start={{timestamp}}, end={{timestamp}}, hostility=1
+
+The response format seems to be basically the same as V2 except:
+* If there's no target (targetID -1 in V2), it will instead have `target` object for the Environment/-1 target
+* Addition of the `sourceIsFriendly`/`targetIsFriendly` booleans
+
+```typescript
+{
+  "events": [
+    {
+      "timestamp": 8909231,
+      "type": "cast",
+      "sourceID": 114,
+      "sourceInstance": 1,
+      "sourceIsFriendly": false,
+      "target": {
+        "name": "Environment",
+        "id": -1,
+        "guid": 0,
+        "type": "NPC",
+        "icon": "NPC"
+      },
+      "targetIsFriendly": false,
+      "ability": {
+        "name": "Electray",
+        "guid": 38379,
+        "type": 1024,
+        "abilityIcon": "000000-000405.png"
+      },
+      "fight": 11,
+      "sourceResources": {
+        "hitPoints": 18830000,
+        "maxHitPoints": 18830000,
+        "mp": 10000,
+        "maxMP": 10000,
+        "tp": 0,
+        "maxTP": 0,
+        "x": 8000,
+        "y": 11250,
+        "facing": -629
+      }
+    },
+    //...
+    {
+      "timestamp": 8913773,
+      "type": "begincast",
+      "sourceID": 113,
+      "sourceInstance": 4,
+      "sourceIsFriendly": false,
+      "targetID": 113,
+      "targetInstance": 4,
+      "targetIsFriendly": false,
+      "ability": {
+        "name": "Burst",
+        "guid": 38378,
+        "type": 1024,
+        "abilityIcon": "000000-000405.png"
+      },
+      "fight": 11,
+      "duration": 5700
+    },    
+    //...etc
+  ]
+  "count": 56,
+  "auraAbilities": []
+}
+```
 
 # Coordinate system
+Timestamps are in ms; the start/end times of a report are since epoch, but
+timestamps for fights and events within a fight are since the start of the
+containing report.
 
 ## Locations
 FFLogs 2D coordinates are x=horizontal, y=vertical, starting from the top-left
@@ -25,11 +226,10 @@ an FFLogs adjustment or what the actual game does.
 ## Facings
 FFLog values are in units of 0.01rad CW starting from east, they all seem to be
 between -PI and -3PI for... reasons but you can modulo that out.
-* -786 is north
-* -315 is west
-* -629 is east (= -2PI = 0)
-* -472 is south (= -1.5PI = 0.5PI)
-
+* -786 (-2.5 PI, -90d) is north
+* -315 (-1 PI, -180d) is west
+* -629 (-2 PI, -0d) is east - note the correct value would be -628 so either it wasn't facing directly east or there's a rounding error somewhere
+* -472 (-1.5 PI, -270d) is south
 
 # Zone backgrounds
 raidplan.io seems to have made custom-drawn zone backgrounds, rendering our own looks like it would be a massive pita so we'll borrow theirs for now
@@ -74,80 +274,6 @@ I think we'll just need a static map
 # Abilities and spells
 Ability IDs from FFLogs match up with those from XIVApi (https://xivapi.com/Action/<id>)
 Buffs/debuffs appear in FFLogs as 100xxxx for some reason, the actual ID (just the xxxx part) is on XIVApi at https://xivapi.com/Status/xxxx
-
-Radius around target is `effectRange` in yalms.
-
-## Cast types
-Cast type determines the shape of the AoE from an action.
-
-From [BossMod](https://github.com/awgil/ffxiv_bossmod/blob/master/BossMod/BossModule/AIHintsBuilder.cs)
-
-    2 => new AOEShapeCircle(data.EffectRange), // used for some point-blank aoes and enemy location-targeted - does not add caster hitbox
-    3 => new AOEShapeCone(data.EffectRange + actor.HitboxRadius, DetermineConeAngle(data) * 0.5f),
-    4 => new AOEShapeRect(data.EffectRange + actor.HitboxRadius, data.XAxisModifier * 0.5f),
-    5 => new AOEShapeCircle(data.EffectRange + actor.HitboxRadius),
-    //6 => ???
-    //7 => new AOEShapeCircle(data.EffectRange), - used for player ground-targeted circles a-la asylum
-    //8 => charge rect
-    10 => new AOEShapeDonut(DetermineDonutInner(data), data.EffectRange),
-    11 => new AOEShapeCross(data.EffectRange, data.XAxisModifier * 0.5f),
-    12 => new AOEShapeRect(data.EffectRange, data.XAxisModifier * 0.5f),
-    13 => new AOEShapeCone(data.EffectRange, DetermineConeAngle(data) * 0.5f),
-
-From [event-trigger](https://github.com/xpdota/event-trigger/blob/master/xivsupport/src/main/java/gg/xp/xivsupport/gui/map/MapPanel.java#L892)
-
-    From Valarnin:
-    2 - Circle AoE, range directly based on `EffectRange` column
-    3 - Cone, range is `EffectRange` + actor's hitbox radius, angle depends on Omen
-    4 - Rectangle, range is `EffectRange` + actor's hitbox radius, offset is half of `XAxisModifier` column?
-    5 - Circle AoE, range is `EffectRange` + actor's hitbox radius
-    6 - I think these are circle AoEs with no actual ground-target AoE shown even as they're resolving, e.g. `Twister`. Should use one of the two formulas (including hitbox raidus or excluding), but not sure.
-    8 - "wild charge" rectangle, not sure exactly how width is determined, probably also half of `XAxisModifier`?
-    10 - Donut AoE, not sure how inner/outer range is calculated
-    11 - cross-shaped AoEs? not 100% sure on this one
-    12 - Rectangle, range is `EffectRange`, offset is half of `XAxisModifier` column
-    13 - Cone, range is `EffectRange`, angle depends on Omen
-        */
-    /*
-    My further notes:
-    #10 - effect range is the outer radius
-
-    #11 - yes, it's cross
-
-    #12 is a rectangle, but sometimes it is centered on the caster, extending <effectRange> forward and back
-        Perhaps cast angle/position will help
-
-    #13 seems to be not only cones, but also things like Omega's "Swivel Cannon" in TOP P5,
-    which is a half-room cleave but with the angle offset a bit.
-
-### Cones
-BossMod tries to use omen data to determine cone angle, often not present.
-
-Examples:
-* [Honeyed Breeze](https://xivapi.com/Action/37224) is AAC M2 normal tankbuster - a narrow cone, <45?. effectRange 40, animation 7929, key mon_sp/gimmick/n4gb_boss_gimmick03
-* [Stinging Slash](https://xivapi.com/Action/37277) is the tankbuster on savage - approx 90 degrees. effectRange 50, animation 7592, key mon_sp/gimmick/n4g6_boss_gimmick05
-* [Laceration](https://xivapi.com/Action/37299) - the cone part of Xstage Combo in savage. 45 degrees. effectRange 30, animation 1378, key mon_sp/gimmick/monster_hanyou_hitclip_nomi_saisoku ("monster generic hitclip only fastest")
-* [Black Cat Crossing](https://xivapi.com/Action/37649) - AAC M1 normal's Crossing, 45 degrees. effectRange 60, animation 11111, key mon_sp/gimmick/x6r1_boss_gimmick01
-
-The only material differences in the first three are effectRange and Animation{End}, so I guess the in-cone hit detection is purely serverside and we need to look elsewhere for cone area. The Animation{end} IDs seem to be shared with completely unrelated boss fights (eg Stinging Slash uses the same one as Ferostorm from Eden savage, Laceration uses the same one as a *ton* of actions) so they are probably fairly generic. What could we deduce from that, then?
-
-Black-Cat Crossing has a cast time and an Omen, so we could determine the cone range from that.
-
-### Donuts
-BossMod uses omen data here too, FFXIVActionEffectRange uses predefined maps, so again I guess not available client-side.
-
-Examples:
-* [Laceration](https://xivapi.com/Action/37300) - the donut in Xstage Combo in savage. Inner radius is ~the same as the PBAE version (37297)'s outer radius, 7 yalms.
-
-Laceration's Animation{end} is 1378, the same mon_sp/gimmick/monster_hanyou_hitclip_nomi_saisoku as above, so this isn't helpful unless the animations can be separated?
-
-## Omen
-The floor telegraph for (easier raid) actions that give a prediction on the hit.
-
-* Omen ID 2 (path "general02f") is a straight-line telegraph (PhysRanged LB, Thunderstrike from bugs, Blinding Love from bees)
-* Omen 583 (path "er_gl_fan045_0p1") is a 45 degree cone
-
-[event-trigger](https://github.com/xpdota/event-trigger/blob/master/xivdata/src/main/java/gg/xp/xivdata/data/ActionLibraryImpl.java) has some extracted cone angles from omen IDs, I'm guessing you need to find the data at the referenced path and read that somehow.
 
 # Specific fight notes
 

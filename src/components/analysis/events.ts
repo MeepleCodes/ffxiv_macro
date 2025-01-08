@@ -1,5 +1,5 @@
 import { Action } from "../../excel/Action";
-import { LocationMatch, Locator } from "../../fflogs/locator";
+import { LocationMatch, Locator } from "../../analysis/locator";
 import { Report, ReportActor } from "../../fflogs/reports";
 import { Event, Resources } from "../../fflogs/types";
 

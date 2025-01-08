@@ -1,7 +1,7 @@
 import { Box, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { Action, ActionKeys } from "../../excel/Action";
 
-import { ReportActions } from "../../fflogs/fetch";
+import { ReportActions } from "../../analysis/types";
 
 
 function formatCell(row: Action, key: typeof ActionKeys[number]): string | number {

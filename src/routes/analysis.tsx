@@ -2,7 +2,7 @@ import {  Paper, Stack, tabClasses, Tabs, tabsClasses } from '@mui/material'
 import { createFileRoute, useMatchRoute } from '@tanstack/react-router'
 import { TabLink } from '../components/Links'
 import { Outlet } from '@tanstack/react-router';
-import { fetchIndex } from '../fflogs/fetch';
+import { fetchIndex } from '../analysis/fetch';
 import dayjs from 'dayjs';
 
 export const Route = createFileRoute('/analysis')({

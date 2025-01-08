@@ -4,7 +4,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import dayjs from 'dayjs';
 
-import { fetchFightData, fetchMeta } from '../../../fflogs/fetch';
+import { fetchFightData, fetchMeta } from '../../../analysis/fetch';
 import React from 'react';
 import { CastEvent } from '../../../fflogs/types';
 import { Report, ReportAbility } from '../../../fflogs/reports';

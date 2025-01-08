@@ -5,7 +5,7 @@ import bgPath from "../../aacm2.jpg";
 import React from 'react';
 import { Box, Checkbox, FormControlLabel, List, ListItemAvatar, ListItemButton, MenuItem, Slider, Stack, Switch, TextField } from '@mui/material';
 import { ReportActor } from '../../../../../fflogs/reports';
-import { LocationMatch } from '../../../../../fflogs/locator';
+import { LocationMatch } from '../../../../../analysis/locator';
 import { GroupBeeMarker } from './-GroupBeeMarker';
 import dayjs from 'dayjs';
 import { CircleConfig } from 'konva/lib/shapes/Circle';

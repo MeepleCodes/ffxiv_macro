@@ -74,6 +74,7 @@ export default function EventsTable(props: EventsTableProps) {
         </TableHead>
         <TableBody>
           {events.filter(event => event.type !== "begincast" || showStartCasts === true).map(event => <EventsTableRow
+            key={event.id}
             checked={isChecked?.(event)==true}
             event={event}
             fight={fight}
