@@ -1,5 +1,5 @@
 import { createFileRoute, useSearch } from '@tanstack/react-router'
-import { Box, Button, Checkbox, FormControlLabel, IconButton, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableRowProps } from '@mui/material';
+import { Box, Button, Checkbox, FormControlLabel, IconButton, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableRowProps, Tabs } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import dayjs from 'dayjs';
@@ -7,8 +7,9 @@ import dayjs from 'dayjs';
 import { fetchFightData, fetchMeta } from '../../../analysis/fetch';
 import React from 'react';
 import { CastEvent } from '../../../fflogs/types';
-import { Report, ReportAbility } from '../../../fflogs/reports';
-import { RouteLink } from '../../../components/Links';
+import { Report, ReportAbility } from '../../../fflogs/types';
+import { RouteLink, TabLink } from '../../../components/Links';
+import { number } from 'zod';
 
 async function fetchFights(reportID: string) {
   const report = await fetchMeta(reportID);
@@ -24,6 +25,7 @@ async function fetchFights(reportID: string) {
   );
 }
 type TimelineSearch = {
+  encounter?: number,
   excludeFights?: number[],
   dontMerge?: number[],
   ignore?: number[]
@@ -38,6 +40,7 @@ export const Route = createFileRoute('/analysis/$reportID/timeline')({
   validateSearch: (search: Record<string, unknown>): TimelineSearch => {
     // validate and parse the search params into a typed state
     return {
+      encounter: typeof(search.encounter) === "string" ? parseInt(search.encounter, 10) : search.encounter as number|undefined,
       excludeFights: Array.isArray(search.excludeFights) ? search.excludeFights.map(Number) : [],
       dontMerge: Array.isArray(search.dontMerge) ? search.dontMerge.map(Number) : [],
       ignore: Array.isArray(search.ignore) ? search.ignore.map(Number) : [],
@@ -59,10 +62,27 @@ type RowData = {
 
 function Timeline() {
   const meta = Route.parentRoute.useLoaderData();
-  const fights = Route.useLoaderData();
-  const {excludeFights, dontMerge, ignore} = Route.useSearch();
+  const allFights = Route.useLoaderData();
+  const encounters = React.useMemo(() => {
+    const encounterIDs: number[] = [];
+    const encounters: {id: number, name: string}[] = [];
+    meta.fights.forEach(fight => {
+      if(!encounterIDs.includes(fight.encounterID)) {
+        encounterIDs.push(fight.encounterID);
+        encounters.push({
+          id: fight.encounterID,
+          name: fight.name
+        });
+      }
+    });
+    return encounters;
+  }, [meta]);
+  const {encounter = 0, excludeFights, dontMerge, ignore} = Route.useSearch();
+  const encounterFights = React.useMemo(() => 
+    allFights.filter((_, i) => meta.fights[i].encounterID === encounters[encounter].id)
+  , [allFights, encounters, encounter, meta]);
   const casts = React.useMemo(() => 
-    fights.map(
+    encounterFights.map(
       (fight, i) => {
         if(excludeFights?.includes(i) === true) {
           return [];
@@ -83,7 +103,7 @@ function Timeline() {
         }
         return out;
       }
-    ), [fights, excludeFights, dontMerge, ignore]
+    ), [encounterFights, excludeFights, dontMerge, ignore]
   );
 
   const [selected, setSelected] = React.useState<readonly number[]>([]);
@@ -177,7 +197,7 @@ function Timeline() {
     return lines.join("\n");
   }, [rows, isSelected]);
   return (
-    <Paper sx={{width: "90vw", height: "90vh", overflow: "hidden", display: "flex", flexDirection: "column", position: "relative"}}>
+    <Paper sx={{m: 1, overflow: "hidden", display: "flex", flexDirection: "column", position: "relative"}}>
       <IconButton
         sx={{position: "absolute", right: 0, m: 0.5, zIndex: 1000}}
         color="primary"
@@ -185,6 +205,19 @@ function Timeline() {
         >
         {showSide ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
       </IconButton>
+      <Tabs value={encounters[encounter].name}>
+        {encounters.map((encounter, i) => 
+          <TabLink
+            key={encounter.id}
+            search={(prev) => ({
+              ...prev,
+              encounter: i
+            })}
+            value={encounter.name}
+            label={encounter.name}
+          />
+        )}
+      </Tabs>
       <Stack direction="row-reverse" sx={{overflow: "hidden"}} spacing={1}>
         {showSide  && <>
           
@@ -222,7 +255,7 @@ function Timeline() {
             </TableCell>
             {meta.fights.map((fight, i) => 
               <TableCell key={fight.id}>
-                <RouteLink search={(prev) => ({...prev, excludeFights: toggle(prev.excludeFights, i)})} from={Route.fullPath}>{fight.id}</RouteLink>
+                <RouteLink search={(prev) => ({...prev, excludeFights: toggle(prev.excludeFights, i)})}>{fight.id}</RouteLink>
               </TableCell>
             )}
             </TableRow>
