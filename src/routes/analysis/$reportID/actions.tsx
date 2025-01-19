@@ -1,14 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { Action } from '../../../excel/Action';
+import { fetchReportActionSummary } from '../../../supabase/fetch';
 import ReportActionSummary from '../../../components/analysis/ReportActionSummary';
-import { fetchActions, fetchMeta, fetchReportActionSummary } from '../../../analysis/fetch';
-import React from 'react';
-import { getObjectId } from '../../../utils';
 
 export const Route = createFileRoute('/analysis/$reportID/actions')({
   component: ReportActions,
-  loader: async ({params: {reportID}}) => fetchReportActionSummary(reportID),
-  staleTime: 300_000
+  loader: async ({params: {reportID}}) => fetchReportActionSummary(parseInt(reportID, 10)),
 });
 
 function ReportActions() {

@@ -1,17 +1,13 @@
 import { Arc } from "react-konva";
-import { gameToCanvas, gameToCanvasDist } from "../analysis/position";
+import { gameToCanvas, gameToCanvasDist, gameToCanvasRotation } from "../../analysis/position";
 import { ArcConfig } from "konva/lib/shapes/Arc";
-import { Colour } from "./types";
+import { AoEOmitShapeProps, AoEProps, colourToRGBA } from "./types";
 
-export type AoEConeProps = {
-  x?: number,
-  y?: number,
+export type AoEConeProps = AoEProps & {
   facing?: number,
   range: number,
   angle: number,
-  colour: Colour,
-  opacity: number
-} & Omit<ArcConfig, "innerRadius"|"outerRadius"|"angle"|"rotation"|"rotationDeg"|"fill">;
+} & AoEOmitShapeProps<ArcConfig, "innerRadius"|"outerRadius"|"angle"|"rotation"|"rotationDeg">;
 export default function AoECone(props: AoEConeProps) {
   const {x, y, facing=0, angle, range, colour, opacity, ...rest} = props;
   return <Arc
@@ -20,9 +16,9 @@ export default function AoECone(props: AoEConeProps) {
     innerRadius={0}
     outerRadius={gameToCanvasDist(range)}
     angle={angle}
-    rotationDeg={facing-angle/2}
+    rotation={gameToCanvasRotation(facing-angle/2)}
     {...rest}
-    fill={`rgba(${colour.r}, ${colour.g}, ${colour.b}, ${opacity})`}
+    fill={colourToRGBA(colour, opacity)}
     
     />  
 }

@@ -8,6 +8,7 @@ interface ImportMetaEnv {
   readonly VITE_FIREBASE_APP_ID: string;
 
   readonly VITE_FFLOGS_PUBLIC_API: string;
+  readonly VITE_FFLOGS_PRIVATE_API: string;
   readonly VITE_FFLOGS_OAUTH_URL: string;
   readonly VITE_FFLOGS_TOKEN_PATH: string;
   readonly VITE_FFLOGS_AUTH_PATH: string;
@@ -15,6 +16,9 @@ interface ImportMetaEnv {
   readonly VITE_FFLOGS_CLIENT_SECRET: string;
   readonly VITE_FFLOGS_V1_API: string;
   readonly VITE_FFLOGS_V1_KEY: string;
+
+  readonly VITE_SUPABASE_URL: string;
+  readonly VITE_SUPABASE_ANON_KEY: string;
 }
 
 interface ImportMeta {

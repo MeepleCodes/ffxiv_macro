@@ -1,28 +1,29 @@
-import { Table, TableBody, TableCell, TableContainer as MuiTableContainer, TableContainerProps, TableHead, TableRow, styled, Link, tableRowClasses, tableCellClasses, Stack, Typography } from "@mui/material";
-import { ReplayActorSnapshot, ReplayEvent } from "./events";
-import { ReportFight } from "../../fflogs/reports";
-import { logToCanvasRotation, logToGame, logToHumanRotation } from "./position";
-import { fightTs } from "../../routes/analysis/aacm2s/bees/-utils";
+import { Table, TableBody, TableCell, TableContainer as MuiTableContainer, TableContainerProps, TableHead, TableRow, styled, tableRowClasses, tableCellClasses, Typography, Link } from "@mui/material";
 import React from "react";
+import { LocatedEvent } from "./events";
+import { Fight, formatTimestamp, Report } from "../../analysis/types";
+import ActorTooltip from "./ActorTooltip";
+import ActionTooltip from "./ActionTooltip";
 
 type EventsTableRowEvents = {
-  onRowMouseOver?: React.Dispatch<ReplayEvent>;
-  onRowMouseOut?: React.Dispatch<ReplayEvent>;
-  onRowClicked?: React.Dispatch<ReplayEvent>;
+  onRowMouseOver?: React.Dispatch<LocatedEvent>;
+  onRowMouseOut?: React.Dispatch<LocatedEvent>;
+  onRowClicked?: React.Dispatch<LocatedEvent>;
+  setTimestamp?: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export type EventsTableProps = {
-  fight: ReportFight;
-  events: ReplayEvent[];
-  showStartCasts?: boolean;
-  isChecked?: (event: ReplayEvent) => boolean;
+  report: Report,
+  fight: Fight,
+  events: LocatedEvent[],
+  setTimestamp?: React.Dispatch<React.SetStateAction<number>>,
+  isChecked?: (event: LocatedEvent) => boolean
 } & EventsTableRowEvents & Omit<TableContainerProps, "children">;
 
 type EventsTableRowProps = {
-  fight: ReportFight;
-  event: ReplayEvent;
-  checked: boolean;
-  combinedTime: boolean;
+  fightStart: number,
+  event: LocatedEvent,
+  checked: boolean
 } & EventsTableRowEvents;
 
 const TableContainer = styled(MuiTableContainer)(({theme}) => ({
@@ -36,80 +37,65 @@ const TableContainer = styled(MuiTableContainer)(({theme}) => ({
 }));
 
 
-const EventsTableRow = React.memo(({event, fight, checked, combinedTime, onRowClicked}: EventsTableRowProps) => {
-  const time = event.type === "cast" && combinedTime && event.action["Cast<100ms>"] > 0 ?
-    `${fightTs(event.timestamp - (event.action["Cast<100ms>"] * 100.0), fight)} - ${fightTs(event.timestamp, fight)}` :
-    fightTs(event.timestamp, fight);
+const EventsTableRow = React.memo(({fightStart, event, checked, onRowClicked, setTimestamp}: EventsTableRowProps) => {
+  const castStart = event.ability.cast100ms > 0 ?
+    event.timestamp - (event.ability.cast100ms * 100.0) :
+    undefined;
   return (
     <TableRow key={event.id} selected={checked} onClick={() => {onRowClicked?.(event)}}>
-      <TableCell>{time}</TableCell>
-      <TableCell>
-        <Actor actor={event.source}/>
+      <TableCell sx={{whiteSpace: "nowrap", textAlign: "right"}}>
+        {castStart !== undefined &&
+          <Typography variant="inherit" component="span" sx={{color: "#808080"}}>
+            ({formatTimestamp(castStart)}) &nbsp;
+          </Typography>
+        }
+        <Link href="#" title={`${event.timestamp}ms since fight start; ${event.timestamp + fightStart}ms since report start`} onClick={(e) => {setTimestamp?.(event.timestamp);e.stopPropagation();e.preventDefault(); }} >{formatTimestamp(event.timestamp)}</Link>
       </TableCell>
-      <TableCell>{event.type}</TableCell>
-      <TableCell>
-        {event.action.Name} (<Link href={`https://xivapi.com/Action/${event.action["#"]}`}>{event.action["#"]}</Link>)
+      <TableCell sx={{whiteSpace: "nowrap"}}> 
+        <ActorTooltip actor={event.source}/>&nbsp;
+        {event.type}&nbsp;
+        <ActionTooltip action={event.ability}/>
+        {event.target && (
+          event.target.id === event.source.id && event.target.instance === event.source.instance ?
+          <>⤞ (self)</> :
+          <>&nbsp;⤞&nbsp;<ActorTooltip actor={event.target}/></>
+        )}
       </TableCell>
-      <TableCell>{event.target && <Actor actor={event.target}/>}</TableCell>
-      <TableCell>{event.actionType}</TableCell>
-      <TableCell>{event.action.CastType}</TableCell>
     </TableRow>
     )
 })
 export default function EventsTable(props: EventsTableProps) {
-  const {fight, events, isChecked, showStartCasts, onRowClicked, onRowMouseOver: setHover, ...rest} = props;
+  const {report, fight, events, isChecked, onRowClicked, onRowMouseOver: setHover, setTimestamp, ...rest} = props;
+  const fightStart = fight.startTime.diff(report.startTime, "milliseconds");
   return (
     <TableContainer {...rest}>
-      <Table stickyHeader size="small">
+      <Table
+        stickyHeader
+        size="small"
+        sx={{
+          "& td, & th": {
+            px: 1
+          }
+        }}
+      >
         <TableHead sx={{background: (theme) => theme.palette.background.paper}}>
           <TableRow>
             <TableCell>Time</TableCell>
-            <TableCell>Source</TableCell>
-            <TableCell>What</TableCell>
-            <TableCell>Action</TableCell>
-            <TableCell>Target</TableCell>
-            <TableCell>AType</TableCell>
-            <TableCell>CType</TableCell>
+            <TableCell>Event</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {events.filter(event => event.type !== "begincast" || showStartCasts === true).map(event => <EventsTableRow
+          {events.map(event => <EventsTableRow
             key={event.id}
+            fightStart={fightStart}
             checked={isChecked?.(event)==true}
             event={event}
-            fight={fight}
-            combinedTime={showStartCasts !== true}
             onRowClicked={onRowClicked}
+            setTimestamp={setTimestamp}
             />            
           )}
         </TableBody>
       </Table>
     </TableContainer>
-  )
-}
-
-function Actor({actor}: {actor: ReplayActorSnapshot}) {
-  const {x, y} = logToGame(actor);
-  return (
-    <Stack
-      direction="row"
-      spacing={1}
-      sx={actor.gameID >= 2_000_000 ? {color: (theme) => theme.palette.grey[500]} : {}}
-    >
-      <Typography
-        sx={{flex: 1}}
-        fontSize="inherit"
-        title={`ID: ${actor.id}, game ID: ${actor.gameID}`}
-      >
-        {actor.instance === undefined ? 
-          actor.name :
-          `${actor.name} (${actor.instance})`
-        }
-      </Typography>
-      <Stack direction="column" alignItems="center" title={`Raw: x=${actor.x}, y=${actor.y}, facing=${actor.facing}`}>
-        <Typography fontSize="50%">({x.toFixed(2)}, {y.toFixed(2)})</Typography>
-        <Typography fontSize="50%">{logToHumanRotation(actor.facing).toFixed(0)}&deg;</Typography>
-      </Stack>
-    </Stack>
   )
 }

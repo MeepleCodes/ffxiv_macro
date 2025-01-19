@@ -2,17 +2,17 @@ import {  Paper, Stack, tabClasses, Tabs, tabsClasses } from '@mui/material'
 import { createFileRoute, useMatchRoute } from '@tanstack/react-router'
 import { TabLink } from '../components/Links'
 import { Outlet } from '@tanstack/react-router';
-import { fetchIndex } from '../analysis/fetch';
 import dayjs from 'dayjs';
+import { fetchReportSummaries } from '../supabase/fetch';
 
 export const Route = createFileRoute('/analysis')({
-  loader: async () => fetchIndex(),
-  staleTime: 300_000,
+  loader: async () => {console.log("Loading..."); return await fetchReportSummaries()},
   component: AnalysisRoot
 })
 
 function AnalysisRoot() {
   const reports = Route.useLoaderData();
+  console.log("Analysis root", reports);
   const matchRoute = useMatchRoute();
   return <>
     <Stack direction="row" alignSelf="stretch" overflow="hidden" height="100%">
@@ -38,7 +38,7 @@ function AnalysisRoot() {
     {reports.map(report => 
       <TabLink
         to="/analysis/$reportID"
-        params={{reportID: report.code}}
+        params={{reportID: report.id.toString()}}
         value={report.code}
         key={report.code}
         label={dayjs(report.startTime).format("MMM DD YY")}

@@ -2,7 +2,7 @@ import React from "react";
 import { AnyPart, Part, PartType } from "./schemas";
 import { KonvaEventObject, NodeConfig } from "konva/lib/Node";
 import { KonvaNodeEvents } from "react-konva";
-import { canvasToGame } from "../analysis/position";
+import { canvasToGame } from "../../analysis/position";
 
 type _LocatedParts = {
   [key in PartType as Part<key> extends {location: unknown} ? key : never]: Part<key>

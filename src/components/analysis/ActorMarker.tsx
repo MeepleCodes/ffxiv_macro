@@ -1,10 +1,10 @@
 import { ShapeConfig } from "konva/lib/Shape";
-import { ReplayEvent } from "./events";
+import { RenderableEvent } from "./events";
 import { Circle, Group, Line } from "react-konva";
-import { gameToCanvasDist, logToCanvasCoord, logToCanvasRotation } from "./position";
+import { gameToCanvas, gameToCanvasDist, gameToCanvasRotation } from "../../analysis/position";
 
 export type ActorMarkerProps = {
-  cast: ReplayEvent
+  cast: RenderableEvent
   hitbox?: number
 } & ShapeConfig;
 
@@ -17,9 +17,9 @@ export default function ActorMarker(props: ActorMarkerProps) {
     fill: "#ffa0a0",
     ...rest
   }
-  const x = logToCanvasCoord(cast.source.x);
-  const y = logToCanvasCoord(cast.source.y);
-  const facing = logToCanvasRotation(cast.source.facing);
+  const x = gameToCanvas(cast.source.location.x);
+  const y = gameToCanvas(cast.source.location.y);
+  const facing = gameToCanvasRotation(cast.source.location.facing);
   const drawRadius = gameToCanvasDist(hitbox);
   return (
     <Group
@@ -28,7 +28,7 @@ export default function ActorMarker(props: ActorMarkerProps) {
       rotation={facing}
     >
       <Circle radius={drawRadius} {...shapeProps}/>
-      <Line points={[10, drawRadius, 0, drawRadius+10, -10, drawRadius]} {...shapeProps}/>
+      <Line points={[drawRadius, 10, drawRadius+10, 0, drawRadius, -10]} {...shapeProps}/>
 
     </Group>
 

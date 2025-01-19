@@ -1,7 +1,7 @@
 import { Circle, Group, Line, Rect, Text } from 'react-konva';
 import Konva from 'konva';
 import { BeeCast } from '../bees.types';
-import { logToCanvasCoord, logToCanvasRotation } from '../../../../../components/analysis/position';
+import { logToCanvasCoord, logToCanvasRotation } from '../../../../../analysis/position';
 
 export type GroupBeeMarkerProps = {
   number: number;

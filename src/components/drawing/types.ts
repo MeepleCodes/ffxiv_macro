@@ -1,4 +1,17 @@
 
+export type AoEProps = {
+  colour?: Colour,
+  opacity?: number
+  x?: number,
+  y?: number,
+}
+
+/**
+ * Get the remaining props from a Konva shape that can be exposed without
+ * clashing with an AoE marker's props.
+ */
+export type AoEOmitShapeProps<T, K extends keyof T = never> = 
+  Omit<T, K | "x"|"y"|"fill">;
 
 export type Colour = {
   r: number;
@@ -8,4 +21,8 @@ export type Colour = {
 export type Position = {
   x: number;
   y: number;
+}
+
+export function colourToRGBA(colour?: Colour, opacity?: number) {
+  return `rgba(${colour?.r ?? 255}, ${colour?.g ?? 0}, ${colour?.b ?? 0}, ${opacity ?? 0.8})`;
 }

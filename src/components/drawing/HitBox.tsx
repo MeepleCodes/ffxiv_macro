@@ -1,6 +1,6 @@
 import { CircleConfig } from "konva/lib/shapes/Circle"
 import { Arc, Group } from "react-konva";
-import { gameToCanvas, gameToCanvasDist } from "../analysis/position";
+import { gameToCanvas, gameToCanvasDist } from "../../analysis/position";
 
 export type HitBoxProps = {
   x: number,

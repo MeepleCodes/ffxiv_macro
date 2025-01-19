@@ -23,6 +23,8 @@ import { Route as MacroImport } from "./routes/macro";
 import { Route as ImporttestImport } from "./routes/importtest";
 import { Route as FusedownImport } from "./routes/fusedown";
 import { Route as ClipboardImport } from "./routes/clipboard";
+import { Route as AuthstartImport } from "./routes/auth_start";
+import { Route as AuthredirectImport } from "./routes/auth_redirect";
 import { Route as AnalysisImport } from "./routes/analysis";
 import { Route as NotesIndexImport } from "./routes/notes/index";
 import { Route as MacroIndexImport } from "./routes/macro/index";
@@ -30,10 +32,12 @@ import { Route as AnalysisIndexImport } from "./routes/analysis/index";
 import { Route as PlansPlanIDImport } from "./routes/plans/$planID";
 import { Route as NotesNoteIDImport } from "./routes/notes/$noteID";
 import { Route as MacroMacroIDImport } from "./routes/macro/$macroID";
-import { Route as AnalysisTimelineImport } from "./routes/analysis/timeline";
+import { Route as AnalysisImportImport } from "./routes/analysis/import";
 import { Route as AnalysisReportIDImport } from "./routes/analysis/$reportID";
 import { Route as AnalysisReportIDIndexImport } from "./routes/analysis/$reportID/index";
 import { Route as AnalysisTimelineReportIDImport } from "./routes/analysis/timeline/$reportID";
+import { Route as AnalysisImportWorkerImport } from "./routes/analysis/import.worker";
+import { Route as AnalysisImportFunctionsImport } from "./routes/analysis/import.functions";
 import { Route as AnalysisAacm2sHeartsImport } from "./routes/analysis/aacm2s/hearts";
 import { Route as AnalysisAacm2sBeesImport } from "./routes/analysis/aacm2s/bees";
 import { Route as AnalysisReportIDTimelineImport } from "./routes/analysis/$reportID/timeline";
@@ -100,6 +104,16 @@ const ClipboardRoute = ClipboardImport.update({
   getParentRoute: () => rootRoute,
 } as any);
 
+const AuthstartRoute = AuthstartImport.update({
+  path: "/auth_start",
+  getParentRoute: () => rootRoute,
+} as any);
+
+const AuthredirectRoute = AuthredirectImport.update({
+  path: "/auth_redirect",
+  getParentRoute: () => rootRoute,
+} as any);
+
 const AnalysisRoute = AnalysisImport.update({
   path: "/analysis",
   getParentRoute: () => rootRoute,
@@ -140,8 +154,8 @@ const MacroMacroIDRoute = MacroMacroIDImport.update({
   getParentRoute: () => MacroRoute,
 } as any);
 
-const AnalysisTimelineRoute = AnalysisTimelineImport.update({
-  path: "/timeline",
+const AnalysisImportRoute = AnalysisImportImport.update({
+  path: "/import",
   getParentRoute: () => AnalysisRoute,
 } as any);
 
@@ -156,8 +170,18 @@ const AnalysisReportIDIndexRoute = AnalysisReportIDIndexImport.update({
 } as any);
 
 const AnalysisTimelineReportIDRoute = AnalysisTimelineReportIDImport.update({
-  path: "/$reportID",
-  getParentRoute: () => AnalysisTimelineRoute,
+  path: "/timeline/$reportID",
+  getParentRoute: () => AnalysisRoute,
+} as any);
+
+const AnalysisImportWorkerRoute = AnalysisImportWorkerImport.update({
+  path: "/worker",
+  getParentRoute: () => AnalysisImportRoute,
+} as any);
+
+const AnalysisImportFunctionsRoute = AnalysisImportFunctionsImport.update({
+  path: "/functions",
+  getParentRoute: () => AnalysisImportRoute,
 } as any);
 
 const AnalysisAacm2sHeartsRoute = AnalysisAacm2sHeartsImport.update({
@@ -226,6 +250,20 @@ declare module "@tanstack/react-router" {
       path: "/analysis";
       fullPath: "/analysis";
       preLoaderRoute: typeof AnalysisImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/auth_redirect": {
+      id: "/auth_redirect";
+      path: "/auth_redirect";
+      fullPath: "/auth_redirect";
+      preLoaderRoute: typeof AuthredirectImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/auth_start": {
+      id: "/auth_start";
+      path: "/auth_start";
+      fullPath: "/auth_start";
+      preLoaderRoute: typeof AuthstartImport;
       parentRoute: typeof rootRoute;
     };
     "/clipboard": {
@@ -305,11 +343,11 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AnalysisReportIDImport;
       parentRoute: typeof AnalysisImport;
     };
-    "/analysis/timeline": {
-      id: "/analysis/timeline";
-      path: "/timeline";
-      fullPath: "/analysis/timeline";
-      preLoaderRoute: typeof AnalysisTimelineImport;
+    "/analysis/import": {
+      id: "/analysis/import";
+      path: "/import";
+      fullPath: "/analysis/import";
+      preLoaderRoute: typeof AnalysisImportImport;
       parentRoute: typeof AnalysisImport;
     };
     "/macro/$macroID": {
@@ -389,12 +427,26 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AnalysisAacm2sHeartsImport;
       parentRoute: typeof AnalysisImport;
     };
+    "/analysis/import/functions": {
+      id: "/analysis/import/functions";
+      path: "/functions";
+      fullPath: "/analysis/import/functions";
+      preLoaderRoute: typeof AnalysisImportFunctionsImport;
+      parentRoute: typeof AnalysisImportImport;
+    };
+    "/analysis/import/worker": {
+      id: "/analysis/import/worker";
+      path: "/worker";
+      fullPath: "/analysis/import/worker";
+      preLoaderRoute: typeof AnalysisImportWorkerImport;
+      parentRoute: typeof AnalysisImportImport;
+    };
     "/analysis/timeline/$reportID": {
       id: "/analysis/timeline/$reportID";
-      path: "/$reportID";
+      path: "/timeline/$reportID";
       fullPath: "/analysis/timeline/$reportID";
       preLoaderRoute: typeof AnalysisTimelineReportIDImport;
-      parentRoute: typeof AnalysisTimelineImport;
+      parentRoute: typeof AnalysisImport;
     };
     "/analysis/$reportID/": {
       id: "/analysis/$reportID/";
@@ -447,8 +499,9 @@ export const routeTree = rootRoute.addChildren({
       AnalysisReportIDTimelineRoute,
       AnalysisReportIDIndexRoute,
     }),
-    AnalysisTimelineRoute: AnalysisTimelineRoute.addChildren({
-      AnalysisTimelineReportIDRoute,
+    AnalysisImportRoute: AnalysisImportRoute.addChildren({
+      AnalysisImportFunctionsRoute,
+      AnalysisImportWorkerRoute,
     }),
     AnalysisIndexRoute,
     AnalysisAacm2sBeesRoute: AnalysisAacm2sBeesRoute.addChildren({
@@ -459,7 +512,10 @@ export const routeTree = rootRoute.addChildren({
         }),
     }),
     AnalysisAacm2sHeartsRoute,
+    AnalysisTimelineReportIDRoute,
   }),
+  AuthredirectRoute,
+  AuthstartRoute,
   ClipboardRoute,
   FusedownRoute,
   ImporttestRoute,
@@ -482,6 +538,8 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/",
         "/analysis",
+        "/auth_redirect",
+        "/auth_start",
         "/clipboard",
         "/fusedown",
         "/importtest",
@@ -501,11 +559,18 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "analysis.tsx",
       "children": [
         "/analysis/$reportID",
-        "/analysis/timeline",
+        "/analysis/import",
         "/analysis/",
         "/analysis/aacm2s/bees",
-        "/analysis/aacm2s/hearts"
+        "/analysis/aacm2s/hearts",
+        "/analysis/timeline/$reportID"
       ]
+    },
+    "/auth_redirect": {
+      "filePath": "auth_redirect.tsx"
+    },
+    "/auth_start": {
+      "filePath": "auth_start.tsx"
     },
     "/clipboard": {
       "filePath": "clipboard.tsx"
@@ -558,11 +623,12 @@ export const routeTree = rootRoute.addChildren({
         "/analysis/$reportID/"
       ]
     },
-    "/analysis/timeline": {
-      "filePath": "analysis/timeline.tsx",
+    "/analysis/import": {
+      "filePath": "analysis/import.tsx",
       "parent": "/analysis",
       "children": [
-        "/analysis/timeline/$reportID"
+        "/analysis/import/functions",
+        "/analysis/import/worker"
       ]
     },
     "/macro/$macroID": {
@@ -615,9 +681,17 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "analysis/aacm2s/hearts.tsx",
       "parent": "/analysis"
     },
+    "/analysis/import/functions": {
+      "filePath": "analysis/import.functions.tsx",
+      "parent": "/analysis/import"
+    },
+    "/analysis/import/worker": {
+      "filePath": "analysis/import.worker.tsx",
+      "parent": "/analysis/import"
+    },
     "/analysis/timeline/$reportID": {
       "filePath": "analysis/timeline/$reportID.tsx",
-      "parent": "/analysis/timeline"
+      "parent": "/analysis"
     },
     "/analysis/$reportID/": {
       "filePath": "analysis/$reportID/index.tsx",

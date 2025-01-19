@@ -1,16 +1,12 @@
 import { RingConfig } from "konva/lib/shapes/Ring";
 import { Ring } from "react-konva";
-import { gameToCanvas, gameToCanvasDist } from "../analysis/position";
-import { Colour } from "./types";
+import { gameToCanvas, gameToCanvasDist } from "../../analysis/position";
+import { AoEOmitShapeProps, AoEProps, colourToRGBA } from "./types";
 
-export type AoEDonutProps = {
-  x?: number,
-  y?: number,
+export type AoEDonutProps = AoEProps & {
   innerRadius: number,
   outerRadius: number,
-  colour: Colour,
-  opacity: number
-} & RingConfig;
+} & AoEOmitShapeProps<RingConfig>;
 export default function AoEDonut(props: AoEDonutProps) {
   const {x, y, innerRadius, outerRadius, colour, opacity, ...rest} = props;
   return <Ring
@@ -18,7 +14,7 @@ export default function AoEDonut(props: AoEDonutProps) {
     y={gameToCanvas(y ?? 0)}
     innerRadius={gameToCanvasDist(innerRadius)}
     outerRadius={gameToCanvasDist(outerRadius)}
-    fill={`rgba(${colour.r}, ${colour.g}, ${colour.b}, ${opacity})`}
+    fill={colourToRGBA(colour, opacity)}
     {...rest}
     />  
 }

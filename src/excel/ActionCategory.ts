@@ -1,0 +1,35 @@
+export const ActionCategories = {
+  0: "",
+  1: "Auto-attack",
+  2: "Spell",
+  3: "Weaponskill",
+  4: "Ability",
+  5: "Item",
+  6: "DoL Ability",
+  7: "DoH Ability",
+  8: "Event",
+  9: "Limit Break",
+  10: "System",
+  11: "System",
+  12: "Mount",
+  13: "Special",
+  14: "Item Manipulation",
+  15: "Limit Break",
+  16: "",
+  17: "Artillery",
+  18: "",
+} as const;
+
+/**
+ * Display an action category as "Name (ID)". Valid IDs with no label in the
+ * game files use a name of "Unassigned"; IDs not in the game files return
+ * "Invalid" instead.
+ * 
+ * @param actionCategory action category ID
+ * @returns A displayable string
+ */
+export function actionCategory(actionCategory: number): string {
+  const name = actionCategory in ActionCategories ?
+    ActionCategories[actionCategory as keyof typeof ActionCategories] || "Unassigned" : "Invalid";
+  return `${name} (${actionCategory})`;
+}

@@ -55,11 +55,11 @@ export interface EventBase {
  * The results of getting the location of an actor at a timestamp
  */
 export interface LocationMatch {
-  /** X coordinate, in 0.01 yalms */
+  /** X coordinate, in yalms */
   x: number;
-  /** Y coordinate, in 0.01 yalms */
+  /** Y coordinate, in yalms */
   y: number;
-  /** Facing, in 0.01 rad CW from east */
+  /** Facing, in rad CW from east */
   facing: number;
   /** Whether the actor had any HP */
   alive: boolean;

@@ -7,8 +7,8 @@ import { Report, ReportActor, ReportFightNPC } from "./types";
 
 const ReportV1 = z.object({
   lang: z.string(),
-  logVersion: z.string(),
-  gameVersion: z.string(),
+  logVersion: z.number(),
+  gameVersion: z.number(),
   title: z.string(),
   owner: z.string(),
   start: z.number().int().positive().describe("ms since epoch"),
@@ -20,7 +20,7 @@ const ReportV1 = z.object({
     name: z.string(),
     type: z.string(),
     icon: z.string(),
-    server: z.string(),
+    server: z.string().optional(),
     fights: z.array(z.object({
       id: z.number()
     }))
@@ -33,8 +33,8 @@ const ReportV1 = z.object({
     icon: z.string(),
     fights: z.array(z.object({
       id: z.number(),
-      instances: z.number(),
-      groups: z.number()
+      instances: z.number().default(0),
+      groups: z.number().default(0)
     }))
   })),
   fights: z.array(z.object({

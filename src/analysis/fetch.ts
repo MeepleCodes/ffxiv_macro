@@ -1,6 +1,6 @@
 import { Action } from "../excel/Action";
 import { LocationSaveData, Locator } from "./locator";
-import { Report, ReportIndex } from "../fflogs/reports";
+import { Report, ReportIndex } from "../fflogs/types";
 import { Event } from "../fflogs/types";
 import { Encounter, FightData, ReportActions } from "./types";
 

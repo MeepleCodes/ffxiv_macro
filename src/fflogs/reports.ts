@@ -1,4 +1,4 @@
-import { importOrFetch } from "./client";
+import { importOrFetch } from "./backend";
 import { Report, ReportFight } from "./types";
 
 /** Query for fetching metadata about a report. Takes one parameter, code, which

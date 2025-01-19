@@ -3,6 +3,7 @@ import { Circle, Group, Image, Text } from "react-konva";
 import { Grayscale } from "konva/lib/filters/Grayscale";
 import { GroupConfig } from "konva/lib/Group";
 import { PlayerIcon } from "./markers";
+import { gameToCanvas } from "../../analysis/position";
 
 
 export type PlayerMarkerProps = {
@@ -24,6 +25,8 @@ export default function PlayerMarker(props: PlayerMarkerProps) {
     style="square",
     label,
     children,
+    x,
+    y,
     ...group
   } = props;
   const stroke = 4;
@@ -34,6 +37,8 @@ export default function PlayerMarker(props: PlayerMarkerProps) {
       
       filters={alive ? [] : [Grayscale]}
       opacity={0.8}
+      x={gameToCanvas(x ?? 0)}
+      y={gameToCanvas(y ?? 0)}
       {...group}
     >
       {children}
@@ -42,8 +47,8 @@ export default function PlayerMarker(props: PlayerMarkerProps) {
         text={label}
         align="center"
         verticalAlign="bottom"
-        x={-size}
-        width={size*2}
+        x={-size*10}
+        width={size*20}
         y={-size*2.5}
         height={size*2}
         fontFamily="Arial"

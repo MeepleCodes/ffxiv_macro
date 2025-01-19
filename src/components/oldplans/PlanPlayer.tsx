@@ -4,7 +4,7 @@ import React from "react";
 import { ImageConfig } from "konva/lib/shapes/Image";
 import { Circle, Image } from "react-konva";
 import { CircleConfig } from "konva/lib/shapes/Circle";
-import { gameToCanvasDist } from "../analysis/position";
+import { gameToCanvasDist } from "../../analysis/position";
 import useImage from "use-image";
 
 export type PlanPlayerProps = PlayerMarkerProps & {

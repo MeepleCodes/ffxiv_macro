@@ -1,6 +1,6 @@
 import { CircleConfig } from "konva/lib/shapes/Circle"
 import { Circle } from "react-konva";
-import { gameToCanvas, gameToCanvasDist } from "../analysis/position";
+import { gameToCanvas, gameToCanvasDist } from "../../analysis/position";
 
 export type PlanCastProps = {
   x: number,

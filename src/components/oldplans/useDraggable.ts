@@ -1,6 +1,6 @@
 import React from "react";
 import { KonvaEventObject, NodeConfig } from "konva/lib/Node";
-import { canvasToGame } from "../analysis/position";
+import { canvasToGame } from "../../analysis/position";
 
 export interface Draggable {
   dragging: boolean;

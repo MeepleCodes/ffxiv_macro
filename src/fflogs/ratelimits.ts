@@ -1,4 +1,4 @@
-import { client } from "./client";
+import { client } from './client';
 
 export type RateLimitData = {
   // The total amount of points this API key can spend per hour.

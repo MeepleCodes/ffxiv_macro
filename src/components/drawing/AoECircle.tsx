@@ -1,22 +1,18 @@
 import { Circle } from "react-konva";
-import { gameToCanvas, gameToCanvasDist } from "../analysis/position";
+import { gameToCanvas, gameToCanvasDist } from "../../analysis/position";
 import { CircleConfig } from "konva/lib/shapes/Circle";
-import { Colour } from "./types";
+import { AoEOmitShapeProps, AoEProps, colourToRGBA } from "./types";
 
-export type AoECircleProps = {
-  x?: number,
-  y?: number,
+export type AoECircleProps = AoEProps & {
   radius: number,
-  colour: Colour,
-  opacity: number  
-} & CircleConfig;
+} & AoEOmitShapeProps<CircleConfig, "radius">;
 export default function AoECircle(props: AoECircleProps) {
   const {x, y, radius, colour, opacity, ...rest} = props;
   return <Circle
     x={gameToCanvas(x ?? 0)}
     y={gameToCanvas(y ?? 0)}
     radius={gameToCanvasDist(radius)}
-    fill={`rgba(${colour.r}, ${colour.g}, ${colour.b}, ${opacity})`}
+    fill={colourToRGBA(colour, opacity)}
     {...rest}
     />  
 }

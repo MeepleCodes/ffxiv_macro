@@ -1,103 +1,85 @@
-import { Action } from "../../excel/Action";
 import { LocationMatch, Locator } from "../../analysis/locator";
-import { Report, ReportActor } from "../../fflogs/reports";
-import { Event, Resources } from "../../fflogs/types";
+import { ActorInstance, Event, EventTypes } from "../../analysis/types";
+import { Action } from "../../excel/Action.types";
+import { CastType } from "../../excel/casts";
 
-const eventTypes = ["cast", "begincast", "applydebuff", "removedebuff"] as const;
-export type EventType = typeof eventTypes[number];
-
-let nextID = 0;
-
-type ReplayLocation = {
-  direct: true;
-  x: number;
-  y: number;
-  facing: number;
-  alive: boolean;
-} | (
-  {
-    direct: false;
-  } & LocationMatch
-)
-
-export type ReplayActorSnapshot = ReportActor & ReplayLocation & {
-  instance?: number;
+export type LocatedActorInstance = ActorInstance & {
+  location: LocationMatch|null
 }
 
-interface ReplayEventBase {
-  id: number;
-  /** Timestamp of the event, as ms since epoch */
-  timestamp: number;
-  type: EventType;
-  action: Action;
-  actionType: string;
-  source: ReplayActorSnapshot;
-  target?: ReplayActorSnapshot;
-}
-
-// TODO: May need to make this a union discriminated by type
-export type ReplayEvent = ReplayEventBase;
-
-export function fromReport(event: Event, meta: Report, actions: (Action|null)[], locator: Locator): ReplayEvent {
-  // Check we support all types
-  const {timestamp, type} = event;
-  if(!eventTypes.includes(type as EventType)) {
-    throw Error(`Unknown event type ${type}`);
+/**
+ * Extension of event that includes the location of the source and target actors.
+ * 
+ * Location of each is calculated the first time they're requested and cached
+ * for subseequent lookups.
+ */
+export class LocatedEvent {
+  public readonly id: number;
+  public readonly timestamp: number;
+  public readonly type: EventTypes;
+  private readonly unlocatedSource: ActorInstance;
+  private locatedSource: LocatedActorInstance|null = null;
+  private readonly unlocatedTarget?: ActorInstance;
+  private locatedTarget: LocatedActorInstance|null = null;
+  public readonly ability: Action;
+  constructor(event: Event, private locator: Locator){
+    this.id = event.id
+    this.timestamp = event.timestamp;
+    this.type = event.type;
+    this.unlocatedSource = event.source;
+    this.unlocatedTarget = event.target;
+    this.ability = event.ability;
+  }
+  public get source(): LocatedActorInstance {
+    if(this.locatedSource === null) {
+      this.locatedSource = {
+        ...this.unlocatedSource, 
+        location: this.locator.estimateLocation(this.unlocatedSource.id, this.unlocatedSource.instance, this.timestamp, true)
+      };
+    }
+    return this.locatedSource;
   }
 
-  // Get actor information
-  function getActorWithLoc(actorID: number|undefined, instance: number|undefined, resources: Resources|undefined, required: true): ReplayActorSnapshot;
-  function getActorWithLoc(actorID: number|undefined, instance: number|undefined, resources: Resources|undefined, required?: boolean): ReplayActorSnapshot | undefined;
-  function getActorWithLoc(actorID: number|undefined, instance: number|undefined, resources: Resources|undefined, required = false): ReplayActorSnapshot | undefined  {
-    if(actorID === undefined || actorID === -1) {
-      if(required) throw new Error("Required actor not present");
-      else return undefined;
-    }
-    const actor = meta.actors.find(actor => actor.id === actorID);
-    if(actor === undefined) throw new Error(`Failed to find actor ID ${actorID} in meta`);
-    if(resources !== undefined) {
-      const {x, y, facing} = resources;
-      return {
-        direct: true,
-        ...actor,
-        instance,
-        x, y, facing,
-        alive: resources.hitPoints > 0,
-      }
-    } else {
-      const est = locator.estimateLocation(actorID, event.timestamp, true);
-      if(est === null) {
-        throw new Error(`Failed to find location for actor ${actorID}`);
-      } else {
-        return {
-          direct: false,
-          ...actor,
-          instance,
-          ...est
+  public get target(): LocatedActorInstance | undefined {
+    if(this.locatedTarget === null) {
+      if(this.unlocatedTarget !== undefined) {
+        this.locatedTarget = {
+          ...this.unlocatedTarget, 
+          location: this.locator.estimateLocation(this.unlocatedTarget.id, this.unlocatedTarget.instance, this.timestamp, true)
         };
       }
     }
-  }
-  const sourceActor = getActorWithLoc(event.sourceID, event.sourceInstance, event.sourceResources, true);
-  const targetActor = getActorWithLoc(event.targetID, event.targetInstance, event.targetResources);
-
-  // Get action
-  const action = actions.find(action => action?.["#"] === event.abilityGameID);
-  if(action === undefined || action === null) {
-    throw new Error(`Failed to find action ID ${event.abilityGameID} in XIV table`);
-  }
-  const actionType = meta.abilities.find(ability => ability.gameID == event.abilityGameID)?.type;
-  if(actionType === undefined){
-    throw new Error(`Failed to find action ID ${event.abilityGameID} in metadata`);
+    return this.locatedSource ?? undefined;
   }
 
-  return {
-    id: nextID++,
-    timestamp,
-    type: type as EventType,
-    source: sourceActor,
-    target: targetActor,
-    action,
-    actionType,
-  };
+  // public renderable(): boolean {
+  public renderable(): this is RenderableEvent {
+    switch(this.ability.castType) {
+      case CastType.TargetableCircle:
+      case CastType.ChargeRectangle:
+      case CastType.Donut:
+      case CastType.Cross:
+      case CastType.Rectangle:
+      case CastType.Cone:
+        return this.source.location !== null;
+      default: return false;
+    }
+  }
+}
+
+
+export type RenderableActorInstance = ActorInstance & {
+  location: LocationMatch
+}
+
+export type RenderableEvent = LocatedEvent & {
+  readonly source: RenderableActorInstance;
+  readonly ability: Action & {
+    castType: typeof CastType.TargetableCircle | 
+              typeof CastType.ChargeRectangle | 
+              typeof CastType.Donut |
+              typeof CastType.Cross |
+              typeof CastType.Rectangle |
+              typeof CastType.Cone
+  }
 }

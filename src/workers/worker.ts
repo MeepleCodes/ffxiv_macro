@@ -7,4 +7,11 @@ export type FromWorker<T> = {
   type: "complete",
   result: T,
   message?: string
+} | {
+  type: "error",
+  message?: string
 };
+
+export function postWorkerMessage<T>(message: FromWorker<T>) {
+  self.postMessage(message);
+}

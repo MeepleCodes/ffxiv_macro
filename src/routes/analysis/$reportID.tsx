@@ -1,18 +1,17 @@
 import { createFileRoute, Outlet } from '@tanstack/react-router'
-import { fetchMeta } from '../../analysis/fetch';
 import ReportNav from './-ReportNav';
+import { fetchReport } from '../../supabase/fetch';
 
 export const Route = createFileRoute('/analysis/$reportID')({
-  loader: async ({params: {reportID}}) => fetchMeta(reportID),
+  loader: async ({params: {reportID}}) => await fetchReport(parseInt(reportID, 10)),
   staleTime: 300_000,
   component: ReportRoot
 })
 
 function ReportRoot() {
-  const {reportID} = Route.useParams();
-  const meta = Route.useLoaderData();
+  const report = Route.useLoaderData();
   return (<>
-      <ReportNav meta={meta} reportID={reportID}/>
+      <ReportNav report={report}/>
       <Outlet/>
       </>
   )

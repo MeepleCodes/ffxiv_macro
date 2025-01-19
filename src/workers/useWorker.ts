@@ -1,9 +1,16 @@
+/**
+ * Small framework for managing background workers that run tasks and report
+ * progress.
+ */
 import React from "react";
 import { FromWorker } from "./worker";
 export type workerConstructor = {
   new (options?: { name?: string }): Worker
 }
 
+/**
+ * State of a background worker; reported via worker messages
+ */
 export type WorkerState<T> = Readonly<{
   state: "idle"
 } | {
@@ -15,13 +22,22 @@ export type WorkerState<T> = Readonly<{
   state: "done",
   result: T
   message?: string
+} | {
+  state: "error",
+  message?: string,
 }>;
 
-export function useWorker<T>(ctor: workerConstructor) {
+export type WorkerHook<T> = {
+  state: WorkerState<T>;
+  worker: Worker;
+  postMessage: (message: unknown) => void;
+}
+
+export function useWorker<M, T>(ctor: workerConstructor) {
   const worker = React.useMemo(() => {
     
     const worker = new ctor();
-    console.log("Creating new worker", worker);
+    // console.log("Creating new worker", worker);
     return worker;
   }, [ctor]);
   const [state, setState] = React.useState<WorkerState<T>>({
@@ -47,6 +63,13 @@ export function useWorker<T>(ctor: workerConstructor) {
           });
           break;
         }
+        case "error": {
+          const {message} = ev.data;
+          setState({
+            state: "error",
+            message
+          })
+        }
       }
     };
     w.addEventListener("message", handleMessage);
@@ -56,12 +79,12 @@ export function useWorker<T>(ctor: workerConstructor) {
     //   w.terminate();
     // }
   }, [worker]);
-  const postMessage = React.useCallback((message: unknown) => {
-    console.log("Posting message to worker");
+  const postMessage = React.useCallback((message: M) => {
+    // console.log("Posting message to worker");
     worker.postMessage(message);
     // worker.postMessage("hi")
   }, [worker]);
-  console.log("Returning worker", worker, "from hook");
+  // console.log("Returning worker", worker, "from hook");
   return {
     state,
     worker,

@@ -1,5 +1,5 @@
 import { Layer, Rect } from "react-konva"
-import { gameToCanvas, gameToCanvasDist } from "../analysis/position"
+import { gameToCanvas, gameToCanvasDist } from "../../analysis/position"
 import { RectConfig } from "konva/lib/shapes/Rect"
 import React from "react";
 import { Part, PartTypes } from "./plans";

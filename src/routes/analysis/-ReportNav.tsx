@@ -1,4 +1,4 @@
-import { Box, List, ListItem, ListItemIcon, ListItemText, ListSubheader, Paper } from '@mui/material';
+import { Box, List, ListItem,  ListItemText, ListSubheader, Paper } from '@mui/material';
 import TroubleshootIcon from '@mui/icons-material/Troubleshoot';
 import ViewTimelineIcon from '@mui/icons-material/ViewTimeline';
 import SportsMartialArtsIcon from '@mui/icons-material/SportsMartialArts';
@@ -6,21 +6,21 @@ import SportsMartialArtsIcon from '@mui/icons-material/SportsMartialArts';
 import { useMatchRoute } from '@tanstack/react-router'
 import { ListItemButtonLink } from '../../components/Links';
 import dayjs from 'dayjs';
-import { Report } from '../../fflogs/types';
 import { Route as ReportRoute } from "./$reportID";
 import { Route as ActionsRoute } from "./$reportID/actions";
 import { Route as FightRoute } from "./$reportID/$fightID";
 import { Route as TimelineRoute } from "./$reportID/timeline";
 import ReportNavLink from './-ReportNavLink';
+import { Report } from '../../analysis/types';
 
 export type FightListParams = {
-  meta: Report,
-  reportID: string
+  report: Report
 }
 
 export default function ReportNav(params: FightListParams) {
   const matchRoute = useMatchRoute();
-  const { meta, reportID } = params;
+  const { report } = params;
+  const reportID = `${report.id}`;
   return (<>
     <Box
       sx={{
@@ -94,7 +94,7 @@ export default function ReportNav(params: FightListParams) {
           >
             Fights
           </ListSubheader>
-          {meta.fights.map((fight, idx) => {
+          {report.fights.map((fight, idx) => {
             <ReportNavLink
               key={fight.id}
               to={FightRoute.to}

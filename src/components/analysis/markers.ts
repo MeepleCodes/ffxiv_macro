@@ -23,6 +23,8 @@ export const DonutRadii = {
   37912: 16,
   37914: 8,
   37915: 16,
+  // Thundering during Widening/Narrowing Witch Hunt, AACM4S
+  19730: 10
 }
 export function guessDonutRadius(actionID: number): number {
   return actionID in DonutRadii ? DonutRadii[actionID as keyof typeof DonutRadii] : 5  

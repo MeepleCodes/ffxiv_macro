@@ -1,56 +1,59 @@
-import { Box, Checkbox, Drawer, FormControlLabel, IconButton, Menu, MenuItem, Toolbar } from "@mui/material";
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { Action } from "../../excel/Action";
-import { Locator } from "../../analysis/locator";
-import { Report, ReportFight } from "../../fflogs/reports";
-import { Event } from "../../fflogs/types";
-import { fromReport, ReplayEvent } from "./events";
+import { Box, Checkbox, FormControlLabel, IconButton, Menu, MenuItem, Paper, Slider, Stack } from "@mui/material";
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import EventsTable from "./EventsTable";
 import Arena from "./Arena";
 import CastMarker from "./CastMarker";
 import React from "react";
 import ActorMarker from "./ActorMarker";
 import { Layer } from "react-konva";
-import { bindContextMenu, bindMenu, usePopupState } from "material-ui-popup-state/hooks";
 
 import aacm1s from "./aac/aacm1.jpg";
 import aacm2s from "./aac/aacm2.jpg";
 import aacm3s from "./aac/aacm3.jpg";
-import useWaymarkLoader from "../../waymarks/useWaymarkLoader";
+import aacm4s_p1 from "./aac/aacm4.p1.jpg";
 import { Preset } from "ffxiv-client-data/uisave/FieldMarkers";
 import WaymarkPicker from "./WaymarkPicker";
 import Waymarks from "./Waymarks";
 import Konva from "konva";
-import DraggableCastMarker from "./DraggableCastMarker";
+import { Event, Fight, Report } from "../../analysis/types";
+import { LocatedActorInstance, LocatedEvent } from "./events";
+import { Sidebar } from "../Sidebar";
+import ReportCard from "./ReportCard";
+import FightCard from "./FightCard";
+import PlayerMarker from "./PlayerMarker";
 
 let nextCopyId = 1;
 
 export type ReplayProps = {
-  actions: (Action|null)[];
-  events: Event[];
-  locator: Locator;
-  meta: Report;
-  fight: ReportFight;
+  report: Report;
+  fight: Fight;
   backgroundImageUrl?: string;
   backgroundImageScale?: number;
 };
 
-type EventCopy = ReplayEvent & {
+type EventCopy = Omit<Event, "source"|"target"> & {
+  source: LocatedActorInstance,
+  target?: LocatedActorInstance,
   copyId: number
 }
 
 export default function Replay(props: ReplayProps) {
   const [open, setOpen] = React.useState(false);
-  const [showStarts, setShowStarts] = React.useState(false);
+  const [showPlayers, setShowPlayers] = React.useState(false);
+  const [timestamp, setTimestamp] = React.useState(0);
   const [selected, setSelected] = React.useState<Set<number>>(new Set());
-  const [hovered, setHovered] = React.useState<ReplayEvent|null>(null);
+  const [hovered, setHovered] = React.useState<Event|null>(null);
   const [waymarkPreset, setWaymarkPreset] = React.useState<Preset|null>(null);
   const [draggables, setDraggables] = React.useState<EventCopy[]>([]);
-  const [contextMenu, setContextMenu] = React.useState<{top: number, left: number, event: ReplayEvent}|undefined>(undefined);
+  const [contextMenu, setContextMenu] = React.useState<
+    {top: number, left: number, event: LocatedEvent}|undefined
+  >(undefined);
   
 
-  const {locator, fight } = props;
+  const {report, fight } = props;
+  const locator = fight.locator;
+  const events = fight.events.map(event => new LocatedEvent(event, locator));
   let {backgroundImageUrl, backgroundImageScale} = props;
   if(backgroundImageUrl === undefined) {
     switch(fight.encounterID) {
@@ -66,36 +69,28 @@ export default function Replay(props: ReplayProps) {
         backgroundImageUrl = aacm3s;
         backgroundImageScale = 0.75;
         break;
-      }      
+      }
+      case 96: {
+        backgroundImageUrl = aacm4s_p1;
+        break;
+      }
     }
   }
-  const events = React.useMemo(() => 
-    props.events.map(
-      (rawEvent) => {
-        try {
-          return fromReport(rawEvent, props.meta, props.actions, locator);
-        } catch(e) {
-          console.log(e)
-          return null;
-        }
-      }
-    ).filter(event => event !== null)
-  ,[props.events, props.meta, props.actions, locator]);
-  const handleRowClicked = React.useCallback((event: ReplayEvent) => {
+  const handleRowClicked = React.useCallback((event: LocatedEvent) => {
     setSelected(selected => {
       return selected.symmetricDifference(new Set([event.id]));
     })
   }, [setSelected]);
-  const isChecked = React.useCallback((event: ReplayEvent) => 
+  const isChecked = React.useCallback((event: LocatedEvent) => 
     selected.has(event.id)
   , [selected]);
   const handleAdd = () => {
     if(contextMenu !== undefined) {
-      setDraggables(draggables => [...draggables, {copyId: nextCopyId++, ...contextMenu.event}])
+      setDraggables(draggables => [...draggables, {copyId: nextCopyId++, ...contextMenu.event, source: contextMenu.event.source, target: contextMenu.event.target}])
       setContextMenu(undefined);
     }
   }
-  const handleKonvaContext = (pointerEvent: Konva.KonvaEventObject<PointerEvent>, replayEvent: ReplayEvent) => {
+  const handleKonvaContext = (pointerEvent: Konva.KonvaEventObject<PointerEvent>, replayEvent: LocatedEvent) => {
     setContextMenu({
       top: pointerEvent.evt.clientY,
       left: pointerEvent.evt.clientX,
@@ -125,68 +120,111 @@ export default function Replay(props: ReplayProps) {
       waymarkPreset={waymarkPreset}
       setWaymarkPreset={setWaymarkPreset}
     />
-    <Drawer
+    <Sidebar
+      side="right"
       open={true}
-      variant="permanent"
-      anchor="right"
-      PaperProps={{
-        sx: {
-          width: open ? undefined : 400,
-          overflow: "hidden"
-        }
+      sx={{
+        position: "fixed",
+        right: 0,
+        height: "100%",
+        overflow: "visible",
+        zIndex: (theme) => theme.vars.zIndex.drawer
       }}
+      width={open ? "" : "400px"}
     >
-      <Toolbar variant="dense">
-        <IconButton onClick={() => {setOpen(!open)}} color="primary">
-          {open ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-        </IconButton>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={showStarts}
-              onChange={
-                (event: React.ChangeEvent<HTMLInputElement>) => {
-                  setShowStarts(event.target.checked)
-                }
-              }
-            />
-          }
-          label="Show startcasts"
+      <IconButton
+          size="small"
+          onClick={() => { setOpen(!open) }}
+          sx={{
+            position: "absolute",
+            left: "-34px",
+            my: 1,
+            top: 0,
+            borderTopRightRadius: 0,
+            borderBottomRightRadius: 0,
+            backgroundColor: (theme) => theme.vars.palette.background.paper,
+            ["&:hover"]: {
+              backgroundColor: (theme) => `rgba(${theme.vars.palette.dividerChannel} / 0.48)`
+            }
+          }}
+        >
+          {open ? <KeyboardArrowRightIcon/> : <KeyboardArrowLeftIcon/> }
+        </IconButton>      
+      <Stack direction="column" height="100%">
+        <Box 
+          display="flex"
+          flexDirection="row"
+          flexWrap="wrap"
+          justifyContent="space-between"
+          mx={1}
+          py={1}
+        >
+          <Paper sx={{p:1, flex: 1}}><ReportCard report={report}/></Paper>
+          <Paper sx={{p:1, flex: 1}}><FightCard fight={fight}/></Paper>
+        </Box>
+        <EventsTable
+          events={events}
+          fight={fight}
+          report={report}
+          onRowMouseOver={setHovered}
+          onRowClicked={handleRowClicked}
+          setTimestamp={setTimestamp}
+          isChecked={isChecked}
+          sx={{overflow: "auto", flex: 1}}
         />
-      </Toolbar>
-      <EventsTable
-        events={events}
-        fight={fight}
-        showStartCasts={showStarts}
-        onRowMouseOver={setHovered}
-        onRowClicked={handleRowClicked}
-        isChecked={isChecked}
-        sx={{overflow: "auto", flex: 1}}/>
-    </Drawer>
+      </Stack>
+    </Sidebar>
     <Arena backgroundImageUrl={backgroundImageUrl} backgroundImageScale={backgroundImageScale}>
+
       <Layer name="castMarkers">
-      {hovered && <CastMarker cast={hovered}/>}
+      {/* {hovered && <CastMarker cast={hovered}/>} */}
 
       {events.filter(event => selected.has(event.id)).map(event => <>
-        <CastMarker key={`cast-${event.id}`} cast={event} onContextMenu={(pointerEvent: Konva.KonvaEventObject<PointerEvent>) => handleKonvaContext(pointerEvent, event)}/>
+        {event.renderable() &&
+          <CastMarker
+            key={`cast-${event.id}`}
+            cast={event}
+            onContextMenu={(pointerEvent: Konva.KonvaEventObject<PointerEvent>) => handleKonvaContext(pointerEvent, event)}
+          />
+        }
       </>)}
-      {draggables.map(draggable => {
+      {/* {draggables.map(draggable => {
         const {copyId, ...event} = draggable;
         return <DraggableCastMarker key={`draggable-${copyId}`} cast={event} onDblClick={() => {console.log("Attempting to remove", copyId, "from draggables"); setDraggables(draggables => draggables.filter(d => d.copyId !== copyId))}}/>
-      })}
+      })} */}
       </Layer>
       <Layer name="hostileActorMarkers">
-      {events.filter(event => selected.has(event.id)).map(event => <>
-        <ActorMarker key={`actor-${event.id}`} cast={event}/>
-      </>)}
+      {events.filter(event => selected.has(event.id)).map(event => 
+        event.renderable() &&
+          <ActorMarker key={`actor-${event.id}`} cast={event}/>
+      )}
       </Layer>
+      {showPlayers && <Layer name="players">
+        {fight.actors.filter(actor => actor.type==="Player").map(player => {
+          const located = fight.locator.estimateLocation(player.id, player.instance, timestamp, true);
+          return located && <PlayerMarker 
+            key={`${player.id}-${player.instance}`}
+            {...located}
+            icon={player.subType}
+            label={player.name}
+          />;
+          }
+        )}
+      </Layer>}      
       <Layer name="waymarkers">
         {waymarkPreset && <Waymarks preset={waymarkPreset}/>}
       </Layer>
-      {/* {events.map((event, i) => 
-        <CastMarker key={i} cast={event}/>
-      )} */}
     </Arena>
+    <Paper sx={{position: "absolute", bottom: "8px", right: "408px", left: "200px", px: 2}}>
+      <FormControlLabel
+        label="Show players"
+        control={
+          <Checkbox checked={showPlayers} onChange={(_, checked) => {setShowPlayers(checked)}}/>
+          
+        }
+      />
+      <Slider min={0} max={fight.endTime.diff(fight.startTime, "milliseconds")} value={timestamp} onChange={(_, value) => {setTimestamp(value as number)}}/>
+    </Paper>
     </>
   )
 }

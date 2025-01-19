@@ -10,7 +10,7 @@ import { GroupBeeMarker } from './-GroupBeeMarker';
 import dayjs from 'dayjs';
 import { CircleConfig } from 'konva/lib/shapes/Circle';
 import { Grayscale } from 'konva/lib/filters/Grayscale';
-import { logToCanvasCoord, logToCanvasRotation } from '../../../../../components/analysis/position';
+import { logToCanvasCoord, logToCanvasRotation } from '../../../../../analysis/position';
 
 
 export const Route = createFileRoute('/analysis/aacm2s/bees/$reportID/$fightID')({

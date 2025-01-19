@@ -1,7 +1,7 @@
 import { Marker, MarkerColour, MarkerShape, Preset, PresetMarker } from "ffxiv-client-data/uisave/FieldMarkers";
 import { Circle, Group, Line, Rect } from "react-konva";
 import Konva from "konva";
-import { gameToCanvas, gameToCanvasDist } from "./position";
+import { gameToCanvas, gameToCanvasDist } from "../../analysis/position";
 
 const COLOUR_MAP: Record<MarkerColour, string> = {
   [MarkerColour.RED]: "#F35A78",
