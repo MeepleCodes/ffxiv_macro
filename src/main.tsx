@@ -12,6 +12,8 @@ import { RouterProvider, createRouter } from '@tanstack/react-router'
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 dayjs.extend(duration);
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+dayjs.extend(localizedFormat);
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'

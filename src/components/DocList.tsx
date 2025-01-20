@@ -1,5 +1,5 @@
 import React from "react";
-import { Sort, Store, UserDoc, useWatchOwnDocs } from "../firebase/store/UserDocStore"
+import { Sort, Store, UserDoc, useWatchOwnDocs } from "../supabase/UserDocStore"
 import { Divider, InputAdornment, InputBase, Paper, Stack, IconButton, StackProps, Box } from "@mui/material";
 import ModeMenu, { Mode } from "./ModeMenu";
 
@@ -65,7 +65,7 @@ export default function DocList<OwnFields>(props: DocListProps<OwnFields>) {
                 position="end"
               >
                 <IconButton
-                  onClick={() => setFilterText("")}
+                  onClick={() => {setFilterText("")}}
                 >
                   <ClearIcon />
                 </IconButton>

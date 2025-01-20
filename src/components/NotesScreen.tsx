@@ -1,6 +1,6 @@
 import { Card } from "@mui/material";
 
-import { NoteDoc, noteStore } from "../firebase/store/Notes"
+import { NoteDoc, noteStore } from "../supabase/Notes"
 import React from "react";
 import DocToolbar from "./DocToolbar";
 

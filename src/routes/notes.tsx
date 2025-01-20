@@ -3,12 +3,14 @@ import UserMenu from '../components/UserMenu'
 import { NavDrawer, NavMain } from '../Nav'
 import React from 'react';
 import { Box, Button, Drawer, IconButton, List, ListItem, ListItemText, Paper, Tooltip } from '@mui/material';
-import { updated, useWatchOwnDocs } from '../firebase/store/UserDocStore';
-import { NoteDoc, noteStore } from '../firebase/store/Notes';
+import { updated, useWatchOwnDocs } from '../supabase/UserDocStore';
+import { NoteDoc, noteStore } from '../supabase/Notes';
 import { ListItemButtonLink } from '../components/Links';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useConfirm } from 'material-ui-confirm';
 import MenuIcon from '@mui/icons-material/Menu';
+
+import { Route as NoteIDRoute } from './notes/$noteID';
 
 export const Route = createFileRoute('/notes')({
   component: Notes
@@ -77,7 +79,7 @@ function Notes() {
               </IconButton>
             </Tooltip>
           }>
-            <ListItemButtonLink to={note.id} from={Route.fullPath}>
+            <ListItemButtonLink to={NoteIDRoute.to} params={{noteID: note.id}}>
               <ListItemText primary={note.name} secondary={updated(note)}/>
             </ListItemButtonLink>
           </ListItem>

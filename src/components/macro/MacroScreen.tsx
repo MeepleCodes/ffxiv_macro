@@ -1,6 +1,6 @@
 import { Box, Card, CardActions, CardMedia, IconButton, InputAdornment, MenuItem, Select, Stack, styled, ToggleButton, Tooltip, Typography } from "@mui/material";
 
-import { MacroFields, macroStore } from "../../firebase/store/Macro"
+import { MacroDoc, macroStore } from "../../supabase/Macro"
 import React from "react";
 import DocToolbar from "../DocToolbar";
 import { Sidebar } from "../Sidebar";
@@ -8,12 +8,11 @@ import GlyphPicker from "./GlyphPicker";
 import TextEditorReact, { HTMLTextEditorElement } from "../../texteditor/TextEditorReact";
 import { FontSource, fontSources } from "./fonts";
 
-import { UserDoc } from "../../firebase/store/UserDocStore";
 import MenuIcon from '@mui/icons-material/Menu';
 import FormatSizeIcon from '@mui/icons-material/FormatSize';
 
 export type MacroScreenProps = {
-  doc?: UserDoc<MacroFields>,
+  doc?: MacroDoc,
   onIdChange?: (id?: string) => void,
 };
 

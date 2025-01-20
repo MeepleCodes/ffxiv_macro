@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { noteStore } from '../../firebase/store/Notes'
+import { noteStore } from '../../supabase/Notes'
 import NotesScreen from '../../components/NotesScreen';
 
 export const Route = createFileRoute('/notes/$noteID')({

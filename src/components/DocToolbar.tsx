@@ -1,20 +1,20 @@
 import React from "react";
-import { MaybeSaved, Store, UserDoc } from "../firebase/store/UserDocStore";
+import { MaybeSaved, Store } from "../supabase/UserDocStore";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from '@mui/icons-material/Save';
 import ContentSavePlus from 'mdi-material-ui/ContentSavePlus';
 import FileOutline from 'mdi-material-ui/FileOutline';
 import { Box, BoxProps, Stack, TextField } from "@mui/material";
 
-export type DocToolbarProps<T> = {
-  store: Store<T>,
+export type DocToolbarProps<T, S> = {
+  store: Store<T, S>,
   liveDoc: MaybeSaved<T>,
   setLiveDoc: React.Dispatch<React.SetStateAction<MaybeSaved<T>>>,
   onIdChange?: (id?: string) => void,
   namePlaceholder?: string
 } & BoxProps;
 
-export default function DocToolbar<OwnFields>(props: DocToolbarProps<OwnFields>) {
+export default function DocToolbar<OwnFields, StoreFields>(props: DocToolbarProps<OwnFields, StoreFields>) {
   const {
     store, liveDoc, setLiveDoc, onIdChange, namePlaceholder,
     ...boxProps

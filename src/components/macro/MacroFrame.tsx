@@ -4,7 +4,7 @@ import React from 'react'
 import { Box, IconButton } from '@mui/material'
 import { Sidebar } from '../Sidebar'
 import DocList, { DisplayMode, SortMode } from '../DocList'
-import { MacroFields, macroStore } from '../../firebase/store/Macro'
+import { MacroFields, macroStore } from '../../supabase/Macro'
 import ListList from './MacroListList'
 import PreviewList from './MacroListPreview'
 

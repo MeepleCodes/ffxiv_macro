@@ -1,7 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import MacroTest from '../-macrotest'
-import MacroTest2 from '../-macrotest2';
-import { macroStore } from '../../firebase/store/Macro';
+import { macroStore } from '../../supabase/Macro';
 import MacroScreen from '../../components/macro/MacroScreen';
 
 export const Route = createFileRoute('/macro/$macroID')({

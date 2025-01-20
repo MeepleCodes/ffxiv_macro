@@ -439,18 +439,96 @@ export type Database = {
       flogs: {
         Row: {
           created_at: string
+          data: Json | null
           id: number
-          message: string | null
+          level: number
+          message: string
         }
         Insert: {
           created_at?: string
+          data?: Json | null
           id?: number
-          message?: string | null
+          level?: number
+          message?: string
         }
         Update: {
           created_at?: string
+          data?: Json | null
           id?: number
-          message?: string | null
+          level?: number
+          message?: string
+        }
+        Relationships: []
+      }
+      macros: {
+        Row: {
+          body: string
+          created: string | null
+          deleted: boolean
+          id: number
+          name: string
+          owner: string | null
+          short_id: string
+          thumbnail: string | null
+          thumbnail_base64: string | null
+          updated: string | null
+        }
+        Insert: {
+          body: string
+          created?: string | null
+          deleted?: boolean
+          id?: number
+          name: string
+          owner?: string | null
+          short_id?: string
+          thumbnail?: string | null
+          thumbnail_base64?: string | null
+          updated?: string | null
+        }
+        Update: {
+          body?: string
+          created?: string | null
+          deleted?: boolean
+          id?: number
+          name?: string
+          owner?: string | null
+          short_id?: string
+          thumbnail?: string | null
+          thumbnail_base64?: string | null
+          updated?: string | null
+        }
+        Relationships: []
+      }
+      notes: {
+        Row: {
+          body: string
+          created: string | null
+          deleted: boolean
+          id: number
+          name: string
+          owner: string | null
+          short_id: string
+          updated: string | null
+        }
+        Insert: {
+          body: string
+          created?: string | null
+          deleted?: boolean
+          id?: number
+          name: string
+          owner?: string | null
+          short_id?: string
+          updated?: string | null
+        }
+        Update: {
+          body?: string
+          created?: string | null
+          deleted?: boolean
+          id?: number
+          name?: string
+          owner?: string | null
+          short_id?: string
+          updated?: string | null
         }
         Relationships: []
       }
@@ -632,6 +710,10 @@ export type Database = {
       }
     }
     Functions: {
+      bytea_test: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
       f_insert_test: {
         Args: {
           value: string
@@ -654,6 +736,18 @@ export type Database = {
           report_code: string
         }
         Returns: Json
+      }
+      stdid_decode: {
+        Args: {
+          short_id: number
+        }
+        Returns: number
+      }
+      stdid_encode: {
+        Args: {
+          id: number
+        }
+        Returns: string
       }
     }
     Enums: {

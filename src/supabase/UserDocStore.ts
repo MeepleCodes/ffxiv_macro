@@ -1,8 +1,8 @@
-import { addDoc, collection, CollectionReference, doc, DocumentData, FieldValue, FirestoreDataConverter, getDocFromServer, onSnapshot, orderBy, PartialWithFieldValue, query, QueryConstraint, QueryDocumentSnapshot, serverTimestamp, SetOptions, SnapshotOptions, Timestamp, updateDoc, where, WithFieldValue } from "firebase/firestore";
 import React from "react";
-import { db } from "../Firebase";
-import { auth, useCurrentUser } from "../auth/FirebaseAuth";
 import dayjs, { Dayjs } from "dayjs";
+import { Database, Tables, TablesUpdate } from "./database.types";
+import supabase from "./client";
+import { useSession } from "./auth";
 
 export type UserDoc<OwnFields> = OwnFields & {
   id: string;
@@ -30,52 +30,48 @@ export function updated(doc: UserDoc<unknown>) {
   return doc.updated?.format("lll") ?? "No modified date/time";
 }
 
-
-function fromDayjs(dayjs?: FieldValue|WithFieldValue<Dayjs>|PartialWithFieldValue<Dayjs>|null): FieldValue|WithFieldValue<Timestamp>|PartialWithFieldValue<Timestamp>|undefined|null {
-  return dayjs instanceof Dayjs ? Timestamp.fromDate(dayjs.toDate()) : dayjs;
+type DocTable = {
+  Row: {
+    created: string | null
+    deleted: boolean
+    id: number
+    name: string
+    owner: string | null
+    updated: string | null
+  }
 }
+
+type DocTables = {
+  [key in keyof Database["public"]["Tables"] as Database["public"]["Tables"][key] extends DocTable ? key : never]: Database["public"]["Tables"][key]
+}
+
+
+
 /**
  * Store for arbitrary document types with some common fields.
  */
-export abstract class Store<OwnFields> implements FirestoreDataConverter<UserDoc<OwnFields>> {
-  private collection: CollectionReference<UserDoc<OwnFields>>;
+export abstract class Store<OwnFields, PreProcessed = OwnFields, Table extends DocTables[keyof DocTables] = DocTables[keyof DocTables]> {
   constructor(
-    collectionName: string
-  ) {
-    this.collection = collection(db, collectionName).withConverter<UserDoc<OwnFields>>(this);
-  }
+    public readonly tableName: keyof DocTables
+  ) {}
   
   protected abstract constructOwnFields(): OwnFields;
   protected abstract hasChangedOwnFields(a: OwnFields, b: OwnFields): boolean;
-  protected abstract getOwnFieldsFromFirestore(snapshot: QueryDocumentSnapshot): OwnFields;
-  protected abstract setOwnFieldsToFirestore(doc: PartialWithFieldValue<OwnFields>): DocumentData;
-  // abstract toFirestore(modelObject: WithFieldValue<UserDoc<OwnFields>>): WithFieldValue<DocumentData>;
-  // abstract toFirestore(modelObject: PartialWithFieldValue<UserDoc<OwnFields>>, options: SetOptions): PartialWithFieldValue<DocumentData>;
-  // abstract toFirestore(modelObject: unknown, options?: unknown): WithFieldValue<DocumentData> | PartialWithFieldValue<DocumentData>;
-  // abstract fromFirestore(snapshot: QueryDocumentSnapshot, options?: SnapshotOptions): UserDoc<OwnFields>;
-  fromFirestore(snapshot: QueryDocumentSnapshot, _options?: SnapshotOptions): UserDoc<OwnFields> {
-    const {owner, name, created, updated, deleted} = snapshot.data();
-    return Object.assign(
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-      {id: snapshot.id, owner, name, created: dayjs(created.toDate()), updated: dayjs(updated.toDate()), deleted},
-      this.getOwnFieldsFromFirestore(snapshot)
-    );
+  protected abstract ownFieldsFromRow(row: Table["Row"]): OwnFields;
+  protected abstract ownFieldsToRow(doc: PreProcessed): Omit<Table["Insert"], "name">;
+
+  private fromDb(row: Table["Row"]): UserDoc<OwnFields> {
+    return {
+      name: row.name,
+      owner: row.owner ?? undefined,
+      updated: dayjs(row.updated),
+      created: dayjs(row.created),
+      deleted: row.deleted,
+      id: row.short_id,
+      ...this.ownFieldsFromRow(row)
+    };
   }
-  toFirestore(modelObject: WithFieldValue<UserDoc<OwnFields>>): DocumentData;
-  toFirestore(modelObject: PartialWithFieldValue<UserDoc<OwnFields>>, options: SetOptions): PartialWithFieldValue<DocumentData>;
-  toFirestore(modelObject: WithFieldValue<UserDoc<OwnFields>> | PartialWithFieldValue<UserDoc<OwnFields>>, _options?: unknown): WithFieldValue<DocumentData> | PartialWithFieldValue<DocumentData> {
-    const {owner, name, created, updated, deleted} = modelObject;
-    return Object.fromEntries(
-      Object.entries(
-        Object.assign(
-          {owner, name, created: fromDayjs(created), updated: fromDayjs(updated), deleted},
-          this.setOwnFieldsToFirestore(modelObject)
-        )
-      ).filter(
-        ([_, value]) => value !== undefined
-      )
-    );
-  }
+
   /**
    * Create a new, unsaved document
    * @returns A new, blank document
@@ -99,9 +95,7 @@ export abstract class Store<OwnFields> implements FirestoreDataConverter<UserDoc
    * Doing any pre-save processing, such as generating thumbnails.
    * Default implementation does nothing.
    */
-  public async presave(document: Update<OwnFields>): Promise<Update<OwnFields>> {
-    return Promise.resolve(document);
-  }
+  protected abstract presave(document: Update<OwnFields>): Promise<Update<PreProcessed>>;
 
   /**
    * Save a document. If ID is known, it will be saved under that ID; otherwise
@@ -114,22 +108,22 @@ export abstract class Store<OwnFields> implements FirestoreDataConverter<UserDoc
    * @returns The ID of the saved document.
    */
   public async save(id: string|undefined, document: Update<OwnFields>): Promise<string> {
+    
     if(id === undefined) {
       return await this.saveAs(document);
     } else {
-      const ref = doc(this.collection, id);
-      const preSaved = await this.presave(document);
-      const updates = {
-        ...this.setOwnFieldsToFirestore(preSaved),
-        name: preSaved.name,
-        updated: serverTimestamp()
-      };
-      console.log("Updating doc", id, "with changes", updates);
-      await updateDoc(
-        ref,
-        updates
-      );
-      return ref.id;
+      const preProcessed = await this.presave(document);
+      const response = await supabase
+        .from(this.tableName)
+        .update({
+          ...this.ownFieldsToRow(preProcessed),
+          name: document.name,
+          updated: new Date().toISOString()
+        })
+        .eq("short_id", id)
+        .select("short_id");
+      if(response.error !== null) throw response.error;
+      return response.data[0].short_id;
     }
   }
   /**
@@ -142,22 +136,21 @@ export abstract class Store<OwnFields> implements FirestoreDataConverter<UserDoc
     
     // Even fixing the typing, this still breaks because WithFieldValue doesn't
     // accept serverTimestamp() as a WithFieldValue<Timestamp>?
-    const preSaved = await this.presave(document);
-    const newDoc = Object.assign(
-      preSaved,
-      {
-        owner: auth.currentUser?.uid,
-        updated: serverTimestamp(),
-        created: serverTimestamp(),
-        deleted: false
-      }
-    ) as WithFieldValue<UserDoc<OwnFields>>;
-    const docRef = await addDoc(
-      this.collection,
-      newDoc
-    );
-
-    return docRef.id;
+    const preProcessed = await this.presave(document);
+    const user = await supabase.auth.getUser();
+    if(user.error) throw user.error;
+    const uid = user.data.user.id;
+    const response = await supabase
+      .from(this.tableName)
+      .insert({
+        ...this.ownFieldsToRow(preProcessed),
+        name: document.name,
+        owner: uid,
+        updated: new Date().toISOString()
+      })
+      .select("short_id");
+    if(response.error !== null) throw response.error;
+    return response.data[0].short_id;
   }
 
   /**
@@ -169,13 +162,18 @@ export abstract class Store<OwnFields> implements FirestoreDataConverter<UserDoc
    * @returns The document, if it was found, otherwise null
    */
   public async load(id: string, includeDeleted = false): Promise<UserDoc<OwnFields>|null> {
-    const snapshot = await getDocFromServer(doc(this.collection, id));
-    if(!snapshot.exists()) return null;
-    else if(snapshot.data().deleted && !includeDeleted) return null;
-    else {
-      console.log("Loaded", snapshot.data());
-      return snapshot.data();
+    let query = supabase
+      .from(this.tableName)
+      .select("*")
+      .eq("short_id", id);
+    if(!includeDeleted) {
+      query = query.eq("deleted", false);
     }
+    const response = await query
+      .maybeSingle();
+    if(response.error !== null) throw response.error;
+    if(response.data === null) return null;
+    return this.fromDb(response.data);
   }
 
   /**
@@ -185,8 +183,10 @@ export abstract class Store<OwnFields> implements FirestoreDataConverter<UserDoc
    * @param id Document ID
    */
   public async markDeleted(id: string): Promise<void> {
-    const ref = doc(this.collection, id);
-    await updateDoc(ref, {deleted: true});
+    await supabase
+      .from(this.tableName)
+      .update({deleted: true})
+      .eq("short_id", id);
   }
 
   /**
@@ -200,33 +200,62 @@ export abstract class Store<OwnFields> implements FirestoreDataConverter<UserDoc
    * @returns Unsubscribe function, call when updates are no longer required
    */
   public watchOwn(uid: string|undefined, callback: (docs: UserDoc<OwnFields>[]) => void, sortBy: Sort<OwnFields>[], includeDeleted = false): () => void {
+
     // If there's no current user, the result will always be the empty list and
     // there's no subscription so just set that now and return a dummy
     // unsubscribe.
     if(uid === undefined) {
+      console.log("No user to watch, returning empty list");
       callback([]);
       return () => {};
     }
-    const filters: QueryConstraint[] = [
-      where("owner", "==", uid)
+    const filters: string[] = [
+      
     ];
     if(!includeDeleted) {
-      filters.push(
-        where("deleted", "!=", true)
-      );
+      filters.push("deleted=eq.false");
     }
-    for(const sort of sortBy) {
-      filters.push(
-        orderBy(sort.key, sort.direction)
-      )
-    }
-    return onSnapshot(
-      query(this.collection, ...filters),
-      (snapshot) => {
-        const docs = snapshot.docs.filter(snap => snap.exists()).map(snap=>snap.data());
-        callback(docs);
+    const fetchDocs = () => {
+      let query = supabase
+        .from(this.tableName)
+        .select("*")
+        .eq("owner", uid);
+      if(!includeDeleted) {
+        query = query.eq("deleted", false);
       }
-    );
+      for(const sort of sortBy) {
+        query = query.order(sort.key, {ascending: sort.direction === "asc"})
+      };
+      query.then(
+        (result) => {
+          if(result.error !== null) throw result.error;
+          callback(result.data.map(row => this.fromDb(row)))
+        },
+        (error: unknown) => {
+          throw error;
+        }
+      );
+    };
+    const updates = supabase
+      .channel(`public-db-${this.tableName}-changes`)
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          tableName: this.tableName,
+          filter: `owner=eq.${uid}`
+        },
+        fetchDocs
+      )
+      .subscribe((status, err) => {
+        console.log("Subscription to postgres changes:", status);
+        if(err) console.error("Failed to subscribe to table updates", err);
+      });
+    fetchDocs();
+    return () => {
+      void updates.unsubscribe;
+    }
   }
 }
 
@@ -238,8 +267,9 @@ export abstract class Store<OwnFields> implements FirestoreDataConverter<UserDoc
  * @param includeDeleted Whether to incldue deleted documents
  * @returns The latest list of documents
  */
-export function useWatchOwnDocs<OwnFields>(store: Store<OwnFields>, sortBy?: Sort<OwnFields>[], includeDeleted?: boolean, filter?: string): UserDoc<OwnFields>[] {
-  const uid = useCurrentUser()?.uid;
+export function useWatchOwnDocs<OwnFields, SaveFields, Table extends DocTables[keyof DocTables]>(store: Store<OwnFields, SaveFields, Table>, sortBy?: Sort<OwnFields>[], includeDeleted?: boolean, filter?: string): UserDoc<OwnFields>[] {
+  const uid = useSession()?.user.id;
+  console.log("watching for changes to table", store.tableName, "for user", uid);
   const [docs, setDocs] = React.useState<UserDoc<OwnFields>[]>([]);
   React.useEffect(() => {
     const unsubscribe = store.watchOwn(uid, 

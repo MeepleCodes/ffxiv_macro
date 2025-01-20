@@ -1,11 +1,11 @@
 import { IconButton, ImageList, ImageListItem, ImageListItemBar, ImageListItemProps, styled } from "@mui/material";
-import { MacroFields, macroStore } from "../../firebase/store/Macro";
+import { MacroFields, macroStore } from "../../supabase/Macro";
 import { DisplayModeComponentProps } from "../DocList";
 import { Route as MacroRoute } from '../../routes/macro/$macroID';
 import { createLink } from "@tanstack/react-router";
 import React from "react";
 import Preview from "./Preview";
-import { updated } from "../../firebase/store/UserDocStore";
+import { updated } from "../../supabase/UserDocStore";
 import DeleteIcon from '@mui/icons-material/Delete';
 
 
@@ -49,7 +49,7 @@ export default function PreviewList({ docs }: DisplayModeComponentProps<MacroFie
         >
           <Preview
             className="MuiImageListItem-img"
-            mask={`data:image/png;base64,${doc.thumbnail.toBase64()}`}
+            mask={`data:image/png;base64,${doc.thumbnail_b64}`}
           />
           <ImageListItemBar
             title={doc.name}
@@ -60,7 +60,7 @@ export default function PreviewList({ docs }: DisplayModeComponentProps<MacroFie
                 aria-label="Delete"
                 onClick={(e) => {
                   e.stopPropagation();
-                  macroStore.markDeleted(doc.id);
+                  void macroStore.markDeleted(doc.id);
                 }}
               >
                 <DeleteIcon />

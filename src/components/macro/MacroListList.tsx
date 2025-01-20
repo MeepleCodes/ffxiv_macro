@@ -1,11 +1,11 @@
 import { Avatar, IconButton, List, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
 import { DisplayModeComponentProps } from "../DocList";
-import { MacroFields, macroStore } from "../../firebase/store/Macro";
+import { MacroFields, macroStore } from "../../supabase/Macro";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Route as MacroRoute } from '../../routes/macro/$macroID';
 import { ListItemButtonLink } from "../Links";
 import Preview from "./Preview";
-import { updated } from "../../firebase/store/UserDocStore";
+import { updated } from "../../supabase/UserDocStore";
 
 
 
@@ -24,7 +24,7 @@ export default function ListList({docs}: DisplayModeComponentProps<MacroFields>)
               aria-label="Delete"
               onClick={(e) => {
                 e.stopPropagation();
-                macroStore.markDeleted(macro.id);
+                void macroStore.markDeleted(macro.id);
               }}
             >
               <DeleteIcon/>
@@ -41,7 +41,7 @@ export default function ListList({docs}: DisplayModeComponentProps<MacroFields>)
                 variant="square"
                 textColor="white"
                 component={Preview}
-                mask={`data:image/png;base64,${macro.thumbnail.toBase64()}`}
+                mask={`data:image/png;base64,${macro.thumbnail_b64}`}
                 small
               />
           </ListItemAvatar>
