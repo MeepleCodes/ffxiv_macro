@@ -1,15 +1,17 @@
-import { Image, Layer, Stage } from 'react-konva';
+import { Image, KonvaNodeEvents, Layer, Stage, StageProps } from 'react-konva';
 import React from 'react';
 import { Box } from '@mui/material';
 import useImage from 'use-image';
 import { Zone, Zones } from './zones';
+import Konva from 'konva';
 
 export type ArenaProps = React.PropsWithChildren<{
   zone: Zone
-}>;
+}> & StageProps & KonvaNodeEvents;
 
-export default function Arena(props: ArenaProps) {
-  const {zone: zoneOrName} = props;
+
+const Arena = React.forwardRef(function Arena(props: ArenaProps, ref: React.ForwardedRef<Konva.Stage>) {
+  const {zone: zoneOrName, ...rest} = props;
   const containerRef = React.useRef(null as HTMLElement | null);
   const [scale, setScale] = React.useState(0.6);
   const [width, setWidth] = React.useState(500);
@@ -47,15 +49,17 @@ export default function Arena(props: ArenaProps) {
       width={width}
       height={height}
       
+      ref={ref}
       onDragEnd={(evt) => {if(evt.target === evt.currentTarget) setPos({x: evt.target.x(), y: evt.target.y()})}}
       x={pos.x}
       y={pos.y}
       scale={{x: scale, y: scale}}
       draggable={true}
       onWheel={handleWheel}
+      {...rest}
       >
         
-        {bg && <Layer>
+        {bg && <Layer listening={false} >
           <Image image={bg} x={-(bg.width * backgroundImageScale)/2} y={-(bg.height * backgroundImageScale)/2} scale={{x:backgroundImageScale, y:backgroundImageScale}}/>
         </Layer>
         }
@@ -90,4 +94,5 @@ export default function Arena(props: ArenaProps) {
       </Stage>
     </Box>
   )
-}
+});
+export default Arena;

@@ -9,16 +9,16 @@ export type PreviewProps = {
 
 export default function Preview({small, textColor, mask}: PreviewProps) {
 
-  const size = small ? 10 : 20;
+  const size = small === true ? 10 : 20;
   return (
     <Box sx={{width: "100%"}}>
       <Box
         sx={{
           width: '100%',
-          background: (theme) => textColor || theme.palette.text.secondary,
+          background: (theme) => textColor ?? theme.palette.text.secondary,
           maskComposite: 'source-in',
           maskRepeat: 'no-repeat',
-          ...(small ? {
+          ...(small === true ? {
               aspectRatio: '1',
               maskImage: `url(${mask}), ` + (["top", "left"].map(edge => `linear-gradient(to ${edge}, transparent, black ${size}px)`)).join(", "),
           } : {

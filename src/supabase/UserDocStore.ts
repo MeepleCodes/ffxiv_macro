@@ -1,8 +1,26 @@
 import React from "react";
 import dayjs, { Dayjs } from "dayjs";
-import { Database, Tables, TablesUpdate } from "./database.types";
+import { Database, TablesInsert } from "./database.types";
 import supabase from "./client";
 import { useSession } from "./auth";
+
+
+export function fromBytea(bytea: string): Uint8Array {
+    if(bytea.length == 0) return new Uint8Array();
+    if(!bytea.match(/\\x([0-9a-fA-F]{2})*/)) {
+        console.error("Invalid bytea string", bytea);
+        return new Uint8Array();
+    }
+    const bytes: number[] = [];
+    for(let i=0; i<bytea.length; i+=2) {
+        bytes.push(parseInt(bytea.substring(i, i+2), 16));
+    }
+    return new Uint8Array(bytes);
+}
+export function toBytea(blob: Uint8Array): string {
+    return `\\x${blob.values().map(v => v.toString(16).padStart(2, '0')).toArray().join('')}`
+}
+
 
 export type UserDoc<OwnFields> = OwnFields & {
   id: string;
@@ -133,9 +151,7 @@ export abstract class Store<OwnFields, PreProcessed = OwnFields, Table extends D
    * @returns The ID of the new document
    */
   public async saveAs(document: Update<OwnFields>): Promise<string> {
-    
-    // Even fixing the typing, this still breaks because WithFieldValue doesn't
-    // accept serverTimestamp() as a WithFieldValue<Timestamp>?
+
     const preProcessed = await this.presave(document);
     const user = await supabase.auth.getUser();
     if(user.error) throw user.error;
@@ -147,7 +163,8 @@ export abstract class Store<OwnFields, PreProcessed = OwnFields, Table extends D
         name: document.name,
         owner: uid,
         updated: new Date().toISOString()
-      })
+      // TODO: Correct typing continues to elude me
+      } as Table["Insert"])
       .select("short_id");
     if(response.error !== null) throw response.error;
     return response.data[0].short_id;

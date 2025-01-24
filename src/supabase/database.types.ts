@@ -532,6 +532,45 @@ export type Database = {
         }
         Relationships: []
       }
+      plans: {
+        Row: {
+          created: string | null
+          deleted: boolean
+          id: number
+          name: string
+          owner: string | null
+          plan: Json
+          short_id: string
+          thumbnail: string | null
+          thumbnail_base64: string | null
+          updated: string | null
+        }
+        Insert: {
+          created?: string | null
+          deleted?: boolean
+          id?: number
+          name: string
+          owner?: string | null
+          plan: Json
+          short_id?: string
+          thumbnail?: string | null
+          thumbnail_base64?: string | null
+          updated?: string | null
+        }
+        Update: {
+          created?: string | null
+          deleted?: boolean
+          id?: number
+          name?: string
+          owner?: string | null
+          plan?: Json
+          short_id?: string
+          thumbnail?: string | null
+          thumbnail_base64?: string | null
+          updated?: string | null
+        }
+        Relationships: []
+      }
       report_actors: {
         Row: {
           game_id: number | null

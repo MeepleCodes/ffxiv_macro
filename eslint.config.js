@@ -9,7 +9,7 @@ import globals from "globals";
 export default tseslint.config(
 
   { // Configuration object with just 'ignores' produces a global ignore rule
-    ignores: ["dist/", ".eslintrc.cjs", "eslint.config.js", "vite.config.ts"],
+    ignores: ["dist/", "supabase/", ".eslintrc.cjs", "eslint.config.js", "vite.config.ts"],
   },
   {
     languageOptions: {

@@ -1,39 +1,39 @@
 import { Avatar, IconButton, List, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
 import { DisplayModeComponentProps } from "../DocList";
-import { MacroFields, macroStore } from "../../supabase/Macro";
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Route as MacroRoute } from '../../routes/macro/$macroID';
+import { Route as PlanRoute } from '../../routes/plans/$planID';
 import { ListItemButtonLink } from "../Links";
 import Preview from "../Preview";
 import { updated } from "../../supabase/UserDocStore";
+import { PlanFields, planStore } from "../../supabase/Plans";
 
 
 
-export default function ListList({docs}: DisplayModeComponentProps<MacroFields>) {
+export default function ListList({docs}: DisplayModeComponentProps<PlanFields>) {
   return (
     <List dense>
-      {docs.map(macro =>
+      {docs.map(plan =>
         <ListItem
-          title={macro.name}
+          title={plan.name}
           disableGutters
           disablePadding
-          key={macro.id}
+          key={plan.id}
           secondaryAction={
             <IconButton
               color="inherit"
               aria-label="Delete"
               onClick={(e) => {
                 e.stopPropagation();
-                void macroStore.markDeleted(macro.id);
+                void planStore.markDeleted(plan.id);
               }}
             >
               <DeleteIcon/>
             </IconButton>
       }>
           <ListItemButtonLink
-            to={MacroRoute.to}
+            to={PlanRoute.to}
             params={{
-              macroID: macro.id
+              planID: plan.id
             }}
           >
           <ListItemAvatar>
@@ -41,13 +41,13 @@ export default function ListList({docs}: DisplayModeComponentProps<MacroFields>)
                 variant="square"
                 textColor="white"
                 component={Preview}
-                mask={`data:image/png;base64,${macro.thumbnail_b64}`}
+                mask={`data:image/png;base64,${plan.thumbnail_b64}`}
                 small
               />
           </ListItemAvatar>
           <ListItemText
-            primary={macro.name}
-            secondary={updated(macro)}
+            primary={plan.name}
+            secondary={updated(plan)}
             primaryTypographyProps={{noWrap: true}}
           />
         </ListItemButtonLink>

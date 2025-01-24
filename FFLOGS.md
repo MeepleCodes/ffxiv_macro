@@ -1,15 +1,35 @@
 # FFLogs and other data sources
-Notes on extracting data about a fight, mostly from FFLogs but with reference to XIV client data and/or XIVAPI.
+Notes on extracting data about a fight, mostly from FFLogs but with reference to
+XIV client data and/or XIVAPI.
 
 # Background images
 https://cf.raidplan.io/raid/ff.aac1/map/01.r1-main.jpg
 
+
 # FFLogs
-FFLogs's own UI uses a "cast-events" data source to get a list of events with "childEvent" arrays (the damage done by a cast when it lands); this doesn't seem to be available through the GraphQL API which sucks.
+FFLogs's own UI uses a "cast-events" data source to get a list of events with
+"childEvent" arrays (the damage done by a cast when it lands); this doesn't seem
+to be available through the GraphQL API which sucks.
 
-You also don't get worldMarkers in the ReportData > report > fights array, and I don't see any place to get those via the API.
+You also don't get worldMarkers in the ReportData > report > fights array, and I
+don't see any place to get those via the API.
 
-As of 08/01/2025 there seems to be a bug in the fflogs V2 API, as it's returning `_rsv_13059_-1_1_0_0_S64755250_E64755250` as the name for the turrents in M4S, which is unhelpful. The V1 API correctly names them as `Gun Battery` so maybe we need to try the V1 API out for a bit...
+As of 08/01/2025 there seems to be a bug in the fflogs V2 API, as it's returning
+`_rsv_13059_-1_1_0_0_S64755250_E64755250` as the name for the turrents in M4S,
+which is unhelpful. The V1 API correctly names them as `Gun Battery` so maybe we
+need to try the V1 API out for a bit...
+
+(I got similar junk in the Actions.csv because it was outdated, so I guess
+they're using an older Excel dump for their V2 export and a bunch of IDs got
+changed)
+
+## OAuth2
+
+After losing most of a day to debugging this - if you want to use the
+public/PKCE workflow you *must* tick the "Public client" box when creating a new
+client, otherwise you'll get 401 Forbidden errors with unhelpful errors when you
+attempt the `authorization_code` step.
+
 
 ## V1
 The documented schema seems incomplete or just wrong, so...
@@ -145,7 +165,8 @@ The documented schema seems incomplete or just wrong, so...
 Relevant querystring params: start={{timestamp}}, end={{timestamp}}, hostility=1
 
 The response format seems to be basically the same as V2 except:
-* If there's no target (targetID -1 in V2), it will instead have `target` object for the Environment/-1 target
+* If there's no target (targetID -1 in V2), it will instead have `target` object
+  for the Environment/-1 target
 * Addition of the `sourceIsFriendly`/`targetIsFriendly` booleans
 
 ```typescript
@@ -210,7 +231,42 @@ The response format seems to be basically the same as V2 except:
 }
 ```
 
-# Coordinate system
+# Abilities
+Abilities come with a bit of extra information attached. FFLogs also packs
+status effects into the abilities list by giving them gameIDs of `StatusID +
+1000000`. As we don't track statuses at the moment this isn't particularly
+relevant but might be in the future.
+
+## Icon
+Seems to be a straight remap of the one from Action.csv, e.g.
+`/i/000000/000405.png` in game becomes `000000-000405.png` in fflogs (which maps
+to https://assets.rpglogs.com/img/ff/abilities/000000-000405.png).
+
+## Type
+The `type` field in FFLogs is documented as `The type of the ability. This
+represents the type of damage (e.g., the spell school in WoW).`. I've only seen
+the following values:
+
+* 1: Shows as yellow in fflogs event view. Seems to be do-nothing attacks but
+  sometimes also replaces 128/1024.
+* 128: Shows as orange in fflogs; physical damage?
+* 1024: Shows up as turquoise; magic damage?
+* 30: Shows up as purple; seems to be killing blows?
+
+I'm inclined to ignore this as it's not consistent for the same ability between
+parses (e.g. M2S's Laceration (37399) is type 1 in one log and type 1024 in
+another). I *suspect* this might be because they're trying to bake in something
+extra like "got hit by an avoidable mechanic" (see the 'killing blow' value
+above) but it doesn't work if the ability type is global to whole the report
+rather than changing per event. Even using the V1 API which inlines ability data
+with each event doesn't change that, though, so it's probably a server-side
+problem.
+
+Conclusion: we don't need this at all and can just use the game files.
+
+# Data types
+
+## Timestamps
 Timestamps are in ms; the start/end times of a report are since epoch, but
 timestamps for fights and events within a fight are since the start of the
 containing report.
@@ -228,24 +284,33 @@ FFLog values are in units of 0.01rad CW starting from east, they all seem to be
 between -PI and -3PI for... reasons but you can modulo that out.
 * -786 (-2.5 PI, -90d) is north
 * -315 (-1 PI, -180d) is west
-* -629 (-2 PI, -0d) is east - note the correct value would be -628 so either it wasn't facing directly east or there's a rounding error somewhere
+* -629 (-2 PI, -0d) is east - note the correct value would be -628 so either it
+  wasn't facing directly east or there's a rounding error somewhere
 * -472 (-1.5 PI, -270d) is south
 
 # Zone backgrounds
-raidplan.io seems to have made custom-drawn zone backgrounds, rendering our own looks like it would be a massive pita so we'll borrow theirs for now
+raidplan.io seems to have made custom-drawn zone backgrounds, rendering our own
+looks like it would be a massive pita so we'll borrow theirs for now
 
 Their images are 2000x1126px regardless
 
-Black Cat's coordinate space is 200x200? Centrepoint is at 100,100, big squares are 10x10, so the fightable area is 80,80 to 120,120
+Black Cat's coordinate space is 200x200? Centrepoint is at 100,100, big squares
+are 10x10, so the fightable area is 80,80 to 120,120
 - squares are 225px wide in raidplan, so 22.5px/yalm
 
-Honey B. Lovely spawns at 100,90. Biggest bounding box is just under 75,75 to 125,125, so the moveable area is probably a 20-unit radius circle.
+Honey B. Lovely spawns at 100,90. Biggest bounding box is just under 75,75 to
+125,125, so the moveable area is probably a 20-unit radius circle.
 - raidplan image is 900px across the circle, so 22.5px/yalm again?
 
 # Identifying zones
-There doesn't seem to be any correlation between FFLogs zone or encounter IDs and FFXIV's (e.g. for field marker presets)
+There doesn't seem to be any correlation between FFLogs zone or encounter IDs
+and FFXIV's (e.g. for field marker presets)
 
-Field marker presets reference a zone by ContentFinderCondition.ID (in XIVAPI.com model), presumably because they want to have separate waymarks for the same zone at different difficulties. FFLogs encounter ID is probably internal (given it's only up in the 90s for 7.0 savage raids) and I'm not sure what their gameZone maps to.
+Field marker presets reference a zone by ContentFinderCondition.ID (in
+XIVAPI.com model), presumably because they want to have separate waymarks for
+the same zone at different difficulties. FFLogs encounter ID is probably
+internal (given it's only up in the 90s for 7.0 savage raids) and I'm not sure
+what their gameZone maps to.
 
 Some notes
 ## AACM2S
@@ -272,31 +337,31 @@ XIVAPI ContentFinderCondition 988:
 I think we'll just need a static map
 
 # Abilities and spells
-Ability IDs from FFLogs match up with those from XIVApi (https://xivapi.com/Action/<id>)
-Buffs/debuffs appear in FFLogs as 100xxxx for some reason, the actual ID (just the xxxx part) is on XIVApi at https://xivapi.com/Status/xxxx
+Ability IDs from FFLogs match up with those from XIVApi
+(https://xivapi.com/Action/<id>) Buffs/debuffs appear in FFLogs as 100xxxx for
+some reason, the actual ID (just the xxxx part) is on XIVApi at
+https://xivapi.com/Status/xxxx
 
 # Specific fight notes
 
 ## AAC M2S
 ### Honey B. Live: 1st Beat
-Preceded by cast of 37219 at 01:08
-Cast on self (1.7s) at 01:10 ->: 01:12
+Preceded by cast of 37219 at 01:08 Cast on self (1.7s) at 01:10 ->: 01:12
 Debuffs applied by Environment at 01:18:
 * Unknown (100)3922: 0 stack
 * Infatuated 3923: 1 stack
-* Head Over Heels 3924: 2 stack
-Honey gains Top of the Hive (4143) 01:18
+* Head Over Heels 3924: 2 stack Honey gains Top of the Hive (4143) 01:18
 
 Later we also see
 * Hopeless Devotion 3925: 3 stack
 * Honey Bee Mine 3926: 4 stack/zombified
 
 ### Blinding Love / Love Is Blind
-AbilityID is 39629
-Timings from fight 8:
+AbilityID is 39629 Timings from fight 8:
 * fight start       2589608
 * first begincast   2803049
-* last cast         2828109
-Starts at ~213s in, ends at ~238s
+* last cast         2828109 Starts at ~213s in, ends at ~238s
 
-I think there might be a bug in the fflogs collector because it misses some of the begincasts for the Groupbees and assigns them to an instance of Honey B. Lovely instead
+I think there might be a bug in the fflogs collector because it misses some of
+the begincasts for the Groupbees and assigns them to an instance of Honey B.
+Lovely instead

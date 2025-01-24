@@ -9,7 +9,10 @@
 		"ghcr.io/devcontainers-contrib/features/firebase-cli:2": {},
 	    // "ghcr.io/devcontainers-contrib/features/corepack:1": {},
 		// firebase emulators require java
-		"ghcr.io/devcontainers/features/java:1": {}
+		"ghcr.io/devcontainers/features/java:1": {},
+		"ghcr.io/devcontainers-community/features/deno:1": {},
+		// Supabase needs docker so nesting time
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
 	},
 	"customizations": {
 		"vscode": {
@@ -26,7 +29,15 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": ["sudo corepack enable yarn", "yarn"],
+	"postCreateCommand": "sudo corepack enable yarn && yarn",
+	"portsAttributes": {
+		"5001": {
+			"label": "Firestore emulator"
+		},
+		"8080": {
+			"label": "Firestore emulator"
+		}
+	},
 
 	// Configure tool-specific properties.
 	// "customizations": {},

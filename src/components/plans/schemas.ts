@@ -1,25 +1,28 @@
 import { z } from "zod";
 import { Zones } from "../drawing/zones";
 
+export const CoordSchema = z.number().multipleOf(0.01).default(0);
+
 export const LocationType = z.object({
-  x: z.number().multipleOf(0.01).default(0),
-  y: z.number().multipleOf(0.01).default(0),
+  x: CoordSchema,
+  y: CoordSchema,
 });
-export const FacingType = z.number().multipleOf(0.01).min(0).max(360).default(0);
+export const FacingSchema = z.number().multipleOf(0.01).min(0).max(360).default(0);
 export const AngleType = z.number().multipleOf(0.01).min(0).max(360);
-export const DistanceType = z.number().multipleOf(0.01).min(0);
-export const ColourType = z.object({
+export const DistanceSchema = z.number().multipleOf(0.01).min(0);
+export const ColourSchema = z.object({
   r: z.number().int().min(0).max(255),
   g: z.number().int().min(0).max(255),
   b: z.number().int().min(0).max(255),
 });
-export const OpacityType = z.number().min(0).max(1).default(1);
+export const OpacitySchema = z.number().min(0).max(1).default(1);
 
 /**
  * Base schema for parts
  */
 const PartBase = z.object({
-  id: z.string()
+  id: z.string(),
+  name: z.string()
 });
 
 /**
@@ -102,32 +105,61 @@ function schema<T extends string, U extends z.ZodRawShape>(type: T, shape: U) {
 }
 
 export const [AoEConeSchema, AoEConeTimeline] = schema("aoecone", {
-  // type: z.literal("aoecone"),
-  location: LocationType,
-  facing: FacingType,
+  x: CoordSchema,
+  y: CoordSchema,
+  facing: FacingSchema,
   angle: AngleType,
-  range: DistanceType,
-  colour: ColourType,
-  opacity: OpacityType
+  range: DistanceSchema,
+  colour: ColourSchema,
+  opacity: OpacitySchema
 });
 
 export const [AoEDonutSchema, AoEDonutTimeline] = schema("aoedonut", {
-  location: LocationType,
-  innerRadius: DistanceType,
-  outerRadius: DistanceType,
-  colour: ColourType,
-  opacity: OpacityType,
+  x: CoordSchema,
+  y: CoordSchema,
+  innerRadius: DistanceSchema,
+  outerRadius: DistanceSchema,
+  colour: ColourSchema,
+  opacity: OpacitySchema,
 });
 
 export const [AoECircleSchema, AoECircleTimeline] = schema("aoecircle", {
-  location: LocationType,
-  radius: DistanceType,
-  colour: ColourType,
-  opacity: OpacityType,
+  x: CoordSchema,
+  y: CoordSchema,
+  radius: DistanceSchema,
+  colour: ColourSchema,
+  opacity: OpacitySchema,
+});
+
+export const [AoERectSchema, AoERectTimeline] = schema("aoerect", {
+  x: CoordSchema,
+  y: CoordSchema,
+  facing: FacingSchema,
+  width: DistanceSchema,
+  height: DistanceSchema,
+  colour: ColourSchema,
+  opacity: OpacitySchema,  
+});
+
+export const CastMarkerSchema = PartBase.extend({
+  type: z.literal("cast"),
+  x: CoordSchema,
+  y: CoordSchema,
+  facing: FacingSchema,
+  colour: ColourSchema,
+  opacity: OpacitySchema,
+  // Only the parts of Action that we need for drawing
+  action: z.object({
+    id: z.number(),
+    castType: z.number(),
+    xAxisOffset: z.number(),
+    effectRange: z.number(),
+  }).nullable()  // If null, we haven't set an action yet (won't render, but can click to edit)
 });
 
 const [baseGroupSchema, GroupTimeline] = schema("group", {
-  location: LocationType,
+  x: CoordSchema,
+  y: CoordSchema,
 });
 export {GroupTimeline};
 
@@ -142,7 +174,9 @@ type FullOutputType = BasesOutputType | (z.output<typeof baseGroupSchema> & {"el
 export const PartSchema: z.ZodType<FullOutputType, z.ZodTypeDef, FullInputType> = z.discriminatedUnion("type", [baseGroupSchema.extend({
   elements: z.lazy(() => PartSchema.array())
 }), ...baseSchemas]);
+
 export type Part = z.infer<typeof PartSchema>;
+export type GroupPart = Extract<Part, {type: "group"}>
 
 
 // Can't make a discriminated union on a nested property, so leave this as-is for now
@@ -188,3 +222,36 @@ export const AnimatedPlanSchema = z.object({
   parts: AnimationPartSchema.array()
 });
 export type AnimatedPlanConfig = z.infer<typeof AnimatedPlanSchema>;
+
+export const LayerSchema = z.object({
+  name: z.string(),
+  parts: PartSchema.array(),
+  visible: z.boolean(),
+});
+export type Layer = z.infer<typeof LayerSchema>;
+
+export const ArenaSchema = z.object({
+  layers: LayerSchema.array()
+});
+export type Arena = z.infer<typeof ArenaSchema>;
+
+export const PageSchema = z.object({
+  notes: z.string(),
+  title: z.string(),
+  arenas: z.union([
+    ArenaSchema.array().length(1),
+    ArenaSchema.array().length(2),
+    ArenaSchema.array().length(4),
+    ArenaSchema.array().length(6),
+    ArenaSchema.array().length(8)
+  ])
+});
+export type Page = z.infer<typeof PageSchema>;
+
+export const PlanSchema = z.object({
+  version: z.literal(1),
+  zone: ZoneSchema,
+  pages: PageSchema.array().min(1),
+});
+
+export type Plan = z.infer<typeof PlanSchema>;

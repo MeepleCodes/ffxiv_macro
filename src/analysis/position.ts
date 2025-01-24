@@ -140,3 +140,11 @@ export function gameToCanvas(loc: number): number {
 export function canvasToGame(loc: number): number {
   return (loc/22.5) + 100;
 }
+
+/**
+ * Convert a facing from canvas space (degrees cw from east) to Game Space
+ * (radians cw from east).
+ **/
+export function canvasToGameRotation(rotation: number): number {
+  return (rotation/180) * Math.PI;
+}

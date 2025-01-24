@@ -18,15 +18,15 @@ export type SortMode<OwnFields> = Mode & {
   sortOrder: Sort<OwnFields> | undefined
 }
 
-export type DocListProps<OwnFields> = StackProps & {
-  store: Store<OwnFields>,
+export type DocListProps<OwnFields, DBFields> = StackProps & {
+  store: Store<OwnFields, DBFields>,
   displayModes: [DisplayMode<OwnFields>, ...DisplayMode<OwnFields>[]],
   defaultDisplay?: DisplayMode<OwnFields>,
   sortModes: SortMode<OwnFields>[],
   defaultSort?: SortMode<OwnFields>
 }
 
-export default function DocList<OwnFields>(props: DocListProps<OwnFields>) {
+export default function DocList<OwnFields, DBFields>(props: DocListProps<OwnFields, DBFields>) {
   const { store, displayModes, defaultDisplay, sortModes, defaultSort, ...rest } = props;
   const [displayMode, setDisplayMode] = React.useState(defaultDisplay ?? displayModes[0]);
   const [sortMode, setSortMode] = React.useState<SortMode<OwnFields> | undefined>(defaultSort ?? sortModes[0]);
@@ -79,13 +79,13 @@ export default function DocList<OwnFields>(props: DocListProps<OwnFields>) {
           setMode={setSortMode}
           title="Sort order"
         />}
-        <ModeMenu
+        {displayModes.length > 1 && <ModeMenu
           color="primary"
           modes={displayModes}
           mode={displayMode}
           setMode={setDisplayMode}
           title="Display as..."
-        />
+        />}
       </Paper>
       <Box sx={{overflow: "auto"}}>
         <displayMode.component docs={docs}/>

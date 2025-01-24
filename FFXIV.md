@@ -2,10 +2,12 @@
 Notes on game file formats and data. Some of this information is in the ffxiv-client-data or the font loader repos.
 
 # Reference sites
-* [FFXIV Datamining](https://github.com/xivapi/ffxiv-datamining/blob/master/README.md). Stale but has some useful reference, and a dump of Ioncannon's research from FFXIV Explorer
-  * [FFXIV Explorer Research](http://ffxivexplorer.fragmenterworks.com/research.php) original of above
-* [FFIXVClientStructs](https://github.com/aers/FFXIVClientStructs) Mapping of C++ structs to C#, as used by Dalamud. Mostly concerned with the in-memory structures, they seem to mostly just invoke the game client's API to load/save from disk.
+* [FFXIV Datamining](https://github.com/xivapi/ffxiv-datamining/blob/master/README.md). Keeps a fairly live dump of the Excel client files in [CSV format](https://github.com/xivapi/ffxiv-datamining/tree/master/csv). Also has some notes though they're quite old now.
+* [FFXIV Explorer Research](http://ffxivexplorer.fragmenterworks.com/research.php) notes on some file formats (also mirrored by FFXIV Datamining).
+* [FFIXVClientStructs](https://github.com/aers/FFXIVClientStructs) Mapping of C++ structs to C#, as used by Dalamud. I think these are purely the in-memory structures, they seem to just invoke the game client's API to load/save from disk.
 * [Lumina]() C# library for handling data files, *mostly* just the Excel tables but it has basic layer (.lgb) and texture support
+  * [Lumina-excel](https://github.com/NotAdam/Lumina.Excel/tree/master) Generated C# headers for the CSV file formats
+  * [EXDSchema](https://github.com/xivdev/EXDSchema) Yaml descriptions of the fields in excel files (mostly the cross-referencing between tables)
 * [Dalamud](https://github.com/goatcorp/Dalamud) API core for plugins, using FFXIVClientStructs and Lumina for data formats but sometimes a useful reference too
 * [XIV.dev](https://xiv.dev/) Not updated recently but has a few useful references
 * [Saint Coinach/Godbert](https://github.com/xivapi/SaintCoinach) Datminer/viewer, so more concerned with the on-disk structures.
@@ -21,12 +23,18 @@ I'm not sure how it tells when you've copied a payload-containing string in the 
 
 Basically I can't see a way of pasting rich text (links etc) into the client from an external app short of poking at the game client.
 
+# Jobs, roles, etc
+Role colour schemes:
+* Tank: #2d3a80
+* Healer: #346624
+* DPS: #732828
+
 # Abilities and their areas of effect
 
 The column from Actions for radius around target is `effectRange` in yalms.
 
 ## Cast types
-Cast type determines the shape of the AoE from an action.
+The CastType field determines the shape of the AoE from an action.
 
 From [BossMod](https://github.com/awgil/ffxiv_bossmod/blob/master/BossMod/BossModule/AIHintsBuilder.cs)
 
@@ -57,6 +65,7 @@ From [event-trigger](https://github.com/xpdota/event-trigger/blob/master/xivsupp
     13 - Cone, range is `EffectRange`, angle depends on Omen
         */
     /*
+
     My further notes:
     #10 - effect range is the outer radius
 
@@ -88,6 +97,12 @@ Examples:
 * [Laceration](https://xivapi.com/Action/37300) - the donut in Xstage Combo in savage. Inner radius is ~the same as the PBAE version (37297)'s outer radius, 7 yalms.
 
 Laceration's Animation{end} is 1378, the same mon_sp/gimmick/monster_hanyou_hitclip_nomi_saisoku as above, so this isn't helpful unless the animations can be separated?
+
+### Rectangles
+Cast type 12 (rectangle) is either forward from the caster *or* centered on the
+caster, and I can see no obvious way of distinguishing them. This is especailly
+odd when some of them have omens (e.g. Honey Beeline) but both those and square
+ones use omen ID 2.
 
 ## Omen
 The floor telegraph for (easier raid) actions that give a prediction on the hit.

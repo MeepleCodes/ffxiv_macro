@@ -2,7 +2,7 @@
  * Doc information for macro documents
  */
 import { Tables, TablesInsert } from '../supabase/database.types';
-import { Store, Update, UserDoc } from './UserDocStore';
+import { Store, toBytea, Update, UserDoc } from './UserDocStore';
 import TextView from "../texteditor/TextView";
 import { TextModel } from "../texteditor/TextModel";
 
@@ -23,22 +23,6 @@ export enum MacroSortKeys {
 interface MacroSavedFields {
     text: string;
     thumbnail_bytea: string | null;
-}
-
-export function fromBytea(bytea: string): Uint8Array {
-    if(bytea.length == 0) return new Uint8Array();
-    if(!bytea.match(/\\x([0-9a-fA-F]{2})*/)) {
-        console.error("Invalid bytea string", bytea);
-        return new Uint8Array();
-    }
-    const bytes: number[] = [];
-    for(let i=0; i<bytea.length; i+=2) {
-        bytes.push(parseInt(bytea.substring(i, i+2), 16));
-    }
-    return new Uint8Array(bytes);
-}
-export function toBytea(blob: Uint8Array): string {
-    return `\\x${blob.values().map(v => v.toString(16).padStart(2, '0')).toArray().join('')}`
 }
 
 export class MacroStore extends Store<MacroFields, MacroSavedFields> {

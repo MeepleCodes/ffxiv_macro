@@ -2,6 +2,7 @@
 import { defineConfig } from 'vite'
 import react from "@vitejs/plugin-react-swc"
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
+import basicSsl from '@vitejs/plugin-basic-ssl';
 // import swc from "unplugin-swc";
 // import react from '@vitejs/plugin-react'
 
@@ -11,6 +12,10 @@ export default defineConfig({
   plugins: [
     TanStackRouterVite(),
     react({tsDecorators: true}),
+    // basicSsl({
+    //   /** name of certification */
+    //   name: 'test',   
+    // }) 
     // swc.vite({
     //   tsconfigFile: './tsconfig.app.json',
     //   jsc: {

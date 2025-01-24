@@ -1,10 +1,11 @@
+import { KonvaNodeEvents } from "react-konva";
 
 export type AoEProps = {
   colour?: Colour,
   opacity?: number
   x?: number,
   y?: number,
-}
+} & KonvaNodeEvents;
 
 /**
  * Get the remaining props from a Konva shape that can be exposed without

@@ -4,7 +4,7 @@ import { DisplayModeComponentProps } from "../DocList";
 import { Route as MacroRoute } from '../../routes/macro/$macroID';
 import { createLink } from "@tanstack/react-router";
 import React from "react";
-import Preview from "./Preview";
+import Preview from "../Preview";
 import { updated } from "../../supabase/UserDocStore";
 import DeleteIcon from '@mui/icons-material/Delete';
 
