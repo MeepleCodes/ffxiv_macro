@@ -1,13 +1,16 @@
-import { Button, Divider, Paper, Stack } from "@mui/material";
+import { Button, Divider, MenuItem, Paper, Select, Stack } from "@mui/material";
 
 import { PlanDoc, planStore } from "../../supabase/Plans"
 import React, { SetStateAction } from "react";
 import DocToolbar from "../DocToolbar";
 import { Part, Plan } from "./schemas";
-import { useEditablePlan } from "./types";
+import { useEditablePlan } from "./editable";
 import PlanEditor from "./PlanEditor";
 import { ColourPresets } from "./presets";
 import PartPalette from "./PartPalette";
+import LayerEditor from "./LayerEditor";
+import PropertyEditor from "./PropertyEditor";
+import { Zones } from "../drawing/zones";
 
 export type PlanScreenProps = {
   doc?: PlanDoc,
@@ -25,18 +28,20 @@ const initialPlan: Plan = {
         {
           layers: [
             {
+              id: "layer1",
+              type: "layer",
               name: "Layer 1",
               visible: true,
-              parts: [
+              children: [
                 {
                   id: "1",
-                  name: "",
+                  name: "AoECircle",
                   type: "aoecircle",
                   x: 100,
                   y: 100,
                   colour: ColourPresets.Red,
                   opacity: 1,
-                  radius: 6,
+                  range: 6,
                 }
               ]
             }
@@ -51,7 +56,23 @@ export default function PlanScreen(props: PlanScreenProps) {
   const {doc = planStore.new(), onIdChange} = props;
   doc.plan = initialPlan;
   const [liveDoc, setLiveDoc] = React.useState(doc);
+  const [selection, setSelection] = React.useState<Set<string>>(new Set());
   const {plan, changers} = useEditablePlan(liveDoc.plan as Plan);
+  const findById = (id: string) => {
+    function findInner(id: string, parts: Part[]): Part | undefined {
+      for(const part of parts) {
+        if(part.id === id) return part;
+        if("children" in part) {
+          const child = findInner(id, part.children);
+          if(child !== undefined) return child;
+        }
+      }
+      return undefined;
+    }
+    // FIXME: Needs to search all layers, should probably build the index on
+    // change instead
+    return findInner(id, plan.pages[0].arenas[0].layers[0].children);
+  }
   
   const setPlan = (newOrUpdate: SetStateAction<Plan>) => {
     setLiveDoc(doc => ({
@@ -77,7 +98,7 @@ export default function PlanScreen(props: PlanScreenProps) {
             onInsert={(newPart: Part) => {changers.pages[0].arenas[0].layers[0].onAdd(newPart)}}
           />
         </Paper>
-        <PlanEditor plan={plan} changers={changers} page={0} arena={0}/>
+        <PlanEditor plan={plan} changers={changers} page={0} arena={0} selection={selection} setSelection={setSelection}/>
       </Stack>
       <Paper
         sx={{
@@ -91,7 +112,23 @@ export default function PlanScreen(props: PlanScreenProps) {
           flexDirection: "column"
         }}
         >
-          
+          <Select value={plan.zone}>
+            {Object.keys(Zones).map(code =>
+              <MenuItem key={code} value={code} onClick={() => {changers.zone(code)}}>{code}</MenuItem>
+            )}
+          </Select>
+          <LayerEditor plan={plan} changers={changers} page={0} arena={0} selection={selection} setSelection={setSelection}/>
+          <Divider/>
+            {selection.values().toArray().map((id, idx) => {
+              const part = findById(id);
+              console.log("Tried to find part", id, "got", part);
+              if(part === undefined) return <React.Fragment key={idx}>Error: can't find part {id}</React.Fragment>
+              else return <PropertyEditor
+                key={idx}
+                byId={changers.byId}
+                part={part}
+              />
+            })}
           <Divider/>
         <Button
           onClick={() => {setPlan(doc.plan as Plan)}}

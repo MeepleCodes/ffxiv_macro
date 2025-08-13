@@ -67,6 +67,7 @@ From [event-trigger](https://github.com/xpdota/event-trigger/blob/master/xivsupp
     /*
 
     My further notes:
+
     #10 - effect range is the outer radius
 
     #11 - yes, it's cross
@@ -76,6 +77,8 @@ From [event-trigger](https://github.com/xpdota/event-trigger/blob/master/xivsupp
 
     #13 seems to be not only cones, but also things like Omega's "Swivel Cannon" in TOP P5,
     which is a half-room cleave but with the angle offset a bit.
+### My notes
+#6 - used for Alexandrian Banish II stack markers in Resolution Ex, maybe it's shared-damage moves?
 
 ### Cones
 BossMod tries to use omen data to determine cone angle, often not present.
@@ -111,3 +114,17 @@ The floor telegraph for (easier raid) actions that give a prediction on the hit.
 * Omen 583 (path "er_gl_fan045_0p1") is a 45 degree cone
 
 [event-trigger](https://github.com/xpdota/event-trigger/blob/master/xivdata/src/main/java/gg/xp/xivdata/data/ActionLibraryImpl.java) has some extracted cone angles from omen IDs, I'm guessing you need to find the data at the referenced path and read that somehow.
+
+# Arena textures
+Given raidplan.io stopped updating we may need to capture these ourselves.
+
+https://github.com/kotarou3/ffxiv-arena-images has a how-to, using ZoneFbx and/or
+Godbert 
+
+ZoneFbx: https://github.com/takhlaq/ZoneFbx/tree/master/ZoneFbx
+Godbert: as above
+
+## ZoneFbx
+Using the Lumina .NET libraries but written in C++ because Reasons.
+
+Recollection is ex5/01_xkt_x6/fld/x6fd/level/x6fd, Ex is x6fd_2

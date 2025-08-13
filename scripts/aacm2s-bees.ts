@@ -1,5 +1,5 @@
 import path from "path";
-import { importOrFetch } from '../src/fflogs/client';
+import { importOrFetch } from '../src/fflogs/backend';
 import { importOrFetchMeta } from "../src/fflogs/reports";
 import { importOrFetchLocations } from "../src/fflogs/locations";
 import { BeeEvent } from "../src/routes/analysis/aacm2s/bees/bees.types";

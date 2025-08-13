@@ -1,4 +1,4 @@
-import { Box, Checkbox, FormControlLabel, IconButton, Menu, MenuItem, Paper, Slider, Stack } from "@mui/material";
+import { Box, Checkbox, FormControlLabel, IconButton, Menu, MenuItem, Paper, Slider, Stack, Switch } from "@mui/material";
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import EventsTable from "./EventsTable";
@@ -22,6 +22,7 @@ import { Sidebar } from "../Sidebar";
 import ReportCard from "./ReportCard";
 import FightCard from "./FightCard";
 import PlayerMarker from "./PlayerMarker";
+import XIVAPI from "@xivapi/js";
 
 let nextCopyId = 1;
 
@@ -54,28 +55,64 @@ export default function Replay(props: ReplayProps) {
   const {report, fight } = props;
   const locator = fight.locator;
   const events = fight.events.map(event => new LocatedEvent(event, locator));
-  let {backgroundImageUrl, backgroundImageScale} = props;
-  if(backgroundImageUrl === undefined) {
-    switch(fight.encounterID) {
-      case 93: {
-        backgroundImageUrl = aacm1s;
-        break;
-      }
-      case 94: {
-        backgroundImageUrl = aacm2s;
-        break;
-      }
-      case 95: {
-        backgroundImageUrl = aacm3s;
-        backgroundImageScale = 0.75;
-        break;
-      }
-      case 96: {
-        backgroundImageUrl = aacm4s_p1;
-        break;
+  const {backgroundImageUrl, backgroundImageScale} = React.useMemo(() => {
+    let {backgroundImageUrl, backgroundImageScale} = props;
+    if(backgroundImageUrl === undefined) {
+      switch(fight.encounterID) {
+        case 93: {
+          backgroundImageUrl = aacm1s;
+          break;
+        }
+        case 94: {
+          backgroundImageUrl = aacm2s;
+          break;
+        }
+        case 95: {
+          backgroundImageUrl = aacm3s;
+          backgroundImageScale = 0.75;
+          break;
+        }
+        case 96: {
+          backgroundImageUrl = aacm4s_p1;
+          break;
+        }
+        default: {
+          fetch(
+            `https://v2.xivapi.com/api/sheet/TerritoryType/${fight.zone.id}?fields=Map.Id%2COffsetZ%2CMap.SizeFactor`
+          ).then(
+            (response) => response.json()
+          ).then(
+            (json) => {
+              let offsetZ = 0, sizeFactor = 100;
+              try {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                offsetZ = json.transient.OffsetZ as number;
+              } catch {
+                // no-op
+              }
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+              try { sizeFactor = json.fields.Map.fields.SizeFactor ?? 100 as number } catch { /**/}
+              try {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                const mapId = json.fields.Map.fields.Id as string;
+                // Default scale is 22.5px per yalm. Game maps are (sizeFactor/100) px/yalm
+                const scale = 22.5 / (sizeFactor/100);
+                console.log("Scaling to", scale, "from sizeFactor", sizeFactor);
+                setBg({url: `https://v2.xivapi.com/api/asset/map/${mapId}`, scale, filter: true});
+              } catch {
+                console.log("No Map ID in response", json);
+                return;
+              }
+              
+            }
+          ).catch((e: unknown) => {console.error("Failed to fetch map", e);})
+        }
       }
     }
-  }
+    return {backgroundImageUrl, backgroundImageScale};
+  }, [props, fight.encounterID, fight.zone.id]);
+  const [bg, setBg] = React.useState({url: backgroundImageUrl, scale: backgroundImageScale, filter: false});
+  const [showBg, setShowBg] = React.useState(true);
   const handleRowClicked = React.useCallback((event: LocatedEvent) => {
     setSelected(selected => {
       return selected.symmetricDifference(new Set([event.id]));
@@ -110,16 +147,22 @@ export default function Replay(props: ReplayProps) {
     >
       <MenuItem onClick={handleAdd}>Make moveable copy</MenuItem>
     </Menu>
-    <WaymarkPicker
-      sx={{
-        zIndex: 1000,
+    <Box sx={{
+      zIndex: 1000,
         position: "absolute",
         top: 16,
-        left: 160
-      }}
-      waymarkPreset={waymarkPreset}
-      setWaymarkPreset={setWaymarkPreset}
-    />
+        left: 200
+    }}
+    >
+      <FormControlLabel control={<Switch checked={showBg} onChange={(_, checked) => {setShowBg(checked)}} />} label="Show background" />
+      <WaymarkPicker
+        sx={{
+          
+        }}
+        waymarkPreset={waymarkPreset}
+        setWaymarkPreset={setWaymarkPreset}
+      />
+    </Box>
     <Sidebar
       side="right"
       open={true}
@@ -174,7 +217,7 @@ export default function Replay(props: ReplayProps) {
         />
       </Stack>
     </Sidebar>
-    <Arena backgroundImageUrl={backgroundImageUrl} backgroundImageScale={backgroundImageScale}>
+    <Arena backgroundImageUrl={showBg?bg.url:undefined} backgroundImageScale={bg.scale} filterBackground={bg.filter}>
 
       <Layer name="castMarkers">
       {/* {hovered && <CastMarker cast={hovered}/>} */}

@@ -18,7 +18,7 @@ const Parts = [
       type: "aoecircle",
       colour: ColourPresets.Red,
       opacity: 0.8,
-      radius: 10
+      range: 10
     }
   },
   {

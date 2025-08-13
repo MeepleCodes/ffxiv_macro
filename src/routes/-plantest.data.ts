@@ -44,7 +44,7 @@ function rainMarker(id: string, stage: number, x: number, y: number): CastPart {
       id,
       type: "aoecircle",
       location: {x, y},
-      radius: 8
+      range: 8
     }
     case 1: return {
       id,
@@ -75,7 +75,7 @@ function makePlayerExplosion(frame: number, x: number, y: number): CastAnimation
       id: `player-explosion-${x}-${y}-${frame}`,
       type: "aoecircle",
       location: {x, y},
-      radius: 8
+      range: 8
     }
 
   }

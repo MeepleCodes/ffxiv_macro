@@ -302,9 +302,16 @@ Honey B. Lovely spawns at 100,90. Biggest bounding box is just under 75,75 to
 125,125, so the moveable area is probably a 20-unit radius circle.
 - raidplan image is 900px across the circle, so 22.5px/yalm again?
 
+# XIVAPI maps
+Their map images are always 2048x2048.
+
+Black Cat's arena is 160x160px, so 4px/yalm
+
 # Identifying zones
-There doesn't seem to be any correlation between FFLogs zone or encounter IDs
-and FFXIV's (e.g. for field marker presets)
+~~There doesn't seem to be any correlation between FFLogs zone or encounter IDs
+and FFXIV's (e.g. for field marker presets)~~
+
+FFLog's zone.id corresponds to FFXIV's TerritoryType sheet.
 
 Field marker presets reference a zone by ContentFinderCondition.ID (in
 XIVAPI.com model), presumably because they want to have separate waymarks for

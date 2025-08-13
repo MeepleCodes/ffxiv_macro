@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { Primitive, z } from "zod";
 import { Zones } from "../drawing/zones";
 
 export const CoordSchema = z.number().multipleOf(0.01).default(0);
@@ -8,7 +8,7 @@ export const LocationType = z.object({
   y: CoordSchema,
 });
 export const FacingSchema = z.number().multipleOf(0.01).min(0).max(360).default(0);
-export const AngleType = z.number().multipleOf(0.01).min(0).max(360);
+export const AngleSchema = z.number().multipleOf(0.01).min(0).max(360);
 export const DistanceSchema = z.number().multipleOf(0.01).min(0);
 export const ColourSchema = z.object({
   r: z.number().int().min(0).max(255),
@@ -108,7 +108,7 @@ export const [AoEConeSchema, AoEConeTimeline] = schema("aoecone", {
   x: CoordSchema,
   y: CoordSchema,
   facing: FacingSchema,
-  angle: AngleType,
+  angle: AngleSchema,
   range: DistanceSchema,
   colour: ColourSchema,
   opacity: OpacitySchema
@@ -126,7 +126,7 @@ export const [AoEDonutSchema, AoEDonutTimeline] = schema("aoedonut", {
 export const [AoECircleSchema, AoECircleTimeline] = schema("aoecircle", {
   x: CoordSchema,
   y: CoordSchema,
-  radius: DistanceSchema,
+  range: DistanceSchema,
   colour: ColourSchema,
   opacity: OpacitySchema,
 });
@@ -157,6 +157,11 @@ export const CastMarkerSchema = PartBase.extend({
   }).nullable()  // If null, we haven't set an action yet (won't render, but can click to edit)
 });
 
+export const WaymarkSchema = PartBase.extend({
+  type: z.literal("waymark"),
+  
+})
+
 const [baseGroupSchema, GroupTimeline] = schema("group", {
   x: CoordSchema,
   y: CoordSchema,
@@ -168,14 +173,25 @@ type BasesInputType = z.input<z.ZodUnion<typeof baseSchemas>>;
 type BasesOutputType = z.output<z.ZodUnion<typeof baseSchemas>>;
 
 
-type FullInputType = BasesInputType | (z.input<typeof baseGroupSchema> & {"elements": FullInputType[]});
-type FullOutputType = BasesOutputType | (z.output<typeof baseGroupSchema> & {"elements": FullOutputType[]});
+type FullInputType = BasesInputType | (z.input<typeof baseGroupSchema> & {"children": FullInputType[]});
+type FullOutputType = BasesOutputType | (z.output<typeof baseGroupSchema> & {"children": FullOutputType[]});
 
-export const PartSchema: z.ZodType<FullOutputType, z.ZodTypeDef, FullInputType> = z.discriminatedUnion("type", [baseGroupSchema.extend({
-  elements: z.lazy(() => PartSchema.array())
-}), ...baseSchemas]);
+export const PartSchema: z.ZodType<FullOutputType, z.ZodTypeDef, FullInputType> & {
+  readonly discriminator: "type",
+  readonly optionsMap: Map<Primitive, z.ZodDiscriminatedUnionOption<never>> 
+} = z.discriminatedUnion(
+  "type",
+  [
+    baseGroupSchema.extend({
+      children: z.lazy(() => PartSchema.array())
+    }),
+    ...baseSchemas
+  ]
+);
 
 export type Part = z.infer<typeof PartSchema>;
+export type PartTypeName = Part["type"];
+export type SpecificPart<T extends PartTypeName> = Extract<Part, {type: T}>;
 export type GroupPart = Extract<Part, {type: "group"}>
 
 
@@ -224,8 +240,10 @@ export const AnimatedPlanSchema = z.object({
 export type AnimatedPlanConfig = z.infer<typeof AnimatedPlanSchema>;
 
 export const LayerSchema = z.object({
+  id: z.string(),
+  type: z.literal("layer"),
   name: z.string(),
-  parts: PartSchema.array(),
+  children: PartSchema.array(),
   visible: z.boolean(),
 });
 export type Layer = z.infer<typeof LayerSchema>;

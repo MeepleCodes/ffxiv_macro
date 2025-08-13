@@ -1,5 +1,5 @@
 import { objectInputType, objectOutputType, UnknownKeysParam, z, ZodLiteral, ZodObject, ZodString, ZodTypeAny } from 'zod';
-import { AngleType, DistanceType, FacingType, LocationType, PartListType, PropType } from './types';
+import { AngleType, DistanceType, FacingType, LocationType, PartListType, PropType } from './editable';
 
 
 type SchemaBaseShape<T extends string> = {

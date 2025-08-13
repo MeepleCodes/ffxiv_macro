@@ -135,10 +135,10 @@ export function gameToCanvas(loc: number): number {
 /**
  * Convert a location from Canvas Space to Game Space
  * @param loc X or y pixel coordinate in canvas space
- * @returns Yalm coordinate in game space
+ * @returns Yalm coordinate in game space, rounded to 2d.p.
  */
 export function canvasToGame(loc: number): number {
-  return (loc/22.5) + 100;
+  return Math.round(((loc/22.5) + 100) * 100) / 100.0;
 }
 
 /**

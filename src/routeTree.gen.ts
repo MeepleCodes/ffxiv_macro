@@ -26,6 +26,7 @@ import { Route as ClipboardImport } from "./routes/clipboard";
 import { Route as AuthstartImport } from "./routes/auth_start";
 import { Route as AuthredirectImport } from "./routes/auth_redirect";
 import { Route as AnalysisImport } from "./routes/analysis";
+import { Route as PlansIndexImport } from "./routes/plans/index";
 import { Route as NotesIndexImport } from "./routes/notes/index";
 import { Route as MacroIndexImport } from "./routes/macro/index";
 import { Route as AnalysisIndexImport } from "./routes/analysis/index";
@@ -123,6 +124,11 @@ const IndexLazyRoute = IndexLazyImport.update({
   path: "/",
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import("./routes/index.lazy").then((d) => d.Route));
+
+const PlansIndexRoute = PlansIndexImport.update({
+  path: "/",
+  getParentRoute: () => PlansRoute,
+} as any);
 
 const NotesIndexRoute = NotesIndexImport.update({
   path: "/",
@@ -392,6 +398,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof NotesIndexImport;
       parentRoute: typeof NotesImport;
     };
+    "/plans/": {
+      id: "/plans/";
+      path: "/";
+      fullPath: "/plans/";
+      preLoaderRoute: typeof PlansIndexImport;
+      parentRoute: typeof PlansImport;
+    };
     "/analysis/$reportID/$fightID": {
       id: "/analysis/$reportID/$fightID";
       path: "/$fightID";
@@ -522,7 +535,7 @@ export const routeTree = rootRoute.addChildren({
   MacroRoute: MacroRoute.addChildren({ MacroMacroIDRoute, MacroIndexRoute }),
   NonsenseRoute,
   NotesRoute: NotesRoute.addChildren({ NotesNoteIDRoute, NotesIndexRoute }),
-  PlansRoute: PlansRoute.addChildren({ PlansPlanIDRoute }),
+  PlansRoute: PlansRoute.addChildren({ PlansPlanIDRoute, PlansIndexRoute }),
   PlantestRoute,
   TestRoute,
   WorkertestRoute,
@@ -601,7 +614,8 @@ export const routeTree = rootRoute.addChildren({
     "/plans": {
       "filePath": "plans.tsx",
       "children": [
-        "/plans/$planID"
+        "/plans/$planID",
+        "/plans/"
       ]
     },
     "/plantest": {
@@ -654,6 +668,10 @@ export const routeTree = rootRoute.addChildren({
     "/notes/": {
       "filePath": "notes/index.tsx",
       "parent": "/notes"
+    },
+    "/plans/": {
+      "filePath": "plans/index.tsx",
+      "parent": "/plans"
     },
     "/analysis/$reportID/$fightID": {
       "filePath": "analysis/$reportID/$fightID.tsx",

@@ -1,6 +1,6 @@
 import { Group, Layer, Transformer } from "react-konva"
 import Arena from "../drawing/Arena"
-import { PlanChanger } from "./types"
+import { PlanChanger } from "./editable"
 import { Part, PartSchema, Plan } from "./schemas"
 import PartEditor from "./PartEditor"
 import { Box, Button, Paper, Typography } from "@mui/material"
@@ -17,33 +17,19 @@ export type PlanEditorProps = {
   changers: PlanChanger,
   page: number,
   arena: number,
-  onSelectionChange?: (selection: Part[]) => void
+  // TODO: I think these need to be an array or we're going to be re-rendering excessively
+  selection: Set<string>,
+  setSelection: React.Dispatch<React.SetStateAction<Set<string>>>
 }
 
 const PlanEditor = function PlanEditor(props: PlanEditorProps) {
-  const {plan, changers, page, arena} = props;
+  const {plan, changers, page, arena, selection, setSelection} = props;
   const [pxPos, setPxPos] = React.useState<Position|null>(null);
   const stageRef = React.useRef<Konva.Stage>(null);
   const tRef = React.useRef<KonvaTransformer>(null);
-  const [selectedNodes, setSelectedNodes] = React.useState<Set<Node>>(new Set<Node>());
   React.useEffect(() => {
-    tRef.current?.nodes(selectedNodes.values().toArray())
-  }, [selectedNodes]);
-  const [selectedParts, setSelectedParts] = React.useState<Part[]>([]);
-
-  const addSelection = (node: Node, part: Part) => {
-    setSelectedNodes(selectedNodes.union(new Set([node])));
-    setSelectedParts([...selectedParts, part]);
-  }
-  const removeSelection = (node: Node, part: Part) => {
-    setSelectedNodes(selectedNodes.difference(new Set([node])));
-    // TODO: intercept this, emit event
-    setSelectedParts(selectedParts.filter(p => p != part));
-  }
-  const setSelection = (node: Node, part: Part) => {
-    setSelectedNodes(new Set([node]));
-    setSelectedParts([part]);
-  }
+    tRef.current?.nodes(selection.values().map(id => stageRef.current?.findOne(`#${id}`)).filter(n => n !== undefined).toArray())
+  }, [selection]);
 
   
   const handleDragOver = (ev: React.DragEvent) => {
@@ -76,8 +62,7 @@ const PlanEditor = function PlanEditor(props: PlanEditorProps) {
         const part = {
           ...template,
           id: crypto.randomUUID(),
-          ...gamePos,
-          name: "",
+          ...gamePos
         };
         changers.pages[page].arenas[arena].layers[0].onAdd(part);
       } catch(e: unknown) {
@@ -100,14 +85,14 @@ const PlanEditor = function PlanEditor(props: PlanEditorProps) {
  >
     <Arena zone={plan.zone} ref={stageRef} onClick={(evt: KonvaEventObject<MouseEvent>) => {
       if(evt.target === stageRef.current) {
-        setSelectedNodes(new Set());
+        setSelection(new Set());
       }
     }}>
       <Layer>
         {plan.pages[page].arenas[arena].layers.map(
           (layer, layer_idx) =>
             <Group key={layer_idx}>
-              {layer.parts.map(
+              {layer.children.map(
                 (part, part_idx) => {
                   // const ident = `${page}-${arena}-${layer_idx}-${part_idx}`;
                   // const isSelected = selected.has(ident);
@@ -115,19 +100,19 @@ const PlanEditor = function PlanEditor(props: PlanEditorProps) {
                     part={part}
                     key={part.id}
                     onMouseDown={(ev) => {
-                      const isSelected = selectedNodes.has(ev.currentTarget);
+                      console.log("Selecting", ev.currentTarget, "with bounds", ev.currentTarget.getClientRect())
+                      const myId = new Set([part.id]);
                       if(ev.evt.shiftKey) {
-                        if(isSelected) removeSelection(ev.currentTarget, part);
-                        else addSelection(ev.currentTarget, part);
-                      } else if(!isSelected) {
-                        setSelection(ev.currentTarget, part);
+                        setSelection(selection.symmetricDifference(myId));
+                      } else if(!selection.has(part.id)) {
+                        setSelection(myId);
                       }
                     }}
                     changer={changers.pages[page].arenas[arena].layers[layer_idx].parts[part_idx]}
                   />
                 }
               )}
-              <Transformer ref={tRef} resizeEnabled={false} draggable/>
+              <Transformer ref={tRef} resizeEnabled={false} draggable shouldOverdrawWholeArea/>
               {/* <Transformer
                 resizeEnabled={false}
                 ref={tRef}
@@ -183,12 +168,7 @@ const PlanEditor = function PlanEditor(props: PlanEditorProps) {
         z: {canvasToGame(pxPos.y).toFixed(2)}
       </Box>
       </>}
-        {selectedNodes.length > 0 ? <>{selectedNodes.length} item(s) selected</> : <> No selection</>} 
-        <Button onClick={() => {
-          console.log("Selected nodes:", selectedNodes);
-          console.log("transformer.nodes():", tRef.current?.transformerRef.current?.nodes());
-          
-        }}>Sel</Button>
+        {selection.size > 0 ? <>{selection.size} item(s) selected : {selection.values().toArray().toString()}</> : <> No selection</>} 
     </Paper>
   </Box>
   )

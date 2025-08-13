@@ -109,7 +109,7 @@ export function castTimeline(cast: CastAnimation): Timeline {
             frame: cast.castFrame - cast.omenFrames + omenInLen,
             changes: {
               radius: {
-                newValue: cast.part.radius,
+                newValue: cast.part.range,
                 lerp: true
               }
             }

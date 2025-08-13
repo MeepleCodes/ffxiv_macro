@@ -1,5 +1,5 @@
 import path from "path";
-import { fetchAllPages, importOrFetch } from "../src/fflogs/client";
+import { makeFetchAllQuery, importOrFetch } from "../src/fflogs/backend";
 import { importOrFetchMeta } from "../src/fflogs/reports";
 import { CastEvent } from "../src/fflogs/types";
 
@@ -37,6 +37,6 @@ await importOrFetch(
   })),
   {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
-    fetch: fetchAllPages<CastEvent>(raw => raw.reportData.report.events)
+    fetch: makeFetchAllQuery<CastEvent>(raw => raw.reportData.report.events)
   }
 );

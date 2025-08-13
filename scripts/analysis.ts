@@ -2,7 +2,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import path from "path";
-import { fetchAllPages, importOrFetch, Page } from "../src/fflogs/client";
+import { makeFetchAllQuery, importOrFetch } from "../src/fflogs/backend";
+import { Page } from '../src/fflogs/client';
 import { importOrFetchMeta, Report, ReportFight, ReportIndex } from "../src/fflogs/reports";
 import { Event } from "../src/fflogs/types";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
@@ -208,7 +209,7 @@ const reportDetailResults = await Promise.allSettled(
               eventsQuery,
               variables,
               {
-                fetch: fetchAllPages(
+                fetch: makeFetchAllQuery(
                   (response: RawEvents) => response.reportData.report.events
                 ),
                 postProcess: (events: Event[]) => events.filter(

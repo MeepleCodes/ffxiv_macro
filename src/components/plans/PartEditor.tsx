@@ -3,11 +3,15 @@ import AoEDonut from "../drawing/AoEDonut";
 import { Part } from "./schemas"
 import AoECircle from "../drawing/AoECircle";
 import AoECone from "../drawing/AoECone";
-import { PartChanger } from "./types";
+import { PartChanger } from "./editable";
 import { KonvaEventObject, Node } from "konva/lib/Node";
 import { Group as KonvaGroup } from "konva/lib/Group";
-import { canvasToGame, canvasToGameRotation } from "../../analysis/position";
+import { canvasToGame, canvasToGameRotation, gameToCanvas } from "../../analysis/position";
 import React from "react";
+
+function roundToYalm(coord: number): number {
+  return gameToCanvas(Math.round(canvasToGame(coord)));
+}
 
 export type PartEditorProps = {
   part: Part,
@@ -23,8 +27,14 @@ const PartEditor = React.forwardRef(function PartEditor(props: PartEditorProps, 
   
     ...(changer ? {
       draggable: true,
+      onDragMove: (evt: KonvaEventObject<DragEvent>) => {
+        if(evt.evt.ctrlKey) {
+          console.log("snapping to nearest yalm")
+          evt.currentTarget.x(roundToYalm(evt.currentTarget.x()));
+          evt.currentTarget.y(roundToYalm(evt.currentTarget.y()));          
+        }
+      },
       onDragEnd:  (evt: KonvaEventObject<DragEvent>) => {
-        console.log("Part dragend");
         changer.onChange({
           ...part,
           x: canvasToGame(evt.currentTarget.x()),
@@ -64,7 +74,7 @@ const PartEditor = React.forwardRef(function PartEditor(props: PartEditorProps, 
       return <AoECone {...part} {...extraProps}/>
     }    
     case "group": {
-      const children = part.elements;
+      const children = part.children;
       const {ref, ...groupExtra} = extraProps;
       // Just have to lie about the type of ref, it's actually okay to put
       // a subclass into a superclass ref

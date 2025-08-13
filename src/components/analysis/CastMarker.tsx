@@ -20,14 +20,14 @@ export default function CastMarker({cast, ...shapeProps}: CastMarkerProps) {
         return <AoECircle
           x={cast.target.location.x}
           y={cast.target.location.y}
-          radius={cast.ability.effectRange}
+          range={cast.ability.effectRange}
           {...shapeProps}
           />
       } else {
         return <AoECircle
           x={cast.source.location.x}
           y={cast.source.location.y}
-          radius={cast.ability.effectRange}
+          range={cast.ability.effectRange}
           {...shapeProps}
           />        
       }

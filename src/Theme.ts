@@ -1,5 +1,6 @@
 import { createTheme, Theme } from '@mui/material/styles';
 import type {} from '@mui/material/themeCssVarsAugmentation';
+import type {} from '@mui/x-tree-view/themeAugmentation';
 export let appTheme = createTheme({
     cssVariables: true,
 });

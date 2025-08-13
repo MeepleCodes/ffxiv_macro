@@ -2,12 +2,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import path from "path";
 import { parse } from "csv-parse/sync";
-import { fetchAllPages, importOrFetch, Page } from "../src/fflogs/client";
+import { makeFetchAllQuery, importOrFetch } from "../src/fflogs/backend";
+import { Page } from '../src/fflogs/client';
 import { importOrFetchMeta, Report } from "../src/fflogs/reports";
 import { CastEvent, Event } from "../src/fflogs/types";
 import { existsSync, mkdirSync, promises, readFile, readFileSync, writeFileSync } from "fs";
 import { getRateLimitData } from "../src/fflogs/ratelimits";
-import { Locator } from "../src/fflogs/locator";
+import { Locator } from "../src/analysis/locator";
 import { Action, ActionCast, parseActionsCSV } from "../src/excel/Action";
 import { importOrFetchLocations } from "../src/fflogs/locations";
 import { writeFile } from "fs/promises";
@@ -207,7 +208,7 @@ for(const reportID of args.reportid) {
       eventsQuery,
       variables,
       {
-        fetch: fetchAllPages(
+        fetch: makeFetchAllQuery(
           (response: RawEvents) => response.reportData.report.events
         ),
         postProcess: (events: Event[]) => events.filter(
